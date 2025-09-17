@@ -1,7 +1,9 @@
-# treemov
+# TreeMov
 
 A new Flutter project.
 
-## Getting Started
+## Getting Started (install)
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter run
