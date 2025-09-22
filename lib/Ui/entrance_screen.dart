@@ -6,10 +6,20 @@ class EntranceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Выбор роли'),
+        backgroundColor: const Color(0xFF75D0FF),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       backgroundColor: const Color(0xFF75D0FF),
       body: Container(
-        width: 390,
-        height: 844,
+        width: double.infinity,
+        height: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -44,6 +54,23 @@ class EntranceScreen extends StatelessWidget {
                   decoration: TextDecoration.underline,
                 ),
               ),
+            ),
+            
+            const SizedBox(height: 30),
+            
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context, 
+                  '/home', 
+                  (route) => false
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: const Color(0xFF75D0FF),
+              ),
+              child: const Text('На главную'),
             ),
           ],
         ),
