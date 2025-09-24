@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'ui/entrance_screen.dart';
 import 'ui/entrance_kid.dart';
+import 'ui/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/entrance-kid': (context) => const EntranceKidScreen(),
         '/entrance-teacher': (context) => const PlaceholderScreen(title: 'Экран преподавателя'),
         '/register': (context) => const PlaceholderScreen(title: 'Регистрация'),
+        '/main-app': (context) => const MainScreen(),
       },
     );
   }
@@ -60,6 +62,9 @@ class HomeScreen extends StatelessWidget {
             
             _buildNavButton(context, 'Регистрация', '/register', Colors.purple),
             const SizedBox(height: 40),
+            
+            _buildNavButton(context, 'Тест навигации', '/main-app', Colors.red),
+            const SizedBox(height: 20),
             
             const Text(
               'Это тестовые кнопки',
@@ -132,6 +137,22 @@ class PlaceholderScreen extends StatelessWidget {
                 );
               },
               child: const Text('Вернуться на главную'),
+            ),
+
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context, 
+                  '/main-app', 
+                  (route) => false
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Перейти в приложение (навигация)'),
             ),
           ],
         ),

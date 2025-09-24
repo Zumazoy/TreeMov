@@ -57,6 +57,11 @@ class EntranceKidScreen extends StatelessWidget {
               height: 44,
               child: ElevatedButton(
                 onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context, 
+                    '/main-app', 
+                    (route) => false
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0099E9),
