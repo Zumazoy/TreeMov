@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'ui/entrance_screen.dart';
 import 'ui/entrance_kid.dart';
 import 'ui/screens/main_screen.dart';
+import 'ui/entrance_teacher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,9 +23,10 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/entrance': (context) => const EntranceScreen(),
         '/entrance-kid': (context) => const EntranceKidScreen(),
-        '/entrance-teacher': (context) => const PlaceholderScreen(title: 'Экран преподавателя'),
+        '/entrance-teacher': (context) => const EntranceTeacherScreen(),
         '/register': (context) => const PlaceholderScreen(title: 'Регистрация'),
         '/main-app': (context) => const MainScreen(),
+        '/teacher-main-app': (context) => const PlaceholderScreen(title: 'Приложение преподавателя'),
       },
     );
   }
