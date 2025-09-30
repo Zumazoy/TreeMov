@@ -24,6 +24,25 @@ class EntranceScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(
+              'assets/images/white_default_logo.png',
+              width: 48.56,
+              height: 47.24,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(height: 20),
+            
+            const Text(
+              'TreeMov',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontFamily: 'TT Norms',
+              ),
+            ),
+            const SizedBox(height: 30),
+            
             const Text(
               'Вход',
               style: TextStyle(
@@ -43,7 +62,7 @@ class EntranceScreen extends StatelessWidget {
             
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/register');
+                Navigator.pushNamed(context, '/reg-kid-1');
               },
               child: const Text(
                 'Зарегистрироваться',

@@ -3,6 +3,7 @@ import 'ui/entrance_screen.dart';
 import 'ui/entrance_kid.dart';
 import 'ui/screens/main_screen.dart';
 import 'ui/entrance_teacher.dart';
+import 'ui/registration/reg_kid1.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,18 +15,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'TreeMov App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: const HomeScreen(),
       routes: {
         '/home': (context) => const HomeScreen(),
         '/entrance': (context) => const EntranceScreen(),
         '/entrance-kid': (context) => const EntranceKidScreen(),
         '/entrance-teacher': (context) => const EntranceTeacherScreen(),
-        '/register': (context) => const PlaceholderScreen(title: 'Регистрация'),
+        '/reg-kid-1': (context) => const RegKid1Screen(),
         '/main-app': (context) => const MainScreen(),
+        '/reg-kid-2': (context) => const PlaceholderScreen(title: 'Шаг 2'),
         '/teacher-main-app': (context) => const PlaceholderScreen(title: 'Приложение преподавателя'),
       },
     );
@@ -52,22 +53,42 @@ class HomeScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-            
-            _buildNavButton(context, 'Экран выбора роли', '/entrance', Colors.blue),
+
+            _buildNavButton(
+              context,
+              'Экран выбора роли',
+              '/entrance',
+              Colors.blue,
+            ),
             const SizedBox(height: 20),
-            
-            _buildNavButton(context, 'Экран входа ученика', '/entrance-kid', Colors.green),
+
+            _buildNavButton(
+              context,
+              'Экран входа ученика',
+              '/entrance-kid',
+              Colors.green,
+            ),
             const SizedBox(height: 20),
-            
-            _buildNavButton(context, 'Экран преподавателя', '/entrance-teacher', Colors.orange),
+
+            _buildNavButton(
+              context,
+              'Экран преподавателя',
+              '/entrance-teacher',
+              Colors.orange,
+            ),
             const SizedBox(height: 20),
-            
-            _buildNavButton(context, 'Регистрация', '/register', Colors.purple),
-            const SizedBox(height: 40),
-            
+
+            _buildNavButton(
+              context,
+              'Регистрация ребенка',
+              '/reg-kid-1',
+              Colors.amber,
+            ),
+            const SizedBox(height: 20),
+
             _buildNavButton(context, 'Тест навигации', '/main-app', Colors.red),
             const SizedBox(height: 20),
-            
+
             const Text(
               'Это тестовые кнопки',
               style: TextStyle(fontSize: 16, color: Colors.grey),
@@ -79,7 +100,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavButton(BuildContext context, String text, String route, Color color) {
+  Widget _buildNavButton(
+    BuildContext context,
+    String text,
+    String route,
+    Color color,
+  ) {
     return SizedBox(
       width: 250,
       child: ElevatedButton(
@@ -91,10 +117,7 @@ class HomeScreen extends StatelessWidget {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 15),
         ),
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 16),
-        ),
+        child: Text(text, style: const TextStyle(fontSize: 16)),
       ),
     );
   }
@@ -102,7 +125,7 @@ class HomeScreen extends StatelessWidget {
 
 class PlaceholderScreen extends StatelessWidget {
   final String title;
-  
+
   const PlaceholderScreen({super.key, required this.title});
 
   @override
@@ -129,13 +152,13 @@ class PlaceholderScreen extends StatelessWidget {
             const SizedBox(height: 20),
             const Text('В процессе'),
             const SizedBox(height: 30),
-            
+
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
-                  context, 
-                  '/home', 
-                  (route) => false
+                  context,
+                  '/home',
+                  (route) => false,
                 );
               },
               child: const Text('Вернуться на главную'),
@@ -145,9 +168,9 @@ class PlaceholderScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
-                  context, 
-                  '/main-app', 
-                  (route) => false
+                  context,
+                  '/main-app',
+                  (route) => false,
                 );
               },
               style: ElevatedButton.styleFrom(

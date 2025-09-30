@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../navigation/nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -19,7 +19,10 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   final List<String> _pageTitles = [
-    'Календарь', 'Рейтинг', 'Магазин', 'Профиль'
+    'Календарь',
+    'Рейтинг',
+    'Магазин',
+    'Профиль',
   ];
 
   @override
@@ -30,9 +33,9 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: const Color(0xFF75D0FF),
         foregroundColor: Colors.white,
       ),
-      
+
       body: _pages[_currentIndex],
-      
+
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {

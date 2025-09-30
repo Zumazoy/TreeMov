@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class EntranceKidScreen extends StatelessWidget {
-  const EntranceKidScreen({super.key});
+class RegKid1Screen extends StatelessWidget {
+  const RegKid1Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Вход ученика'),
+        title: const Text('Регистрация'),
         backgroundColor: const Color(0xFF75D0FF),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -31,7 +31,7 @@ class EntranceKidScreen extends StatelessWidget {
               fit: BoxFit.contain,
             ),
             const SizedBox(height: 20),
-            
+
             const Text(
               'TreeMov',
               style: TextStyle(
@@ -44,7 +44,7 @@ class EntranceKidScreen extends StatelessWidget {
             const SizedBox(height: 30),
 
             const Text(
-              'Вход',
+              'Регистрация',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -52,24 +52,26 @@ class EntranceKidScreen extends StatelessWidget {
                 fontFamily: 'TT Norms',
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
 
-            _buildTextField('Email', Icons.email_outlined),
+            _buildTextField('ФИО', Icons.person_outline),
             const SizedBox(height: 20),
 
-            _buildTextField('Пароль', Icons.lock_outline, isPassword: true),
-            const SizedBox(height: 30),
+            _buildTextField('Личный код', Icons.badge_outlined),
+            const SizedBox(height: 20),
+
+            _buildTextField('Придумайте пароль', Icons.lock_outline, isPassword: true),
+            const SizedBox(height: 20),
+
+            _buildTextField('Повторите пароль', Icons.lock_outline, isPassword: true),
+            const SizedBox(height: 40),
 
             SizedBox(
               width: 316,
               height: 44,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context, 
-                    '/main-app', 
-                    (route) => false
-                  );
+                  Navigator.pushNamed(context, '/reg-kid-2');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0099E9),
@@ -79,7 +81,7 @@ class EntranceKidScreen extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Войти',
+                  'Далее →',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -87,23 +89,6 @@ class EntranceKidScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            
-            const SizedBox(height: 20),
-            
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context, 
-                  '/home', 
-                  (route) => false
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF75D0FF),
-              ),
-              child: const Text('На главную'),
             ),
           ],
         ),
