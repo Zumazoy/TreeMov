@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'ui/entrance_screen.dart';
+
 import 'ui/entrance_kid.dart';
-import 'ui/screens/main_screen.dart';
+import 'ui/entrance_screen.dart';
 import 'ui/entrance_teacher.dart';
 import 'ui/registration/reg_kid1.dart';
+import 'ui/screens/calendar_kid.dart';
+import 'ui/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,7 +29,9 @@ class MyApp extends StatelessWidget {
         '/reg-kid-1': (context) => const RegKid1Screen(),
         '/main-app': (context) => const MainScreen(),
         '/reg-kid-2': (context) => const PlaceholderScreen(title: 'Шаг 2'),
-        '/teacher-main-app': (context) => const PlaceholderScreen(title: 'Приложение преподавателя'),
+        '/teacher-main-app': (context) =>
+            const PlaceholderScreen(title: 'Приложение преподавателя'),
+        '/calendar': (context) => CalendarKidScreen(),
       },
     );
   }
@@ -87,6 +91,14 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             _buildNavButton(context, 'Тест навигации', '/main-app', Colors.red),
+            const SizedBox(height: 20),
+
+            _buildNavButton(
+              context,
+              'Календарь ученика',
+              '/calendar',
+              Colors.purple,
+            ),
             const SizedBox(height: 20),
 
             const Text(

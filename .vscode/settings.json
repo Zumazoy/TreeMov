@@ -1,0 +1,9 @@
+{
+    "dart.flutterHotReloadOnSave": "all",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "files.autoSave": "onFocusChange",
+    "dart.openDevTools": "flutter"
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../navigation/nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
