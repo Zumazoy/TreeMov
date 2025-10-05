@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class EntranceTeacherScreen extends StatelessWidget {
-  const EntranceTeacherScreen({super.key});
+class RegTeacher2Screen extends StatelessWidget {
+  const RegTeacher2Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Вход преподавателя'),
+        title: const Text('Регистрация'),
         backgroundColor: const Color(0xFF7A75FF),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -44,32 +44,33 @@ class EntranceTeacherScreen extends StatelessWidget {
             const SizedBox(height: 30),
 
             const Text(
-              'Вход',
+              'Регистрация',
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.bold,
                 color: Colors.white,
                 fontFamily: 'TT Norms',
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
+
+            _buildTextField('ФИО', Icons.person_outline),
+            const SizedBox(height: 20),
 
             _buildTextField('email', Icons.email_outlined),
             const SizedBox(height: 20),
 
-            _buildTextField('Пароль', Icons.lock_outline, isPassword: true),
-            const SizedBox(height: 30),
+            _buildTextField('придумайте пароль', Icons.lock_outline, isPassword: true),
+            const SizedBox(height: 20),
+
+            _buildTextField('повтори пароль', Icons.lock_outline, isPassword: true),
+            const SizedBox(height: 40),
 
             SizedBox(
               width: 316,
               height: 44,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context, 
-                    '/teacher-main-app', 
-                    (route) => false
-                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4B0096),
@@ -79,7 +80,7 @@ class EntranceTeacherScreen extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Войти',
+                  'Зарегистрироваться',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -87,23 +88,6 @@ class EntranceTeacherScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            
-            const SizedBox(height: 20),
-            
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context, 
-                  '/home', 
-                  (route) => false
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF7A75FF),
-              ),
-              child: const Text('На главную'),
             ),
           ],
         ),

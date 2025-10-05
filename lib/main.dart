@@ -4,6 +4,9 @@ import 'ui/entrance_kid.dart';
 import 'ui/entrance_screen.dart';
 import 'ui/entrance_teacher.dart';
 import 'ui/registration/reg_kid1.dart';
+import 'ui/registration/reg_kid2.dart';
+import 'ui/registration/reg_teacher1.dart';
+import 'ui/registration/reg_teacher2.dart';
 import 'ui/screens/calendar_kid.dart';
 import 'ui/screens/main_screen.dart';
 
@@ -27,8 +30,10 @@ class MyApp extends StatelessWidget {
         '/entrance-kid': (context) => const EntranceKidScreen(),
         '/entrance-teacher': (context) => const EntranceTeacherScreen(),
         '/reg-kid-1': (context) => const RegKid1Screen(),
+        '/reg-kid-2': (context) => const RegKid2Screen(),
+        '/reg-teacher-1': (context) => const RegTeacher1Screen(),
+        '/reg-teacher-2': (context) => const RegTeacher2Screen(),
         '/main-app': (context) => const MainScreen(),
-        '/reg-kid-2': (context) => const PlaceholderScreen(title: 'Шаг 2'),
         '/teacher-main-app': (context) =>
             const PlaceholderScreen(title: 'Приложение преподавателя'),
         '/calendar': (context) => CalendarKidScreen(),
@@ -47,66 +52,75 @@ class HomeScreen extends StatelessWidget {
         title: const Text('TreeMov - Главная'),
         backgroundColor: const Color(0xFF75D0FF),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Добро пожаловать в TreeMov!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              const Text(
+                'Добро пожаловать в TreeMov!',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
 
-            _buildNavButton(
-              context,
-              'Экран выбора роли',
-              '/entrance',
-              Colors.blue,
-            ),
-            const SizedBox(height: 20),
+              _buildNavButton(
+                context,
+                'Экран выбора роли',
+                '/entrance',
+                const Color(0xFF75D0FF),
+              ),
+              const SizedBox(height: 15),
 
-            _buildNavButton(
-              context,
-              'Экран входа ученика',
-              '/entrance-kid',
-              Colors.green,
-            ),
-            const SizedBox(height: 20),
+              _buildNavButton(
+                context,
+                'Экран входа ученика',
+                '/entrance-kid',
+                Colors.green,
+              ),
+              const SizedBox(height: 15),
 
-            _buildNavButton(
-              context,
-              'Экран преподавателя',
-              '/entrance-teacher',
-              Colors.orange,
-            ),
-            const SizedBox(height: 20),
+              _buildNavButton(
+                context,
+                'Экран преподавателя',
+                '/entrance-teacher',
+                Colors.orange,
+              ),
+              const SizedBox(height: 15),
 
-            _buildNavButton(
-              context,
-              'Регистрация ребенка',
-              '/reg-kid-1',
-              Colors.amber,
-            ),
-            const SizedBox(height: 20),
+              _buildNavButton(
+                context,
+                'Регистрация ребенка',
+                '/reg-kid-1',
+                Colors.amber,
+              ),
+              const SizedBox(height: 15),
 
-            _buildNavButton(context, 'Тест навигации', '/main-app', Colors.red),
-            const SizedBox(height: 20),
+              _buildNavButton(
+                context,
+                'Регистрация преподавателя',
+                '/reg-teacher-1',
+                Colors.purple,
+              ),
+              const SizedBox(height: 15),
 
-            _buildNavButton(
-              context,
-              'Календарь ученика',
-              '/calendar',
-              Colors.purple,
-            ),
-            const SizedBox(height: 20),
+              _buildNavButton(
+                context,
+                'Тест навигации',
+                '/main-app',
+                Colors.red,
+              ),
+              const SizedBox(height: 30),
 
-            const Text(
-              'Это тестовые кнопки',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              const Text(
+                'Это тестовые кнопки',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
@@ -119,7 +133,7 @@ class HomeScreen extends StatelessWidget {
     Color color,
   ) {
     return SizedBox(
-      width: 250,
+      width: 280,
       child: ElevatedButton(
         onPressed: () {
           Navigator.pushNamed(context, route);
@@ -128,8 +142,15 @@ class HomeScreen extends StatelessWidget {
           backgroundColor: color,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
-        child: Text(text, style: const TextStyle(fontSize: 16)),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
