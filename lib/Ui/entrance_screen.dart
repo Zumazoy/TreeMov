@@ -84,23 +84,6 @@ class EntranceScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            const SizedBox(height: 30),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/home',
-                  (route) => false,
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF75D0FF),
-              ),
-              child: const Text('На главную'),
-            ),
           ],
         ),
       ),
