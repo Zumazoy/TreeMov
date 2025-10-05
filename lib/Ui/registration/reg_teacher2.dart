@@ -60,18 +60,25 @@ class RegTeacher2Screen extends StatelessWidget {
             _buildTextField('email', Icons.email_outlined),
             const SizedBox(height: 20),
 
-            _buildTextField('придумайте пароль', Icons.lock_outline, isPassword: true),
+            _buildTextField(
+              'придумайте пароль',
+              Icons.lock_outline,
+              isPassword: true,
+            ),
             const SizedBox(height: 20),
 
-            _buildTextField('повтори пароль', Icons.lock_outline, isPassword: true),
+            _buildTextField(
+              'повтори пароль',
+              Icons.lock_outline,
+              isPassword: true,
+            ),
             const SizedBox(height: 40),
 
             SizedBox(
               width: 316,
               height: 44,
               child: ElevatedButton(
-                onPressed: () {
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4B0096),
                   foregroundColor: Colors.white,
@@ -95,7 +102,11 @@ class RegTeacher2Screen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String hintText, IconData icon, {bool isPassword = false}) {
+  Widget _buildTextField(
+    String hintText,
+    IconData icon, {
+    bool isPassword = false,
+  }) {
     return Container(
       width: 316,
       height: 44,
@@ -107,7 +118,10 @@ class RegTeacher2Screen extends StatelessWidget {
         obscureText: isPassword,
         decoration: InputDecoration(
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 12,
+          ),
           hintText: hintText,
           hintStyle: const TextStyle(
             color: Colors.grey,
@@ -116,10 +130,7 @@ class RegTeacher2Screen extends StatelessWidget {
           ),
           prefixIcon: Icon(icon, color: Colors.grey),
         ),
-        style: const TextStyle(
-          fontSize: 16,
-          fontFamily: 'TT Norms',
-        ),
+        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
       ),
     );
   }

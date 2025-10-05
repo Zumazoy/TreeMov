@@ -31,7 +31,7 @@ class EntranceScreen extends StatelessWidget {
               fit: BoxFit.contain,
             ),
             const SizedBox(height: 20),
-            
+
             const Text(
               'TreeMov',
               style: TextStyle(
@@ -42,7 +42,7 @@ class EntranceScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            
+
             const Text(
               'Вход',
               style: TextStyle(
@@ -53,13 +53,23 @@ class EntranceScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            
-            _buildRoleButton(context, 'Ученик', '/entrance-kid', const Color(0xFF0099E9)),
+
+            _buildRoleButton(
+              context,
+              'Ученик',
+              '/entrance-kid',
+              const Color(0xFF0099E9),
+            ),
             const SizedBox(height: 20),
-            
-            _buildRoleButton(context, 'Преподаватель', '/entrance-teacher', const Color(0xFF004C75)),
+
+            _buildRoleButton(
+              context,
+              'Преподаватель',
+              '/entrance-teacher',
+              const Color(0xFF004C75),
+            ),
             const SizedBox(height: 40),
-            
+
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/reg-kid-1');
@@ -74,15 +84,15 @@ class EntranceScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 30),
-            
+
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
-                  context, 
-                  '/home', 
-                  (route) => false
+                  context,
+                  '/home',
+                  (route) => false,
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -97,7 +107,12 @@ class EntranceScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRoleButton(BuildContext context, String text, String route, Color buttonColor) {
+  Widget _buildRoleButton(
+    BuildContext context,
+    String text,
+    String route,
+    Color buttonColor,
+  ) {
     return SizedBox(
       width: 316,
       height: 44,

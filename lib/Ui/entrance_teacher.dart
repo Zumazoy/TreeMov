@@ -66,9 +66,9 @@ class EntranceTeacherScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
-                    context, 
-                    '/teacher-main-app', 
-                    (route) => false
+                    context,
+                    '/teacher-main-app',
+                    (route) => false,
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -88,15 +88,15 @@ class EntranceTeacherScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
-                  context, 
-                  '/home', 
-                  (route) => false
+                  context,
+                  '/home',
+                  (route) => false,
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -111,7 +111,11 @@ class EntranceTeacherScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String hintText, IconData icon, {bool isPassword = false}) {
+  Widget _buildTextField(
+    String hintText,
+    IconData icon, {
+    bool isPassword = false,
+  }) {
     return Container(
       width: 316,
       height: 44,
@@ -123,7 +127,10 @@ class EntranceTeacherScreen extends StatelessWidget {
         obscureText: isPassword,
         decoration: InputDecoration(
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 12,
+          ),
           hintText: hintText,
           hintStyle: const TextStyle(
             color: Colors.grey,
@@ -132,10 +139,7 @@ class EntranceTeacherScreen extends StatelessWidget {
           ),
           prefixIcon: Icon(icon, color: Colors.grey),
         ),
-        style: const TextStyle(
-          fontSize: 16,
-          fontFamily: 'TT Norms',
-        ),
+        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
       ),
     );
   }

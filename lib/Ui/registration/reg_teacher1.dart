@@ -87,7 +87,11 @@ class RegTeacher1Screen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String hintText, IconData icon, {bool isPassword = false}) {
+  Widget _buildTextField(
+    String hintText,
+    IconData icon, {
+    bool isPassword = false,
+  }) {
     return Container(
       width: 316,
       height: 44,
@@ -99,7 +103,10 @@ class RegTeacher1Screen extends StatelessWidget {
         obscureText: isPassword,
         decoration: InputDecoration(
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 12,
+          ),
           hintText: hintText,
           hintStyle: const TextStyle(
             color: Colors.grey,
@@ -108,10 +115,7 @@ class RegTeacher1Screen extends StatelessWidget {
           ),
           prefixIcon: Icon(icon, color: Colors.grey),
         ),
-        style: const TextStyle(
-          fontSize: 16,
-          fontFamily: 'TT Norms',
-        ),
+        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
       ),
     );
   }
