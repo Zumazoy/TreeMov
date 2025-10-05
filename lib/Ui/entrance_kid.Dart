@@ -17,101 +17,88 @@ class EntranceKidScreen extends StatelessWidget {
         ),
       ),
       backgroundColor: const Color(0xFF75D0FF),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/white_default_logo.png',
-              width: 48.56,
-              height: 47.24,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(height: 20),
-            
-            const Text(
-              'TreeMov',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: 'TT Norms',
-              ),
-            ),
-            const SizedBox(height: 30),
-
-            const Text(
-              'Вход',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: 'TT Norms',
-              ),
-            ),
-            const SizedBox(height: 30),
-
-            _buildTextField('Email', Icons.email_outlined),
-            const SizedBox(height: 20),
-
-            _buildTextField('Пароль', Icons.lock_outline, isPassword: true),
-            const SizedBox(height: 30),
-
-            SizedBox(
-              width: 316,
-              height: 44,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context, 
-                    '/main-app', 
-                    (route) => false
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF0099E9),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/white_default_logo.png',
+                  width: 48.56,
+                  height: 47.24,
+                  fit: BoxFit.contain,
                 ),
-                child: const Text(
-                  'Войти',
+                const SizedBox(height: 20),
+                
+                const Text(
+                  'TreeMov',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
-              ),
+                const SizedBox(height: 30),
+
+                const Text(
+                  'Вход',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'TT Norms',
+                  ),
+                ),
+                const SizedBox(height: 30),
+
+                _buildTextField('Email'),
+                const SizedBox(height: 20),
+
+                _buildTextField('Пароль', isPassword: true),
+                const SizedBox(height: 30),
+
+                SizedBox(
+                  width: 316,
+                  height: 44,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context, 
+                        '/main-app', 
+                        (route) => false
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF004C75),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      'Войти',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'TT Norms',
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+              ],
             ),
-            
-            const SizedBox(height: 20),
-            
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context, 
-                  '/home', 
-                  (route) => false
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF75D0FF),
-              ),
-              child: const Text('На главную'),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTextField(String hintText, IconData icon, {bool isPassword = false}) {
+  Widget _buildTextField(String hintText, {bool isPassword = false}) {
     return Container(
       width: 316,
       height: 44,
@@ -130,7 +117,6 @@ class EntranceKidScreen extends StatelessWidget {
             fontSize: 16,
             fontFamily: 'TT Norms',
           ),
-          prefixIcon: Icon(icon, color: Colors.grey),
         ),
         style: const TextStyle(
           fontSize: 16,
