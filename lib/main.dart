@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/Ui/test_token_screen.dart';
+import 'package:treemov/bloc/providers.dart';
 
-import 'constants/app_routes.dart';
 import 'constants/app_colors.dart';
+import 'constants/app_routes.dart';
 import 'ui/entrance/entrance_kid.dart';
 import 'ui/entrance/entrance_screen.dart';
 import 'ui/entrance/entrance_teacher.dart';
@@ -12,6 +14,9 @@ import 'ui/registration/reg_teacher2.dart';
 import 'ui/screens/main_screen.dart';
 
 void main() {
+  // Инициализируем зависимости
+  setupDependencies();
+
   runApp(const MyApp());
 }
 
@@ -35,6 +40,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.regTeacher1: (context) => const RegTeacher1Screen(),
         AppRoutes.regTeacher2: (context) => const RegTeacher2Screen(),
         AppRoutes.mainApp: (context) => const MainScreen(),
+        '/test_token': (context) => TokenTestScreen(),
       },
     );
   }
@@ -108,6 +114,22 @@ class HomeScreen extends StatelessWidget {
                 'Тест навигации',
                 AppRoutes.mainApp,
                 Colors.red,
+              ),
+              const SizedBox(height: 15),
+
+              _buildNavButton(
+                context,
+                'Календарь v0.1',
+                '/calendar',
+                Colors.deepOrangeAccent,
+              ),
+              const SizedBox(height: 15),
+
+              _buildNavButton(
+                context,
+                'Тест токена',
+                '/test_token',
+                Colors.indigo,
               ),
               const SizedBox(height: 30),
 
