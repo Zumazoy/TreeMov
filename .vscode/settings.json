@@ -4,6 +4,5 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
     },
-    "files.autoSave": "onFocusChange",
     "dart.openDevTools": "flutter"
 }
