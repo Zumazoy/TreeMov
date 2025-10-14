@@ -11,7 +11,6 @@ class TokenBloc extends Bloc<TokenEvent, TokenState> {
   TokenBloc({required this.tokenRepository}) : super(TokenInitial()) {
     on<GetTokenEvent>(_onGetToken);
     on<CheckTokenEvent>(_onCheckToken);
-    // on<ClearTokenEvent>(_onClearToken);
   }
 
   Future<void> _onGetToken(
@@ -58,17 +57,4 @@ class TokenBloc extends Bloc<TokenEvent, TokenState> {
       emit(TokenError(error: e.toString()));
     }
   }
-
-  // Future<void> _onClearToken(
-  //   ClearTokenEvent event,
-  //   Emitter<TokenState> emit,
-  // ) async {
-  //   try {
-  //     // В текущей реализации нет метода удаления, но можно добавить
-  //     // await tokenRepository.deleteTokens();
-  //     emit(TokenCleared());
-  //   } catch (e) {
-  //     emit(TokenError(error: e.toString()));
-  //   }
-  // }
 }

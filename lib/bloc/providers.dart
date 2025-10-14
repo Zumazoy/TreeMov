@@ -8,14 +8,18 @@ import 'package:treemov/data/repositories/token_repository.dart';
 final getIt = GetIt.instance;
 
 void setupDependencies() {
+  // Хранилище
+  getIt.registerSingleton<StorageRepository>(StorageRepository());
+
   // Клиент
-  getIt.registerSingleton<DioClient>(DioClient());
+  getIt.registerSingleton<DioClient>(
+    DioClient(storageRepository: getIt<StorageRepository>()),
+  );
 
   // Сервисы
   getIt.registerSingleton<TokenService>(TokenService(getIt<DioClient>()));
 
   // Репозитории
-  getIt.registerSingleton<StorageRepository>(StorageRepository());
   getIt.registerSingleton<TokenRepository>(
     TokenRepository(
       tokenService: getIt<TokenService>(),
@@ -23,7 +27,7 @@ void setupDependencies() {
     ),
   );
 
-  // BLoC
+  // BLoC - регистрируем фабрику, так как BLoC должен создаваться заново
   getIt.registerFactory<TokenBloc>(
     () => TokenBloc(tokenRepository: getIt<TokenRepository>()),
   );

@@ -1,16 +1,36 @@
 import 'package:dio/dio.dart';
 import 'package:treemov/api/core/api_constants.dart';
+import 'package:treemov/api/core/interceptors/auth_interceptor.dart';
+import 'package:treemov/api/core/interceptors/logging_interceptor.dart';
+import 'package:treemov/data/local/storage_repository.dart';
 
 class DioClient {
   late final Dio _dio;
+  final StorageRepository storageRepository;
 
-  DioClient() {
+  DioClient({required this.storageRepository}) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
-        headers: {'Content-Type': 'application/json'},
+        connectTimeout: ApiConstants.connectTimeout,
+        receiveTimeout: ApiConstants.receiveTimeout,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        validateStatus: (status) =>
+            status! < 500, // Разрешаем все статусы кроме 5xx
       ),
     );
+
+    _addInterceptors();
+  }
+
+  void _addInterceptors() {
+    _dio.interceptors.addAll([
+      LoggingInterceptor(),
+      AuthInterceptor(storageRepository: storageRepository),
+    ]);
   }
 
   Dio get dio => _dio;
@@ -25,6 +45,10 @@ class DioClient {
 
   Future<Response> put(String path, {dynamic data}) {
     return _dio.put(path, data: data);
+  }
+
+  Future<Response> patch(String path, {dynamic data}) {
+    return _dio.patch(path, data: data);
   }
 
   Future<Response> delete(String path, {dynamic data}) {

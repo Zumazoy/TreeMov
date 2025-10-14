@@ -11,5 +11,3 @@ class GetTokenEvent extends TokenEvent {
 }
 
 class CheckTokenEvent extends TokenEvent {}
-
-// class ClearTokenEvent extends TokenEvent {}
