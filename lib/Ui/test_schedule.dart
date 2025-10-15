@@ -15,7 +15,7 @@ class TestScheduleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // create service using existing DioClient from getIt
     final dioClient = getIt<DioClient>();
-    final service = ScheduleService(client: dioClient);
+    final service = ScheduleService(dioClient);
 
     return BlocProvider(
       create: (_) =>

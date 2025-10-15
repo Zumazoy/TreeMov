@@ -8,7 +8,7 @@ class StudentsService {
   StudentsService(this._dioClient);
 
   Future<GetStudentsResponse> getAllStudents() async {
-    final response = await _dioClient.get(ApiConstants.getAllStudents);
+    final response = await _dioClient.get(ApiConstants.students);
 
     return GetStudentsResponse.fromJson(response.data);
   }

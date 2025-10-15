@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/Ui/test_create_schedule.dart';
 import 'package:treemov/Ui/test_token_screen.dart';
 import 'package:treemov/bloc/providers.dart';
 
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         '/calendar': (context) => CalendarKidScreen(),
         '/test_token': (context) => TokenTestScreen(),
         '/test_schedule': (context) => TestScheduleScreen(),
+        '/create_schedule': (context) => const CreateScheduleScreen(),
       },
     );
   }
@@ -135,7 +137,7 @@ class HomeScreen extends StatelessWidget {
                 '/test_token',
                 Colors.indigo,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
 
               _buildNavButton(
                 context,
@@ -143,7 +145,15 @@ class HomeScreen extends StatelessWidget {
                 '/test_schedule',
                 const Color.fromARGB(255, 158, 201, 41),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
+
+              _buildNavButton(
+                context,
+                'Создать занятие',
+                '/create_schedule',
+                const Color.fromARGB(255, 160, 172, 56),
+              ),
+              const SizedBox(height: 15),
 
               const Text(
                 'Это тестовые кнопки',

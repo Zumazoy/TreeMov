@@ -63,8 +63,6 @@ class AuthInterceptor extends Interceptor {
   }
 
   bool _isAuthEndpoint(String path) {
-    return path.contains('/token') ||
-        path.contains('/auth/sign_up') ||
-        path.contains('/auth/confirm_sign_up');
+    return path.contains('token/') || path.contains('auth/');
   }
 }

@@ -4,19 +4,19 @@ import 'package:dio/dio.dart';
 import 'package:treemov/api/core/api_constants.dart';
 import 'package:treemov/api/core/dio_client.dart';
 import 'package:treemov/api/models/schedule_model.dart';
-import 'package:treemov/bloc/providers.dart' show getIt;
+import 'package:treemov/api/models/schedules/create_schedule_request.dart';
 
 class ScheduleService {
-  final DioClient _client;
+  final DioClient _dioClient;
 
-  ScheduleService({DioClient? client}) : _client = client ?? getIt<DioClient>();
+  ScheduleService(this._dioClient);
 
   /// Возвращает список занятий. Ответ явно запрашиваем в виде bytes,
   /// затем декодируем в UTF-8 и парсим JSON.
   Future<List<ScheduleModel>> fetchSchedules({String? token}) async {
     try {
-      final Response response = await _client.dio.get(
-        ApiConstants.getAllSchedules,
+      final Response response = await _dioClient.dio.get(
+        ApiConstants.schedules,
         options: Options(
           responseType: ResponseType.bytes,
           headers: token != null ? {'Authorization': 'Bearer $token'} : null,
@@ -40,6 +40,19 @@ class ScheduleService {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<Response> createSchedule(CreateScheduleRequest request) async {
+    try {
+      final response = await _dioClient.post(
+        ApiConstants.schedules,
+        data: request.toJson(),
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception('Ошибка создания занятия: $e');
     }
   }
 }

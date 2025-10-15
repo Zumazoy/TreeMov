@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:treemov/api/core/dio_client.dart';
+import 'package:treemov/api/services/schedule_service.dart';
 import 'package:treemov/api/services/token_service.dart';
 import 'package:treemov/bloc/token/token_bloc.dart';
 import 'package:treemov/data/local/storage_repository.dart';
@@ -18,6 +19,7 @@ void setupDependencies() {
 
   // Сервисы
   getIt.registerSingleton<TokenService>(TokenService(getIt<DioClient>()));
+  getIt.registerSingleton<ScheduleService>(ScheduleService(getIt<DioClient>()));
 
   // Репозитории
   getIt.registerSingleton<TokenRepository>(
