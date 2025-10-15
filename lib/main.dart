@@ -12,6 +12,7 @@ import 'ui/registration/reg_kid2.dart';
 import 'ui/registration/reg_teacher1.dart';
 import 'ui/registration/reg_teacher2.dart';
 import 'ui/screens/main_screen.dart';
+import 'ui/test_schedule.dart';
 
 void main() {
   // Инициализируем зависимости
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.regTeacher2: (context) => const RegTeacher2Screen(),
         AppRoutes.mainApp: (context) => const MainScreen(),
         '/test_token': (context) => TokenTestScreen(),
+        '/test_schedule': (context) => TestScheduleScreen(),
       },
     );
   }
@@ -130,6 +132,14 @@ class HomeScreen extends StatelessWidget {
                 'Тест токена',
                 '/test_token',
                 Colors.indigo,
+              ),
+              const SizedBox(height: 30),
+
+              _buildNavButton(
+                context,
+                'Тест занятий',
+                '/test_schedule',
+                const Color.fromARGB(255, 158, 201, 41),
               ),
               const SizedBox(height: 30),
 
