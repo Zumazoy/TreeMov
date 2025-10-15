@@ -8,4 +8,5 @@ class ApiConstants {
   // Endpoints
   static const String token = 'token/';
   static const String getAllStudents = 'students/students/';
+  static const String schedules = 'schedules/schedules/';
 }
