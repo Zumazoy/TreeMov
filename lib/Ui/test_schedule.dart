@@ -15,7 +15,7 @@ class TestScheduleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // create service using existing DioClient from getIt
     final dioClient = getIt<DioClient>();
-    final service = ScheduleService(client: dioClient);
+    final service = ScheduleService(dioClient);
 
     return BlocProvider(
       create: (_) =>
@@ -53,13 +53,14 @@ class _TestScheduleView extends StatelessWidget {
               );
             } else if (state is SchedulesLoadSuccess) {
               final items = state.schedules;
-              if (items.isEmpty)
+              if (items.isEmpty) {
                 return ListView(
                   children: const [
                     SizedBox(height: 80),
                     Center(child: Text('Занятий не найдено')),
                   ],
                 );
+              }
 
               return ListView.builder(
                 padding: const EdgeInsets.all(8),
