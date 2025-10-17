@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'constants/app_routes.dart';
+import 'constants/app_colors.dart';
 import 'ui/entrance/entrance_kid.dart';
 import 'ui/entrance/entrance_screen.dart';
 import 'ui/entrance/entrance_teacher.dart';
@@ -47,7 +48,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('TreeMov - Главная'),
-        backgroundColor: const Color(0xFF75D0FF),
+        backgroundColor: AppColors.kidPrimary,
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -66,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                 context,
                 'Экран выбора роли',
                 AppRoutes.entrance,
-                const Color(0xFF75D0FF),
+                Colors.lightBlue,
               ),
               const SizedBox(height: 15),
 
