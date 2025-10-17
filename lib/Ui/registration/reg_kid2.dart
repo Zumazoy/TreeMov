@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../constants/app_colors.dart';
+// import '../../constants/app_routes.dart';
 
 class RegKid2Screen extends StatelessWidget {
   const RegKid2Screen({super.key});
@@ -8,7 +10,7 @@ class RegKid2Screen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Регистрация'),
-        backgroundColor: const Color(0xFF75D0FF),
+        backgroundColor: AppColors.kidPrimary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -16,7 +18,7 @@ class RegKid2Screen extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: const Color(0xFF75D0FF),
+      backgroundColor: AppColors.kidPrimary,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -38,7 +40,7 @@ class RegKid2Screen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
@@ -49,7 +51,7 @@ class RegKid2Screen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
@@ -67,8 +69,8 @@ class RegKid2Screen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF004C75),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.kidButton,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -97,7 +99,7 @@ class RegKid2Screen extends StatelessWidget {
       width: 316,
       height: 44,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
@@ -110,7 +112,7 @@ class RegKid2Screen extends StatelessWidget {
           ),
           hintText: hintText,
           hintStyle: const TextStyle(
-            color: Colors.grey,
+            color: AppColors.grey,
             fontSize: 16,
             fontFamily: 'TT Norms',
           ),

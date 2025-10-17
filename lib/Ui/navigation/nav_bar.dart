@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../constants/app_colors.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -12,14 +13,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unselectedColor = Colors.grey[600]!;
-    final selectedColor = const Color(0xFF75D0FF);
+    final unselectedColor = AppColors.grey;
+    final selectedColor = AppColors.plusButton;
 
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: onTap,
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       selectedItemColor: selectedColor,
       unselectedItemColor: unselectedColor,
       selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),

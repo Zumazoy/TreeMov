@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../constants/app_colors.dart';
+import '../../constants/app_routes.dart';
 
 class RegTeacher1Screen extends StatelessWidget {
   const RegTeacher1Screen({super.key});
@@ -8,7 +10,7 @@ class RegTeacher1Screen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Регистрация'),
-        backgroundColor: const Color(0xFF7A75FF),
+        backgroundColor: AppColors.teacherPrimary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -16,7 +18,7 @@ class RegTeacher1Screen extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: const Color(0xFF7A75FF),
+      backgroundColor: AppColors.teacherPrimary,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -38,7 +40,7 @@ class RegTeacher1Screen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
@@ -49,7 +51,7 @@ class RegTeacher1Screen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
@@ -63,11 +65,11 @@ class RegTeacher1Screen extends StatelessWidget {
                   height: 44,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/reg-teacher-2');
+                      Navigator.pushNamed(context, AppRoutes.regTeacher2);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4B0096),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.teacherButton,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -96,7 +98,7 @@ class RegTeacher1Screen extends StatelessWidget {
       width: 316,
       height: 44,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
@@ -109,7 +111,7 @@ class RegTeacher1Screen extends StatelessWidget {
           ),
           hintText: hintText,
           hintStyle: const TextStyle(
-            color: Colors.grey,
+            color: AppColors.grey,
             fontSize: 16,
             fontFamily: 'TT Norms',
           ),

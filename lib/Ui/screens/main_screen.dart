@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
+import '../../constants/app_colors.dart';
 import '../navigation/nav_bar.dart';
+import '../calendar/main_calendar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -13,7 +14,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    Center(child: Text('Заглушка календаря', style: TextStyle(fontSize: 20))),
+    const CalendarScreen(),
     Center(child: Text('Заглушка рейтинга', style: TextStyle(fontSize: 20))),
     Center(child: Text('Заглушка магазина', style: TextStyle(fontSize: 20))),
     Center(child: Text('Заглушка профиля', style: TextStyle(fontSize: 20))),
@@ -31,8 +32,8 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_pageTitles[_currentIndex]),
-        backgroundColor: const Color(0xFF75D0FF),
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.teacherPrimary,
+        foregroundColor: AppColors.white,
       ),
 
       body: _pages[_currentIndex],

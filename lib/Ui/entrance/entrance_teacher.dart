@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_routes.dart';
 
 class EntranceTeacherScreen extends StatelessWidget {
   const EntranceTeacherScreen({super.key});
@@ -8,7 +10,7 @@ class EntranceTeacherScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Вход преподавателя'),
-        backgroundColor: const Color(0xFF7A75FF),
+        backgroundColor: AppColors.teacherPrimary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -16,7 +18,7 @@ class EntranceTeacherScreen extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: const Color(0xFF7A75FF),
+      backgroundColor: AppColors.teacherPrimary,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -38,7 +40,7 @@ class EntranceTeacherScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
@@ -49,7 +51,7 @@ class EntranceTeacherScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w900,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
@@ -68,13 +70,13 @@ class EntranceTeacherScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        '/teacher-main-app',
+                        AppRoutes.mainApp,
                         (route) => false,
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4B0096),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.teacherButton,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -103,7 +105,7 @@ class EntranceTeacherScreen extends StatelessWidget {
       width: 316,
       height: 44,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
@@ -116,7 +118,7 @@ class EntranceTeacherScreen extends StatelessWidget {
           ),
           hintText: hintText,
           hintStyle: const TextStyle(
-            color: Colors.grey,
+            color: AppColors.grey,
             fontSize: 16,
             fontFamily: 'TT Norms',
           ),

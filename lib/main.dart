@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'ui/entrance_kid.dart';
-import 'ui/entrance_screen.dart';
-import 'ui/entrance_teacher.dart';
+import 'constants/app_routes.dart';
+import 'ui/entrance/entrance_kid.dart';
+import 'ui/entrance/entrance_screen.dart';
+import 'ui/entrance/entrance_teacher.dart';
 import 'ui/registration/reg_kid1.dart';
 import 'ui/registration/reg_kid2.dart';
 import 'ui/registration/reg_teacher1.dart';
 import 'ui/registration/reg_teacher2.dart';
-import 'ui/screens/calendar_kid.dart';
 import 'ui/screens/main_screen.dart';
 
 void main() {
@@ -26,17 +26,14 @@ class MyApp extends StatelessWidget {
       home: const HomeScreen(),
       routes: {
         '/home': (context) => const HomeScreen(),
-        '/entrance': (context) => const EntranceScreen(),
-        '/entrance-kid': (context) => const EntranceKidScreen(),
-        '/entrance-teacher': (context) => const EntranceTeacherScreen(),
-        '/reg-kid-1': (context) => const RegKid1Screen(),
-        '/reg-kid-2': (context) => const RegKid2Screen(),
-        '/reg-teacher-1': (context) => const RegTeacher1Screen(),
-        '/reg-teacher-2': (context) => const RegTeacher2Screen(),
-        '/main-app': (context) => const MainScreen(),
-        '/teacher-main-app': (context) =>
-            const PlaceholderScreen(title: 'Приложение преподавателя'),
-        '/calendar': (context) => CalendarKidScreen(),
+        AppRoutes.entrance: (context) => const EntranceScreen(),
+        AppRoutes.entranceKid: (context) => const EntranceKidScreen(),
+        AppRoutes.entranceTeacher: (context) => const EntranceTeacherScreen(),
+        AppRoutes.regKid1: (context) => const RegKid1Screen(),
+        AppRoutes.regKid2: (context) => const RegKid2Screen(),
+        AppRoutes.regTeacher1: (context) => const RegTeacher1Screen(),
+        AppRoutes.regTeacher2: (context) => const RegTeacher2Screen(),
+        AppRoutes.mainApp: (context) => const MainScreen(),
       },
     );
   }
@@ -68,7 +65,7 @@ class HomeScreen extends StatelessWidget {
               _buildNavButton(
                 context,
                 'Экран выбора роли',
-                '/entrance',
+                AppRoutes.entrance,
                 const Color(0xFF75D0FF),
               ),
               const SizedBox(height: 15),
@@ -76,7 +73,7 @@ class HomeScreen extends StatelessWidget {
               _buildNavButton(
                 context,
                 'Экран входа ученика',
-                '/entrance-kid',
+                AppRoutes.entranceKid,
                 Colors.green,
               ),
               const SizedBox(height: 15),
@@ -84,7 +81,7 @@ class HomeScreen extends StatelessWidget {
               _buildNavButton(
                 context,
                 'Экран преподавателя',
-                '/entrance-teacher',
+                AppRoutes.entranceTeacher,
                 Colors.orange,
               ),
               const SizedBox(height: 15),
@@ -92,7 +89,7 @@ class HomeScreen extends StatelessWidget {
               _buildNavButton(
                 context,
                 'Регистрация ребенка',
-                '/reg-kid-1',
+                AppRoutes.regKid1,
                 Colors.amber,
               ),
               const SizedBox(height: 15),
@@ -100,7 +97,7 @@ class HomeScreen extends StatelessWidget {
               _buildNavButton(
                 context,
                 'Регистрация преподавателя',
-                '/reg-teacher-1',
+                AppRoutes.regTeacher1,
                 Colors.purple,
               ),
               const SizedBox(height: 15),
@@ -108,7 +105,7 @@ class HomeScreen extends StatelessWidget {
               _buildNavButton(
                 context,
                 'Тест навигации',
-                '/main-app',
+                AppRoutes.mainApp,
                 Colors.red,
               ),
               const SizedBox(height: 30),
@@ -202,7 +199,7 @@ class PlaceholderScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  '/main-app',
+                  AppRoutes.mainApp,
                   (route) => false,
                 );
               },

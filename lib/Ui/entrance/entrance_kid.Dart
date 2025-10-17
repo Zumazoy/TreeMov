@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../constants/app_colors.dart';
+import '../../constants/app_routes.dart';
 
 class EntranceKidScreen extends StatelessWidget {
   const EntranceKidScreen({super.key});
@@ -8,7 +10,7 @@ class EntranceKidScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Вход ученика'),
-        backgroundColor: const Color(0xFF75D0FF),
+        backgroundColor: AppColors.kidPrimary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -16,7 +18,7 @@ class EntranceKidScreen extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: const Color(0xFF75D0FF),
+      backgroundColor: AppColors.kidPrimary,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -38,7 +40,7 @@ class EntranceKidScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
@@ -49,7 +51,7 @@ class EntranceKidScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontFamily: 'TT Norms',
                   ),
                 ),
@@ -68,13 +70,13 @@ class EntranceKidScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
                         context, 
-                        '/main-app', 
+                        AppRoutes.mainApp, 
                         (route) => false
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF004C75),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.kidButton,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -103,7 +105,7 @@ class EntranceKidScreen extends StatelessWidget {
       width: 316,
       height: 44,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
@@ -113,7 +115,7 @@ class EntranceKidScreen extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           hintText: hintText,
           hintStyle: const TextStyle(
-            color: Colors.grey,
+            color: AppColors.grey,
             fontSize: 16,
             fontFamily: 'TT Norms',
           ),
