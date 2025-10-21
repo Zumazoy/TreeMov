@@ -103,7 +103,6 @@ class ScheduleUpdateModel {
       case 'date':
         if (newValue == null) return false;
         final originalDate = originalSchedule!.date;
-        if (originalDate == null) return true;
         final formattedNewDate = _formatDate(newValue);
         return formattedNewDate != originalDate;
       case 'start_time':
