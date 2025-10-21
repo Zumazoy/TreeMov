@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
-import 'package:treemov/features/teacher_calendar/data/models/create_schedule_request.dart';
+import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
 
 class CreateScheduleScreen extends StatefulWidget {
   const CreateScheduleScreen({super.key});
@@ -20,7 +20,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
   int? _periodScheduleId;
   int _teacherId = 1;
   int _subjectId = 1;
-  int _weekDay = 1;
   int? _lesson;
 
   DateTime _selectedDate = DateTime.now();
@@ -44,13 +43,12 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       });
 
       try {
-        final request = CreateScheduleRequest(
+        final request = ScheduleRequestModel(
           classroomId: _classroomId,
           groupId: _groupId,
           periodScheduleId: _periodScheduleId,
           teacherId: _teacherId,
           subjectId: _subjectId,
-          weekDay: _weekDay,
           lesson: _lesson,
           title: _titleController.text,
           date: _selectedDate,
@@ -58,29 +56,17 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
           endTime: _endTime,
         );
 
-        final response = await _scheduleService.createSchedule(request);
+        await _scheduleService.createSchedule(request);
 
-        if (response.statusCode == 201) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Занятие успешно создано!'),
-                backgroundColor: Colors.green,
-              ),
-            );
-            _clearForm();
-          }
-        } else {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Ошибка сервера: ${response.statusCode} - ${response.data}',
-                ),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
+        // Если метод возвращает ScheduleResponseModel, значит создание успешно
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Занятие успешно создано!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          _clearForm();
         }
       } catch (e) {
         if (mounted) {
@@ -108,7 +94,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     _periodScheduleId = null;
     _teacherId = 1;
     _subjectId = 1;
-    _weekDay = 1;
     _lesson = null;
     _selectedDate = DateTime.now();
     _startTime = const TimeOfDay(hour: 9, minute: 0);
@@ -277,71 +262,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                               subtitle: Text(_endTime.format(context)),
                               trailing: const Icon(Icons.arrow_drop_down),
                               onTap: _selectEndTime,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // День недели
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'День недели',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            DropdownButtonFormField<int>(
-                              initialValue: _weekDay,
-                              decoration: const InputDecoration(
-                                labelText: 'День недели *',
-                                border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.calendar_view_week),
-                              ),
-                              items: const [
-                                DropdownMenuItem(
-                                  value: 1,
-                                  child: Text('Понедельник'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 2,
-                                  child: Text('Вторник'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 3,
-                                  child: Text('Среда'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 4,
-                                  child: Text('Четверг'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 5,
-                                  child: Text('Пятница'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 6,
-                                  child: Text('Суббота'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 7,
-                                  child: Text('Воскресенье'),
-                                ),
-                              ],
-                              onChanged: (value) =>
-                                  setState(() => _weekDay = value!),
-                              validator: (value) =>
-                                  value == null ? 'Выберите день недели' : null,
                             ),
                           ],
                         ),

@@ -1,17 +1,33 @@
-// import '../../api/models/schedule_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
 
-// abstract class SchedulesState {}
+abstract class ScheduleState {
+  const ScheduleState();
+}
 
-// class SchedulesInitial extends SchedulesState {}
+class ScheduleInitial extends ScheduleState {}
 
-// class SchedulesLoadInProgress extends SchedulesState {}
+class ScheduleLoading extends ScheduleState {}
 
-// class SchedulesLoadSuccess extends SchedulesState {
-//   final List<ScheduleModel> schedules;
-//   SchedulesLoadSuccess(this.schedules);
-// }
+class SchedulesLoaded extends ScheduleState {
+  final List<ScheduleResponseModel> schedules;
 
-// class SchedulesLoadFailure extends SchedulesState {
-//   final String error;
-//   SchedulesLoadFailure(this.error);
-// }
+  const SchedulesLoaded(this.schedules);
+}
+
+class ScheduleLoaded extends ScheduleState {
+  final ScheduleResponseModel schedule;
+
+  const ScheduleLoaded(this.schedule);
+}
+
+class ScheduleOperationSuccess extends ScheduleState {
+  final String message;
+
+  const ScheduleOperationSuccess(this.message);
+}
+
+class ScheduleError extends ScheduleState {
+  final String message;
+
+  const ScheduleError(this.message);
+}

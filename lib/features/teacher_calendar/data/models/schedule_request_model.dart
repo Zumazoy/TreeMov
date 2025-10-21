@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CreateScheduleRequest {
+class ScheduleRequestModel {
   final int classroomId;
   final int groupId;
   final int? periodScheduleId;
   final int teacherId;
   final int subjectId;
-  final int weekDay;
   final int? lesson;
   final String title;
   final DateTime date;
@@ -15,13 +14,12 @@ class CreateScheduleRequest {
   final bool isCanceled;
   final bool isCompleted;
 
-  CreateScheduleRequest({
+  ScheduleRequestModel({
     required this.classroomId,
     required this.groupId,
     required this.periodScheduleId,
     required this.teacherId,
     required this.subjectId,
-    required this.weekDay,
     required this.lesson,
     required this.title,
     required this.date,
@@ -37,7 +35,6 @@ class CreateScheduleRequest {
     if (periodScheduleId != null) 'period_schedule': periodScheduleId,
     'teacher': teacherId,
     'subject': subjectId,
-    'week_day': weekDay,
     if (lesson != null) 'lesson': lesson,
     'title': title,
     'date': _formatDate(date),

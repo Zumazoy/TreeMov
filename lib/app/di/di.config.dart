@@ -5,6 +5,9 @@ import 'package:treemov/features/auth/data/datasources/auth_remote_data_source.d
 import 'package:treemov/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:treemov/features/auth/presentation/blocs/token/token_bloc.dart';
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
+import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
+import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
+import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -32,9 +35,15 @@ void setupDependencies() {
       storageRepository: getIt<StorageRepository>(),
     ),
   );
+  getIt.registerSingleton<ScheduleRepository>(
+    ScheduleRepositoryImpl(getIt<ScheduleRemoteDataSource>()),
+  );
 
   // BLoC - регистрируем фабрику, так как BLoC должен создаваться заново
   getIt.registerFactory<TokenBloc>(
     () => TokenBloc(tokenRepository: getIt<AuthRepositoryImpl>()),
+  );
+  getIt.registerFactory<SchedulesBloc>(
+    () => SchedulesBloc(getIt<ScheduleRepository>()),
   );
 }

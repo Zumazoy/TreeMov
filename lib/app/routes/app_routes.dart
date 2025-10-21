@@ -9,9 +9,9 @@ import 'package:treemov/features/auth/presentation/pages/register/reg_teacher1.d
 import 'package:treemov/features/auth/presentation/pages/register/reg_teacher2.dart';
 import 'package:treemov/features/kid_calendar/presentation/pages/calendar_kid.dart';
 import 'package:treemov/features/teacher_calendar/presentation/pages/test_create_schedule.dart';
+import 'package:treemov/features/teacher_calendar/presentation/pages/test_schedule_list_screen.dart';
 import 'package:treemov/features/test_home/home_screen.dart';
 import 'package:treemov/temp/main_screen.dart';
-// import 'package:treemov/temp/test_schedule.dart';
 
 class AppRoutes {
   static const String entrance = '/entrance';
@@ -45,7 +45,7 @@ class AppRoutes {
     mainApp: (context) => const MainScreen(),
     testHome: (context) => HomeScreen(),
     testToken: (context) => TokenTestScreen(),
-    // testSchedule: (context) => TestScheduleScreen(),
+    testSchedule: (context) => TestScheduleScreen(),
     createSchedule: (context) => const CreateScheduleScreen(),
   };
 }
