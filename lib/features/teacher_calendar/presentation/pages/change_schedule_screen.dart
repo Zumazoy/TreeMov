@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
 import '../../../../core/themes/app_colors.dart';
 
-class CreateScheduleScreen extends StatefulWidget {
-  const CreateScheduleScreen({super.key});
+class EditEventScreen extends StatefulWidget {
+  final String eventId;
+  final String initialGroup;
+  final String initialLessonType;
+  final String initialLocation;
+  final DateTime initialStartDateTime;
+  final DateTime initialEndDateTime;
+  final String initialRepeat;
+  final String initialReminder;
+  final String initialDescription;
+
+  const EditEventScreen({
+    super.key,
+    required this.eventId,
+    required this.initialGroup,
+    required this.initialLessonType,
+    required this.initialLocation,
+    required this.initialStartDateTime,
+    required this.initialEndDateTime,
+    required this.initialRepeat,
+    required this.initialReminder,
+    required this.initialDescription,
+  });
 
   @override
-  State<CreateScheduleScreen> createState() => _CreateScheduleScreenState();
+  State<EditEventScreen> createState() => _EditEventScreenState();
 }
 
-class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
+class _EditEventScreenState extends State<EditEventScreen> {
   String? _selectedGroup;
   String? _selectedLessonType;
   String? _selectedLocation;
@@ -47,6 +68,20 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
 
   DateTime _startDateTime = DateTime.now();
   DateTime _endDateTime = DateTime.now().add(const Duration(hours: 1));
+
+  @override
+  void initState() {
+    super.initState();
+    // Инициализация данными из переданного события
+    _selectedGroup = widget.initialGroup;
+    _selectedLessonType = widget.initialLessonType;
+    _selectedLocation = widget.initialLocation;
+    _startDateTime = widget.initialStartDateTime;
+    _endDateTime = widget.initialEndDateTime;
+    _selectedRepeat = widget.initialRepeat;
+    _selectedReminder = widget.initialReminder;
+    _descriptionController.text = widget.initialDescription;
+  }
 
   String _formatDateTime(DateTime dateTime) {
     return '${_formatDate(dateTime)} ${_formatTime(dateTime)}';
@@ -103,7 +138,9 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
             pickedTime.hour,
             pickedTime.minute,
           );
-          _endDateTime = _startDateTime.add(const Duration(hours: 1));
+          if (_endDateTime.isBefore(_startDateTime)) {
+            _endDateTime = _startDateTime.add(const Duration(hours: 1));
+          }
         });
       }
     }
@@ -157,7 +194,21 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     }
   }
 
-  void _saveEvent() {
+  void _updateEvent() {
+    //
+    // context.read<EventBloc>().add(UpdateEvent(
+    //   eventId: widget.eventId,
+    //   group: _selectedGroup!,
+    //   lessonType: _selectedLessonType!,
+    //   location: _selectedLocation!,
+    //   startDateTime: _startDateTime,
+    //   endDateTime: _endDateTime,
+    //   repeat: _selectedRepeat,
+    //   reminder: _selectedReminder,
+    //   description: _descriptionController.text,
+    // ));
+
+    // Временно возвращаем назад
     Navigator.pop(context);
   }
 
@@ -375,7 +426,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
         backgroundColor: AppColors.teacherPrimary,
         automaticallyImplyLeading: false,
         title: const Text(
-          'Новое событие',
+          'Изменить событие',
           style: TextStyle(
             fontFamily: 'Arial',
             fontWeight: FontWeight.w900,
@@ -392,7 +443,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.check, color: Colors.white),
-            onPressed: _saveEvent,
+            onPressed: _updateEvent,
           ),
         ],
       ),

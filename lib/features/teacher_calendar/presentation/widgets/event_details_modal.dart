@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/features/teacher_calendar/data/models/calendar_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/pages/about_event_details.dart';
 
 import '../../../../core/themes/app_colors.dart';
 
@@ -107,7 +108,23 @@ class EventDetailsModal extends StatelessWidget {
                   height: 40,
                   child: OutlinedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(context); // Закрываем модальное окно
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AboutEventDetailsScreen(
+                            groupName: event.title,
+                            activityType: _extractActivityType(event.title),
+                            location: event.location,
+                            startTime: startTime,
+                            endTime: endTime,
+                            repeat: 'Еженедельно',
+                            description:
+                                event.description ??
+                                'Описание события отсутствует',
+                          ),
+                        ),
+                      );
                     },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: AppColors.white,
