@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../data/models/calendar_event.dart';
 import '../widgets/events_panel.dart';
+import 'create_schedule_screen.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -62,6 +63,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
+  void _navigateToCreateSchedule() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CreateScheduleScreen()),
+    );
+  }
+
   List<CalendarEvent> _getEventsForDate(DateTime date) {
     final String dateKey = _formatDate(date);
     return _events[dateKey] ?? [];
@@ -71,91 +79,120 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: SingleChildScrollView(
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-
-              Container(
-                width: 327,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: AppColors.calendarButton,
-                  borderRadius: BorderRadius.circular(12.5),
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.only(top: 20, right: 24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: AppColors.plusButton,
+                    borderRadius: BorderRadius.circular(12.5),
+                  ),
+                  child: IconButton(
+                    padding: const EdgeInsets.all(5),
+                    icon: const Icon(Icons.add, color: Colors.white, size: 15),
+                    onPressed: _navigateToCreateSchedule,
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.chevron_left,
-                        color: AppColors.white,
-                        size: 24,
+                    Container(
+                      width: 327,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: AppColors.calendarButton,
+                        borderRadius: BorderRadius.circular(12.5),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _currentDate = DateTime(
-                            _currentDate.year,
-                            _currentDate.month - 1,
-                          );
-                        });
-                      },
-                    ),
-                    Center(
-                      child: Text(
-                        _getMonthYearText(),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                          fontFamily: 'TT Norms',
-                          height: 1.2,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.chevron_left,
+                              color: AppColors.white,
+                              size: 24,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _currentDate = DateTime(
+                                  _currentDate.year,
+                                  _currentDate.month - 1,
+                                );
+                              });
+                            },
+                          ),
+                          Center(
+                            child: Text(
+                              _getMonthYearText(),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.white,
+                                fontFamily: 'TT Norms',
+                                height: 1.2,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.chevron_right,
+                              color: AppColors.white,
+                              size: 24,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _currentDate = DateTime(
+                                  _currentDate.year,
+                                  _currentDate.month + 1,
+                                );
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.chevron_right,
-                        color: AppColors.white,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _currentDate = DateTime(
-                            _currentDate.year,
-                            _currentDate.month + 1,
-                          );
-                        });
-                      },
+
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      width: 327,
+                      height: 40,
+                      child: Row(children: _buildWeekDays()),
                     ),
+
+                    const SizedBox(height: 10),
+
+                    SizedBox(
+                      width: 327,
+                      height: _calculateCalendarHeight(),
+                      child: _buildCalendarGrid(),
+                    ),
+
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 20),
-
-              SizedBox(
-                width: 327,
-                height: 40,
-                child: Row(children: _buildWeekDays()),
-              ),
-
-              const SizedBox(height: 10),
-
-              SizedBox(
-                width: 327,
-                height: _calculateCalendarHeight(),
-                child: _buildCalendarGrid(),
-              ),
-
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
