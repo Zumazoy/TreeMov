@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:treemov/core/storage/storage_repository.dart';
+import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
 
 class AuthInterceptor extends Interceptor {
-  final StorageRepository storageRepository;
+  final AuthStorageRepository authStorageRepository;
 
-  AuthInterceptor({required this.storageRepository});
+  AuthInterceptor({required this.authStorageRepository});
 
   @override
   Future<void> onRequest(
@@ -15,7 +15,7 @@ class AuthInterceptor extends Interceptor {
     // Пропускаем запросы на аутентификацию
     if (!_isAuthEndpoint(options.path)) {
       try {
-        final token = await storageRepository.getAccessToken();
+        final token = await authStorageRepository.getAccessToken();
 
         if (token != null && token.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $token';

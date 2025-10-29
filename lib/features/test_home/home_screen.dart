@@ -49,14 +49,14 @@ class HomeScreen extends StatelessWidget {
 
               NavButton(
                 text: 'Регистрация ребенка',
-                route: AppRoutes.regKid1,
+                route: AppRoutes.kidInfoScreen,
                 color: Colors.amber,
               ),
               const SizedBox(height: 15),
 
               NavButton(
                 text: 'Регистрация преподавателя',
-                route: AppRoutes.regTeacher1,
+                route: AppRoutes.teacherVerificationScreen,
                 color: Colors.purple,
               ),
               const SizedBox(height: 15),

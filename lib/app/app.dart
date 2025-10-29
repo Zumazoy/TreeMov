@@ -11,7 +11,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'TreeMov App',
       theme: AppTheme.lightTheme,
-      initialRoute: AppRoutes.testHome,
+      initialRoute: AppRoutes.home,
       routes: AppRoutes.routes,
     );
   }

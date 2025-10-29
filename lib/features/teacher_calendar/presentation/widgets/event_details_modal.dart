@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/features/teacher_calendar/data/models/calendar_event.dart';
-import 'package:treemov/features/teacher_calendar/presentation/pages/about_event_details.dart';
+import 'package:treemov/features/teacher_calendar/presentation/screens/about_event_details.dart';
 
 import '../../../../core/themes/app_colors.dart';
 

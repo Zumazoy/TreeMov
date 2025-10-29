@@ -1,9 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:treemov/core/network/dio_client.dart';
-import 'package:treemov/core/storage/storage_repository.dart';
-import 'package:treemov/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:treemov/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:treemov/features/auth/presentation/blocs/token/token_bloc.dart';
+import 'package:treemov/features/authorization/data/datasources/auth_remote_data_source.dart';
+import 'package:treemov/features/authorization/data/repositories/auth_repository_impl.dart';
+import 'package:treemov/features/authorization/data/repositories/auth_storage_repository_impl.dart';
+import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
+import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
+import 'package:treemov/features/authorization/presentation/blocs/token/token_bloc.dart';
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
@@ -12,12 +14,12 @@ import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/s
 final getIt = GetIt.instance;
 
 void setupDependencies() {
-  // Хранилище
-  getIt.registerSingleton<StorageRepository>(StorageRepository());
+  // Локальные хранилища
+  getIt.registerSingleton<AuthStorageRepository>(AuthStorageRepositoryImpl());
 
   // Клиент
   getIt.registerSingleton<DioClient>(
-    DioClient(storageRepository: getIt<StorageRepository>()),
+    DioClient(authStorageRepository: getIt<AuthStorageRepository>()),
   );
 
   // Сервисы
@@ -29,10 +31,10 @@ void setupDependencies() {
   );
 
   // Репозитории
-  getIt.registerSingleton<AuthRepositoryImpl>(
+  getIt.registerSingleton<AuthRepository>(
     AuthRepositoryImpl(
-      tokenService: getIt<AuthRemoteDataSource>(),
-      storageRepository: getIt<StorageRepository>(),
+      authRemoteDataSource: getIt<AuthRemoteDataSource>(),
+      authStorageRepository: getIt<AuthStorageRepository>(),
     ),
   );
   getIt.registerSingleton<ScheduleRepository>(
@@ -41,7 +43,10 @@ void setupDependencies() {
 
   // BLoC - регистрируем фабрику, так как BLoC должен создаваться заново
   getIt.registerFactory<TokenBloc>(
-    () => TokenBloc(tokenRepository: getIt<AuthRepositoryImpl>()),
+    () => TokenBloc(
+      authRepository: getIt<AuthRepository>(),
+      authStorageRepository: getIt<AuthStorageRepository>(),
+    ),
   );
   getIt.registerFactory<SchedulesBloc>(
     () => SchedulesBloc(getIt<ScheduleRepository>()),

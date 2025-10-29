@@ -2,13 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/auth_interceptor.dart';
 import 'package:treemov/core/network/logging_interceptor.dart';
-import 'package:treemov/core/storage/storage_repository.dart';
+import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
 
 class DioClient {
   late final Dio _dio;
-  final StorageRepository storageRepository;
+  final AuthStorageRepository authStorageRepository;
 
-  DioClient({required this.storageRepository}) {
+  DioClient({required this.authStorageRepository}) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
@@ -29,7 +29,7 @@ class DioClient {
   void _addInterceptors() {
     _dio.interceptors.addAll([
       LoggingInterceptor(),
-      AuthInterceptor(storageRepository: storageRepository),
+      AuthInterceptor(authStorageRepository: authStorageRepository),
     ]);
   }
 

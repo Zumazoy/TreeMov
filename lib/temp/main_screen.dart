@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
-import 'package:treemov/features/teacher_calendar/presentation/pages/calendar_screen.dart';
+import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
+import 'package:treemov/temp/profile_screen.dart';
 
 import '../core/themes/app_colors.dart';
 
@@ -18,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
     const CalendarScreen(),
     Center(child: Text('Заглушка рейтинга', style: TextStyle(fontSize: 20))),
     Center(child: Text('Заглушка магазина', style: TextStyle(fontSize: 20))),
-    Center(child: Text('Заглушка профиля', style: TextStyle(fontSize: 20))),
+    const ProfileScreen(),
   ];
 
   final List<String> _pageTitles = [
