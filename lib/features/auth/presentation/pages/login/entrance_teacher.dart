@@ -1,107 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/app/routes/app_routes.dart';
-
 import '../../../../../core/themes/app_colors.dart';
+import '../../widgets/auth_header.dart';
 
-class EntranceTeacherScreen extends StatelessWidget {
+class EntranceTeacherScreen extends StatefulWidget {
   const EntranceTeacherScreen({super.key});
+
+  @override
+  State<EntranceTeacherScreen> createState() => _EntranceTeacherScreenState();
+}
+
+class _EntranceTeacherScreenState extends State<EntranceTeacherScreen> {
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Вход преподавателя'),
-        backgroundColor: AppColors.teacherPrimary,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
       backgroundColor: AppColors.teacherPrimary,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/white_default_logo.png',
-                  width: 48.56,
-                  height: 47.24,
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(height: 20),
+      body: Stack(
+        children: [
+          const AuthHeader(),
 
-                const Text(
-                  'TreeMov',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.white,
-                    fontFamily: 'TT Norms',
-                  ),
-                ),
-                const SizedBox(height: 30),
+          Center(
+            child: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 60),
 
-                const Text(
-                  'Вход',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.white,
-                    fontFamily: 'TT Norms',
-                  ),
-                ),
-                const SizedBox(height: 30),
-
-                _buildTextField('email'),
-                const SizedBox(height: 20),
-
-                _buildTextField('Пароль', isPassword: true),
-                const SizedBox(height: 30),
-
-                SizedBox(
-                  width: 316,
-                  height: 44,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        AppRoutes.mainApp,
-                        (route) => false,
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.teacherButton,
-                      foregroundColor: AppColors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      'Войти',
+                    const Text(
+                      'Вход',
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.white,
                         fontFamily: 'TT Norms',
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 40),
+
+                    _buildTextField('email'),
+                    const SizedBox(height: 20),
+
+                    _buildPasswordField('Пароль'),
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      width: 316,
+                      height: 44,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            AppRoutes.mainApp,
+                            (route) => false,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.teacherButton,
+                          foregroundColor: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                        ),
+                        child: const Text(
+                          'Войти',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'TT Norms',
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                  ],
                 ),
-                const SizedBox(height: 40),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  Widget _buildTextField(String hintText, {bool isPassword = false}) {
+  Widget _buildTextField(String hintText) {
     return Container(
       width: 316,
       height: 44,
@@ -110,7 +98,6 @@ class EntranceTeacherScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
-        obscureText: isPassword,
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
@@ -122,6 +109,45 @@ class EntranceTeacherScreen extends StatelessWidget {
             color: AppColors.grey,
             fontSize: 16,
             fontFamily: 'TT Norms',
+          ),
+        ),
+        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField(String hintText) {
+    return Container(
+      width: 316,
+      height: 44,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextField(
+        obscureText: _obscurePassword,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 12,
+          ),
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            color: AppColors.grey,
+            fontSize: 16,
+            fontFamily: 'TT Norms',
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscurePassword ? Icons.visibility_off : Icons.visibility,
+              color: AppColors.grey,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscurePassword = !_obscurePassword;
+              });
+            },
           ),
         ),
         style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../pages/change_schedule_screen.dart';
+import '../widgets/delete_event_modal.dart';
+import '../widgets/change_event_modal.dart';
 
 class AboutEventDetailsScreen extends StatelessWidget {
   final String? eventId;
@@ -55,6 +57,36 @@ class AboutEventDetailsScreen extends StatelessWidget {
           initialDescription: description,
         ),
       ),
+    );
+  }
+
+  void _showChangeModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: ChangeEventModal(
+          onOptionSelected: (selectedOption) {
+            // Здесь будет логика для BLoC
+            // Выбранный вариант: selectedOption
+
+            // Переходим на экран редактирования после выбора
+            _navigateToEditScreen(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) =>
+          Padding(padding: const EdgeInsets.all(20), child: DeleteEventModal()),
     );
   }
 
@@ -194,7 +226,7 @@ class AboutEventDetailsScreen extends StatelessWidget {
                   _buildActionButton(
                     text: 'Изменить',
                     icon: Icons.edit,
-                    onPressed: () => _navigateToEditScreen(context),
+                    onPressed: () => _showChangeModal(context),
                   ),
 
                   const SizedBox(width: 16),
@@ -202,9 +234,7 @@ class AboutEventDetailsScreen extends StatelessWidget {
                   _buildActionButton(
                     text: 'Удалить',
                     icon: Icons.delete,
-                    onPressed: () {
-                      // удаление
-                    },
+                    onPressed: () => _showDeleteModal(context),
                   ),
                 ],
               ),

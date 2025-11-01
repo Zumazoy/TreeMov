@@ -7,17 +7,18 @@ import 'package:treemov/features/auth/presentation/pages/register/reg_kid1.dart'
 import 'package:treemov/features/auth/presentation/pages/register/reg_kid2.dart';
 import 'package:treemov/features/auth/presentation/pages/register/reg_teacher1.dart';
 import 'package:treemov/features/auth/presentation/pages/register/reg_teacher2.dart';
+import 'package:treemov/features/auth/presentation/pages/register/registration_screen.dart';
 import 'package:treemov/features/kid_calendar/presentation/pages/calendar_kid.dart';
 import 'package:treemov/features/teacher_calendar/presentation/pages/test_create_schedule.dart';
 import 'package:treemov/features/test_home/home_screen.dart';
 import 'package:treemov/temp/main_screen.dart';
-// import 'package:treemov/temp/test_schedule.dart';
 
 class AppRoutes {
   static const String entrance = '/entrance';
   static const String entranceKid = '/entrance-kid';
   static const String entranceTeacher = '/entrance-teacher';
 
+  static const String registration = '/registration';
   static const String regKid1 = '/reg-kid-1';
   static const String regKid2 = '/reg-kid-2';
   static const String regTeacher1 = '/reg-teacher-1';
@@ -37,6 +38,7 @@ class AppRoutes {
     entrance: (context) => const EntranceScreen(),
     entranceKid: (context) => const EntranceKidScreen(),
     entranceTeacher: (context) => const EntranceTeacherScreen(),
+    registration: (context) => const RegistrationScreen(),
     regKid1: (context) => const RegKid1Screen(),
     regKid2: (context) => const RegKid2Screen(),
     regTeacher1: (context) => const RegTeacher1Screen(),
@@ -45,7 +47,6 @@ class AppRoutes {
     mainApp: (context) => const MainScreen(),
     testHome: (context) => HomeScreen(),
     testToken: (context) => TokenTestScreen(),
-    // testSchedule: (context) => TestScheduleScreen(),
     createSchedule: (context) => const CreateScheduleScreen(),
   };
 }
