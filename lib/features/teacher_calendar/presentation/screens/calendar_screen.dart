@@ -134,33 +134,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         backgroundColor: AppColors.white,
         body: Column(
           children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.only(top: 20, right: 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: AppColors.plusButton,
-                      borderRadius: BorderRadius.circular(12.5),
-                    ),
-                    child: IconButton(
-                      padding: const EdgeInsets.all(5),
-                      icon: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 15,
-                      ),
-                      onPressed: _navigateToCreateSchedule,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
+            // Убрали контейнер с кнопкой добавления отсюда
             const SizedBox(height: 12),
 
             Expanded(
@@ -250,6 +224,32 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
             ),
           ],
+        ),
+        // Добавляем кнопку в нижнюю часть экрана
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: _navigateToCreateSchedule,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.plusButton,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.5),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text(
+                'Добавить событие',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'TT Norms',
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
