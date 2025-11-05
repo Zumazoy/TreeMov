@@ -259,13 +259,13 @@ class ScheduleResponseModel {
   String get formattedTimeRange {
     if (startTime == null && endTime == null) return '';
 
-    final start = startTime != null ? _formatTime(startTime!) : '';
-    final end = endTime != null ? _formatTime(endTime!) : '';
+    final start = startTime != null ? formatTime(startTime!) : '';
+    final end = endTime != null ? formatTime(endTime!) : '';
 
     return [start, end].where((x) => x.isNotEmpty).join(' — ');
   }
 
-  String _formatTime(String time) {
+  String formatTime(String time) {
     if (time.length >= 5) {
       return time.substring(0, 5);
     }

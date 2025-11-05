@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
+import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../../data/models/calendar_event.dart';
@@ -16,44 +21,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _currentDate = DateTime.now();
   DateTime? _selectedDate;
 
-  final Map<String, List<CalendarEvent>> _events = {
-    '2025-10-29': [
-      CalendarEvent(
-        time: '18:30\n20:00',
-        title: 'Растяжка (Группа "Слайд")',
-        location: 'Малый зал',
-      ),
-      CalendarEvent(
-        time: '19:45\n21:15',
-        title: 'Йога для начинающих',
-        location: 'Большой зал',
-      ),
-    ],
-    '2025-10-25': [
-      CalendarEvent(
-        time: '16:00\n17:30',
-        title: 'Фитнес микс',
-        location: 'Большой зал',
-      ),
-    ],
-    '2025-10-22': [
-      CalendarEvent(
-        time: '09:00\n10:30',
-        title: 'Утренняя зарядка',
-        location: 'Малый зал',
-      ),
-      CalendarEvent(
-        time: '14:00\n15:30',
-        title: 'Стретчинг',
-        location: 'Большой зал',
-      ),
-      CalendarEvent(
-        time: '19:00\n20:30',
-        title: 'Силовая тренировка',
-        location: 'Тренажерный зал',
-      ),
-    ],
-  };
+  Map<String, List<CalendarEvent>> _events = {};
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SchedulesBloc>().add(LoadSchedulesEvent());
+    });
+  }
 
   void _showEventsPanel(DateTime date) {
     EventsPanel.show(
@@ -75,124 +51,206 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return _events[dateKey] ?? [];
   }
 
+  void _updateEventsFromSchedules(List<ScheduleResponseModel> schedules) {
+    final Map<String, List<CalendarEvent>> newEvents = {};
+
+    for (final schedule in schedules) {
+      final dateKey = _formatScheduleDate(schedule);
+
+      if (!newEvents.containsKey(dateKey)) {
+        newEvents[dateKey] = [];
+      }
+
+      newEvents[dateKey]!.add(
+        CalendarEvent(
+          time: _formatScheduleTime(schedule),
+          title: schedule.title.isEmpty ? '(Без названия)' : schedule.title,
+          location: schedule.classroomTitle.isNotEmpty
+              ? schedule.classroomTitle
+              : 'Не указано',
+          description: _getScheduleDescription(schedule),
+        ),
+      );
+    }
+
+    setState(() {
+      _events = newEvents;
+    });
+  }
+
+  String _formatScheduleDate(ScheduleResponseModel schedule) {
+    try {
+      final date = DateTime.parse(schedule.date);
+      return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    } catch (e) {
+      debugPrint("===ERROR=== on _formatScheduleDate");
+      return schedule.date;
+    }
+  }
+
+  String _formatScheduleTime(ScheduleResponseModel schedule) {
+    final startTime = schedule.startTime;
+    final endTime = schedule.endTime;
+
+    if (startTime != null && endTime != null) {
+      return '${schedule.formatTime(startTime)}\n${schedule.formatTime(endTime)}';
+    }
+
+    return 'Время не указано';
+  }
+
+  String _getScheduleDescription(ScheduleResponseModel schedule) {
+    final List<String> details = [];
+
+    if (schedule.formattedEmployer.isNotEmpty) {
+      details.add('Преподаватель: ${schedule.formattedEmployer}');
+    }
+
+    if (schedule.groupName.isNotEmpty) {
+      details.add('Группа: ${schedule.groupName}');
+    }
+
+    if (schedule.isCanceled) {
+      details.add('❌ Отменено');
+    }
+
+    if (schedule.isCompleted) {
+      details.add('✅ Завершено');
+    }
+
+    return details.join('\n');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.only(top: 20, right: 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: AppColors.plusButton,
-                    borderRadius: BorderRadius.circular(12.5),
-                  ),
-                  child: IconButton(
-                    padding: const EdgeInsets.all(5),
-                    icon: const Icon(Icons.add, color: Colors.white, size: 15),
-                    onPressed: _navigateToCreateSchedule,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          Expanded(
-            child: SingleChildScrollView(
-              child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 327,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: AppColors.calendarButton,
-                        borderRadius: BorderRadius.circular(12.5),
+    return BlocListener<SchedulesBloc, ScheduleState>(
+      listener: (context, state) {
+        if (state is SchedulesLoaded) {
+          // Обновляем события календаря при загрузке расписаний
+          _updateEventsFromSchedules(state.schedules);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(top: 20, right: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 34,
+                    height: 34,
+                    decoration: BoxDecoration(
+                      color: AppColors.plusButton,
+                      borderRadius: BorderRadius.circular(12.5),
+                    ),
+                    child: IconButton(
+                      padding: const EdgeInsets.all(5),
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 15,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.chevron_left,
-                              color: AppColors.white,
-                              size: 24,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _currentDate = DateTime(
-                                  _currentDate.year,
-                                  _currentDate.month - 1,
-                                );
-                              });
-                            },
-                          ),
-                          Center(
-                            child: Text(
-                              _getMonthYearText(),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                      onPressed: _navigateToCreateSchedule,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            Expanded(
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 327,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.calendarButton,
+                          borderRadius: BorderRadius.circular(12.5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.chevron_left,
                                 color: AppColors.white,
-                                fontFamily: 'TT Norms',
-                                height: 1.2,
+                                size: 24,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _currentDate = DateTime(
+                                    _currentDate.year,
+                                    _currentDate.month - 1,
+                                  );
+                                });
+                              },
+                            ),
+                            Center(
+                              child: Text(
+                                _getMonthYearText(),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.white,
+                                  fontFamily: 'TT Norms',
+                                  height: 1.2,
+                                ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.chevron_right,
-                              color: AppColors.white,
-                              size: 24,
+                            IconButton(
+                              icon: const Icon(
+                                Icons.chevron_right,
+                                color: AppColors.white,
+                                size: 24,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _currentDate = DateTime(
+                                    _currentDate.year,
+                                    _currentDate.month + 1,
+                                  );
+                                });
+                              },
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _currentDate = DateTime(
-                                  _currentDate.year,
-                                  _currentDate.month + 1,
-                                );
-                              });
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
 
-                    const SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
-                    SizedBox(
-                      width: 327,
-                      height: 40,
-                      child: Row(children: _buildWeekDays()),
-                    ),
+                      SizedBox(
+                        width: 327,
+                        height: 40,
+                        child: Row(children: _buildWeekDays()),
+                      ),
 
-                    const SizedBox(height: 10),
+                      const SizedBox(height: 10),
 
-                    SizedBox(
-                      width: 327,
-                      height: _calculateCalendarHeight(),
-                      child: _buildCalendarGrid(),
-                    ),
+                      SizedBox(
+                        width: 327,
+                        height: _calculateCalendarHeight(),
+                        child: _buildCalendarGrid(),
+                      ),
 
-                    const SizedBox(height: 20),
-                  ],
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

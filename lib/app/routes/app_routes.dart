@@ -6,6 +6,7 @@ import 'package:treemov/features/authorization/presentation/screens/test_token_s
 import 'package:treemov/features/kid_calendar/presentation/screens/calendar_kid.dart';
 import 'package:treemov/features/registration/presentation/screens/kid_info_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/parent_info_screen.dart';
+import 'package:treemov/features/registration/presentation/screens/registration_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/teacher_info_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/teacher_verification_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/test_create_schedule.dart';
@@ -20,6 +21,7 @@ class AppRoutes {
   static const String entranceKid = '/entrance_kid';
   static const String entranceTeacher = '/entrance_teacher';
 
+  static const String registration = '/registration';
   static const String kidInfoScreen = '/kid_info_screen';
   static const String parentInfoScreen = '/parent_info_screen';
   static const String teacherVerificationScreen =
@@ -41,6 +43,7 @@ class AppRoutes {
     entrance: (context) => AuthCheckerFeature.createEntranceScreen(),
     entranceKid: (context) => const EntranceKidScreen(),
     entranceTeacher: (context) => const EntranceTeacherScreen(),
+    registration: (context) => const RegistrationScreen(),
     kidInfoScreen: (context) => const KidInfoScreen(),
     parentInfoScreen: (context) => const ParentInfoScreen(),
     teacherVerificationScreen: (context) => const TeacherVerificationScreen(),

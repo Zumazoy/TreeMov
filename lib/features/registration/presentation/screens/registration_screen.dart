@@ -4,8 +4,8 @@ import 'package:treemov/core/widgets/auth/auth_header.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
-class EntranceScreen extends StatelessWidget {
-  const EntranceScreen({super.key});
+class RegistrationScreen extends StatelessWidget {
+  const RegistrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,22 +26,20 @@ class EntranceScreen extends StatelessWidget {
                     const SizedBox(height: 60),
 
                     const Text(
-                      'Вход',
+                      'Регистрация',
                       style: TextStyle(
-                        fontFamily: 'TT Norms',
-                        fontWeight: FontWeight.w900,
                         fontSize: 24,
-                        height: 1.0,
+                        fontWeight: FontWeight.w900,
                         color: AppColors.white,
+                        fontFamily: 'TT Norms',
                       ),
-                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
 
                     _buildRoleButton(
                       context,
                       'Ученик',
-                      AppRoutes.entranceKid,
+                      AppRoutes.kidInfoScreen,
                       AppColors.entranceKidButton,
                     ),
                     const SizedBox(height: 20),
@@ -49,31 +47,44 @@ class EntranceScreen extends StatelessWidget {
                     _buildRoleButton(
                       context,
                       'Преподаватель',
-                      AppRoutes.entranceTeacher,
+                      AppRoutes.teacherVerificationScreen,
                       AppColors.kidButton,
                     ),
                     const SizedBox(height: 40),
 
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.registration);
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppColors.white,
-                        padding: EdgeInsets.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: const Text(
-                        'Зарегистрироваться',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 16,
-                          fontFamily: 'TT Norms',
-                          decoration: TextDecoration.underline,
-                          decorationColor: AppColors.white,
-                          decorationThickness: 1.5,
+                    Column(
+                      children: [
+                        const Text(
+                          'Есть аккаунт?',
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 16,
+                            fontFamily: 'TT Norms',
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 2),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRoutes.entrance);
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: const Text(
+                            'Войти',
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontSize: 16,
+                              fontFamily: 'TT Norms',
+                              decoration: TextDecoration.underline,
+                              decorationColor:
+                                  AppColors.white, // ← ДОБАВИЛ БЕЛУЮ ЧЕРТОЧКУ
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -101,7 +112,6 @@ class EntranceScreen extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: buttonColor,
           foregroundColor: AppColors.white,
-          padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -111,7 +121,7 @@ class EntranceScreen extends StatelessWidget {
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.w700,
             fontFamily: 'TT Norms',
           ),

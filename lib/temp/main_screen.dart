@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
+import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 import 'package:treemov/temp/profile_screen.dart';
 
@@ -16,7 +19,10 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const CalendarScreen(),
+    BlocProvider(
+      create: (_) => getIt<SchedulesBloc>(),
+      child: const CalendarScreen(),
+    ),
     Center(child: Text('Заглушка рейтинга', style: TextStyle(fontSize: 20))),
     Center(child: Text('Заглушка магазина', style: TextStyle(fontSize: 20))),
     const ProfileScreen(),

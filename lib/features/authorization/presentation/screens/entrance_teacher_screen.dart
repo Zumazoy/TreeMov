@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/app/routes/app_routes.dart';
-import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/widgets/auth/auth_header.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
 import 'package:treemov/features/authorization/presentation/blocs/token/token_bloc.dart';
+
+import '../../../../../core/themes/app_colors.dart';
 
 class EntranceTeacherScreen extends StatelessWidget {
   const EntranceTeacherScreen({super.key});
@@ -97,6 +99,7 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -146,102 +149,85 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
       },
       child: Scaffold(
         backgroundColor: AppColors.teacherPrimary,
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/white_default_logo.png',
-                    width: 48.56,
-                    height: 47.24,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 20),
+        body: Stack(
+          children: [
+            const AuthHeader(),
 
-                  const Text(
-                    'TreeMov',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                      fontFamily: 'TT Norms',
-                    ),
-                  ),
-                  const SizedBox(height: 30),
+            Center(
+              child: SingleChildScrollView(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 60),
 
-                  const Text(
-                    'Вход',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.white,
-                      fontFamily: 'TT Norms',
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-
-                  _buildTextField(_emailController, 'email'),
-                  const SizedBox(height: 20),
-
-                  _buildTextField(
-                    _passwordController,
-                    'Пароль',
-                    isPassword: true,
-                  ),
-                  const SizedBox(height: 30),
-
-                  SizedBox(
-                    width: 316,
-                    height: 44,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _login,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.teacherButton,
-                        foregroundColor: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                      const Text(
+                        'Вход',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.white,
+                          fontFamily: 'TT Norms',
                         ),
                       ),
-                      child: _isLoading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.white,
-                                ),
-                              ),
-                            )
-                          : const Text(
-                              'Войти',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'TT Norms',
-                              ),
+                      const SizedBox(height: 40),
+
+                      _buildTextField(_emailController, 'email'),
+                      const SizedBox(height: 20),
+
+                      _buildPasswordField(_passwordController, 'Пароль'),
+                      const SizedBox(height: 20),
+
+                      SizedBox(
+                        width: 316,
+                        height: 44,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.teacherButton,
+                            foregroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                    ),
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                          ),
+                          child: _isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.white,
+                                    ),
+                                  ),
+                                )
+                              : const Text(
+                                  'Войти',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'TT Norms',
+                                  ),
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                    ],
                   ),
-                  const SizedBox(height: 40),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildTextField(
-    TextEditingController controller,
-    String hintText, {
-    bool isPassword = false,
-  }) {
+  Widget _buildTextField(TextEditingController controller, String hintText) {
     return Container(
       width: 316,
       height: 44,
@@ -251,7 +237,6 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
       ),
       child: TextField(
         controller: controller,
-        obscureText: isPassword,
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
@@ -263,6 +248,49 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
             color: AppColors.grey,
             fontSize: 16,
             fontFamily: 'TT Norms',
+          ),
+        ),
+        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField(
+    TextEditingController controller,
+    String hintText,
+  ) {
+    return Container(
+      width: 316,
+      height: 44,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: _obscurePassword,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 12,
+          ),
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            color: AppColors.grey,
+            fontSize: 16,
+            fontFamily: 'TT Norms',
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscurePassword ? Icons.visibility_off : Icons.visibility,
+              color: AppColors.grey,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscurePassword = !_obscurePassword;
+              });
+            },
           ),
         ),
         style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
