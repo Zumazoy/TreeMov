@@ -25,9 +25,9 @@ class LessonInfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Название занятия
+          // ВИД ЗАНЯТИЯ
           Text(
-            lesson['title'],
+            lesson['type'],
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -50,7 +50,7 @@ class LessonInfoCard extends StatelessWidget {
                     children: [
                       _buildInfoRow(
                         icon: 'assets/images/activity_icon.png',
-                        text: lesson['type'],
+                        text: lesson['title'],
                       ),
                       const SizedBox(height: 16),
                       _buildInfoRow(

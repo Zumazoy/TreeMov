@@ -19,4 +19,9 @@ class AppColors {
   static const Color shadow = Color(0x1A000000);
   static const Color dialogBarrier = Color(0x80000000);
   static const Color grayFieldText = Color(0xB22F213E);
+
+  static const Color directoryTextSecondary = Color(0xFF9CA3AF);
+  static const Color directoryBorder = Color(0xFFE5E7EB);
+  static const Color directoryAvatarBorder = Color(0xFFD7D6FF);
+  static const Color directoryAvatarBackground = Color(0xFFE5E7EB);
 }

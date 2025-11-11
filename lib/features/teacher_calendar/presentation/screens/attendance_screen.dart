@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/widgets/layout/nav_bar.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../widgets/attendance_parts/lesson_info_card.dart';
@@ -73,6 +74,20 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     // сохранения посещаемости
   }
 
+  void _onNavBarTap(int index, BuildContext context) {
+    switch (index) {
+      case 0: // Календарь
+        Navigator.popUntil(context, (route) => route.isFirst);
+        break;
+      case 1: // Рейтинг
+        break;
+      case 2: // Справка
+        break;
+      case 3: // Профиль
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double availableWidth = MediaQuery.of(context).size.width - 40;
@@ -127,6 +142,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 0,
+        onTap: (index) => _onNavBarTap(index, context),
       ),
     );
   }

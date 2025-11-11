@@ -72,7 +72,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             height: 24,
             color: selectedColor,
           ),
-          label: 'Магазин',
+          label: 'Справка',
         ),
         BottomNavigationBarItem(
           icon: Image.asset(

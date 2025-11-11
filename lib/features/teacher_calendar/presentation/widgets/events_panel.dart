@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/calendar_event.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/calendar_event_entity.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import 'event_details_modal.dart';

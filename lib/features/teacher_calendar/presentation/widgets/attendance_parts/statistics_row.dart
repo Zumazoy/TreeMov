@@ -101,7 +101,7 @@ class StatisticsRow extends StatelessWidget {
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: FontWeight.w400,
                 fontFamily: 'Arial',
                 color: countColor,

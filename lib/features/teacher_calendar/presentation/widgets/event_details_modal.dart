@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/calendar_event.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/calendar_event_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/about_event_details.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/attendance_screen.dart';
 

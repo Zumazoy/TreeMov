@@ -8,7 +8,7 @@ import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/s
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 import '../../../../core/themes/app_colors.dart';
-import '../../domain/entities/calendar_event.dart';
+import '../../domain/entities/calendar_event_entity.dart';
 import '../widgets/events_panel.dart';
 import 'create_schedule_screen.dart';
 

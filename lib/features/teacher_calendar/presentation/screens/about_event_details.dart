@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/change_schedule_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
@@ -89,6 +90,20 @@ class AboutEventDetailsScreen extends StatelessWidget {
       builder: (context) =>
           Padding(padding: const EdgeInsets.all(20), child: DeleteEventModal()),
     );
+  }
+
+  void _onNavBarTap(int index, BuildContext context) {
+    switch (index) {
+      case 0: // Календарь
+        Navigator.popUntil(context, (route) => route.isFirst);
+        break;
+      case 1: // Рейтинг
+        break;
+      case 2: // Магазин
+        break;
+      case 3: // Профиль
+        break;
+    }
   }
 
   @override
@@ -242,6 +257,10 @@ class AboutEventDetailsScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 0,
+        onTap: (index) => _onNavBarTap(index, context),
       ),
     );
   }
