@@ -346,9 +346,9 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
 
   void _populateForm(ScheduleResponseModel schedule) {
     setState(() {
-      _titleController.text = schedule.title;
-      _isCanceled = schedule.isCanceled;
-      _isCompleted = schedule.isCompleted;
+      _titleController.text = schedule.title ?? '(Без названия)';
+      _isCanceled = schedule.isCanceled!;
+      _isCompleted = schedule.isCompleted!;
 
       // _classroomIdController.text = schedule.classroomId.toString();
       // _groupIdController.text = schedule.groupId.toString();
@@ -361,7 +361,7 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
         _periodScheduleIdController.text = schedule.periodSchedule.toString();
       }
 
-      _selectedDate = DateTime.parse(schedule.date);
+      _selectedDate = DateTime.parse(schedule.date!);
       if (schedule.startTime != null) {
         final parts = schedule.startTime!.split(':');
         _startTime = TimeOfDay(

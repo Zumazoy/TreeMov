@@ -2,12 +2,9 @@ import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
+import 'package:treemov/shared/domain/models/base_response_model.dart';
 
-class PeriodScheduleResponseModel {
-  final int id;
-  final int? org;
-  final int? createdBy;
-  final String? createdAt;
+class PeriodScheduleResponseModel extends BaseResponseModel {
   final String? title;
   final String? startTime;
   final String? endTime;
@@ -21,10 +18,7 @@ class PeriodScheduleResponseModel {
   final ClassroomResponseModel? classroom;
 
   PeriodScheduleResponseModel({
-    required this.id,
-    required this.org,
-    required this.createdBy,
-    required this.createdAt,
+    required super.baseData,
     required this.title,
     required this.startTime,
     required this.endTime,
@@ -45,17 +39,14 @@ class PeriodScheduleResponseModel {
     final classroomJson = json['classroom'];
 
     return PeriodScheduleResponseModel(
-      id: json['id'] ?? 0,
-      org: json['org'] ?? 0,
-      createdBy: json['created_by'] ?? 0,
-      createdAt: json['created_at'],
+      baseData: json.baseData,
       title: json['title'],
       startTime: json['start_time'],
       endTime: json['end_time'],
       repeatLessonsUntilDate: json['repeat_lessons_until_date'],
       startDate: json['start_date'],
-      period: json['period'] ?? 0,
-      lesson: json['lesson'] ?? 0,
+      period: json['period'],
+      lesson: json['lesson'],
       teacher: teacherJson != null && teacherJson is Map<String, dynamic>
           ? TeacherResponseModel.fromJson(teacherJson)
           : null,

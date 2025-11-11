@@ -8,7 +8,7 @@ import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/s
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 import '../../../../core/themes/app_colors.dart';
-import '../../data/models/calendar_event.dart';
+import '../../domain/entities/calendar_event.dart';
 import '../widgets/events_panel.dart';
 import 'create_schedule_screen.dart';
 
@@ -23,7 +23,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _currentDate = DateTime.now();
   DateTime? _selectedDate;
 
-  Map<String, List<CalendarEvent>> _events = {};
+  Map<String, List<CalendarEventEntity>> _events = {};
 
   @override
   void initState() {
@@ -56,13 +56,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  List<CalendarEvent> _getEventsForDate(DateTime date) {
+  List<CalendarEventEntity> _getEventsForDate(DateTime date) {
     final String dateKey = _formatDate(date);
     return _events[dateKey] ?? [];
   }
 
   void _updateEventsFromSchedules(List<ScheduleResponseModel> schedules) {
-    final Map<String, List<CalendarEvent>> newEvents = {};
+    final Map<String, List<CalendarEventEntity>> newEvents = {};
 
     for (final schedule in schedules) {
       final dateKey = _formatScheduleDate(schedule);
@@ -72,9 +72,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
       }
 
       newEvents[dateKey]!.add(
-        CalendarEvent(
+        CalendarEventEntity(
           time: _formatScheduleTime(schedule),
-          title: schedule.title.isEmpty ? '(Без названия)' : schedule.title,
+          title: schedule.title ?? '(Без названия)',
           location: schedule.classroom!.title!.isNotEmpty
               ? schedule.classroom!.title!
               : 'Не указано',
@@ -90,11 +90,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   String _formatScheduleDate(ScheduleResponseModel schedule) {
     try {
-      final date = DateTime.parse(schedule.date);
+      final date = DateTime.parse(schedule.date!);
       return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     } catch (e) {
       debugPrint("===ERROR=== on _formatScheduleDate");
-      return schedule.date;
+      return schedule.date!;
     }
   }
 
@@ -120,11 +120,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
       details.add('Группа: ${schedule.group!.name!}');
     }
 
-    if (schedule.isCanceled) {
+    if (schedule.isCanceled != null && schedule.isCanceled!) {
       details.add('❌ Отменено');
     }
 
-    if (schedule.isCompleted) {
+    if (schedule.isCompleted != null && schedule.isCompleted!) {
       details.add('✅ Завершено');
     }
 

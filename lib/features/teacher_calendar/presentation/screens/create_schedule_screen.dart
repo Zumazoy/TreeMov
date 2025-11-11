@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
-import 'package:treemov/shared/data/models/period_schedule_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
@@ -29,14 +29,13 @@ class CreateScheduleScreen extends StatefulWidget {
 class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
   int? _classroomId;
   int? _groupId;
-  int? _periodScheduleId;
   int? _teacherId;
   int? _subjectId;
 
   String? _selectedGroupName;
   String? _selectedSubjectName;
   String? _selectedClassroomName;
-  String? _selectedPeriodScheduleName;
+  String? _selectedRepeatOption;
   String? _selectedReminder;
 
   final TextEditingController _descriptionController = TextEditingController();
@@ -44,13 +43,14 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
   List<StudentGroupResponseModel> _groups = [];
   List<SubjectResponseModel> _subjects = [];
   List<ClassroomResponseModel> _classrooms = [];
-  List<PeriodScheduleResponseModel> _periodSchedules = [];
 
   bool _isLoading = true;
   String? _error;
 
   DateTime _startDateTime = DateTime.now();
   DateTime _endDateTime = DateTime.now().add(const Duration(hours: 1));
+
+  final List<String> _repeatOptions = ['Повтор', 'Ежедневно', 'Еженедельно'];
 
   final List<String> _reminderOptions = [
     'Не напоминать',
@@ -72,7 +72,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
         widget.sharedRepository.getStudentGroups(),
         widget.sharedRepository.getSubjects(),
         widget.sharedRepository.getClassrooms(),
-        widget.sharedRepository.getPeriodSchedules(),
         widget.sharedRepository.getTeacherId(),
       ]);
 
@@ -80,8 +79,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
         _groups = results[0] as List<StudentGroupResponseModel>;
         _subjects = results[1] as List<SubjectResponseModel>;
         _classrooms = results[2] as List<ClassroomResponseModel>;
-        _periodSchedules = results[3] as List<PeriodScheduleResponseModel>;
-        _teacherId = results[4] as int?;
+        _teacherId = results[3] as int?;
 
         // Устанавливаем значения по умолчанию
         if (_groups.isNotEmpty) {
@@ -132,21 +130,61 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       return;
     }
 
-    final request = ScheduleRequestModel(
-      classroomId: _classroomId!,
-      groupId: _groupId!,
-      periodScheduleId: _periodScheduleId,
-      teacherId: _teacherId!,
-      subjectId: _subjectId!,
-      title: _descriptionController.text.isNotEmpty
-          ? _descriptionController.text
-          : '${_selectedSubjectName ?? 'Занятие'} - ${_selectedGroupName ?? 'Группа'}',
-      date: _startDateTime,
-      startTime: TimeOfDay.fromDateTime(_startDateTime),
-      endTime: TimeOfDay.fromDateTime(_endDateTime),
-    );
+    if (_selectedRepeatOption == 'Повтор' || _selectedRepeatOption == null) {
+      // Обычное событие без повторения
+      final request = ScheduleRequestModel(
+        classroomId: _classroomId!,
+        groupId: _groupId!,
+        teacherId: _teacherId!,
+        subjectId: _subjectId!,
+        title: _descriptionController.text.isNotEmpty
+            ? _descriptionController.text
+            : '${_selectedSubjectName ?? 'Занятие'} - ${_selectedGroupName ?? 'Группа'}',
+        date: _startDateTime,
+        startTime: TimeOfDay.fromDateTime(_startDateTime),
+        endTime: TimeOfDay.fromDateTime(_endDateTime),
+      );
 
-    widget.schedulesBloc.add(CreateScheduleEvent(request));
+      widget.schedulesBloc.add(CreateScheduleEvent(request));
+    } else {
+      // Периодическое событие
+      final period = _getPeriodValue(_selectedRepeatOption!);
+      final repeatUntilDate = _calculateRepeatUntilDate();
+
+      final request = PeriodScheduleRequestModel(
+        teacherId: _teacherId!,
+        subjectId: _subjectId!,
+        groupId: _groupId!,
+        classroomId: _classroomId!,
+        period: period,
+        title: _descriptionController.text.isNotEmpty
+            ? _descriptionController.text
+            : '${_selectedSubjectName ?? 'Занятие'} - ${_selectedGroupName ?? 'Группа'}',
+        startTime: TimeOfDay.fromDateTime(_startDateTime),
+        endTime: TimeOfDay.fromDateTime(_endDateTime),
+        lesson: null,
+        repeatUntilDate: repeatUntilDate,
+        startDate: _startDateTime,
+      );
+
+      widget.schedulesBloc.add(CreatePeriodScheduleEvent(request));
+    }
+  }
+
+  int _getPeriodValue(String repeatOption) {
+    switch (repeatOption) {
+      case 'Ежедневно':
+        return 1;
+      case 'Еженедельно':
+        return 7;
+      default:
+        return 0;
+    }
+  }
+
+  DateTime _calculateRepeatUntilDate() {
+    // Устанавливаем повторение на 1 месяц вперед
+    return _startDateTime.add(const Duration(days: 30));
   }
 
   String _formatDateTime(DateTime dateTime) {
@@ -204,7 +242,9 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
             pickedTime.hour,
             pickedTime.minute,
           );
-          _endDateTime = _startDateTime.add(const Duration(hours: 1));
+          if (_startDateTime.isAfter(_endDateTime)) {
+            _endDateTime = _startDateTime.add(const Duration(hours: 1));
+          }
         });
       }
     }
@@ -258,22 +298,14 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     }
   }
 
-  Widget _buildPeriodScheduleDropdown() {
-    return _buildModelDropdownCard<PeriodScheduleResponseModel?>(
-      title: 'Период расписания',
-      displayValue: _selectedPeriodScheduleName ?? 'Не выбрано',
-      items: [null, ..._periodSchedules], // null представляет "Не выбрано"
-      getDisplayName: (period) => period?.title ?? 'Не выбрано',
-      getId: (period) => period?.id ?? -1,
-      onSelected: (period) {
+  Widget _buildRepeatDropdown() {
+    return _buildStringDropdownCard(
+      title: 'Повтор',
+      value: _selectedRepeatOption ?? 'Повтор',
+      options: _repeatOptions,
+      onSelected: (value) {
         setState(() {
-          if (period == null) {
-            _periodScheduleId = null;
-            _selectedPeriodScheduleName = null;
-          } else {
-            _periodScheduleId = period.id;
-            _selectedPeriodScheduleName = period.title ?? 'Без названия';
-          }
+          _selectedRepeatOption = value;
         });
       },
       iconPath: 'assets/images/repeat_icon.png',
@@ -682,7 +714,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                         const SizedBox(height: 8),
 
                         // Период расписания (повтор)
-                        _buildPeriodScheduleDropdown(),
+                        _buildRepeatDropdown(),
                         const SizedBox(height: 8),
 
                         _buildDateTimeSection(),

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_schedule_response_model.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
-import 'package:treemov/shared/data/models/period_schedule_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';

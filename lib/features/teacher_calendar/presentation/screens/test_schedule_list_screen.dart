@@ -135,10 +135,12 @@ class _ScheduleCard extends StatelessWidget {
       child: ListTile(
         leading: _buildStatusIcon(),
         title: Text(
-          schedule.title.isEmpty ? '(Без названия)' : schedule.title,
+          schedule.title ?? '(Без названия)',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            decoration: schedule.isCanceled ? TextDecoration.lineThrough : null,
+            decoration: schedule.isCanceled!
+                ? TextDecoration.lineThrough
+                : null,
           ),
         ),
         subtitle: Column(
@@ -152,9 +154,9 @@ class _ScheduleCard extends StatelessWidget {
             // if (schedule.groupName.isNotEmpty) Text('👥 ${schedule.groupName}'),
             // if (schedule.classroomTitle.isNotEmpty)
             //   Text('🏫 ${schedule.classroomTitle}'),
-            if (schedule.isCanceled)
+            if (schedule.isCanceled!)
               const Text('❌ Отменено', style: TextStyle(color: Colors.red)),
-            if (schedule.isCompleted)
+            if (schedule.isCompleted!)
               const Text('✅ Завершено', style: TextStyle(color: Colors.green)),
           ],
         ),
@@ -217,9 +219,9 @@ class _ScheduleCard extends StatelessWidget {
   }
 
   Widget _buildStatusIcon() {
-    if (schedule.isCanceled) {
+    if (schedule.isCanceled!) {
       return const Icon(Icons.cancel, color: Colors.red, size: 30);
-    } else if (schedule.isCompleted) {
+    } else if (schedule.isCompleted!) {
       return const Icon(Icons.check_circle, color: Colors.green, size: 30);
     } else {
       return const Icon(Icons.schedule, color: Colors.blue, size: 30);
@@ -264,7 +266,7 @@ class _ScheduleCard extends StatelessWidget {
   }
 
   void _toggleCancelStatus(BuildContext context, SchedulesBloc schedulesBloc) {
-    final updateData = ScheduleUpdateModel(isCanceled: !schedule.isCanceled);
+    final updateData = ScheduleUpdateModel(isCanceled: !schedule.isCanceled!);
 
     schedulesBloc.add(
       UpdateScheduleEvent(scheduleId: schedule.id, updateData: updateData),
@@ -275,7 +277,7 @@ class _ScheduleCard extends StatelessWidget {
     BuildContext context,
     SchedulesBloc schedulesBloc,
   ) {
-    final updateData = ScheduleUpdateModel(isCompleted: !schedule.isCompleted);
+    final updateData = ScheduleUpdateModel(isCompleted: !schedule.isCompleted!);
 
     schedulesBloc.add(
       UpdateScheduleEvent(scheduleId: schedule.id, updateData: updateData),

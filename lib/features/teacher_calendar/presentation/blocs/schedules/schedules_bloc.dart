@@ -12,6 +12,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<LoadSchedulesEvent>(_onLoadSchedules);
     on<LoadScheduleByIdEvent>(_onLoadScheduleById);
     on<CreateScheduleEvent>(_onCreateSchedule);
+    on<CreatePeriodScheduleEvent>(_onCreatePeriodSchedule);
     on<UpdateScheduleEvent>(_onUpdateSchedule);
   }
 
@@ -52,6 +53,20 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
       add(LoadSchedulesEvent());
     } catch (e) {
       emit(ScheduleError('Ошибка создания занятия: $e'));
+    }
+  }
+
+  Future<void> _onCreatePeriodSchedule(
+    CreatePeriodScheduleEvent event,
+    Emitter<ScheduleState> emit,
+  ) async {
+    emit(ScheduleLoading());
+    try {
+      await _repository.createPeriodSchedule(event.request);
+      emit(ScheduleOperationSuccess('Периодическое занятие успешно создано'));
+      add(LoadSchedulesEvent());
+    } catch (e) {
+      emit(ScheduleError('Ошибка создания периодического занятия: $e'));
     }
   }
 

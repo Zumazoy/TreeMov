@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_update_model.dart';
 
@@ -29,6 +30,15 @@ class CreateScheduleEvent extends ScheduleEvent {
   final ScheduleRequestModel request;
 
   const CreateScheduleEvent(this.request);
+
+  @override
+  List<Object?> get props => [request];
+}
+
+class CreatePeriodScheduleEvent extends ScheduleEvent {
+  final PeriodScheduleRequestModel request;
+
+  const CreatePeriodScheduleEvent(this.request);
 
   @override
   List<Object?> get props => [request];

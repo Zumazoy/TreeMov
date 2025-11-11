@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/teacher_calendar/data/models/calendar_event.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/calendar_event.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import 'event_details_modal.dart';
 
 class EventsPanel extends StatelessWidget {
   final DateTime selectedDate;
-  final List<CalendarEvent> events;
+  final List<CalendarEventEntity> events;
 
   const EventsPanel({
     super.key,
@@ -17,7 +17,7 @@ class EventsPanel extends StatelessWidget {
   static void show({
     required BuildContext context,
     required DateTime selectedDate,
-    required List<CalendarEvent> events,
+    required List<CalendarEventEntity> events,
   }) {
     showModalBottomSheet(
       context: context,
@@ -100,7 +100,7 @@ class EventsPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildEventItem(CalendarEvent event, BuildContext context) {
+  Widget _buildEventItem(CalendarEventEntity event, BuildContext context) {
     final timeParts = event.time.split('\n');
     final startTime = timeParts.isNotEmpty ? timeParts[0] : '';
     final endTime = timeParts.length > 1 ? timeParts[1] : '';
@@ -209,7 +209,7 @@ class EventsPanel extends StatelessWidget {
     );
   }
 
-  void _showEventDetails(BuildContext context, CalendarEvent event) {
+  void _showEventDetails(BuildContext context, CalendarEventEntity event) {
     Navigator.pop(context);
     EventDetailsModal.show(context: context, event: event);
   }

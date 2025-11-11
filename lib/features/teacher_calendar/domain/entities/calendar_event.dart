@@ -1,10 +1,10 @@
-class CalendarEvent {
+class CalendarEventEntity {
   final String time;
   final String title;
   final String location;
   final String? description;
 
-  const CalendarEvent({
+  const CalendarEventEntity({
     required this.time,
     required this.title,
     required this.location,

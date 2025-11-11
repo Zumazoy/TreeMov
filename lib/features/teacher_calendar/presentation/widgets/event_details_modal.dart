@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/teacher_calendar/data/models/calendar_event.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/calendar_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/about_event_details.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/attendance_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 
 class EventDetailsModal extends StatelessWidget {
-  final CalendarEvent event;
+  final CalendarEventEntity event;
 
   const EventDetailsModal({super.key, required this.event});
 
   static void show({
     required BuildContext context,
-    required CalendarEvent event,
+    required CalendarEventEntity event,
   }) {
     showDialog(
       context: context,

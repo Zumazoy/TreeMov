@@ -1,18 +1,12 @@
 import 'package:treemov/shared/domain/entities/student_entity.dart';
+import 'package:treemov/shared/domain/models/base_response_model.dart';
 
-class StudentGroupResponseModel {
-  final int id;
-  final int? org;
-  final int? createdBy;
-  final String? createdAt;
+class StudentGroupResponseModel extends BaseResponseModel {
   final String? name;
   final List<StudentEntity> students;
 
   StudentGroupResponseModel({
-    required this.id,
-    required this.org,
-    required this.createdBy,
-    required this.createdAt,
+    required super.baseData,
     required this.name,
     required this.students,
   });
@@ -26,10 +20,7 @@ class StudentGroupResponseModel {
     }
 
     return StudentGroupResponseModel(
-      id: json['id'] ?? 0,
-      org: json['org'] ?? 0,
-      createdBy: json['created_by'] ?? 0,
-      createdAt: json['created_at'],
+      baseData: json.baseData,
       name: json['name'],
       students: studentsList,
     );

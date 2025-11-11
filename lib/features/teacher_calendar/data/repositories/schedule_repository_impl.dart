@@ -1,4 +1,6 @@
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_schedule_response_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_update_model.dart';
@@ -24,6 +26,13 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     ScheduleRequestModel request,
   ) async {
     return await _remoteDataSource.createSchedule(request);
+  }
+
+  @override
+  Future<PeriodScheduleResponseModel> createPeriodSchedule(
+    PeriodScheduleRequestModel request,
+  ) async {
+    return await _remoteDataSource.createPeriodSchedule(request);
   }
 
   @override

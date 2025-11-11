@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_schedule_response_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_update_model.dart';
@@ -65,6 +67,25 @@ class ScheduleRemoteDataSource {
 
       if (response.statusCode == 201) {
         return ScheduleResponseModel.fromJson(response.data);
+      } else {
+        throw Exception('Ошибка создания занятия: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Ошибка создания занятия: $e');
+    }
+  }
+
+  Future<PeriodScheduleResponseModel> createPeriodSchedule(
+    PeriodScheduleRequestModel request,
+  ) async {
+    try {
+      final response = await _dioClient.post(
+        ApiConstants.periodSchedules,
+        data: request.toJson(),
+      );
+
+      if (response.statusCode == 201) {
+        return PeriodScheduleResponseModel.fromJson(response.data);
       } else {
         throw Exception('Ошибка создания занятия: ${response.statusCode}');
       }

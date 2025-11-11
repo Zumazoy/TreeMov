@@ -259,7 +259,7 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
-                color: Color(0xFF004C75).withOpacity(0.5),
+                color: Color(0xFF004C75) /*.withOpacity(0.5)*/,
                 fontFamily: 'TT Norms',
               ),
             ),
