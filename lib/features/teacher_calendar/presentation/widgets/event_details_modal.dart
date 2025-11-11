@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/features/teacher_calendar/data/models/calendar_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/about_event_details.dart';
+import 'package:treemov/features/teacher_calendar/presentation/screens/attendance_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 
@@ -154,6 +155,12 @@ class EventDetailsModal extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AttendanceScreen(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.teacherPrimary,
