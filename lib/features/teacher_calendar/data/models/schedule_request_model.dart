@@ -17,10 +17,10 @@ class ScheduleRequestModel {
   ScheduleRequestModel({
     required this.classroomId,
     required this.groupId,
-    required this.periodScheduleId,
+    this.periodScheduleId,
     required this.teacherId,
     required this.subjectId,
-    required this.lesson,
+    this.lesson,
     required this.title,
     required this.date,
     required this.startTime,

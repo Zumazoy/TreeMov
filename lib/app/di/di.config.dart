@@ -10,6 +10,9 @@ import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remo
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
+import 'package:treemov/shared/data/datasources/shared_remote_data_source.dart';
+import 'package:treemov/shared/data/repositories/shared_repository_impl.dart';
+import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 final getIt = GetIt.instance;
 
@@ -29,6 +32,9 @@ void setupDependencies() {
   getIt.registerSingleton<ScheduleRemoteDataSource>(
     ScheduleRemoteDataSource(getIt<DioClient>()),
   );
+  getIt.registerSingleton<SharedRemoteDataSource>(
+    SharedRemoteDataSource(getIt<DioClient>()),
+  );
 
   // Репозитории
   getIt.registerSingleton<AuthRepository>(
@@ -39,6 +45,9 @@ void setupDependencies() {
   );
   getIt.registerSingleton<ScheduleRepository>(
     ScheduleRepositoryImpl(getIt<ScheduleRemoteDataSource>()),
+  );
+  getIt.registerSingleton<SharedRepository>(
+    SharedRepositoryImpl(getIt<SharedRemoteDataSource>()),
   );
 
   // BLoC - регистрируем фабрику, так как BLoC должен создаваться заново

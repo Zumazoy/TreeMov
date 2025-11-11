@@ -7,7 +7,6 @@ import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/s
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/test_schedule_update_screen.dart';
-import 'package:treemov/features/teacher_calendar/presentation/widgets/schedule_detail_screen.dart';
 
 class TestScheduleScreen extends StatelessWidget {
   const TestScheduleScreen({super.key});
@@ -150,9 +149,9 @@ class _ScheduleCard extends StatelessWidget {
               Text('⏰ ${schedule.formattedTimeRange}'),
             if (schedule.formattedEmployer.isNotEmpty)
               Text('👨‍🏫 ${schedule.formattedEmployer}'),
-            if (schedule.groupName.isNotEmpty) Text('👥 ${schedule.groupName}'),
-            if (schedule.classroomTitle.isNotEmpty)
-              Text('🏫 ${schedule.classroomTitle}'),
+            // if (schedule.groupName.isNotEmpty) Text('👥 ${schedule.groupName}'),
+            // if (schedule.classroomTitle.isNotEmpty)
+            //   Text('🏫 ${schedule.classroomTitle}'),
             if (schedule.isCanceled)
               const Text('❌ Отменено', style: TextStyle(color: Colors.red)),
             if (schedule.isCompleted)
@@ -160,14 +159,14 @@ class _ScheduleCard extends StatelessWidget {
           ],
         ),
         isThreeLine: true,
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ScheduleDetailScreen(schedule: schedule),
-            ),
-          );
-        },
+        // onTap: () {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => ScheduleDetailScreen(schedule: schedule),
+        //     ),
+        //   );
+        // },
         trailing: PopupMenuButton<String>(
           onSelected: (value) => _handleMenuAction(context, value),
           itemBuilder: (BuildContext context) => [
@@ -254,12 +253,12 @@ class _ScheduleCard extends StatelessWidget {
         _toggleCompleteStatus(context, schedulesBloc);
         break;
       case 'details':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ScheduleDetailScreen(schedule: schedule),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => ScheduleDetailScreen(schedule: schedule),
+        //   ),
+        // );
         break;
     }
   }

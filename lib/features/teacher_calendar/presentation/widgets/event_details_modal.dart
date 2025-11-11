@@ -109,7 +109,7 @@ class EventDetailsModal extends StatelessWidget {
                   height: 40,
                   child: OutlinedButton(
                     onPressed: () {
-                      Navigator.pop(context); // Закрываем модальное окно
+                      Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
