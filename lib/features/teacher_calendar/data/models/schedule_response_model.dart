@@ -73,6 +73,8 @@ class ScheduleResponseModel extends BaseResponseModel {
   }
 
   String get formattedEmployer {
+    if (teacher?.employer == null) return '';
+
     return [
       teacher?.employer.surname,
       teacher?.employer.name,

@@ -74,10 +74,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
       newEvents[dateKey]!.add(
         CalendarEventEntity(
           time: _formatScheduleTime(schedule),
-          title: schedule.title ?? '(Без названия)',
-          location: schedule.classroom!.title!.isNotEmpty
-              ? schedule.classroom!.title!
-              : 'Не указано',
+          title: schedule.title!.isNotEmpty
+              ? schedule.title ?? '(Без названия)'
+              : '(Без названия)',
+          location: _getClassroomTitle(schedule),
           description: _getScheduleDescription(schedule),
         ),
       );
@@ -98,6 +98,19 @@ class _CalendarScreenState extends State<CalendarScreen> {
     }
   }
 
+  String _getClassroomTitle(ScheduleResponseModel schedule) {
+    if (schedule.classroom == null) {
+      return 'Не указано';
+    }
+
+    final title = schedule.classroom?.title;
+    if (title == null || title.isEmpty) {
+      return 'Не указано';
+    }
+
+    return title;
+  }
+
   String _formatScheduleTime(ScheduleResponseModel schedule) {
     final startTime = schedule.startTime;
     final endTime = schedule.endTime;
@@ -116,15 +129,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
       details.add('Преподаватель: ${schedule.formattedEmployer}');
     }
 
-    if (schedule.group!.name!.isNotEmpty) {
-      details.add('Группа: ${schedule.group!.name!}');
+    final groupName = schedule.group?.name;
+    if (groupName != null && groupName.isNotEmpty) {
+      details.add('Группа: $groupName');
     }
 
-    if (schedule.isCanceled != null && schedule.isCanceled!) {
+    if (schedule.isCanceled == true) {
       details.add('❌ Отменено');
     }
 
-    if (schedule.isCompleted != null && schedule.isCompleted!) {
+    if (schedule.isCompleted == true) {
       details.add('✅ Завершено');
     }
 
