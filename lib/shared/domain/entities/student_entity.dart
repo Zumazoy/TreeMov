@@ -1,49 +1,46 @@
-class EmployerEntity {
+class StudentEntity {
   final int id;
   final String? name;
   final String? surname;
-  final String? patronymic;
+  final String? progress;
+  final String? phoneNumber;
   final String? birthday;
   final String? email;
-  final String? passportSeries;
-  final String? passportNum;
-  final String? inn;
+  final String? avatar;
   final String? createdAt;
+  final int? score;
   final int? org;
   final int? createdBy;
-  final int? department;
 
-  EmployerEntity({
+  StudentEntity({
     required this.id,
     required this.name,
     required this.surname,
-    required this.patronymic,
+    required this.progress,
+    required this.phoneNumber,
     required this.birthday,
     required this.email,
-    required this.passportSeries,
-    required this.passportNum,
-    required this.inn,
+    required this.avatar,
     required this.createdAt,
+    required this.score,
     required this.org,
     required this.createdBy,
-    required this.department,
   });
 
-  factory EmployerEntity.fromJson(Map<String, dynamic> json) {
-    return EmployerEntity(
+  factory StudentEntity.fromJson(Map<String, dynamic> json) {
+    return StudentEntity(
       id: json['id'] ?? 0,
       name: json['name'],
       surname: json['surname'],
-      patronymic: json['patronymic'],
+      progress: json['progress'],
+      phoneNumber: json['phone_number'],
       birthday: json['birthday'],
       email: json['email'],
-      passportSeries: json['passport_series'],
-      passportNum: json['passport_num'],
-      inn: json['inn'],
+      avatar: json['avatar'],
       createdAt: json['created_at'],
+      score: json['score'] ?? 0,
       org: json['org'] ?? 0,
       createdBy: json['created_by'] ?? 0,
-      department: json['department'] ?? 0,
     );
   }
 }

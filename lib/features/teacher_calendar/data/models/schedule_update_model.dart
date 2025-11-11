@@ -87,15 +87,15 @@ class ScheduleUpdateModel {
 
     switch (fieldName) {
       case 'classroom':
-        return newValue != null && newValue != originalSchedule!.classroomId;
+        return newValue != null && newValue != originalSchedule!.classroom?.id;
       case 'group':
-        return newValue != null && newValue != originalSchedule!.groupId;
+        return newValue != null && newValue != originalSchedule!.group?.id;
       case 'period_schedule':
         return newValue != originalSchedule!.periodSchedule;
       case 'teacher':
-        return newValue != null && newValue != originalSchedule!.teacherId;
+        return newValue != null && newValue != originalSchedule!.teacher?.id;
       case 'subject':
-        return newValue != null && newValue != originalSchedule!.subjectId;
+        return newValue != null && newValue != originalSchedule!.subject?.id;
       case 'lesson':
         return newValue != originalSchedule!.lesson;
       case 'title':

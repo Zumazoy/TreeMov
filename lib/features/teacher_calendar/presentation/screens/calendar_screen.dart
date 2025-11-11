@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
+import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../../data/models/calendar_event.dart';
@@ -40,9 +42,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   void _navigateToCreateSchedule() {
+    final sharedRepository = getIt<SharedRepository>();
+    final schedulesBloc = context.read<SchedulesBloc>();
+
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CreateScheduleScreen()),
+      MaterialPageRoute(
+        builder: (context) => CreateScheduleScreen(
+          sharedRepository: sharedRepository,
+          schedulesBloc: schedulesBloc,
+        ),
+      ),
     );
   }
 
@@ -65,8 +75,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
         CalendarEvent(
           time: _formatScheduleTime(schedule),
           title: schedule.title.isEmpty ? '(Без названия)' : schedule.title,
-          location: schedule.classroomTitle.isNotEmpty
-              ? schedule.classroomTitle
+          location: schedule.classroom!.title!.isNotEmpty
+              ? schedule.classroom!.title!
               : 'Не указано',
           description: _getScheduleDescription(schedule),
         ),
@@ -106,8 +116,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
       details.add('Преподаватель: ${schedule.formattedEmployer}');
     }
 
-    if (schedule.groupName.isNotEmpty) {
-      details.add('Группа: ${schedule.groupName}');
+    if (schedule.group!.name!.isNotEmpty) {
+      details.add('Группа: ${schedule.group!.name!}');
     }
 
     if (schedule.isCanceled) {
@@ -126,7 +136,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return BlocListener<SchedulesBloc, ScheduleState>(
       listener: (context, state) {
         if (state is SchedulesLoaded) {
-          // Обновляем события календаря при загрузке расписаний
           _updateEventsFromSchedules(state.schedules);
         }
       },

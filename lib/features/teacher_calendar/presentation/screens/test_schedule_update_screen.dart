@@ -350,10 +350,10 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
       _isCanceled = schedule.isCanceled;
       _isCompleted = schedule.isCompleted;
 
-      _classroomIdController.text = schedule.classroomId.toString();
-      _groupIdController.text = schedule.groupId.toString();
-      _teacherIdController.text = schedule.teacherId.toString();
-      _subjectIdController.text = schedule.subjectId.toString();
+      // _classroomIdController.text = schedule.classroomId.toString();
+      // _groupIdController.text = schedule.groupId.toString();
+      // _teacherIdController.text = schedule.teacherId.toString();
+      // _subjectIdController.text = schedule.subjectId.toString();
       if (schedule.lesson != null) {
         _lessonController.text = schedule.lesson.toString();
       }
