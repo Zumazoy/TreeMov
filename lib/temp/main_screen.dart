@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/directory/presentation/screens/directory_screen.dart';
+import 'package:treemov/features/notes/presentation/screens/notes_screen.dart'; // временно вместо рейтинга
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 import 'package:treemov/temp/profile_screen.dart';
@@ -22,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
       create: (_) => getIt<SchedulesBloc>(),
       child: const CalendarScreen(),
     ),
-    Center(child: Text('Заглушка рейтинга', style: TextStyle(fontSize: 20))),
+    const NotesScreen(), // временная замена на место рейтинга
     const DirectoryScreen(),
     const ProfileScreen(),
   ];
@@ -31,7 +32,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentIndex],
-
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
