@@ -62,13 +62,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
       }
 
       newEvents[dateKey]!.add(
-        CalendarEvent(
+        CalendarEvent.fromSchedule(
           time: _formatScheduleTime(schedule),
           title: schedule.title.isEmpty ? '(Без названия)' : schedule.title,
           location: schedule.classroomTitle.isNotEmpty
               ? schedule.classroomTitle
               : 'Не указано',
           description: _getScheduleDescription(schedule),
+          isCompleted: schedule.isCompleted,
         ),
       );
     }
@@ -229,7 +230,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         bottomNavigationBar: SafeArea(
           child: Container(
             width: double.infinity,
-            margin: const EdgeInsets.all(16),
+            margin: const EdgeInsets.only(left: 60, right: 60, bottom: 10),
             child: ElevatedButton(
               onPressed: _navigateToCreateSchedule,
               style: ElevatedButton.styleFrom(
@@ -238,7 +239,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.5),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 5),
               ),
               child: const Text(
                 'Добавить событие',

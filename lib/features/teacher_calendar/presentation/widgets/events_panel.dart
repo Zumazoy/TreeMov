@@ -32,13 +32,12 @@ class EventsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 450,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.white,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12.5),
           topRight: Radius.circular(12.5),
         ),
-        border: Border.all(color: AppColors.eventTap, width: 1),
       ),
       child: Column(
         children: [
@@ -87,12 +86,11 @@ class EventsPanel extends StatelessWidget {
                       ),
                     ),
                   )
-                : ListView.builder(
+                : ListView(
                     padding: const EdgeInsets.all(16),
-                    itemCount: events.length,
-                    itemBuilder: (context, index) {
-                      return _buildEventItem(events[index], context);
-                    },
+                    children: events
+                        .map((event) => _buildEventItem(event, context))
+                        .toList(),
                   ),
           ),
         ],
@@ -105,13 +103,26 @@ class EventsPanel extends StatelessWidget {
     final startTime = timeParts.isNotEmpty ? timeParts[0] : '';
     final endTime = timeParts.length > 1 ? timeParts[1] : '';
 
+    final bool isCompleted = event.isCompleted;
+
+    // Цвета для прошедших событий
+    final Color backgroundColor = isCompleted
+        ? Colors.grey[200]!
+        : AppColors.eventTap;
+    final Color textColor = isCompleted ? Colors.grey[600]! : Colors.black;
+    final Color detailColor = isCompleted ? Colors.grey[500]! : AppColors.grey;
+    final Color dividerColor = isCompleted
+        ? Colors.grey[400]!
+        : const Color(0xFF2F213E);
+
     return Container(
       width: double.infinity,
       height: 70,
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: AppColors.eventTap,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(8),
+        border: isCompleted ? Border.all(color: Colors.grey[400]!) : null,
       ),
       child: Row(
         children: [
@@ -122,21 +133,21 @@ class EventsPanel extends StatelessWidget {
               children: [
                 Text(
                   startTime,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'TT Norms',
-                    color: Colors.black,
+                    color: textColor,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   endTime,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'TT Norms',
-                    color: Colors.black,
+                    color: textColor,
                   ),
                 ),
               ],
@@ -148,7 +159,7 @@ class EventsPanel extends StatelessWidget {
             height: 40,
             margin: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF2F213E),
+              color: dividerColor,
               borderRadius: BorderRadius.circular(4.5),
             ),
           ),
@@ -162,11 +173,11 @@ class EventsPanel extends StatelessWidget {
                 children: [
                   Text(
                     event.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'TT Norms',
-                      color: Colors.black,
+                      color: textColor,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -174,9 +185,9 @@ class EventsPanel extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     event.location,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.grey,
+                      color: detailColor,
                       fontFamily: 'TT Norms',
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -197,6 +208,7 @@ class EventsPanel extends StatelessWidget {
                 'assets/images/purple_arrow.png',
                 width: 24,
                 height: 24,
+                color: isCompleted ? Colors.grey : null,
                 fit: BoxFit.contain,
               ),
               onPressed: () {
