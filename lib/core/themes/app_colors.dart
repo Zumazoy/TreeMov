@@ -24,4 +24,28 @@ class AppColors {
   static const Color directoryBorder = Color(0xFFE5E7EB);
   static const Color directoryAvatarBorder = Color(0xFFD7D6FF);
   static const Color directoryAvatarBackground = Color(0xFFE5E7EB);
+
+  static const Color notesBackground = Color(0xFFF9FAFB);
+  static const Color notesDarkText = Color(0xFF2F213E);
+
+  static const Color categoryBehaviorBg = Color(0xFFDBEAFE);
+  static const Color categoryBehaviorText = Color(0xFF1E40AF);
+  static const Color categoryStudyBg = Color(0xFFDCFCE7);
+  static const Color categoryStudyText = Color(0xFF166534);
+  static const Color categoryParentsBg = Color(0xFFF3E8FF);
+  static const Color categoryParentsText = Color(0xFF7E22CE);
+  static const Color categoryGeneralBg = Color(0xFFFFEDD5);
+  static const Color categoryGeneralText = Color(0xFF9A3412);
+
+  static const Color statsTotalBg = Color(0xFFF0FDF4);
+  static const Color statsTotalBorder = Color(0xFFBBF7D0);
+  static const Color statsTotalText = Color(0xFF15803D);
+
+  static const Color statsPinnedBg = Color(0xFFEFF6FF);
+  static const Color statsPinnedBorder = Color(0xFFBFDBFE);
+  static const Color statsPinnedText = Color(0xFF1D4ED8);
+
+  static const Color statsTodayBg = Color(0xFFFAF5FF);
+  static const Color statsTodayBorder = Color(0xFFE9D5FF);
+  static const Color statsTodayText = Color(0xFF6D28D9);
 }

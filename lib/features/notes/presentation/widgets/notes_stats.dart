@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/themes/app_colors.dart';
 
 class NotesStats extends StatelessWidget {
   final int totalNotes;
@@ -22,9 +23,9 @@ class NotesStats extends StatelessWidget {
             child: _buildStatContainer(
               count: totalNotes,
               title: 'Всего заметок',
-              bgColor: const Color(0xFFF0FDF4),
-              borderColor: const Color(0xFFBBF7D0),
-              countColor: const Color(0xFF15803D),
+              bgColor: AppColors.statsTotalBg,
+              borderColor: AppColors.statsTotalBorder,
+              countColor: AppColors.statsTotalText,
             ),
           ),
           const SizedBox(width: 8),
@@ -32,9 +33,9 @@ class NotesStats extends StatelessWidget {
             child: _buildStatContainer(
               count: pinnedCount,
               title: 'Закрепленных',
-              bgColor: const Color(0xFFEFF6FF),
-              borderColor: const Color(0xFFBFDBFE),
-              countColor: const Color(0xFF1D4ED8),
+              bgColor: AppColors.statsPinnedBg,
+              borderColor: AppColors.statsPinnedBorder,
+              countColor: AppColors.statsPinnedText,
             ),
           ),
           const SizedBox(width: 8),
@@ -42,9 +43,9 @@ class NotesStats extends StatelessWidget {
             child: _buildStatContainer(
               count: todayCount,
               title: 'Сегодня',
-              bgColor: const Color(0xFFFAF5FF),
-              borderColor: const Color(0xFFE9D5FF),
-              countColor: const Color(0xFF6D28D9),
+              bgColor: AppColors.statsTodayBg,
+              borderColor: AppColors.statsTodayBorder,
+              countColor: AppColors.statsTodayText,
             ),
           ),
         ],

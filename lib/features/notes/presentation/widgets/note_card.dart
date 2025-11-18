@@ -2,23 +2,32 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/teacher_note_entity.dart';
 import '../../domain/entities/note_category_entity.dart';
 import '../../../../core/themes/app_colors.dart';
+import 'note_actions_buttons.dart';
 
 class NoteCard extends StatelessWidget {
   final TeacherNoteEntity note;
   final VoidCallback onPinPressed;
+  final VoidCallback onEditPressed;
+  final VoidCallback onDeletePressed;
 
-  const NoteCard({super.key, required this.note, required this.onPinPressed});
+  const NoteCard({
+    super.key,
+    required this.note,
+    required this.onPinPressed,
+    required this.onEditPressed,
+    required this.onDeletePressed,
+  });
 
   Color _getCategoryColor(NoteCategoryEntity category) {
     switch (category) {
       case NoteCategoryEntity.behavior:
-        return const Color(0xFFDBEAFE);
+        return AppColors.categoryBehaviorBg;
       case NoteCategoryEntity.general:
-        return const Color(0xFFFFEDD5);
+        return AppColors.categoryGeneralBg;
       case NoteCategoryEntity.parents:
-        return const Color(0xFFF3E8FF);
+        return AppColors.categoryParentsBg;
       case NoteCategoryEntity.study:
-        return const Color(0xFFDCFCE7);
+        return AppColors.categoryStudyBg;
       case NoteCategoryEntity.all:
         return Colors.grey;
     }
@@ -27,13 +36,13 @@ class NoteCard extends StatelessWidget {
   Color _getCategoryTextColor(NoteCategoryEntity category) {
     switch (category) {
       case NoteCategoryEntity.behavior:
-        return const Color(0xFF1E40AF);
+        return AppColors.categoryBehaviorText;
       case NoteCategoryEntity.general:
-        return const Color(0xFF9A3412);
+        return AppColors.categoryGeneralText;
       case NoteCategoryEntity.parents:
-        return const Color(0xFF7E22CE);
+        return AppColors.categoryParentsText;
       case NoteCategoryEntity.study:
-        return const Color(0xFF166534);
+        return AppColors.categoryStudyText;
       case NoteCategoryEntity.all:
         return Colors.black;
     }
@@ -55,7 +64,12 @@ class NoteCard extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 80,
+              top: 16,
+              bottom: 16,
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -69,7 +83,6 @@ class NoteCard extends StatelessWidget {
                   onPressed: onPinPressed,
                 ),
 
-                // Контент заметки
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +116,6 @@ class NoteCard extends StatelessWidget {
             ),
           ),
 
-          // Тег категории
           Positioned(
             top: 12,
             right: 12,
@@ -121,6 +133,15 @@ class NoteCard extends StatelessWidget {
                   color: _getCategoryTextColor(note.category),
                 ),
               ),
+            ),
+          ),
+
+          Positioned(
+            top: 40,
+            right: 12,
+            child: NoteActionsButtons(
+              onEditPressed: onEditPressed,
+              onDeletePressed: onDeletePressed,
             ),
           ),
         ],
