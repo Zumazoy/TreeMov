@@ -14,4 +14,5 @@ class ApiConstants {
   static const String classrooms = 'schedules/classrooms/';
   static const String periodSchedules = 'schedules/period_schedules/';
   static const String teachers = 'employers/teachers/';
+  static const String teacherNotes = 'employers/teacher_notes/';
 }
