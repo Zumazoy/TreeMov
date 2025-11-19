@@ -1,6 +1,6 @@
 import 'package:treemov/shared/domain/models/base_response_model.dart';
 
-class EmployerEntity extends BaseResponseModel {
+class EmployerResponseModel extends BaseResponseModel {
   final String? name;
   final String? surname;
   final String? patronymic;
@@ -11,7 +11,7 @@ class EmployerEntity extends BaseResponseModel {
   final String? inn;
   final int? department;
 
-  EmployerEntity({
+  EmployerResponseModel({
     required super.baseData,
     required this.name,
     required this.surname,
@@ -24,8 +24,8 @@ class EmployerEntity extends BaseResponseModel {
     required this.department,
   });
 
-  factory EmployerEntity.fromJson(Map<String, dynamic> json) {
-    return EmployerEntity(
+  factory EmployerResponseModel.fromJson(Map<String, dynamic> json) {
+    return EmployerResponseModel(
       baseData: json.baseData,
       name: json['name'],
       surname: json['surname'],

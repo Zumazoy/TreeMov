@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
+import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
 import 'package:treemov/features/directory/presentation/screens/directory_screen.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 import 'package:treemov/temp/profile_screen.dart';
 
@@ -23,7 +24,10 @@ class _MainScreenState extends State<MainScreen> {
       child: const CalendarScreen(),
     ),
     Center(child: Text('Заглушка рейтинга', style: TextStyle(fontSize: 20))),
-    const DirectoryScreen(),
+    BlocProvider(
+      create: (_) => getIt<DirectoryBloc>(),
+      child: const DirectoryScreen(),
+    ),
     const ProfileScreen(),
   ];
 

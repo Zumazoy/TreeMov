@@ -36,7 +36,9 @@ class SharedRemoteDataSource {
 
   Future<List<SubjectResponseModel>> getSubjects() async {
     try {
-      final Response response = await _dioClient.get(ApiConstants.subjects);
+      final Response response = await _dioClient.get(
+        ApiConstants.schedule + ApiConstants.subjects,
+      );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
@@ -92,9 +94,28 @@ class SharedRemoteDataSource {
     }
   }
 
+  Future<StudentGroupResponseModel> getStudentGroupById(int groupId) async {
+    try {
+      final Response response = await _dioClient.get(
+        '${ApiConstants.studentGroups}$groupId/',
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        return StudentGroupResponseModel.fromJson(responseData);
+      } else {
+        throw Exception('Ошибка сервера: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Ошибка загрузки группы: $e');
+    }
+  }
+
   Future<List<ClassroomResponseModel>> getClassrooms() async {
     try {
-      final Response response = await _dioClient.get(ApiConstants.classrooms);
+      final Response response = await _dioClient.get(
+        ApiConstants.schedule + ApiConstants.classrooms,
+      );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
@@ -123,7 +144,7 @@ class SharedRemoteDataSource {
   Future<List<PeriodScheduleResponseModel>> getPeriodSchedules() async {
     try {
       final Response response = await _dioClient.get(
-        ApiConstants.periodSchedules,
+        ApiConstants.schedule + ApiConstants.periodLessons,
       );
 
       if (response.statusCode == 200) {

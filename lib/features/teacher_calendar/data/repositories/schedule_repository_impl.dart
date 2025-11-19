@@ -1,9 +1,10 @@
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
+import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/attendance_response_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_schedule_response_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_update_model.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
 
 class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -36,13 +37,20 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   }
 
   @override
-  Future<ScheduleResponseModel> updateSchedule({
-    required int scheduleId,
-    required ScheduleUpdateModel updateData,
-  }) async {
-    return await _remoteDataSource.updateSchedule(
-      scheduleId: scheduleId,
-      updateData: updateData,
-    );
+  Future<AttendanceResponseModel> createAttendance(
+    AttendanceRequestModel request,
+  ) async {
+    return await _remoteDataSource.createAttendance(request);
   }
+
+  // @override
+  // Future<ScheduleResponseModel> updateSchedule({
+  //   required int scheduleId,
+  //   required ScheduleUpdateModel updateData,
+  // }) async {
+  //   return await _remoteDataSource.updateSchedule(
+  //     scheduleId: scheduleId,
+  //     updateData: updateData,
+  //   );
+  // }
 }

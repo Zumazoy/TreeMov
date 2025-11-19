@@ -5,11 +5,10 @@ class PeriodScheduleRequestModel {
   final int subjectId;
   final int groupId;
   final int classroomId;
-  final int? period;
-  final String? title;
+  final String title;
   final TimeOfDay? startTime;
   final TimeOfDay? endTime;
-  final int? lesson;
+  final int period;
   final DateTime? repeatUntilDate;
   final DateTime startDate;
 
@@ -18,12 +17,11 @@ class PeriodScheduleRequestModel {
     required this.subjectId,
     required this.groupId,
     required this.classroomId,
-    required this.period,
     required this.title,
-    required this.startTime,
-    required this.endTime,
-    required this.lesson,
-    required this.repeatUntilDate,
+    this.startTime,
+    this.endTime,
+    required this.period,
+    this.repeatUntilDate,
     required this.startDate,
   });
 
@@ -32,14 +30,12 @@ class PeriodScheduleRequestModel {
     'subject': subjectId,
     'group': groupId,
     'classroom': classroomId,
-    'period': period,
     'title': title,
-    'start_time': startTime != null ? _formatTime(startTime!) : null,
-    'end_time': endTime != null ? _formatTime(endTime!) : null,
-    'lesson': lesson,
-    'repeat_lessons_until_date': repeatUntilDate != null
-        ? _formatDate(repeatUntilDate!)
-        : null,
+    if (startTime != null) 'start_time': _formatTime(startTime!),
+    if (endTime != null) 'end_time': _formatTime(endTime!),
+    'period': period,
+    if (repeatUntilDate != null)
+      'repeat_lessons_until_date': _formatDate(repeatUntilDate!),
     'start_date': _formatDate(startDate),
   };
 

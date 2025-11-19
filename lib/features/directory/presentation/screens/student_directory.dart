@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/directory/data/mocks/mock_directory_data.dart';
-import 'package:treemov/features/directory/domain/entities/student_entity.dart';
 import 'package:treemov/features/directory/presentation/screens/student_profile.dart';
 import 'package:treemov/features/directory/presentation/widgets/app_bar_title.dart';
 import 'package:treemov/features/directory/presentation/widgets/search_field.dart';
 import 'package:treemov/features/directory/presentation/widgets/student_item.dart';
+import 'package:treemov/shared/data/models/student_group_response_model.dart';
+import 'package:treemov/shared/data/models/student_response_model.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/layout/nav_bar.dart';
 
 class StudentDirectoryScreen extends StatefulWidget {
-  final String groupName;
-  final String subjectName;
+  final StudentGroupResponseModel group;
+  final List<StudentGroupResponseModel> allGroups;
 
   const StudentDirectoryScreen({
     super.key,
-    required this.groupName,
-    required this.subjectName,
+    required this.group,
+    required this.allGroups,
   });
 
   @override
@@ -25,31 +25,37 @@ class StudentDirectoryScreen extends StatefulWidget {
 
 class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<StudentEntity> _filteredStudents = [];
+  List<StudentResponseModel> _filteredStudents = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredStudents = MockDirectoryData.students;
+    _filteredStudents = widget.group.students;
   }
 
   void _onSearchChanged(String query) {
     setState(() {
       if (query.isEmpty) {
-        _filteredStudents = MockDirectoryData.students;
+        _filteredStudents = widget.group.students;
       } else {
-        _filteredStudents = MockDirectoryData.students.where((student) {
-          return student.fullName.toLowerCase().contains(query.toLowerCase());
+        _filteredStudents = widget.group.students.where((student) {
+          final fullName = '${student.name} ${student.surname}'.toLowerCase();
+          return fullName.contains(query.toLowerCase());
         }).toList();
       }
     });
   }
 
-  void _onStudentTap(StudentEntity student) {
+  void _onStudentTap(StudentResponseModel student) {
+    final studentEntity = student.toEntity();
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => StudentProfileScreen(student: student),
+        builder: (context) => StudentProfileScreen(
+          student: studentEntity,
+          groupName: widget.group.name ?? 'Группа',
+          allGroups: widget.allGroups,
+        ),
       ),
     );
   }
@@ -63,7 +69,7 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: AppBarTitle(text: 'Ученики ${widget.groupName}'),
+        title: AppBarTitle(text: 'Ученики ${widget.group.name}'),
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.grayFieldText,
         elevation: 0,
@@ -76,18 +82,49 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
             hintText: 'Найти: по группам, ученикам...',
           ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                ..._filteredStudents.map(
-                  (student) => StudentItem(
-                    student: student,
-                    groupName: widget.groupName,
-                    onTap: () => _onStudentTap(student),
+            child:
+                _filteredStudents.isEmpty && _searchController.text.isNotEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.person_search,
+                          size: 64,
+                          color: AppColors.directoryTextSecondary,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Студенты не найдены',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.grayFieldText,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Попробуйте изменить поисковый запрос',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppColors.directoryTextSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    children: [
+                      ..._filteredStudents.map(
+                        (student) => StudentItem(
+                          student: student.toEntity(),
+                          groupName: widget.group.name ?? 'Группа',
+                          onTap: () => _onStudentTap(student),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

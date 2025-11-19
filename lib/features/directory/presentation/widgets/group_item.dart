@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/directory/domain/entities/group_entity.dart';
-import 'package:treemov/features/directory/domain/entities/subject_entity.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
 class GroupItem extends StatefulWidget {
-  final GroupEntity group;
-  final SubjectEntity subject;
+  final String groupName;
+  final int studentCount;
   final VoidCallback onTap;
 
   const GroupItem({
     super.key,
-    required this.group,
-    required this.subject,
+    required this.groupName,
+    required this.studentCount,
     required this.onTap,
   });
 
@@ -43,7 +41,7 @@ class _GroupItemState extends State<GroupItem> {
         child: Row(
           children: [
             Text(
-              '${widget.subject.name}  ',
+              widget.groupName,
               style: const TextStyle(
                 fontFamily: 'Arial',
                 fontWeight: FontWeight.w700,
@@ -52,18 +50,9 @@ class _GroupItemState extends State<GroupItem> {
                 color: AppColors.grayFieldText,
               ),
             ),
+            const SizedBox(width: 8),
             Text(
-              'Группа: ${widget.group.name}  ',
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
-                height: 1.0,
-                color: AppColors.directoryTextSecondary,
-              ),
-            ),
-            Text(
-              '${widget.group.studentCount} учеников',
+              '${widget.studentCount} учеников',
               style: const TextStyle(
                 fontFamily: 'Arial',
                 fontWeight: FontWeight.w400,

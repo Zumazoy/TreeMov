@@ -7,14 +7,14 @@ import 'package:treemov/shared/domain/models/base_response_model.dart';
 
 class ScheduleResponseModel extends BaseResponseModel {
   final String? title;
+  final String? startTime;
+  final String? endTime;
   final String? date;
   final int? weekDay;
   final bool? isCanceled;
   final bool? isCompleted;
-  final String? startTime;
-  final String? endTime;
-  final int? lesson;
   final String? duration;
+  final String? comment;
   final int? periodSchedule;
   final TeacherResponseModel? teacher;
   final SubjectResponseModel? subject;
@@ -24,14 +24,14 @@ class ScheduleResponseModel extends BaseResponseModel {
   ScheduleResponseModel({
     required super.baseData,
     required this.title,
+    required this.startTime,
+    required this.endTime,
     required this.date,
     required this.weekDay,
     required this.isCanceled,
     required this.isCompleted,
-    required this.startTime,
-    required this.endTime,
-    required this.lesson,
     required this.duration,
+    required this.comment,
     required this.periodSchedule,
     required this.teacher,
     required this.subject,
@@ -48,14 +48,14 @@ class ScheduleResponseModel extends BaseResponseModel {
     return ScheduleResponseModel(
       baseData: json.baseData,
       title: json['title'] ?? '',
+      startTime: json['start_time'],
+      endTime: json['end_time'],
       date: json['date'] ?? '',
       weekDay: json['week_day'] ?? 0,
       isCanceled: json['is_canceled'] == true,
       isCompleted: json['is_completed'] == true,
-      startTime: json['start_time'],
-      endTime: json['end_time'],
-      lesson: json['lesson'],
       duration: json['duration'],
+      comment: json['comment'],
       periodSchedule: json['period_schedule'],
       teacher: teacherJson != null && teacherJson is Map<String, dynamic>
           ? TeacherResponseModel.fromJson(teacherJson)

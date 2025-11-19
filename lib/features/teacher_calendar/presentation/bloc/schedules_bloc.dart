@@ -2,18 +2,23 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
+import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
   final ScheduleRepository _repository;
+  final SharedRepository _sharedRepository;
 
-  SchedulesBloc(this._repository) : super(ScheduleInitial()) {
+  SchedulesBloc(this._repository, this._sharedRepository)
+    : super(ScheduleInitial()) {
     on<LoadSchedulesEvent>(_onLoadSchedules);
     on<LoadScheduleByIdEvent>(_onLoadScheduleById);
+    on<LoadStudentGroupByIdEvent>(_onLoadStudentGroupById);
     on<CreateScheduleEvent>(_onCreateSchedule);
     on<CreatePeriodScheduleEvent>(_onCreatePeriodSchedule);
-    on<UpdateScheduleEvent>(_onUpdateSchedule);
+    on<CreateMassAttendanceEvent>(_onCreateMassAttendance);
+    // on<UpdateScheduleEvent>(_onUpdateSchedule);
   }
 
   Future<void> _onLoadSchedules(
@@ -39,6 +44,19 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
       emit(ScheduleLoaded(schedule));
     } catch (e) {
       emit(ScheduleError('Ошибка загрузки занятия: $e'));
+    }
+  }
+
+  Future<void> _onLoadStudentGroupById(
+    LoadStudentGroupByIdEvent event,
+    Emitter<ScheduleState> emit,
+  ) async {
+    emit(StudentGroupLoading());
+    try {
+      final group = await _sharedRepository.getStudentGroupById(event.groupId);
+      emit(StudentGroupLoaded(group));
+    } catch (e) {
+      emit(StudentGroupError('Ошибка загрузки группы: $e'));
     }
   }
 
@@ -70,19 +88,35 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     }
   }
 
-  Future<void> _onUpdateSchedule(
-    UpdateScheduleEvent event,
+  Future<void> _onCreateMassAttendance(
+    CreateMassAttendanceEvent event,
     Emitter<ScheduleState> emit,
   ) async {
     emit(ScheduleLoading());
     try {
-      await _repository.updateSchedule(
-        scheduleId: event.scheduleId,
-        updateData: event.updateData,
-      );
-      emit(ScheduleOperationSuccess('Занятие успешно обновлено'));
+      // Отправляем все запросы последовательно
+      for (final attendanceRequest in event.requests) {
+        await _repository.createAttendance(attendanceRequest);
+      }
+      emit(AttendanceOperationSuccess('Посещаемость успешно сохранена'));
     } catch (e) {
-      emit(ScheduleError('Ошибка обновления занятия: $e'));
+      emit(AttendanceError('Ошибка сохранения посещаемости: $e'));
     }
   }
+
+  // Future<void> _onUpdateSchedule(
+  //   UpdateScheduleEvent event,
+  //   Emitter<ScheduleState> emit,
+  // ) async {
+  //   emit(ScheduleLoading());
+  //   try {
+  //     await _repository.updateSchedule(
+  //       scheduleId: event.scheduleId,
+  //       updateData: event.updateData,
+  //     );
+  //     emit(ScheduleOperationSuccess('Занятие успешно обновлено'));
+  //   } catch (e) {
+  //     emit(ScheduleError('Ошибка обновления занятия: $e'));
+  //   }
+  // }
 }

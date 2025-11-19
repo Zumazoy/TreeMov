@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/directory/domain/entities/parent_contact_entity.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
 class ParentContactsList extends StatelessWidget {
-  final List<ParentContactEntity> parentContacts;
+  static const List parentContacts = [''];
 
-  const ParentContactsList({super.key, required this.parentContacts});
+  const ParentContactsList({super.key});
 
   @override
   Widget build(BuildContext context) {

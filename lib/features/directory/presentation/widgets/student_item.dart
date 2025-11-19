@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/directory/domain/entities/student_entity.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
@@ -53,12 +53,19 @@ class _StudentItemState extends State<StudentItem> {
                   width: 2,
                 ),
               ),
-              child: widget.student.avatarUrl != null
+              child: widget.student.avatar != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(24),
                       child: Image.network(
-                        widget.student.avatarUrl!,
+                        widget.student.avatar!,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.person,
+                            color: AppColors.directoryTextSecondary,
+                            size: 28,
+                          );
+                        },
                       ),
                     )
                   : const Icon(
@@ -74,7 +81,7 @@ class _StudentItemState extends State<StudentItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.student.fullName,
+                    '${widget.student.name} ${widget.student.surname}',
                     style: const TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w700,

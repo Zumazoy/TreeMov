@@ -6,10 +6,11 @@ import 'package:treemov/features/authorization/data/repositories/auth_storage_re
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
 import 'package:treemov/features/authorization/presentation/blocs/token/token_bloc.dart';
+import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/shared/data/datasources/shared_remote_data_source.dart';
 import 'package:treemov/shared/data/repositories/shared_repository_impl.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
@@ -58,6 +59,9 @@ void setupDependencies() {
     ),
   );
   getIt.registerFactory<SchedulesBloc>(
-    () => SchedulesBloc(getIt<ScheduleRepository>()),
+    () => SchedulesBloc(getIt<ScheduleRepository>(), getIt<SharedRepository>()),
+  );
+  getIt.registerFactory<DirectoryBloc>(
+    () => DirectoryBloc(getIt<SharedRepository>()),
   );
 }

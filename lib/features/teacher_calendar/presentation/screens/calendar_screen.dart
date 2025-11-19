@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/schedule_entity.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 import '../../../../core/themes/app_colors.dart';
-import '../../domain/entities/calendar_event_entity.dart';
 import '../widgets/events_panel.dart';
 import 'create_schedule_screen.dart';
 
@@ -23,7 +23,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _currentDate = DateTime.now();
   DateTime? _selectedDate;
 
-  Map<String, List<CalendarEventEntity>> _events = {};
+  Map<String, List<ScheduleEntity>> _events = {};
 
   @override
   void initState() {
@@ -34,10 +34,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   void _showEventsPanel(DateTime date) {
+    final schedulesBloc = context.read<SchedulesBloc>();
+
     EventsPanel.show(
       context: context,
       selectedDate: date,
       events: _getEventsForDate(date),
+      schedulesBloc: schedulesBloc,
     );
   }
 
@@ -56,13 +59,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  List<CalendarEventEntity> _getEventsForDate(DateTime date) {
+  List<ScheduleEntity> _getEventsForDate(DateTime date) {
     final String dateKey = _formatDate(date);
     return _events[dateKey] ?? [];
   }
 
   void _updateEventsFromSchedules(List<ScheduleResponseModel> schedules) {
-    final Map<String, List<CalendarEventEntity>> newEvents = {};
+    final Map<String, List<ScheduleEntity>> newEvents = {};
 
     for (final schedule in schedules) {
       final dateKey = _formatScheduleDate(schedule);
@@ -72,13 +75,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
       }
 
       newEvents[dateKey]!.add(
-        CalendarEventEntity(
-          time: _formatScheduleTime(schedule),
-          title: schedule.title!.isNotEmpty
-              ? schedule.title ?? '(Без названия)'
-              : '(Без названия)',
-          location: _getClassroomTitle(schedule),
-          description: _getScheduleDescription(schedule),
+        ScheduleEntity(
+          id: schedule.id,
+          org: schedule.org,
+          createdBy: schedule.createdBy,
+          createdAt: schedule.createdAt,
+          title: schedule.title,
+          startTime: schedule.startTime,
+          endTime: schedule.endTime,
+          date: schedule.date,
+          weekDay: schedule.weekDay,
+          isCanceled: schedule.isCanceled,
+          isCompleted: schedule.isCompleted,
+          duration: schedule.duration,
+          comment: schedule.comment,
+          periodSchedule: schedule.periodSchedule,
+          teacher: schedule.teacher,
+          subject: schedule.subject,
+          group: schedule.group,
+          classroom: schedule.classroom,
         ),
       );
     }
@@ -93,56 +108,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
       final date = DateTime.parse(schedule.date!);
       return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     } catch (e) {
-      debugPrint("===ERROR=== on _formatScheduleDate");
       return schedule.date!;
     }
-  }
-
-  String _getClassroomTitle(ScheduleResponseModel schedule) {
-    if (schedule.classroom == null) {
-      return 'Не указано';
-    }
-
-    final title = schedule.classroom?.title;
-    if (title == null || title.isEmpty) {
-      return 'Не указано';
-    }
-
-    return title;
-  }
-
-  String _formatScheduleTime(ScheduleResponseModel schedule) {
-    final startTime = schedule.startTime;
-    final endTime = schedule.endTime;
-
-    if (startTime != null && endTime != null) {
-      return '${schedule.formatTime(startTime)}\n${schedule.formatTime(endTime)}';
-    }
-
-    return 'Время не указано';
-  }
-
-  String _getScheduleDescription(ScheduleResponseModel schedule) {
-    final List<String> details = [];
-
-    if (schedule.formattedEmployer.isNotEmpty) {
-      details.add('Преподаватель: ${schedule.formattedEmployer}');
-    }
-
-    final groupName = schedule.group?.name;
-    if (groupName != null && groupName.isNotEmpty) {
-      details.add('Группа: $groupName');
-    }
-
-    if (schedule.isCanceled == true) {
-      details.add('❌ Отменено');
-    }
-
-    if (schedule.isCompleted == true) {
-      details.add('✅ Завершено');
-    }
-
-    return details.join('\n');
   }
 
   @override
@@ -155,11 +122,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.white,
+        appBar: AppBar(
+          backgroundColor: AppColors.white,
+          elevation: 0,
+          title: Text(
+            'Календарь',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Arial',
+              color: Colors.black,
+            ),
+          ),
+        ),
         body: Column(
           children: [
-            // Убрали контейнер с кнопкой добавления отсюда
-            const SizedBox(height: 12),
-
             Expanded(
               child: SingleChildScrollView(
                 child: SizedBox(
@@ -248,7 +225,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
           ],
         ),
-        // Добавляем кнопку в нижнюю часть экрана
         bottomNavigationBar: SafeArea(
           child: Container(
             width: double.infinity,

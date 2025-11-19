@@ -8,10 +8,9 @@ class PeriodScheduleResponseModel extends BaseResponseModel {
   final String? title;
   final String? startTime;
   final String? endTime;
+  final int? period;
   final String? repeatLessonsUntilDate;
   final String? startDate;
-  final int? period;
-  final int? lesson;
   final TeacherResponseModel? teacher;
   final SubjectResponseModel? subject;
   final StudentGroupResponseModel? group;
@@ -22,10 +21,9 @@ class PeriodScheduleResponseModel extends BaseResponseModel {
     required this.title,
     required this.startTime,
     required this.endTime,
+    required this.period,
     required this.repeatLessonsUntilDate,
     required this.startDate,
-    required this.period,
-    required this.lesson,
     required this.teacher,
     required this.subject,
     required this.group,
@@ -43,10 +41,9 @@ class PeriodScheduleResponseModel extends BaseResponseModel {
       title: json['title'],
       startTime: json['start_time'],
       endTime: json['end_time'],
+      period: json['period'],
       repeatLessonsUntilDate: json['repeat_lessons_until_date'],
       startDate: json['start_date'],
-      period: json['period'],
-      lesson: json['lesson'],
       teacher: teacherJson != null && teacherJson is Map<String, dynamic>
           ? TeacherResponseModel.fromJson(teacherJson)
           : null,

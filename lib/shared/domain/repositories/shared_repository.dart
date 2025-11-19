@@ -7,6 +7,7 @@ abstract class SharedRepository {
   Future<int?> getTeacherId();
   Future<List<SubjectResponseModel>> getSubjects();
   Future<List<StudentGroupResponseModel>> getStudentGroups();
+  Future<StudentGroupResponseModel> getStudentGroupById(int groupId);
   Future<List<ClassroomResponseModel>> getClassrooms();
   Future<List<PeriodScheduleResponseModel>> getPeriodSchedules();
 }
