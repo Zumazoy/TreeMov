@@ -74,11 +74,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
       newEvents[dateKey]!.add(
         CalendarEventEntity(
           time: _formatScheduleTime(schedule),
-          title: schedule.title!.isNotEmpty
-              ? schedule.title ?? '(Без названия)'
+          title: (schedule.title?.isNotEmpty == true)
+              ? schedule.title!
               : '(Без названия)',
           location: _getClassroomTitle(schedule),
           description: _getScheduleDescription(schedule),
+          isCompleted: schedule.isCompleted ?? false,
         ),
       );
     }
@@ -157,7 +158,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
         backgroundColor: AppColors.white,
         body: Column(
           children: [
-            // Убрали контейнер с кнопкой добавления отсюда
             const SizedBox(height: 12),
 
             Expanded(
@@ -248,11 +248,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
           ],
         ),
-        // Добавляем кнопку в нижнюю часть экрана
         bottomNavigationBar: SafeArea(
           child: Container(
             width: double.infinity,
-            margin: const EdgeInsets.all(16),
+            margin: const EdgeInsets.only(left: 60, right: 60, bottom: 10),
             child: ElevatedButton(
               onPressed: _navigateToCreateSchedule,
               style: ElevatedButton.styleFrom(
@@ -261,7 +260,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.5),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 5),
               ),
               child: const Text(
                 'Добавить событие',

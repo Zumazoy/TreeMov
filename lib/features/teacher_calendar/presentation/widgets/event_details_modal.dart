@@ -31,6 +31,8 @@ class EventDetailsModal extends StatelessWidget {
     final startTime = timeParts.isNotEmpty ? timeParts[0] : '';
     final endTime = timeParts.length > 1 ? timeParts[1] : '';
 
+    final bool isCompleted = event.isCompleted;
+
     return Container(
       width: 355,
       height: 320,
@@ -45,25 +47,37 @@ class EventDetailsModal extends StatelessWidget {
             height: 70,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.eventTap,
+              color: isCompleted ? Colors.grey[300]! : AppColors.eventTap,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12.5),
                 topRight: Radius.circular(12.5),
               ),
             ),
-            child: Center(
-              child: Text(
-                event.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'TT Norms',
-                  color: Colors.black,
+            child: Column(
+              children: [
+                Text(
+                  event.title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'TT Norms',
+                    color: isCompleted ? Colors.grey[600]! : Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+                if (isCompleted) const SizedBox(height: 4),
+                if (isCompleted)
+                  Text(
+                    'Прошедшее занятие',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600]!,
+                      fontFamily: 'TT Norms',
+                    ),
+                  ),
+              ],
             ),
           ),
 
