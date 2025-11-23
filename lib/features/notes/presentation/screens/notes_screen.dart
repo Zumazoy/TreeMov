@@ -9,7 +9,6 @@ import '../../../../core/themes/app_colors.dart';
 import '../../../directory/presentation/widgets/search_field.dart';
 import '../../domain/entities/note_category_entity.dart';
 import '../../domain/entities/teacher_note_entity.dart';
-// Используем существующие виджеты
 import '../widgets/category_filters.dart';
 import '../widgets/create_note_modal.dart';
 import '../widgets/delete_note_modal.dart';
@@ -24,7 +23,6 @@ class NotesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // Инициализируем Bloc и сразу загружаем заметки
       create: (context) => getIt<NotesBloc>()..add(LoadNotesEvent()),
       child: const _NotesScreenContent(),
     );
@@ -42,7 +40,6 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
   NoteCategoryEntity _selectedCategory = NoteCategoryEntity.all;
   final TextEditingController _searchController = TextEditingController();
 
-  // Состояние фильтров храним локально в виджете, данные - в Bloc
   String _searchQuery = '';
   bool _isFilterActive = false;
   List<NoteCategoryEntity> _selectedCategories = [];
@@ -50,18 +47,15 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
   DateTime? _endDate;
   String? _quickFilter;
 
-  // Локальный список для отображения (фильтруется из стейта Bloc)
   List<TeacherNoteEntity> _filterNotes(List<TeacherNoteEntity> allNotes) {
     List<TeacherNoteEntity> filtered = allNotes;
 
-    // Фильтр по табам категорий
     if (_selectedCategory != NoteCategoryEntity.all) {
       filtered = filtered
           .where((note) => note.category == _selectedCategory)
           .toList();
     }
 
-    // Расширенные фильтры
     if (_selectedCategories.isNotEmpty) {
       filtered = filtered
           .where((note) => _selectedCategories.contains(note.category))
@@ -128,8 +122,6 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
   }
 
   void _togglePin(TeacherNoteEntity note) {
-    // Поскольку API не поддерживает pin, мы обновляем через UpdateNoteEvent,
-    // чтобы сохранить консистентность, хотя бэкенд может игнорировать это поле.
     context.read<NotesBloc>().add(
       UpdateNoteEvent(
         id: note.id,
@@ -191,8 +183,6 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
           ),
           content: CreateNoteModal(
             onNoteCreated: (newNote) {
-              // Отправляем событие в Bloc
-              // Используем context родительского виджета, поэтому modalContext тут не нужен для bloc
               this.context.read<NotesBloc>().add(
                 CreateNoteEvent(
                   title: newNote.title,
@@ -261,9 +251,55 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Заметки')),
       backgroundColor: AppColors.notesBackground,
-      // Слушаем изменения состояния для показа SnackBar
+      appBar: AppBar(
+        backgroundColor: AppColors.notesBackground,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false, // Заголовок слева
+        title: Row(
+          children: [
+            const Icon(
+              Icons.description_outlined,
+              color: AppColors.notesDarkText,
+              size: 28,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Заметки',
+              style: TextStyle(
+                fontFamily: 'TT Norms',
+                fontWeight: FontWeight.w900,
+                fontSize: 22,
+                color: AppColors.notesDarkText,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: _showCreateNoteModal,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.teacherPrimary, // Фиолетовый цвет
+                  foregroundColor: Colors.white, // Цвет иконки/сплэша
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // Скругление
+                  ),
+                  elevation: 0,
+                  shadowColor: Colors.transparent,
+                ),
+                child: const Icon(Icons.add, size: 28, color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: BlocConsumer<NotesBloc, NotesState>(
         listener: (context, state) {
           if (state is NoteOperationSuccess) {
@@ -284,15 +320,9 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
           }
         },
         builder: (context, state) {
-          // Получаем актуальный список заметок из состояния или пустой список
           List<TeacherNoteEntity> allNotes = [];
           if (state is NotesLoaded) {
             allNotes = state.notes;
-          } else if (state is NoteOperationSuccess) {
-            // Если операция успешна, можно перезапросить или использовать предыдущий стейт,
-            // но обычно Bloc переходит обратно в Loaded после обновления.
-            // В нашем Bloc мы делаем add(LoadNotesEvent()) после операций,
-            // так что мы снова попадем в Loading -> Loaded.
           }
 
           final filteredList = _filterNotes(allNotes);
@@ -301,6 +331,7 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
 
           return Column(
             children: [
+              // Поле поиска и кнопка фильтра
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
@@ -342,6 +373,7 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
                 ),
               ),
 
+              // Категории (табы)
               CategoryFilters(
                 selectedCategory: _selectedCategory,
                 onCategorySelected: (category) {
@@ -349,6 +381,7 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
                 },
               ),
 
+              // Статистика
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: NotesStats(
@@ -358,14 +391,19 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
                 ),
               ),
 
+              // Список заметок
               Expanded(
                 child: state is NotesLoading && allNotes.isEmpty
                     ? const Center(child: CircularProgressIndicator())
                     : ListView(
+                        padding: const EdgeInsets.only(bottom: 20),
                         children: [
                           if (pinnedNotes.isNotEmpty) ...[
                             const Padding(
-                              padding: EdgeInsets.all(16.0),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 8.0,
+                              ),
                               child: Text(
                                 'Закрепленные',
                                 style: TextStyle(
@@ -385,7 +423,10 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
                           ],
                           if (normalNotes.isNotEmpty) ...[
                             const Padding(
-                              padding: EdgeInsets.all(16.0),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 8.0,
+                              ),
                               child: Text(
                                 'Все заметки',
                                 style: TextStyle(
@@ -418,26 +459,6 @@ class _NotesScreenContentState extends State<_NotesScreenContent> {
                             ),
                         ],
                       ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: _showCreateNoteModal,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.teacherPrimary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                    minimumSize: const Size(140, 48),
-                  ),
-                  child: const Text(
-                    'Новая заметка',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ),
               ),
             ],
           );
