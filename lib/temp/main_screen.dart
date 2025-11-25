@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
-import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
 import 'package:treemov/features/directory/presentation/screens/directory_screen.dart';
+import 'package:treemov/features/notes/presentation/screens/notes_screen.dart';
+import 'package:treemov/features/profile/presentation/screens/profile_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
-import 'package:treemov/temp/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -23,19 +23,15 @@ class _MainScreenState extends State<MainScreen> {
       create: (_) => getIt<SchedulesBloc>(),
       child: const CalendarScreen(),
     ),
-    Center(child: Text('Заглушка рейтинга', style: TextStyle(fontSize: 20))),
-    BlocProvider(
-      create: (_) => getIt<DirectoryBloc>(),
-      child: const DirectoryScreen(),
-    ),
-    const ProfileScreen(),
+    const NotesScreen(), // больше не нужен тут
+    const DirectoryScreen(),
+    const ProfileScreen(), // замененный профиль
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentIndex],
-
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
