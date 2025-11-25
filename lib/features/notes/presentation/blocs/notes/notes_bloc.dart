@@ -3,7 +3,7 @@ import 'package:treemov/features/notes/data/models/teacher_note_request_model.da
 import 'package:treemov/features/notes/data/models/teacher_note_response_model.dart';
 import 'package:treemov/features/notes/domain/entities/note_category_entity.dart';
 import 'package:treemov/features/notes/domain/entities/teacher_note_entity.dart';
-import 'package:treemov/features/notes/domain/repositories/local_notes_repository.dart'; // Импорт
+import 'package:treemov/features/notes/domain/repositories/local_notes_repository.dart';
 import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
@@ -12,7 +12,7 @@ import 'notes_state.dart';
 
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   final TeacherNotesRepository _notesRepository;
-  final LocalNotesRepository _localNotesRepository; // Новая зависимость
+  final LocalNotesRepository _localNotesRepository;
   final SharedRepository _sharedRepository;
 
   int? _teacherId;
@@ -78,7 +78,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         title: event.title,
         text: event.content,
         category: event.category,
-        // isPinned не отправляем на сервер, новые заметки по умолчанию не закреплены
         teacherProfileId: _teacherId!,
       );
 
@@ -122,7 +121,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       final intId = int.tryParse(event.id) ?? 0;
       await _notesRepository.updateTeacherNote(intId, request);
 
-      // emit(const NoteOperationSuccess('Заметка обновлена')); // Опционально
       add(LoadNotesEvent());
     } catch (e) {
       emit(NotesError('Ошибка обновления: $e'));
@@ -141,7 +139,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       // Удаляем с сервера
       await _notesRepository.deleteTeacherNote(intId);
 
-      // Опционально: удаляем ID из локального хранилища, чтобы не мусорить
       await _localNotesRepository.setPinnedStatus(event.id, false);
 
       emit(const NoteOperationSuccess('Заметка удалена'));
