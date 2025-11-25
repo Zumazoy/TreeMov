@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/directory/presentation/screens/directory_screen.dart';
-import 'package:treemov/features/notes/presentation/screens/notes_screen.dart'; // временно вместо рейтинга
+import 'package:treemov/features/notes/presentation/screens/notes_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
-import 'package:treemov/temp/profile_screen.dart';
+import 'package:treemov/features/profile/presentation/screens/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -23,9 +23,9 @@ class _MainScreenState extends State<MainScreen> {
       create: (_) => getIt<SchedulesBloc>(),
       child: const CalendarScreen(),
     ),
-    const NotesScreen(), // временная замена на место рейтинга
+    const NotesScreen(), // больше не нужен тут
     const DirectoryScreen(),
-    const ProfileScreen(),
+    const ProfileScreen(), // замененный профиль
   ];
 
   @override
