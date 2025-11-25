@@ -7,6 +7,7 @@ import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bl
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/shared/data/models/student_response_model.dart';
+import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../widgets/attendance_parts/lesson_info_card.dart';
@@ -162,18 +163,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     widget.schedulesBloc.add(CreateMassAttendanceEvent(attendanceRequests));
   }
 
-  void _onNavBarTap(int index, BuildContext context) {
-    switch (index) {
-      case 0: // Календарь
-        Navigator.popUntil(context, (route) => route.isFirst);
-        break;
-      case 1: // Рейтинг
-        break;
-      case 2: // Справка
-        break;
-      case 3: // Профиль
-        break;
-    }
+  void _onTabTapped(int index) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreen(initialIndex: index)),
+      (route) => false,
+    );
   }
 
   String _formatStudentName(StudentResponseModel student) {
@@ -366,7 +361,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         ),
         bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: 0,
-          onTap: (index) => _onNavBarTap(index, context),
+          onTap: _onTabTapped,
         ),
       ),
     );

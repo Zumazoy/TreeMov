@@ -16,7 +16,7 @@ class ScheduleRemoteDataSource {
   Future<List<ScheduleResponseModel>> getAllSchedules() async {
     try {
       final Response response = await _dioClient.get(
-        ApiConstants.schedule + ApiConstants.lessons,
+        ApiConstants.scheduleP + ApiConstants.lessons,
       );
 
       if (response.statusCode == 200) {
@@ -46,7 +46,7 @@ class ScheduleRemoteDataSource {
   Future<ScheduleResponseModel> getScheduleById(int scheduleId) async {
     try {
       final response = await _dioClient.get(
-        '${ApiConstants.schedule + ApiConstants.lessons}$scheduleId/',
+        '${ApiConstants.scheduleP + ApiConstants.lessons}$scheduleId/',
       );
 
       if (response.statusCode == 200) {
@@ -64,7 +64,7 @@ class ScheduleRemoteDataSource {
   ) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.schedule + ApiConstants.lessons,
+        ApiConstants.scheduleP + ApiConstants.lessons,
         data: request.toJson(),
       );
 
@@ -83,7 +83,7 @@ class ScheduleRemoteDataSource {
   ) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.schedule + ApiConstants.periodLessons,
+        ApiConstants.scheduleP + ApiConstants.periodLessons,
         data: request.toJson(),
       );
 
@@ -104,7 +104,7 @@ class ScheduleRemoteDataSource {
   ) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.schedule + ApiConstants.attendances,
+        ApiConstants.scheduleP + ApiConstants.attendances,
         data: request.toJson(),
       );
 

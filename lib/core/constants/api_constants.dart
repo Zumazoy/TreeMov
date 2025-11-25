@@ -6,17 +6,21 @@ class ApiConstants {
   static const Duration receiveTimeout = Duration(seconds: 10);
 
   // Prefixes
-  static const String schedule = 'schedule/';
+  static const String scheduleP = 'schedule/';
+  static const String studentsP = 'students/';
+  static const String employersP = 'employers/';
 
   // Endpoints
   static const String token = 'token/';
+
   static const String lessons = 'lessons/';
   static const String subjects = 'subjects/';
   static const String classrooms = 'classrooms/';
-  static const String periodLessons = 'period_lessons/';
   static const String attendances = 'attendances/';
-  static const String students = 'students/students/';
-  static const String studentGroups = 'students/student_groups/';
-  static const String teachers = 'employers/teachers/';
-  static const String teacherNotes = 'employers/teacher_notes/';
+  static const String periodLessons = 'period_lessons/';
+
+  static const String studentGroups = 'student_groups/';
+
+  static const String teachers = 'teachers/';
+  static const String teacherNotes = 'teacher_notes/';
 }

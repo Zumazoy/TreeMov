@@ -81,8 +81,10 @@ class DailyScheduleCard extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const MainScreen()),
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const MainScreen(initialIndex: 0),
+                ),
               );
             },
             child: Container(

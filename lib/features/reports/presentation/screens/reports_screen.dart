@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
-// import 'package:treemov/features/directory/presentation/widgets/search_field.dart'; // Удалено
 import 'package:treemov/features/reports/data/mocks/mock_reports_data.dart';
 import 'package:treemov/features/reports/domain/entities/report_entity.dart';
-import 'package:treemov/features/reports/presentation/widgets/filter_categories_section.dart'; // <-- Импорт для Enum
-import 'package:treemov/features/reports/presentation/widgets/filter_quick_section.dart'; // <-- Импорт для Enum
-import 'package:treemov/features/reports/presentation/widgets/report_filter_modal.dart'; // <-- НОВЫЙ ИМПОРТ МОДАЛА
+// import 'package:treemov/features/reports/presentation/widgets/filter_categories_section.dart';
+// import 'package:treemov/features/reports/presentation/widgets/filter_quick_section.dart';
+import 'package:treemov/features/reports/presentation/widgets/report_filter_modal.dart';
 import 'package:treemov/features/reports/presentation/widgets/report_item.dart';
 import 'package:treemov/features/reports/presentation/widgets/reports_stats.dart';
 
@@ -17,14 +16,14 @@ class ReportsScreen extends StatefulWidget {
 }
 
 class _ReportsScreenState extends State<ReportsScreen> {
-  List<ReportEntity> _reports = MockReportsData.mockReports;
+  final List<ReportEntity> _reports = MockReportsData.mockReports;
   String _selectedFilter = 'Все отчеты';
 
   // Состояния для хранения активных фильтров
-  ReportFilterCategory? _activeCategoryFilter;
-  ReportQuickFilter? _activeQuickFilter;
-  DateTime? _activeStartDate;
-  DateTime? _activeEndDate;
+  // ReportFilterCategory? _activeCategoryFilter;
+  // ReportQuickFilter? _activeQuickFilter;
+  // DateTime? _activeStartDate;
+  // DateTime? _activeEndDate;
 
   // Статистика
   int get _readyReportsCount =>
@@ -78,10 +77,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
       context: context,
       onApplyFilters: (category, quickFilter, startDate, endDate) {
         setState(() {
-          _activeCategoryFilter = category;
-          _activeQuickFilter = quickFilter;
-          _activeStartDate = startDate;
-          _activeEndDate = endDate;
+          // _activeCategoryFilter = category;
+          // _activeQuickFilter = quickFilter;
+          // _activeStartDate = startDate;
+          // _activeEndDate = endDate;
 
           // После применения фильтров, можно обновить _selectedFilter, если категория была выбрана,
           // или просто вызвать метод для перезагрузки данных.
@@ -173,7 +172,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         ? () => _onDownloadReport(report)
                         : null,
                   );
-                }).toList(),
+                }),
 
                 // Секция "Создать новый отчет"
                 _buildCreateReportSection(),

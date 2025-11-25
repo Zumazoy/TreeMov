@@ -5,6 +5,7 @@ import 'package:treemov/features/directory/presentation/widgets/search_field.dar
 import 'package:treemov/features/directory/presentation/widgets/student_item.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/student_response_model.dart';
+import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/layout/nav_bar.dart';
@@ -61,7 +62,11 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
   }
 
   void _onTabTapped(int index) {
-    Navigator.popUntil(context, (route) => route.isFirst);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreen(initialIndex: index)),
+      (route) => false,
+    );
   }
 
   @override

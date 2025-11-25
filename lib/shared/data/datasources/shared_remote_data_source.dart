@@ -14,7 +14,9 @@ class SharedRemoteDataSource {
 
   Future<int?> getTeacherId() async {
     try {
-      final Response response = await _dioClient.get(ApiConstants.teachers);
+      final Response response = await _dioClient.get(
+        ApiConstants.employersP + ApiConstants.teachers,
+      );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
@@ -37,7 +39,7 @@ class SharedRemoteDataSource {
   Future<List<SubjectResponseModel>> getSubjects() async {
     try {
       final Response response = await _dioClient.get(
-        ApiConstants.schedule + ApiConstants.subjects,
+        ApiConstants.scheduleP + ApiConstants.subjects,
       );
 
       if (response.statusCode == 200) {
@@ -67,7 +69,7 @@ class SharedRemoteDataSource {
   Future<List<StudentGroupResponseModel>> getStudentGroups() async {
     try {
       final Response response = await _dioClient.get(
-        ApiConstants.studentGroups,
+        ApiConstants.studentsP + ApiConstants.studentGroups,
       );
 
       if (response.statusCode == 200) {
@@ -97,7 +99,7 @@ class SharedRemoteDataSource {
   Future<StudentGroupResponseModel> getStudentGroupById(int groupId) async {
     try {
       final Response response = await _dioClient.get(
-        '${ApiConstants.studentGroups}$groupId/',
+        '${ApiConstants.studentsP + ApiConstants.studentGroups}$groupId/',
       );
 
       if (response.statusCode == 200) {
@@ -114,7 +116,7 @@ class SharedRemoteDataSource {
   Future<List<ClassroomResponseModel>> getClassrooms() async {
     try {
       final Response response = await _dioClient.get(
-        ApiConstants.schedule + ApiConstants.classrooms,
+        ApiConstants.scheduleP + ApiConstants.classrooms,
       );
 
       if (response.statusCode == 200) {
@@ -144,7 +146,7 @@ class SharedRemoteDataSource {
   Future<List<PeriodScheduleResponseModel>> getPeriodSchedules() async {
     try {
       final Response response = await _dioClient.get(
-        ApiConstants.schedule + ApiConstants.periodLessons,
+        ApiConstants.scheduleP + ApiConstants.periodLessons,
       );
 
       if (response.statusCode == 200) {

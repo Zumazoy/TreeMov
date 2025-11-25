@@ -26,7 +26,7 @@ class _AuthCheckerScreenState extends State<AuthCheckerScreen> {
         // Токен есть - переходим на главную
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppRoutes.teacherProfile,
+          AppRoutes.mainApp,
           (route) => false,
         );
       } else {

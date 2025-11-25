@@ -4,7 +4,6 @@ import 'package:treemov/features/authorization/presentation/screens/entrance_kid
 import 'package:treemov/features/authorization/presentation/screens/entrance_teacher_screen.dart';
 import 'package:treemov/features/authorization/presentation/screens/test_token_screen.dart';
 import 'package:treemov/features/kid_calendar/presentation/screens/calendar_kid.dart';
-import 'package:treemov/features/profile/presentation/screens/profile_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/kid_info_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/parent_info_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/registration_screen.dart';
@@ -28,8 +27,6 @@ class AppRoutes {
       '/teacher_verification_screen';
   static const String teacherInfoScreen = '/teacher_info_screen';
 
-  static const String teacherProfile = '/teacher_profile';
-
   static const String kidCalendar = '/kid_calendar';
 
   static const String mainApp = '/main_app';
@@ -49,7 +46,6 @@ class AppRoutes {
     parentInfoScreen: (context) => const ParentInfoScreen(),
     teacherVerificationScreen: (context) => const TeacherVerificationScreen(),
     teacherInfoScreen: (context) => const TeacherInfoScreen(),
-    teacherProfile: (context) => const ProfileScreen(),
     kidCalendar: (context) => const CalendarKidScreen(),
     mainApp: (context) => const MainScreen(),
     testHome: (context) => HomeScreen(),

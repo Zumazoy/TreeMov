@@ -5,14 +5,16 @@ import 'package:treemov/features/profile/presentation/screens/profile_screen.dar
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int initialIndex;
+
+  const MainScreen({super.key, this.initialIndex = 3});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
+  late int _currentIndex;
 
   final List<Widget> _pages = [
     const CalendarScreen(),
@@ -20,6 +22,12 @@ class _MainScreenState extends State<MainScreen> {
     const DirectoryScreen(),
     const ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
