@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/widgets/auth/logout_dialog.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../../data/mocks/mock_profile_data.dart';
@@ -34,6 +35,7 @@ class ProfileScreen extends StatelessWidget {
             },
             onLogout: () {
               Navigator.pop(context);
+              LogoutDialog.show(context: context);
               //  выход
             },
           ),

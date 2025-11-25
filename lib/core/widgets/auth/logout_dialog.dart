@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
 
 class LogoutDialog {
-  static Future<void> show({
-    required BuildContext context,
-    required AuthStorageRepository authStorageRepository,
-  }) async {
+  static Future<void> show({required BuildContext context}) async {
+    final authStorageRepository = getIt<AuthStorageRepository>();
+
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(

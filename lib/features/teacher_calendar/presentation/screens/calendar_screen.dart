@@ -12,26 +12,30 @@ import '../../../../core/themes/app_colors.dart';
 import '../widgets/events_panel.dart';
 import 'create_schedule_screen.dart';
 
-class CalendarScreen extends StatefulWidget {
+class CalendarScreen extends StatelessWidget {
   const CalendarScreen({super.key});
 
   @override
-  State<CalendarScreen> createState() => _CalendarScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<SchedulesBloc>()..add(LoadSchedulesEvent()),
+      child: const _CalendarScreenContent(),
+    );
+  }
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {
+class _CalendarScreenContent extends StatefulWidget {
+  const _CalendarScreenContent();
+
+  @override
+  State<_CalendarScreenContent> createState() => _CalendarScreenContentState();
+}
+
+class _CalendarScreenContentState extends State<_CalendarScreenContent> {
   DateTime _currentDate = DateTime.now();
   DateTime? _selectedDate;
 
   Map<String, List<ScheduleEntity>> _events = {};
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SchedulesBloc>().add(LoadSchedulesEvent());
-    });
-  }
 
   void _showEventsPanel(DateTime date) {
     final schedulesBloc = context.read<SchedulesBloc>();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
 import 'package:treemov/features/directory/presentation/screens/student_directory.dart';
 import 'package:treemov/features/directory/presentation/widgets/app_bar_title.dart';
@@ -9,24 +10,30 @@ import 'package:treemov/shared/data/models/student_group_response_model.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
-class DirectoryScreen extends StatefulWidget {
+class DirectoryScreen extends StatelessWidget {
   const DirectoryScreen({super.key});
 
   @override
-  State<DirectoryScreen> createState() => _DirectoryScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<DirectoryBloc>()..add(LoadStudentGroups()),
+      child: const _DirectoryScreenContent(),
+    );
+  }
 }
 
-class _DirectoryScreenState extends State<DirectoryScreen> {
+class _DirectoryScreenContent extends StatefulWidget {
+  const _DirectoryScreenContent();
+
+  @override
+  State<_DirectoryScreenContent> createState() => _DirectoryScreenState();
+}
+
+class _DirectoryScreenState extends State<_DirectoryScreenContent> {
   final TextEditingController _searchController = TextEditingController();
   List<StudentGroupResponseModel> _allGroups = [];
   List<StudentGroupResponseModel> _filteredGroups = [];
   bool _hasSearchQuery = false; // Флаг наличия поискового запроса
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<DirectoryBloc>().add(LoadStudentGroups());
-  }
 
   void _onSearchChanged(String query) {
     setState(() {

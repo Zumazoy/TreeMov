@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../../domain/entities/daily_schedule_entity.dart';
@@ -78,29 +79,36 @@ class DailyScheduleCard extends StatelessWidget {
             height: 1,
             color: AppColors.teacherPrimary,
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Нажмите для просмотра расписания',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF5853FF),
-                    height: 1.0,
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const MainScreen()),
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Нажмите для просмотра расписания',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF5853FF),
+                      height: 1.0,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Image.asset(
-                  'assets/images/purple_arrow.png',
-                  width: 16,
-                  height: 16,
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Image.asset(
+                    'assets/images/purple_arrow.png',
+                    width: 16,
+                    height: 16,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
