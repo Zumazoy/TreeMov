@@ -228,7 +228,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         bottomNavigationBar: SafeArea(
           child: Container(
             width: double.infinity,
-            margin: const EdgeInsets.all(16),
+            margin: const EdgeInsets.only(left: 60, right: 60, bottom: 10),
             child: ElevatedButton(
               onPressed: _navigateToCreateSchedule,
               style: ElevatedButton.styleFrom(
@@ -237,7 +237,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.5),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 5),
               ),
               child: const Text(
                 'Добавить событие',

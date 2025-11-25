@@ -6,7 +6,13 @@ import 'package:treemov/features/authorization/data/repositories/auth_storage_re
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
 import 'package:treemov/features/authorization/presentation/blocs/token/token_bloc.dart';
-import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
+import 'package:treemov/features/notes/data/datasources/local_notes_datasource.dart';
+import 'package:treemov/features/notes/data/datasources/teacher_notes_remote_data_source.dart';
+import 'package:treemov/features/notes/domain/repositories/local_notes_repository.dart';
+import 'package:treemov/features/notes/domain/repositories/local_notes_repository_impl.dart';
+import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository.dart';
+import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository_impl.dart';
+import 'package:treemov/features/notes/presentation/blocs/notes/notes_bloc.dart';
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
@@ -61,7 +67,26 @@ void setupDependencies() {
   getIt.registerFactory<SchedulesBloc>(
     () => SchedulesBloc(getIt<ScheduleRepository>(), getIt<SharedRepository>()),
   );
-  getIt.registerFactory<DirectoryBloc>(
-    () => DirectoryBloc(getIt<SharedRepository>()),
+
+  getIt.registerSingleton<TeacherNotesRemoteDataSource>(
+    TeacherNotesRemoteDataSource(getIt<DioClient>()),
+  );
+
+  getIt.registerSingleton<TeacherNotesRepository>(
+    TeacherNotesRepositoryImpl(getIt<TeacherNotesRemoteDataSource>()),
+  );
+  getIt.registerSingleton<LocalNotesDataSource>(LocalNotesDataSource());
+
+  getIt.registerSingleton<LocalNotesRepository>(
+    LocalNotesRepositoryImpl(getIt<LocalNotesDataSource>()),
+  );
+
+  // --- Обновляем регистрацию Bloc ---
+  getIt.registerFactory<NotesBloc>(
+    () => NotesBloc(
+      getIt<TeacherNotesRepository>(),
+      getIt<LocalNotesRepository>(), // Добавляем зависимость
+      getIt<SharedRepository>(),
+    ),
   );
 }

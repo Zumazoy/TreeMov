@@ -39,13 +39,12 @@ class EventsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 450,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.white,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12.5),
           topRight: Radius.circular(12.5),
         ),
-        border: Border.all(color: AppColors.eventTap, width: 1),
       ),
       child: Column(
         children: [
@@ -94,12 +93,11 @@ class EventsPanel extends StatelessWidget {
                       ),
                     ),
                   )
-                : ListView.builder(
+                : ListView(
                     padding: const EdgeInsets.all(16),
-                    itemCount: events.length,
-                    itemBuilder: (context, index) {
-                      return _buildEventItem(events[index], context);
-                    },
+                    children: events
+                        .map((event) => _buildEventItem(event, context))
+                        .toList(),
                   ),
           ),
         ],
@@ -131,7 +129,7 @@ class EventsPanel extends StatelessWidget {
               children: [
                 Text(
                   startTime,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'TT Norms',
@@ -141,7 +139,7 @@ class EventsPanel extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   endTime,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'TT Norms',
@@ -171,7 +169,7 @@ class EventsPanel extends StatelessWidget {
                 children: [
                   Text(
                     event.formatTitle(event.title),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'TT Norms',
@@ -187,7 +185,7 @@ class EventsPanel extends StatelessWidget {
                           ? event.classroom?.title
                           : '(Не указана)',
                     ),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       color: AppColors.grey,
                       fontFamily: 'TT Norms',

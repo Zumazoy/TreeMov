@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/themes/app_colors.dart';
 import '../../domain/entities/daily_schedule_entity.dart';
 
@@ -81,7 +82,7 @@ class DailyScheduleCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, 
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Нажмите для просмотра расписания',

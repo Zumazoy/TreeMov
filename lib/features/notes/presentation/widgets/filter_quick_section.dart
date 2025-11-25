@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/teacher_note_entity.dart';
+
 import '../../../../core/themes/app_colors.dart';
+import '../../domain/entities/teacher_note_entity.dart';
 
 class FilterQuickSection extends StatelessWidget {
   final String? selectedFilter;

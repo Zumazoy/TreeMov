@@ -18,4 +18,5 @@ class ApiConstants {
   static const String students = 'students/students/';
   static const String studentGroups = 'students/student_groups/';
   static const String teachers = 'employers/teachers/';
+  static const String teacherNotes = 'employers/teacher_notes/';
 }

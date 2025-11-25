@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/note_category_entity.dart';
+
 import '../../../../core/themes/app_colors.dart';
-import 'filter_categories_section.dart';
+import '../../domain/entities/note_category_entity.dart';
 import '../../domain/entities/teacher_note_entity.dart';
+import 'filter_categories_section.dart';
 import 'filter_period_section.dart';
 import 'filter_quick_section.dart';
 

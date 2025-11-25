@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/themes/app_colors.dart';
 import '../../data/mocks/mock_profile_data.dart';
-import '../widgets/profile_header.dart';
 import '../widgets/daily_schedule_card.dart';
+import '../widgets/profile_header.dart';
 import '../widgets/rep_nots_buttons.dart';
 import '../widgets/settings_menu.dart';
 
