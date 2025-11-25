@@ -106,7 +106,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       final intId = int.tryParse(event.id) ?? 0;
       await _notesRepository.updateTeacherNote(intId, request);
 
-      // emit(const NoteOperationSuccess('Заметка обновлена')); // Опционально
       add(LoadNotesEvent());
     } catch (e) {
       emit(NotesError('Ошибка обновления: $e'));
@@ -125,7 +124,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       // Удаляем с сервера
       await _notesRepository.deleteTeacherNote(intId);
 
-      // Опционально: удаляем ID из локального хранилища, чтобы не мусорить
       await _localNotesRepository.setPinnedStatus(event.id, false);
 
       emit(const NoteOperationSuccess('Заметка удалена'));
