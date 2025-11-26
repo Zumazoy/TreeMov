@@ -3,13 +3,12 @@ import '../../../../core/themes/app_colors.dart';
 import '../../../directory/presentation/widgets/search_field.dart';
 import '../../data/mocks/mock_points_data.dart';
 import '../widgets/student_avatar.dart';
-import 'package:treemov/shared/domain/entities/student_group_entity.dart';
 import '../widgets/action_selection_dialog.dart';
 import '../../domain/entities/point_category_entity.dart';
 import '../widgets/points_snackbar.dart';
 
 class StudentsPointsListScreen extends StatefulWidget {
-  final StudentGroupEntity group;
+  final dynamic group;
 
   const StudentsPointsListScreen({super.key, required this.group});
 

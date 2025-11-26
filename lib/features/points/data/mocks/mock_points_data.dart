@@ -1,7 +1,5 @@
 import '../../domain/entities/point_entity.dart';
 import '../../domain/entities/point_category_entity.dart';
-import 'package:treemov/shared/domain/entities/student_group_entity.dart';
-import 'package:treemov/shared/domain/models/base_entity.dart';
 
 class MockPointsData {
   static final List<PointAction> pointActions = [
@@ -195,4 +193,25 @@ class StudentWithPoints {
     required this.totalPoints,
     required this.attendancePercentage,
   });
+}
+
+class GroupEntity {
+  final String id;
+  final String name;
+  final int studentCount;
+
+  GroupEntity({
+    required this.id,
+    required this.name,
+    required this.studentCount,
+  });
+}
+
+class MockGroupsData {
+  static final List<GroupEntity> groups = [
+    GroupEntity(id: '1', name: 'Физика', studentCount: 25),
+    GroupEntity(id: '2', name: 'Технология', studentCount: 23),
+    GroupEntity(id: '3', name: 'Математика', studentCount: 28),
+    GroupEntity(id: '4', name: 'Робототехника', studentCount: 24),
+  ];
 }
