@@ -18,7 +18,7 @@ class StudentHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFF0F0FF), width: 1),
+        border: Border.all(color: AppColors.eventTap, width: 1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -40,15 +40,26 @@ class StudentHeader extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  '${student.totalPoints} баллов',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF9CA3AF),
-                    height: 1.0,
-                  ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/energy_icon.png',
+                      width: 16,
+                      height: 16,
+                      color: AppColors.directoryTextSecondary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${student.totalPoints} баллов',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Arial',
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.directoryTextSecondary,
+                        height: 1.0,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

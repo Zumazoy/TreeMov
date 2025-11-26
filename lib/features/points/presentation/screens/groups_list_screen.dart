@@ -20,15 +20,32 @@ class GroupsListScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text(
-          'Журнал',
-          style: TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: AppColors.notesDarkText,
-            height: 1.0,
-          ),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/stars_filled_icon.png',
+              width: 24,
+              height: 24,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.star,
+                  color: AppColors.notesDarkText,
+                  size: 24,
+                );
+              },
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              'Журнал',
+              style: TextStyle(
+                fontFamily: 'Arial',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: AppColors.notesDarkText,
+                height: 1.0,
+              ),
+            ),
+          ],
         ),
         backgroundColor: AppColors.white,
         elevation: 0,
@@ -91,13 +108,31 @@ class GroupsListScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    '${group.studentCount} учеников',
-                    style: const TextStyle(
-                      fontFamily: 'Arial',
-                      fontSize: 14,
-                      color: AppColors.directoryTextSecondary,
-                    ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/team_icon.png',
+                        width: 16,
+                        height: 16,
+                        color: AppColors.directoryTextSecondary,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.people,
+                            color: AppColors.directoryTextSecondary,
+                            size: 16,
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${group.studentCount} учеников',
+                        style: const TextStyle(
+                          fontFamily: 'Arial',
+                          fontSize: 14,
+                          color: AppColors.directoryTextSecondary,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

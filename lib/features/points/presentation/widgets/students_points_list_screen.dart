@@ -135,15 +135,26 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  '${student.totalPoints} баллов',
-                  style: const TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.normal,
-                    fontSize: 12,
-                    height: 1.0,
-                    color: AppColors.directoryTextSecondary,
-                  ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/energy_icon.png',
+                      width: 16,
+                      height: 16,
+                      color: AppColors.directoryTextSecondary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${student.totalPoints} баллов',
+                      style: const TextStyle(
+                        fontFamily: 'Arial',
+                        fontWeight: FontWeight.normal,
+                        fontSize: 12,
+                        height: 1.0,
+                        color: AppColors.directoryTextSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
