@@ -1,67 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
-import 'package:treemov/features/teacher_calendar/presentation/screens/change_schedule_screen.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/features/teacher_calendar/presentation/screens/update_lesson_screen.dart';
 import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../widgets/change_event_modal.dart';
 import '../widgets/delete_event_modal.dart';
 
-class AboutEventDetailsScreen extends StatelessWidget {
-  final String? eventId;
-  final String groupName;
-  final String activityType;
-  final String location;
-  final String startTime;
-  final String endTime;
-  final String repeat;
-  final String description;
+class LessonDetailsScreen extends StatelessWidget {
+  final LessonEntity event;
 
-  const AboutEventDetailsScreen({
-    super.key,
-    this.eventId,
-    required this.groupName,
-    required this.activityType,
-    required this.location,
-    required this.startTime,
-    required this.endTime,
-    required this.repeat,
-    required this.description,
-  });
+  const LessonDetailsScreen({super.key, required this.event});
 
-  DateTime _parseTime(String timeStr) {
-    final now = DateTime.now();
-    final timeParts = timeStr.split(':');
-    if (timeParts.length == 2) {
-      return DateTime(
-        now.year,
-        now.month,
-        now.day,
-        int.parse(timeParts[0]),
-        int.parse(timeParts[1]),
-      );
-    }
-    return now;
-  }
-
-  void _navigateToEditScreen(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditEventScreen(
-          eventId: eventId ?? 'temp_${DateTime.now().millisecondsSinceEpoch}',
-          initialGroup: groupName,
-          initialLessonType: activityType,
-          initialLocation: location,
-          initialStartDateTime: _parseTime(startTime),
-          initialEndDateTime: _parseTime(endTime),
-          initialRepeat: repeat,
-          initialReminder: 'Добавить напоминание',
-          initialDescription: description,
-        ),
-      ),
-    );
-  }
+  // void _navigateToEditScreen(BuildContext context) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => EditEventScreen(
+  //         eventId: eventId ?? 'temp_${DateTime.now().millisecondsSinceEpoch}',
+  //         initialGroup: groupName,
+  //         initialLessonType: subject,
+  //         initialLocation: location,
+  //         initialStartDateTime: _parseTime(startTime),
+  //         initialEndDateTime: _parseTime(endTime),
+  //         initialRepeat: repeat,
+  //         initialReminder: 'Добавить напоминание',
+  //         initialDescription: description,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void _showChangeModal(BuildContext context) {
     showModalBottomSheet(
@@ -76,7 +45,12 @@ class AboutEventDetailsScreen extends StatelessWidget {
             // Выбранный вариант: selectedOption
 
             // Переходим на экран редактирования после выбора
-            _navigateToEditScreen(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UpdateLessonScreen(event: event),
+              ),
+            );
           },
         ),
       ),
@@ -149,7 +123,9 @@ class AboutEventDetailsScreen extends StatelessWidget {
                             width: double.infinity,
                             margin: const EdgeInsets.only(bottom: 16),
                             child: Text(
-                              groupName,
+                              event.group != null
+                                  ? 'Группа "${event.formatTitle(event.group?.name)}"'
+                                  : '(Не указан)',
                               style: const TextStyle(
                                 fontFamily: 'Arial',
                                 fontWeight: FontWeight.w900,
@@ -162,13 +138,17 @@ class AboutEventDetailsScreen extends StatelessWidget {
 
                           _buildInfoRow(
                             iconPath: 'assets/images/activity_icon.png',
-                            text: activityType,
+                            text: event.subject != null
+                                ? event.formatTitle(event.subject?.name)
+                                : '(Не указан)',
                           ),
                           const SizedBox(height: 12),
 
                           _buildInfoRow(
                             iconPath: 'assets/images/place_icon.png',
-                            text: location,
+                            text: event.classroom != null
+                                ? event.formatTitle(event.classroom?.title)
+                                : '(Не указана)',
                           ),
                           const SizedBox(height: 16),
 
@@ -177,7 +157,13 @@ class AboutEventDetailsScreen extends StatelessWidget {
 
                           _buildInfoRow(
                             iconPath: 'assets/images/repeat_icon.png',
-                            text: repeat,
+                            text:
+                                event.periodLesson != null &&
+                                    event.periodLesson?.period != null
+                                ? event.formatPeriodLesson(
+                                    event.periodLesson?.period,
+                                  )
+                                : 'Без повтора',
                           ),
                           const SizedBox(height: 12),
 
@@ -209,9 +195,10 @@ class AboutEventDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            description.isNotEmpty
-                                ? description
-                                : 'Описание события отсутствует',
+                            event.formatTitle(
+                              event.comment,
+                              message: 'Описание занятия отсутствует',
+                            ),
                             style: const TextStyle(
                               fontFamily: 'Arial',
                               fontWeight: FontWeight.w400,
@@ -323,7 +310,12 @@ class AboutEventDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    startTime,
+                    event.formatTitle(
+                      event.startTime != null
+                          ? event.startTime!.substring(0, 5)
+                          : event.startTime,
+                      message: 'Время начала не задано',
+                    ),
                     style: const TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w400,
@@ -355,7 +347,12 @@ class AboutEventDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    endTime,
+                    event.formatTitle(
+                      event.endTime != null
+                          ? event.endTime!.substring(0, 5)
+                          : event.endTime,
+                      message: 'Время конца не задано',
+                    ),
                     style: const TextStyle(
                       fontFamily: 'Arial',
                       fontWeight: FontWeight.w400,

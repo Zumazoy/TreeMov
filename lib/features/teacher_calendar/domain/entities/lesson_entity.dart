@@ -1,9 +1,10 @@
+import 'package:treemov/features/teacher_calendar/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
 
-class ScheduleEntity {
+class LessonEntity {
   final int? id;
   final int? org;
   final int? createdBy;
@@ -18,12 +19,13 @@ class ScheduleEntity {
   final String? duration;
   final String? comment;
   final int? periodSchedule;
+  final PeriodLessonResponse? periodLesson;
   final TeacherResponseModel? teacher;
   final SubjectResponseModel? subject;
   final StudentGroupResponseModel? group;
   final ClassroomResponseModel? classroom;
 
-  ScheduleEntity({
+  LessonEntity({
     required this.id,
     required this.org,
     required this.createdBy,
@@ -38,6 +40,7 @@ class ScheduleEntity {
     required this.duration,
     required this.comment,
     required this.periodSchedule,
+    required this.periodLesson,
     required this.teacher,
     required this.subject,
     required this.group,
@@ -54,7 +57,20 @@ class ScheduleEntity {
     return 'Время не указано';
   }
 
-  String formatTitle(String? title) {
-    return title!.isNotEmpty ? title : '(Без названия)';
+  String formatLessonTitle(String? title, String? subject, String? group) {
+    if (title != null && title.isNotEmpty) return title;
+    return '${subject ?? 'Предмет не найден'} (Группа "${group ?? 'не найдена'}")';
+  }
+
+  String formatTitle(String? title, {String message = '(Без названия)'}) {
+    return title!.isNotEmpty ? title : message;
+  }
+
+  String formatPeriodLesson(int? periodLesson) {
+    return switch (periodLesson) {
+      1 => 'Ежедневно',
+      7 => 'Еженедельно',
+      _ => 'Каждые $periodLesson дней',
+    };
   }
 }

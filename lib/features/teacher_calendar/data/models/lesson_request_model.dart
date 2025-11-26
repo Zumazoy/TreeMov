@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PeriodScheduleRequestModel {
+class LessonRequestModel {
   final int teacherId;
   final int subjectId;
   final int groupId;
@@ -8,11 +8,13 @@ class PeriodScheduleRequestModel {
   final String title;
   final TimeOfDay? startTime;
   final TimeOfDay? endTime;
-  final int period;
-  final DateTime? repeatUntilDate;
-  final DateTime startDate;
+  final DateTime date;
+  final bool isCanceled;
+  final bool isCompleted;
+  final String? comment;
+  final int? periodScheduleId;
 
-  PeriodScheduleRequestModel({
+  LessonRequestModel({
     required this.teacherId,
     required this.subjectId,
     required this.groupId,
@@ -20,9 +22,11 @@ class PeriodScheduleRequestModel {
     required this.title,
     this.startTime,
     this.endTime,
-    required this.period,
-    this.repeatUntilDate,
-    required this.startDate,
+    required this.date,
+    this.isCanceled = false,
+    this.isCompleted = false,
+    this.comment,
+    this.periodScheduleId,
   });
 
   Map<String, dynamic> toJson() => {
@@ -33,10 +37,11 @@ class PeriodScheduleRequestModel {
     'title': title,
     if (startTime != null) 'start_time': _formatTime(startTime!),
     if (endTime != null) 'end_time': _formatTime(endTime!),
-    'period': period,
-    if (repeatUntilDate != null)
-      'repeat_lessons_until_date': _formatDate(repeatUntilDate!),
-    'start_date': _formatDate(startDate),
+    'date': _formatDate(date),
+    'is_canceled': isCanceled,
+    'is_completed': isCompleted,
+    if (comment != null) 'comment': comment,
+    if (periodScheduleId != null) 'period_schedule': periodScheduleId,
   };
 
   String _formatDate(DateTime date) {

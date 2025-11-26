@@ -5,7 +5,7 @@ import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
 import 'package:treemov/shared/domain/models/base_response_model.dart';
 
-class ScheduleResponseModel extends BaseResponseModel {
+class LessonResponseModel extends BaseResponseModel {
   final String? title;
   final String? startTime;
   final String? endTime;
@@ -16,12 +16,13 @@ class ScheduleResponseModel extends BaseResponseModel {
   final String? duration;
   final String? comment;
   final int? periodSchedule;
+  final PeriodLessonResponse? periodLesson;
   final TeacherResponseModel? teacher;
   final SubjectResponseModel? subject;
   final StudentGroupResponseModel? group;
   final ClassroomResponseModel? classroom;
 
-  ScheduleResponseModel({
+  LessonResponseModel({
     required super.baseData,
     required this.title,
     required this.startTime,
@@ -33,19 +34,21 @@ class ScheduleResponseModel extends BaseResponseModel {
     required this.duration,
     required this.comment,
     required this.periodSchedule,
+    required this.periodLesson,
     required this.teacher,
     required this.subject,
     required this.group,
     required this.classroom,
   });
 
-  factory ScheduleResponseModel.fromJson(Map<String, dynamic> json) {
+  factory LessonResponseModel.fromJson(Map<String, dynamic> json) {
+    final periodLessonJson = json['period_lesson'];
     final teacherJson = json['teacher'];
     final subjectJson = json['subject'];
     final groupJson = json['group'];
     final classroomJson = json['classroom'];
 
-    return ScheduleResponseModel(
+    return LessonResponseModel(
       baseData: json.baseData,
       title: json['title'] ?? '',
       startTime: json['start_time'],
@@ -57,6 +60,10 @@ class ScheduleResponseModel extends BaseResponseModel {
       duration: json['duration'],
       comment: json['comment'],
       periodSchedule: json['period_schedule'],
+      periodLesson:
+          periodLessonJson != null && periodLessonJson is Map<String, dynamic>
+          ? PeriodLessonResponse.fromJson(periodLessonJson)
+          : null,
       teacher: teacherJson != null && teacherJson is Map<String, dynamic>
           ? TeacherResponseModel.fromJson(teacherJson)
           : null,
@@ -131,5 +138,15 @@ class ScheduleResponseModel extends BaseResponseModel {
       debugPrint("===ERROR=== on get formattedDate: $date");
       return date!;
     }
+  }
+}
+
+class PeriodLessonResponse {
+  final int? period;
+
+  PeriodLessonResponse({this.period});
+
+  factory PeriodLessonResponse.fromJson(Map<String, dynamic> json) {
+    return PeriodLessonResponse(period: json['period']);
   }
 }

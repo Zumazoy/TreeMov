@@ -3,17 +3,17 @@ import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/period_schedule_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/lesson_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/lesson_response_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_lesson_response_model.dart';
 
 class ScheduleRemoteDataSource {
   final DioClient _dioClient;
 
   ScheduleRemoteDataSource(this._dioClient);
 
-  Future<List<ScheduleResponseModel>> getAllSchedules() async {
+  Future<List<LessonResponseModel>> getLessons() async {
     try {
       final Response response = await _dioClient.get(
         ApiConstants.scheduleP + ApiConstants.lessons,
@@ -25,13 +25,13 @@ class ScheduleRemoteDataSource {
         if (responseData is List) {
           // Если ответ - массив занятий
           return responseData
-              .map<ScheduleResponseModel>(
-                (json) => ScheduleResponseModel.fromJson(json),
+              .map<LessonResponseModel>(
+                (json) => LessonResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
           // Если ответ - одиночное занятие (оборачиваем в список)
-          return [ScheduleResponseModel.fromJson(responseData)];
+          return [LessonResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
         }
@@ -43,14 +43,14 @@ class ScheduleRemoteDataSource {
     }
   }
 
-  Future<ScheduleResponseModel> getScheduleById(int scheduleId) async {
+  Future<LessonResponseModel> getLessonById(int scheduleId) async {
     try {
       final response = await _dioClient.get(
         '${ApiConstants.scheduleP + ApiConstants.lessons}$scheduleId/',
       );
 
       if (response.statusCode == 200) {
-        return ScheduleResponseModel.fromJson(response.data);
+        return LessonResponseModel.fromJson(response.data);
       } else {
         throw Exception('Failed to fetch schedule: ${response.statusCode}');
       }
@@ -59,9 +59,7 @@ class ScheduleRemoteDataSource {
     }
   }
 
-  Future<ScheduleResponseModel> createSchedule(
-    ScheduleRequestModel request,
-  ) async {
+  Future<LessonResponseModel> createLesson(LessonRequestModel request) async {
     try {
       final response = await _dioClient.post(
         ApiConstants.scheduleP + ApiConstants.lessons,
@@ -69,7 +67,7 @@ class ScheduleRemoteDataSource {
       );
 
       if (response.statusCode == 201) {
-        return ScheduleResponseModel.fromJson(response.data);
+        return LessonResponseModel.fromJson(response.data);
       } else {
         throw Exception('Ошибка создания занятия: ${response.statusCode}');
       }
@@ -78,8 +76,8 @@ class ScheduleRemoteDataSource {
     }
   }
 
-  Future<PeriodScheduleResponseModel> createPeriodSchedule(
-    PeriodScheduleRequestModel request,
+  Future<PeriodLessonResponseModel> createPeriodLesson(
+    PeriodLessonRequestModel request,
   ) async {
     try {
       final response = await _dioClient.post(
@@ -88,7 +86,7 @@ class ScheduleRemoteDataSource {
       );
 
       if (response.statusCode == 201) {
-        return PeriodScheduleResponseModel.fromJson(response.data);
+        return PeriodLessonResponseModel.fromJson(response.data);
       } else {
         throw Exception(
           'Ошибка создания периодического занятия: ${response.statusCode}',

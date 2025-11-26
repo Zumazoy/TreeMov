@@ -1,4 +1,4 @@
-import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 
 abstract class ScheduleState {
@@ -11,10 +11,10 @@ class ScheduleLoading extends ScheduleState {}
 
 class StudentGroupLoading extends ScheduleState {}
 
-class SchedulesLoaded extends ScheduleState {
-  final List<ScheduleResponseModel> schedules;
+class LessonsLoaded extends ScheduleState {
+  final List<LessonResponseModel> lessons;
 
-  const SchedulesLoaded(this.schedules);
+  const LessonsLoaded(this.lessons);
 }
 
 class StudentGroupLoaded extends ScheduleState {
@@ -23,22 +23,22 @@ class StudentGroupLoaded extends ScheduleState {
   const StudentGroupLoaded(this.group);
 }
 
-class ScheduleLoaded extends ScheduleState {
-  final ScheduleResponseModel schedule;
+class LessonLoaded extends ScheduleState {
+  final LessonResponseModel lesson;
 
-  const ScheduleLoaded(this.schedule);
+  const LessonLoaded(this.lesson);
 }
 
-class ScheduleOperationSuccess extends ScheduleState {
+class LessonOperationSuccess extends ScheduleState {
   final String message;
 
-  const ScheduleOperationSuccess(this.message);
+  const LessonOperationSuccess(this.message);
 }
 
-class ScheduleError extends ScheduleState {
+class LessonError extends ScheduleState {
   final String message;
 
-  const ScheduleError(this.message);
+  const LessonError(this.message);
 }
 
 class StudentGroupError extends ScheduleState {

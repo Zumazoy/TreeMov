@@ -1,38 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 
-class EditEventScreen extends StatefulWidget {
-  final String eventId;
-  final String initialGroup;
-  final String initialLessonType;
-  final String initialLocation;
-  final DateTime initialStartDateTime;
-  final DateTime initialEndDateTime;
-  final String initialRepeat;
-  final String initialReminder;
-  final String initialDescription;
+class UpdateLessonScreen extends StatefulWidget {
+  final LessonEntity event;
 
-  const EditEventScreen({
-    super.key,
-    required this.eventId,
-    required this.initialGroup,
-    required this.initialLessonType,
-    required this.initialLocation,
-    required this.initialStartDateTime,
-    required this.initialEndDateTime,
-    required this.initialRepeat,
-    required this.initialReminder,
-    required this.initialDescription,
-  });
+  const UpdateLessonScreen({super.key, required this.event});
 
   @override
-  State<EditEventScreen> createState() => _EditEventScreenState();
+  State<UpdateLessonScreen> createState() => _UpdateLessonScreenState();
 }
 
-class _EditEventScreenState extends State<EditEventScreen> {
+class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
   String? _selectedGroup;
   String? _selectedLessonType;
   String? _selectedLocation;
@@ -76,14 +58,14 @@ class _EditEventScreenState extends State<EditEventScreen> {
   void initState() {
     super.initState();
     // Инициализация данными из переданного события
-    _selectedGroup = widget.initialGroup;
-    _selectedLessonType = widget.initialLessonType;
-    _selectedLocation = widget.initialLocation;
-    _startDateTime = widget.initialStartDateTime;
-    _endDateTime = widget.initialEndDateTime;
-    _selectedRepeat = widget.initialRepeat;
-    _selectedReminder = widget.initialReminder;
-    _descriptionController.text = widget.initialDescription;
+    // _selectedGroup = widget.initialGroup;
+    // _selectedLessonType = widget.initialLessonType;
+    // _selectedLocation = widget.initialLocation;
+    // _startDateTime = widget.initialStartDateTime;
+    // _endDateTime = widget.initialEndDateTime;
+    // _selectedRepeat = widget.initialRepeat;
+    // _selectedReminder = widget.initialReminder;
+    // _descriptionController.text = widget.initialDescription;
   }
 
   String _formatDateTime(DateTime dateTime) {

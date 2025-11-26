@@ -4,7 +4,7 @@ import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
 import 'package:treemov/shared/domain/models/base_response_model.dart';
 
-class PeriodScheduleResponseModel extends BaseResponseModel {
+class PeriodLessonResponseModel extends BaseResponseModel {
   final String? title;
   final String? startTime;
   final String? endTime;
@@ -16,7 +16,7 @@ class PeriodScheduleResponseModel extends BaseResponseModel {
   final StudentGroupResponseModel? group;
   final ClassroomResponseModel? classroom;
 
-  PeriodScheduleResponseModel({
+  PeriodLessonResponseModel({
     required super.baseData,
     required this.title,
     required this.startTime,
@@ -30,13 +30,13 @@ class PeriodScheduleResponseModel extends BaseResponseModel {
     required this.classroom,
   });
 
-  factory PeriodScheduleResponseModel.fromJson(Map<String, dynamic> json) {
+  factory PeriodLessonResponseModel.fromJson(Map<String, dynamic> json) {
     final teacherJson = json['teacher'];
     final subjectJson = json['subject'];
     final groupJson = json['group'];
     final classroomJson = json['classroom'];
 
-    return PeriodScheduleResponseModel(
+    return PeriodLessonResponseModel(
       baseData: json.baseData,
       title: json['title'],
       startTime: json['start_time'],

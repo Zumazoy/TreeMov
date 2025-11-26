@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/lesson_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
@@ -12,21 +12,21 @@ import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 import '../../../../core/themes/app_colors.dart';
 
-class CreateScheduleScreen extends StatefulWidget {
+class CreateLessonScreen extends StatefulWidget {
   final SharedRepository sharedRepository;
   final SchedulesBloc schedulesBloc;
 
-  const CreateScheduleScreen({
+  const CreateLessonScreen({
     super.key,
     required this.sharedRepository,
     required this.schedulesBloc,
   });
 
   @override
-  State<CreateScheduleScreen> createState() => _CreateScheduleScreenState();
+  State<CreateLessonScreen> createState() => _CreateLessonScreenState();
 }
 
-class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
+class _CreateLessonScreenState extends State<CreateLessonScreen> {
   int? _classroomId;
   int? _groupId;
   int? _teacherId;
@@ -107,7 +107,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     }
   }
 
-  void _createSchedule() {
+  void _createLesson() {
     if (_isLoading) return;
 
     if (_groupId == null || _subjectId == null || _classroomId == null) {
@@ -130,17 +130,17 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       return;
     }
 
-    final String scheduleTitle =
-        '${_selectedSubjectName ?? 'Занятие'} - ${_selectedGroupName ?? 'Группа'}';
+    final String lessonTitle =
+        '${_selectedSubjectName ?? 'Занятие'} (${_selectedGroupName != null ? 'Группа "$_selectedGroupName"' : 'Группа'})';
 
     if (_selectedRepeatOption == 'Повтор' || _selectedRepeatOption == null) {
       // Обычное событие без повторения
-      final request = ScheduleRequestModel(
+      final request = LessonRequestModel(
         teacherId: _teacherId!,
         subjectId: _subjectId!,
         groupId: _groupId!,
         classroomId: _classroomId!,
-        title: scheduleTitle,
+        title: lessonTitle,
         startTime: TimeOfDay.fromDateTime(_startDateTime),
         endTime: TimeOfDay.fromDateTime(_endDateTime),
         date: _startDateTime,
@@ -149,18 +149,18 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
             : '',
       );
 
-      widget.schedulesBloc.add(CreateScheduleEvent(request));
+      widget.schedulesBloc.add(CreateLessonEvent(request));
     } else {
       // Периодическое событие
       final period = _getPeriodValue(_selectedRepeatOption!);
       final repeatUntilDate = _calculateRepeatUntilDate();
 
-      final request = PeriodScheduleRequestModel(
+      final request = PeriodLessonRequestModel(
         teacherId: _teacherId!,
         subjectId: _subjectId!,
         groupId: _groupId!,
         classroomId: _classroomId!,
-        title: scheduleTitle,
+        title: lessonTitle,
         startTime: TimeOfDay.fromDateTime(_startDateTime),
         endTime: TimeOfDay.fromDateTime(_endDateTime),
         period: period,
@@ -168,7 +168,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
         startDate: _startDateTime,
       );
 
-      widget.schedulesBloc.add(CreatePeriodScheduleEvent(request));
+      widget.schedulesBloc.add(CreatePeriodLessonEvent(request));
     }
   }
 
@@ -622,7 +622,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     return BlocListener<SchedulesBloc, ScheduleState>(
       bloc: widget.schedulesBloc,
       listener: (context, state) {
-        if (state is ScheduleOperationSuccess) {
+        if (state is LessonOperationSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
@@ -632,7 +632,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
           Navigator.pop(context, true);
         }
 
-        if (state is ScheduleError) {
+        if (state is LessonError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message), backgroundColor: Colors.red),
           );
@@ -773,7 +773,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
           if (!_isLoading && _error == null)
             IconButton(
               icon: const Icon(Icons.check, color: Colors.white),
-              onPressed: _createSchedule,
+              onPressed: _createLesson,
             ),
         ],
       ),

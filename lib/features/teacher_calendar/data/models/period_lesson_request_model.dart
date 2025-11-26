@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ScheduleRequestModel {
+class PeriodLessonRequestModel {
   final int teacherId;
   final int subjectId;
   final int groupId;
@@ -8,13 +8,11 @@ class ScheduleRequestModel {
   final String title;
   final TimeOfDay? startTime;
   final TimeOfDay? endTime;
-  final DateTime date;
-  final bool isCanceled;
-  final bool isCompleted;
-  final String? comment;
-  final int? periodScheduleId;
+  final int period;
+  final DateTime? repeatUntilDate;
+  final DateTime startDate;
 
-  ScheduleRequestModel({
+  PeriodLessonRequestModel({
     required this.teacherId,
     required this.subjectId,
     required this.groupId,
@@ -22,11 +20,9 @@ class ScheduleRequestModel {
     required this.title,
     this.startTime,
     this.endTime,
-    required this.date,
-    this.isCanceled = false,
-    this.isCompleted = false,
-    this.comment,
-    this.periodScheduleId,
+    required this.period,
+    this.repeatUntilDate,
+    required this.startDate,
   });
 
   Map<String, dynamic> toJson() => {
@@ -37,11 +33,10 @@ class ScheduleRequestModel {
     'title': title,
     if (startTime != null) 'start_time': _formatTime(startTime!),
     if (endTime != null) 'end_time': _formatTime(endTime!),
-    'date': _formatDate(date),
-    'is_canceled': isCanceled,
-    'is_completed': isCompleted,
-    if (comment != null) 'comment': comment,
-    if (periodScheduleId != null) 'period_schedule': periodScheduleId,
+    'period': period,
+    if (repeatUntilDate != null)
+      'repeat_lessons_until_date': _formatDate(repeatUntilDate!),
+    'start_date': _formatDate(startDate),
   };
 
   String _formatDate(DateTime date) {
