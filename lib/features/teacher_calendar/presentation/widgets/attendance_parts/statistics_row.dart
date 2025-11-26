@@ -20,7 +20,7 @@ class StatisticsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: availableWidth,
-      height: 90,
+      height: 80,
       child: Row(
         children: [
           Expanded(
@@ -32,7 +32,7 @@ class StatisticsRow extends StatelessWidget {
               countColor: const Color(0xFF6D28D9),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 5),
           Expanded(
             child: _buildStatContainer(
               count: presentCount,
@@ -42,7 +42,7 @@ class StatisticsRow extends StatelessWidget {
               countColor: const Color(0xFF15803D),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 5),
           Expanded(
             child: _buildStatContainer(
               count: absentCount,
@@ -52,7 +52,7 @@ class StatisticsRow extends StatelessWidget {
               countColor: const Color(0xFFB91C1C),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 5),
           Expanded(
             child: _buildStatContainer(
               count: notMarkedCount,

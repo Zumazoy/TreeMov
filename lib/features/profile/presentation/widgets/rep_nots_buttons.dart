@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/features/reports/presentation/screens/reports_screen.dart';
+
 import '../../../../core/themes/app_colors.dart';
 import '../../../notes/presentation/screens/notes_screen.dart';
 
@@ -18,7 +20,14 @@ class RepNotsButtons extends StatelessWidget {
               color: AppColors.eventTap,
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReportsScreen(),
+                  ),
+                );
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

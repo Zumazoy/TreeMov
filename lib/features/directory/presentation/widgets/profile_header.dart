@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/directory/data/mocks/mock_directory_data.dart';
-import 'package:treemov/features/directory/domain/entities/group_entity.dart';
-import 'package:treemov/features/directory/domain/entities/student_entity.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
 class ProfileHeader extends StatelessWidget {
   final StudentEntity student;
+  final String groupName;
 
-  const ProfileHeader({super.key, required this.student});
-
-  String _getGroupName(String groupId) {
-    final group = MockDirectoryData.groups.firstWhere(
-      (g) => g.id == groupId,
-      orElse: () => GroupEntity(
-        id: '',
-        name: 'Неизвестно',
-        subjectId: '',
-        studentCount: 0,
-      ),
-    );
-    return group.name;
-  }
+  const ProfileHeader({
+    super.key,
+    required this.student,
+    required this.groupName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +29,7 @@ class ProfileHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  student.fullName,
+                  '${student.name} ${student.surname}',
                   style: const TextStyle(
                     fontFamily: 'Arial',
                     fontWeight: FontWeight.w900,
@@ -63,7 +53,7 @@ class ProfileHeader extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: _getGroupName(student.currentGroupId),
+                        text: groupName,
                         style: const TextStyle(
                           fontFamily: 'Arial',
                           fontWeight: FontWeight.w400,
@@ -90,7 +80,7 @@ class ProfileHeader extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: student.email,
+                        text: student.email ?? 'Не указана',
                         style: const TextStyle(
                           fontFamily: 'Arial',
                           fontWeight: FontWeight.w400,
@@ -117,7 +107,7 @@ class ProfileHeader extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: student.formattedGroupJoinDate,
+                        text: 'Не указана', // Заглушка
                         style: const TextStyle(
                           fontFamily: 'Arial',
                           fontWeight: FontWeight.w400,
@@ -144,10 +134,20 @@ class ProfileHeader extends StatelessWidget {
                 width: 4,
               ),
             ),
-            child: student.avatarUrl != null
+            child: student.avatar != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(46),
-                    child: Image.network(student.avatarUrl!, fit: BoxFit.cover),
+                    child: Image.network(
+                      student.avatar!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.person,
+                          color: AppColors.directoryTextSecondary,
+                          size: 50,
+                        );
+                      },
+                    ),
                   )
                 : const Icon(
                     Icons.person,

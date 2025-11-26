@@ -18,7 +18,7 @@ class AppColors {
   static const Color grey = Colors.grey;
   static const Color shadow = Color(0x1A000000);
   static const Color dialogBarrier = Color(0x80000000);
-  static const Color grayFieldText = Color(0xB22F213E);
+  static const Color grayFieldText = Color.fromARGB(255, 47, 33, 62);
 
   static const Color directoryTextSecondary = Color(0xFF9CA3AF);
   static const Color directoryBorder = Color(0xFFE5E7EB);

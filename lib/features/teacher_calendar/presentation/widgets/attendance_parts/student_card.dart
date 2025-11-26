@@ -115,7 +115,7 @@ class StudentCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
 
-                  // плашка статуса
+                  // Плашка статуса
                   Container(
                     constraints: const BoxConstraints(maxHeight: 20),
                     padding: const EdgeInsets.symmetric(

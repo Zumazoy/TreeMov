@@ -1,6 +1,8 @@
 // Базовые данные для всех response моделей
+import 'package:treemov/shared/domain/models/base_entity.dart';
+
 class BaseResponseData {
-  final int id;
+  final int? id;
   final int? org;
   final int? createdBy;
   final String? createdAt;
@@ -20,6 +22,15 @@ class BaseResponseData {
       createdAt: json['created_at'],
     );
   }
+
+  BaseEntityData toEntityData() {
+    return BaseEntityData(
+      id: id,
+      org: org,
+      createdBy: createdBy,
+      createdAt: createdAt,
+    );
+  }
 }
 
 // Базовый класс для всех response моделей
@@ -28,7 +39,7 @@ abstract class BaseResponseModel {
 
   const BaseResponseModel({required this.baseData});
 
-  int get id => baseData.id;
+  int? get id => baseData.id;
   int? get org => baseData.org;
   int? get createdBy => baseData.createdBy;
   String? get createdAt => baseData.createdAt;
@@ -36,4 +47,8 @@ abstract class BaseResponseModel {
 
 extension BaseResponseParsing on Map<String, dynamic> {
   BaseResponseData get baseData => BaseResponseData.fromJson(this);
+}
+
+mixin EntityConvertible<T extends BaseEntity> on BaseResponseModel {
+  T toEntity();
 }

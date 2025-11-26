@@ -1,6 +1,6 @@
-import 'package:treemov/shared/domain/models/base_response_model.dart';
+import 'package:treemov/shared/domain/models/base_entity.dart';
 
-class ColorEntity extends BaseResponseModel {
+class ColorEntity extends BaseEntity {
   final String? title;
   final String? hex;
 
@@ -9,12 +9,4 @@ class ColorEntity extends BaseResponseModel {
     required this.title,
     required this.hex,
   });
-
-  factory ColorEntity.fromJson(Map<String, dynamic> json) {
-    return ColorEntity(
-      baseData: json.baseData,
-      title: json['title'],
-      hex: json['color_hex'],
-    );
-  }
 }

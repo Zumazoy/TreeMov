@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/themes/app_colors.dart';
 import '../../domain/entities/daily_schedule_entity.dart';
 
@@ -89,7 +90,7 @@ class DailyScheduleCard extends StatelessWidget {
                     fontSize: 12,
                     fontFamily: 'Arial',
                     fontWeight: FontWeight.bold,
-                    color: AppColors.teacherPrimary,
+                    color: const Color(0xFF5853FF),
                     height: 1.0,
                   ),
                 ),

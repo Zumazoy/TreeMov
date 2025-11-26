@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_update_model.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 
 class ScheduleUpdateScreen extends StatefulWidget {
   final int scheduleId;
@@ -94,7 +93,7 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
                     const SizedBox(height: 20),
                     _buildStatusSection(isLoading),
                     const SizedBox(height: 24),
-                    _buildActionButton(isLoading),
+                    // _buildActionButton(isLoading),
                   ],
                 ),
               );
@@ -294,17 +293,17 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
     );
   }
 
-  Widget _buildActionButton(bool isLoading) {
-    return isLoading
-        ? const Center(child: CircularProgressIndicator())
-        : ElevatedButton(
-            onPressed: _updateSchedule,
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-            ),
-            child: const Text('Обновить занятие'),
-          );
-  }
+  // Widget _buildActionButton(bool isLoading) {
+  //   return isLoading
+  //       ? const Center(child: CircularProgressIndicator())
+  //       : ElevatedButton(
+  //           onPressed: _updateSchedule,
+  //           style: ElevatedButton.styleFrom(
+  //             minimumSize: const Size(double.infinity, 50),
+  //           ),
+  //           child: const Text('Обновить занятие'),
+  //         );
+  // }
 
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
@@ -354,9 +353,9 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
       // _groupIdController.text = schedule.groupId.toString();
       // _teacherIdController.text = schedule.teacherId.toString();
       // _subjectIdController.text = schedule.subjectId.toString();
-      if (schedule.lesson != null) {
-        _lessonController.text = schedule.lesson.toString();
-      }
+      // if (schedule.lesson != null) {
+      //   _lessonController.text = schedule.lesson.toString();
+      // }
       if (schedule.periodSchedule != null) {
         _periodScheduleIdController.text = schedule.periodSchedule.toString();
       }
@@ -379,72 +378,72 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
     });
   }
 
-  void _updateSchedule() {
-    if (_titleController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Введите название занятия'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+  // void _updateSchedule() {
+  //   if (_titleController.text.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //         content: Text('Введите название занятия'),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //     return;
+  //   }
 
-    // Используем widget.schedulesBloc вместо context.read
-    final currentState = widget.schedulesBloc.state;
-    ScheduleResponseModel? originalSchedule;
+  //   // Используем widget.schedulesBloc вместо context.read
+  //   final currentState = widget.schedulesBloc.state;
+  //   ScheduleResponseModel? originalSchedule;
 
-    if (currentState is ScheduleLoaded) {
-      originalSchedule = currentState.schedule;
-    } else {
-      // Если состояние не ScheduleLoaded, можно показать ошибку или использовать альтернативный подход
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Ошибка: данные занятия не загружены'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+  //   if (currentState is ScheduleLoaded) {
+  //     originalSchedule = currentState.schedule;
+  //   } else {
+  //     // Если состояние не ScheduleLoaded, можно показать ошибку или использовать альтернативный подход
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //         content: Text('Ошибка: данные занятия не загружены'),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //     return;
+  //   }
 
-    final updateData = ScheduleUpdateModel.withOriginal(
-      original: originalSchedule,
-      title: _titleController.text.isEmpty ? null : _titleController.text,
-      isCanceled: _isCanceled,
-      isCompleted: _isCompleted,
-      classroomId: _classroomIdController.text.isEmpty
-          ? null
-          : int.tryParse(_classroomIdController.text),
-      groupId: _groupIdController.text.isEmpty
-          ? null
-          : int.tryParse(_groupIdController.text),
-      teacherId: _teacherIdController.text.isEmpty
-          ? null
-          : int.tryParse(_teacherIdController.text),
-      subjectId: _subjectIdController.text.isEmpty
-          ? null
-          : int.tryParse(_subjectIdController.text),
-      lesson: _lessonController.text.isEmpty
-          ? null
-          : int.tryParse(_lessonController.text),
-      periodScheduleId: _periodScheduleIdController.text.isEmpty
-          ? null
-          : int.tryParse(_periodScheduleIdController.text),
-      date: _selectedDate,
-      startTime: _startTime,
-      endTime: _endTime,
-    );
+  //   final updateData = ScheduleUpdateModel.withOriginal(
+  //     original: originalSchedule,
+  //     title: _titleController.text.isEmpty ? null : _titleController.text,
+  //     isCanceled: _isCanceled,
+  //     isCompleted: _isCompleted,
+  //     classroomId: _classroomIdController.text.isEmpty
+  //         ? null
+  //         : int.tryParse(_classroomIdController.text),
+  //     groupId: _groupIdController.text.isEmpty
+  //         ? null
+  //         : int.tryParse(_groupIdController.text),
+  //     teacherId: _teacherIdController.text.isEmpty
+  //         ? null
+  //         : int.tryParse(_teacherIdController.text),
+  //     subjectId: _subjectIdController.text.isEmpty
+  //         ? null
+  //         : int.tryParse(_subjectIdController.text),
+  //     lesson: _lessonController.text.isEmpty
+  //         ? null
+  //         : int.tryParse(_lessonController.text),
+  //     periodScheduleId: _periodScheduleIdController.text.isEmpty
+  //         ? null
+  //         : int.tryParse(_periodScheduleIdController.text),
+  //     date: _selectedDate,
+  //     startTime: _startTime,
+  //     endTime: _endTime,
+  //   );
 
-    widget.schedulesBloc.add(
-      UpdateScheduleEvent(
-        scheduleId: widget.scheduleId,
-        updateData: updateData,
-      ),
-    );
+  //   widget.schedulesBloc.add(
+  //     UpdateScheduleEvent(
+  //       scheduleId: widget.scheduleId,
+  //       updateData: updateData,
+  //     ),
+  //   );
 
-    // Закрываем экран и передаем результат
-    Navigator.pop(context, true);
-  }
+  //   // Закрываем экран и передаем результат
+  //   Navigator.pop(context, true);
+  // }
 
   @override
   void dispose() {

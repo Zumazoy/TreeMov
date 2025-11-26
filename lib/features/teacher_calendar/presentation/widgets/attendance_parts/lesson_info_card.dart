@@ -25,9 +25,9 @@ class LessonInfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ВИД ЗАНЯТИЯ
+          // Группа
           Text(
-            lesson['type'],
+            lesson['group'],
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -39,7 +39,6 @@ class LessonInfoCard extends StatelessWidget {
 
           // Данные о занятии
           SizedBox(
-            height: 80,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -50,7 +49,7 @@ class LessonInfoCard extends StatelessWidget {
                     children: [
                       _buildInfoRow(
                         icon: 'assets/images/activity_icon.png',
-                        text: lesson['title'],
+                        text: lesson['subject'],
                       ),
                       const SizedBox(height: 16),
                       _buildInfoRow(
@@ -68,7 +67,7 @@ class LessonInfoCard extends StatelessWidget {
                     children: [
                       _buildInfoRow(
                         icon: 'assets/images/place_icon.png',
-                        text: lesson['location'],
+                        text: lesson['classroom'],
                       ),
                     ],
                   ),

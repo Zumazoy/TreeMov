@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/calendar_event_entity.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/schedule_entity.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/about_event_details.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/attendance_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 
 class EventDetailsModal extends StatelessWidget {
-  final CalendarEventEntity event;
+  final ScheduleEntity event;
+  final SchedulesBloc schedulesBloc;
 
-  const EventDetailsModal({super.key, required this.event});
+  const EventDetailsModal({
+    super.key,
+    required this.event,
+    required this.schedulesBloc,
+  });
 
   static void show({
     required BuildContext context,
-    required CalendarEventEntity event,
+    required ScheduleEntity event,
+    required SchedulesBloc schedulesBloc,
   }) {
     showDialog(
       context: context,
@@ -20,14 +27,16 @@ class EventDetailsModal extends StatelessWidget {
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.all(20),
-        child: EventDetailsModal(event: event),
+        child: EventDetailsModal(event: event, schedulesBloc: schedulesBloc),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final timeParts = event.time.split('\n');
+    final timeParts = event
+        .formatTime(event.startTime, event.endTime)
+        .split('\n');
     final startTime = timeParts.isNotEmpty ? timeParts[0] : '';
     final endTime = timeParts.length > 1 ? timeParts[1] : '';
 
@@ -53,7 +62,7 @@ class EventDetailsModal extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                event.title,
+                event.formatTitle(event.title),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -83,11 +92,17 @@ class EventDetailsModal extends StatelessWidget {
               children: [
                 _buildInfoRowWithIcon(
                   'assets/images/activity_icon.png',
-                  _extractActivityType(event.title),
+                  _extractActivityType(event.formatTitle(event.title)),
                 ),
                 _buildInfoRowWithIcon(
                   'assets/images/place_icon.png',
-                  event.location,
+                  event.formatTitle(
+                    event.formatTitle(
+                      event.classroom != null
+                          ? event.classroom?.title
+                          : '(Не указана)',
+                    ),
+                  ),
                 ),
                 _buildInfoRowWithIcon(
                   'assets/images/clock_icon.png',
@@ -114,15 +129,20 @@ class EventDetailsModal extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AboutEventDetailsScreen(
-                            groupName: event.title,
-                            activityType: _extractActivityType(event.title),
-                            location: event.location,
+                            groupName: event.formatTitle(event.title),
+                            activityType: _extractActivityType(
+                              event.formatTitle(event.title),
+                            ),
+                            location: event.formatTitle(
+                              event.classroom != null
+                                  ? event.classroom?.title
+                                  : '(Не указана)',
+                            ),
                             startTime: startTime,
                             endTime: endTime,
                             repeat: 'Еженедельно',
                             description:
-                                event.description ??
-                                'Описание события отсутствует',
+                                event.comment ?? 'Описание отсутствует',
                           ),
                         ),
                       );
@@ -158,7 +178,10 @@ class EventDetailsModal extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AttendanceScreen(),
+                          builder: (context) => AttendanceScreen(
+                            event: event,
+                            schedulesBloc: schedulesBloc,
+                          ),
                         ),
                       );
                     },

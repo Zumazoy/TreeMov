@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_update_model.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/test_schedule_update_screen.dart';
 
 class TestScheduleScreen extends StatelessWidget {
@@ -237,7 +236,7 @@ class _ScheduleCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ScheduleUpdateScreen(
-              scheduleId: schedule.id,
+              scheduleId: schedule.id!,
               schedulesBloc: schedulesBloc,
             ),
           ),
@@ -249,10 +248,10 @@ class _ScheduleCard extends StatelessWidget {
         }
         break;
       case 'cancel':
-        _toggleCancelStatus(context, schedulesBloc);
+        // _toggleCancelStatus(context, schedulesBloc);
         break;
       case 'complete':
-        _toggleCompleteStatus(context, schedulesBloc);
+        // _toggleCompleteStatus(context, schedulesBloc);
         break;
       case 'details':
         // Navigator.push(
@@ -265,22 +264,22 @@ class _ScheduleCard extends StatelessWidget {
     }
   }
 
-  void _toggleCancelStatus(BuildContext context, SchedulesBloc schedulesBloc) {
-    final updateData = ScheduleUpdateModel(isCanceled: !schedule.isCanceled!);
+  // void _toggleCancelStatus(BuildContext context, SchedulesBloc schedulesBloc) {
+  //   final updateData = ScheduleUpdateModel(isCanceled: !schedule.isCanceled!);
 
-    schedulesBloc.add(
-      UpdateScheduleEvent(scheduleId: schedule.id, updateData: updateData),
-    );
-  }
+  //   schedulesBloc.add(
+  //     UpdateScheduleEvent(scheduleId: schedule.id!, updateData: updateData),
+  //   );
+  // }
 
-  void _toggleCompleteStatus(
-    BuildContext context,
-    SchedulesBloc schedulesBloc,
-  ) {
-    final updateData = ScheduleUpdateModel(isCompleted: !schedule.isCompleted!);
+  // void _toggleCompleteStatus(
+  //   BuildContext context,
+  //   SchedulesBloc schedulesBloc,
+  // ) {
+  //   final updateData = ScheduleUpdateModel(isCompleted: !schedule.isCompleted!);
 
-    schedulesBloc.add(
-      UpdateScheduleEvent(scheduleId: schedule.id, updateData: updateData),
-    );
-  }
+  //   schedulesBloc.add(
+  //     UpdateScheduleEvent(scheduleId: schedule.id!, updateData: updateData),
+  //   );
+  // }
 }

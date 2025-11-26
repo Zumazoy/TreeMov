@@ -1,5 +1,5 @@
-import '../../domain/entities/teacher_entity.dart';
 import '../../domain/entities/daily_schedule_entity.dart';
+import '../../domain/entities/teacher_entity.dart';
 
 class MockProfileData {
   static TeacherEntity get mockTeacher => TeacherEntity(

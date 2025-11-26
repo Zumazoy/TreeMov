@@ -1,9 +1,9 @@
-import 'package:treemov/shared/domain/entities/student_entity.dart';
+import 'package:treemov/shared/data/models/student_response_model.dart';
 import 'package:treemov/shared/domain/models/base_response_model.dart';
 
 class StudentGroupResponseModel extends BaseResponseModel {
   final String? name;
-  final List<StudentEntity> students;
+  final List<StudentResponseModel> students;
 
   StudentGroupResponseModel({
     required super.baseData,
@@ -12,10 +12,10 @@ class StudentGroupResponseModel extends BaseResponseModel {
   });
 
   factory StudentGroupResponseModel.fromJson(Map<String, dynamic> json) {
-    List<StudentEntity> studentsList = [];
+    List<StudentResponseModel> studentsList = [];
     if (json['students'] != null && json['students'] is List) {
       studentsList = (json['students'] as List)
-          .map((studentJson) => StudentEntity.fromJson(studentJson))
+          .map((studentJson) => StudentResponseModel.fromJson(studentJson))
           .toList();
     }
 

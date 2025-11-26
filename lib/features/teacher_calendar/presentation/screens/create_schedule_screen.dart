@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_bloc.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_event.dart';
-import 'package:treemov/features/teacher_calendar/presentation/blocs/schedules/schedules_state.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
@@ -130,19 +130,23 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       return;
     }
 
+    final String scheduleTitle =
+        '${_selectedSubjectName ?? 'Занятие'} - ${_selectedGroupName ?? 'Группа'}';
+
     if (_selectedRepeatOption == 'Повтор' || _selectedRepeatOption == null) {
       // Обычное событие без повторения
       final request = ScheduleRequestModel(
-        classroomId: _classroomId!,
-        groupId: _groupId!,
         teacherId: _teacherId!,
         subjectId: _subjectId!,
-        title: _descriptionController.text.isNotEmpty
-            ? _descriptionController.text
-            : '${_selectedSubjectName ?? 'Занятие'} - ${_selectedGroupName ?? 'Группа'}',
-        date: _startDateTime,
+        groupId: _groupId!,
+        classroomId: _classroomId!,
+        title: scheduleTitle,
         startTime: TimeOfDay.fromDateTime(_startDateTime),
         endTime: TimeOfDay.fromDateTime(_endDateTime),
+        date: _startDateTime,
+        comment: _descriptionController.text.isNotEmpty
+            ? _descriptionController.text
+            : '',
       );
 
       widget.schedulesBloc.add(CreateScheduleEvent(request));
@@ -156,13 +160,10 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
         subjectId: _subjectId!,
         groupId: _groupId!,
         classroomId: _classroomId!,
-        period: period,
-        title: _descriptionController.text.isNotEmpty
-            ? _descriptionController.text
-            : '${_selectedSubjectName ?? 'Занятие'} - ${_selectedGroupName ?? 'Группа'}',
+        title: scheduleTitle,
         startTime: TimeOfDay.fromDateTime(_startDateTime),
         endTime: TimeOfDay.fromDateTime(_endDateTime),
-        lesson: null,
+        period: period,
         repeatUntilDate: repeatUntilDate,
         startDate: _startDateTime,
       );

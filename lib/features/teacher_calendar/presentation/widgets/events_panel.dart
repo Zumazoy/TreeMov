@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/calendar_event_entity.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/schedule_entity.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import 'event_details_modal.dart';
 
 class EventsPanel extends StatelessWidget {
   final DateTime selectedDate;
-  final List<CalendarEventEntity> events;
+  final List<ScheduleEntity> events;
+  final SchedulesBloc schedulesBloc;
 
   const EventsPanel({
     super.key,
     required this.selectedDate,
     required this.events,
+    required this.schedulesBloc,
   });
 
   static void show({
     required BuildContext context,
     required DateTime selectedDate,
-    required List<CalendarEventEntity> events,
+    required List<ScheduleEntity> events,
+    required SchedulesBloc schedulesBloc,
   }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) =>
-          EventsPanel(selectedDate: selectedDate, events: events),
+      builder: (context) => EventsPanel(
+        selectedDate: selectedDate,
+        events: events,
+        schedulesBloc: schedulesBloc,
+      ),
     );
   }
 
@@ -32,13 +39,12 @@ class EventsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 450,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.white,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12.5),
           topRight: Radius.circular(12.5),
         ),
-        border: Border.all(color: AppColors.eventTap, width: 1),
       ),
       child: Column(
         children: [
@@ -87,12 +93,11 @@ class EventsPanel extends StatelessWidget {
                       ),
                     ),
                   )
-                : ListView.builder(
+                : ListView(
                     padding: const EdgeInsets.all(16),
-                    itemCount: events.length,
-                    itemBuilder: (context, index) {
-                      return _buildEventItem(events[index], context);
-                    },
+                    children: events
+                        .map((event) => _buildEventItem(event, context))
+                        .toList(),
                   ),
           ),
         ],
@@ -100,8 +105,10 @@ class EventsPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildEventItem(CalendarEventEntity event, BuildContext context) {
-    final timeParts = event.time.split('\n');
+  Widget _buildEventItem(ScheduleEntity event, BuildContext context) {
+    final timeParts = event
+        .formatTime(event.startTime, event.endTime)
+        .split('\n');
     final startTime = timeParts.isNotEmpty ? timeParts[0] : '';
     final endTime = timeParts.length > 1 ? timeParts[1] : '';
 
@@ -122,7 +129,7 @@ class EventsPanel extends StatelessWidget {
               children: [
                 Text(
                   startTime,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'TT Norms',
@@ -132,7 +139,7 @@ class EventsPanel extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   endTime,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'TT Norms',
@@ -161,8 +168,8 @@ class EventsPanel extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    event.title,
-                    style: const TextStyle(
+                    event.formatTitle(event.title),
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'TT Norms',
@@ -173,8 +180,12 @@ class EventsPanel extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    event.location,
-                    style: const TextStyle(
+                    event.formatTitle(
+                      event.classroom != null
+                          ? event.classroom?.title
+                          : '(Не указана)',
+                    ),
+                    style: TextStyle(
                       fontSize: 12,
                       color: AppColors.grey,
                       fontFamily: 'TT Norms',
@@ -209,9 +220,13 @@ class EventsPanel extends StatelessWidget {
     );
   }
 
-  void _showEventDetails(BuildContext context, CalendarEventEntity event) {
+  void _showEventDetails(BuildContext context, ScheduleEntity event) {
     Navigator.pop(context);
-    EventDetailsModal.show(context: context, event: event);
+    EventDetailsModal.show(
+      context: context,
+      event: event,
+      schedulesBloc: schedulesBloc,
+    );
   }
 
   String _formatDate(DateTime date) {

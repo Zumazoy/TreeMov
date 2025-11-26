@@ -89,13 +89,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 15),
 
-              NavButton(
-                text: 'Создать занятие',
-                route: AppRoutes.createSchedule,
-                color: Color.fromARGB(255, 160, 172, 56),
-              ),
-              const SizedBox(height: 15),
-
               const Text(
                 'Это тестовые кнопки',
                 style: TextStyle(fontSize: 16, color: Colors.grey),

@@ -1,81 +1,60 @@
-import 'package:flutter/material.dart';
+import 'package:treemov/shared/data/models/classroom_response_model.dart';
+import 'package:treemov/shared/data/models/student_group_response_model.dart';
+import 'package:treemov/shared/data/models/subject_response_model.dart';
+import 'package:treemov/shared/data/models/teacher_response_model.dart';
 
 class ScheduleEntity {
-  final int id;
-  final int? classroomId;
-  final int? createdById;
-  final int? groupId;
-  final int orgId;
-  final int? periodScheduleId;
-  final int teacherId;
-  final int? subjectId;
-  final int weekDay;
-  final int? lesson;
+  final int? id;
+  final int? org;
+  final int? createdBy;
+  final String? createdAt;
   final String? title;
-  final DateTime date;
-  final DateTime createdAt;
-  final TimeOfDay startTime;
-  final TimeOfDay endTime;
-  final Duration duration;
-  final bool isCanceled;
-  final bool isCompleted;
+  final String? startTime;
+  final String? endTime;
+  final String? date;
+  final int? weekDay;
+  final bool? isCanceled;
+  final bool? isCompleted;
+  final String? duration;
+  final String? comment;
+  final int? periodSchedule;
+  final TeacherResponseModel? teacher;
+  final SubjectResponseModel? subject;
+  final StudentGroupResponseModel? group;
+  final ClassroomResponseModel? classroom;
 
   ScheduleEntity({
     required this.id,
-    required this.classroomId,
-    required this.createdById,
-    required this.groupId,
-    required this.orgId,
-    required this.periodScheduleId,
-    required this.teacherId,
-    required this.subjectId,
-    required this.weekDay,
-    required this.lesson,
-    required this.title,
-    required this.date,
+    required this.org,
+    required this.createdBy,
     required this.createdAt,
+    required this.title,
     required this.startTime,
     required this.endTime,
-    required this.duration,
+    required this.date,
+    required this.weekDay,
     required this.isCanceled,
     required this.isCompleted,
+    required this.duration,
+    required this.comment,
+    required this.periodSchedule,
+    required this.teacher,
+    required this.subject,
+    required this.group,
+    required this.classroom,
   });
 
-  // Методы для парсинга из JSON
-  factory ScheduleEntity.fromJson(Map<String, dynamic> json) {
-    return ScheduleEntity(
-      id: json['id'],
-      classroomId: json['classroom']?['id'] ?? 0,
-      createdById: json['created_by'] ?? 0,
-      groupId: json['group']?['id'] ?? 0,
-      orgId: json['org'],
-      periodScheduleId: json['period_schedule']?['id'],
-      teacherId: json['teacher']?['id'] ?? 0,
-      subjectId: json['subject']?['id'] ?? 0,
-      weekDay: json['week_day'],
-      lesson: json['lesson'],
-      title: json['title'] ?? '',
-      startTime: _parseTime(json['start_time']),
-      endTime: _parseTime(json['end_time']),
-      date: DateTime.parse(json['date']),
-      createdAt: DateTime.parse(json['created_at']),
-      duration: _parseDuration(json['duration']),
-      isCanceled: json['is_canceled'] ?? false,
-      isCompleted: json['is_completed'] ?? false,
-    );
+  String formatTime(String? startTime, String? endTime) {
+    if (startTime != null && endTime != null) {
+      startTime = startTime.length >= 5 ? startTime.substring(0, 5) : startTime;
+      endTime = endTime.length >= 5 ? endTime.substring(0, 5) : endTime;
+      return '$startTime\n$endTime';
+    }
+
+    return 'Время не указано';
   }
 
-  static TimeOfDay _parseTime(String timeString) {
-    final parts = timeString.split(':');
-    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
-  }
-
-  static Duration _parseDuration(String durationString) {
-    final parts = durationString.split(':');
-    return Duration(
-      hours: int.parse(parts[0]),
-      minutes: int.parse(parts[1]),
-      seconds: int.parse(parts[2]),
-    );
+  String formatTitle(String? title) {
+    return title!.isNotEmpty ? title : '(Без названия)';
   }
 }

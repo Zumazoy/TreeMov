@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/widgets/layout/nav_bar.dart';
+import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 
@@ -419,6 +421,14 @@ class _EditEventScreenState extends State<EditEventScreen> {
     );
   }
 
+  void _onTabTapped(int index) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreen(initialIndex: index)),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -537,6 +547,10 @@ class _EditEventScreenState extends State<EditEventScreen> {
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 0,
+        onTap: _onTabTapped,
       ),
     );
   }

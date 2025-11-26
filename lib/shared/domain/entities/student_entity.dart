@@ -1,6 +1,6 @@
-import 'package:treemov/shared/domain/models/base_response_model.dart';
+import 'package:treemov/shared/domain/models/base_entity.dart';
 
-class StudentEntity extends BaseResponseModel {
+class StudentEntity extends BaseEntity {
   final String? name;
   final String? surname;
   final String? progress;
@@ -21,18 +21,4 @@ class StudentEntity extends BaseResponseModel {
     required this.avatar,
     required this.score,
   });
-
-  factory StudentEntity.fromJson(Map<String, dynamic> json) {
-    return StudentEntity(
-      baseData: json.baseData,
-      name: json['name'],
-      surname: json['surname'],
-      progress: json['progress'],
-      phoneNumber: json['phone_number'],
-      birthday: json['birthday'],
-      email: json['email'],
-      avatar: json['avatar'],
-      score: json['score'],
-    );
-  }
 }

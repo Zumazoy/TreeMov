@@ -1,5 +1,7 @@
 import '../../domain/entities/point_entity.dart';
 import '../../domain/entities/point_category_entity.dart';
+import 'package:treemov/shared/domain/entities/student_group_entity.dart';
+import 'package:treemov/shared/domain/models/base_entity.dart';
 
 class MockPointsData {
   static final List<PointAction> pointActions = [

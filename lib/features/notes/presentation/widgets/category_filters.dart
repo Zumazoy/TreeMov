@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/note_category_entity.dart';
+
 import '../../../../core/themes/app_colors.dart';
+import '../../domain/entities/note_category_entity.dart';
 
 class CategoryFilters extends StatelessWidget {
   final NoteCategoryEntity selectedCategory;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/teacher_note_entity.dart';
-import '../../domain/entities/note_category_entity.dart';
+
 import '../../../../core/themes/app_colors.dart';
+import '../../domain/entities/note_category_entity.dart';
+import '../../domain/entities/teacher_note_entity.dart';
 import 'note_actions_buttons.dart';
 
 class NoteCard extends StatelessWidget {

@@ -1,47 +1,47 @@
 import 'package:flutter/material.dart';
 
 class ScheduleRequestModel {
-  final int classroomId;
-  final int groupId;
-  final int? periodScheduleId;
   final int teacherId;
   final int subjectId;
-  final int? lesson;
+  final int groupId;
+  final int classroomId;
   final String title;
+  final TimeOfDay? startTime;
+  final TimeOfDay? endTime;
   final DateTime date;
-  final TimeOfDay startTime;
-  final TimeOfDay endTime;
   final bool isCanceled;
   final bool isCompleted;
+  final String? comment;
+  final int? periodScheduleId;
 
   ScheduleRequestModel({
-    required this.classroomId,
-    required this.groupId,
-    this.periodScheduleId,
     required this.teacherId,
     required this.subjectId,
-    this.lesson,
+    required this.groupId,
+    required this.classroomId,
     required this.title,
+    this.startTime,
+    this.endTime,
     required this.date,
-    required this.startTime,
-    required this.endTime,
     this.isCanceled = false,
     this.isCompleted = false,
+    this.comment,
+    this.periodScheduleId,
   });
 
   Map<String, dynamic> toJson() => {
-    'classroom': classroomId,
-    'group': groupId,
-    if (periodScheduleId != null) 'period_schedule': periodScheduleId,
     'teacher': teacherId,
     'subject': subjectId,
-    if (lesson != null) 'lesson': lesson,
+    'group': groupId,
+    'classroom': classroomId,
     'title': title,
+    if (startTime != null) 'start_time': _formatTime(startTime!),
+    if (endTime != null) 'end_time': _formatTime(endTime!),
     'date': _formatDate(date),
-    'start_time': _formatTime(startTime),
-    'end_time': _formatTime(endTime),
     'is_canceled': isCanceled,
     'is_completed': isCompleted,
+    if (comment != null) 'comment': comment,
+    if (periodScheduleId != null) 'period_schedule': periodScheduleId,
   };
 
   String _formatDate(DateTime date) {

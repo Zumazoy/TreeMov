@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
+import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/schedule_entity.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
+import 'package:treemov/shared/data/models/student_response_model.dart';
+import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../widgets/attendance_parts/lesson_info_card.dart';
@@ -7,37 +15,43 @@ import '../widgets/attendance_parts/statistics_row.dart';
 import '../widgets/attendance_parts/student_card.dart';
 
 class AttendanceScreen extends StatefulWidget {
-  const AttendanceScreen({super.key});
+  final ScheduleEntity event;
+  final SchedulesBloc schedulesBloc;
+
+  const AttendanceScreen({
+    super.key,
+    required this.event,
+    required this.schedulesBloc,
+  });
 
   @override
   State<AttendanceScreen> createState() => _AttendanceScreenState();
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  // Данные о занятии
-  final Map<String, dynamic> _currentLesson = {
-    'title': 'Растяжка',
-    'type': 'Группа "Слайд"',
-    'time': '18:30-20:00',
-    'location': 'Малый зал',
-  };
+  List<Map<String, dynamic>> _students = [];
+  bool _isLoading = false;
+  String? _errorMessage;
+  bool _isSaving = false;
 
-  // Список студентов
-  final List<Map<String, dynamic>> _students = [
-    {'id': 1, 'name': 'Петров Иван', 'avatar': '', 'attendance': 'not_marked'},
-    {
-      'id': 2,
-      'name': 'Сидорова Мария',
-      'avatar': '',
-      'attendance': 'not_marked',
-    },
-    {
-      'id': 3,
-      'name': 'Козлов Алексей',
-      'avatar': '',
-      'attendance': 'not_marked',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadStudents();
+  }
+
+  void _loadStudents() {
+    if (widget.event.group?.id != null) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+
+      widget.schedulesBloc.add(
+        LoadStudentGroupByIdEvent(widget.event.group!.id!),
+      );
+    }
+  }
 
   // Статистика
   int get totalStudents => _students.length;
@@ -47,6 +61,44 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       _students.where((s) => s['attendance'] == 'absent').length;
   int get notMarkedCount =>
       _students.where((s) => s['attendance'] == 'not_marked').length;
+
+  // Проверка, можно ли сохранять
+  bool get canSaveAttendance => notMarkedCount == 0;
+
+  // Получаем данные о занятии из события
+  Map<String, dynamic> get _currentLesson {
+    final timeParts = widget.event
+        .formatTime(widget.event.startTime, widget.event.endTime)
+        .split('\n');
+    final startTime = timeParts.isNotEmpty ? timeParts[0] : '';
+    final endTime = timeParts.length > 1 ? timeParts[1] : '';
+
+    final groupName = widget.event.group?.name ?? '';
+    final formattedGroup = groupName.isNotEmpty
+        ? 'Группа "$groupName"'
+        : 'Группа не указана';
+
+    final subjectName = widget.event.subject?.name ?? '';
+    final formattedSubject = subjectName.isNotEmpty
+        ? subjectName
+        : 'Предмет не указан';
+
+    final classroomTitle = widget.event.classroom?.title ?? '';
+    final formattedClassroom = classroomTitle.isNotEmpty
+        ? classroomTitle
+        : 'Аудитория не указана';
+
+    final formattedTime = startTime.isNotEmpty && endTime.isNotEmpty
+        ? '$startTime-$endTime'
+        : 'Время не указано';
+
+    return {
+      'group': formattedGroup,
+      'subject': formattedSubject,
+      'time': formattedTime,
+      'classroom': formattedClassroom,
+    };
+  }
 
   void _markAllPresent() {
     setState(() {
@@ -71,140 +123,302 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   void _saveAttendance() {
-    // сохранения посещаемости
+    if (!canSaveAttendance) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Пожалуйста, отметьте всех студентов перед сохранением ($notMarkedCount не отмечено)',
+          ),
+          backgroundColor: Colors.orange,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
+    if (widget.event.id == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Ошибка: ID занятия не указан'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    // Создаем список запросов для всех студентов
+    final attendanceRequests = _students.map((student) {
+      return AttendanceRequestModel(
+        student: student['student']?.id ?? student['id'],
+        lesson: widget.event.id!,
+        wasPresent: student['attendance'] == 'present',
+      );
+    }).toList();
+
+    // Отправляем все запросы одним событием
+    widget.schedulesBloc.add(CreateMassAttendanceEvent(attendanceRequests));
   }
 
-  void _onNavBarTap(int index, BuildContext context) {
-    switch (index) {
-      case 0: // Календарь
-        Navigator.popUntil(context, (route) => route.isFirst);
-        break;
-      case 1: // Рейтинг
-        break;
-      case 2: // Справка
-        break;
-      case 3: // Профиль
-        break;
-    }
+  void _onTabTapped(int index) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreen(initialIndex: index)),
+      (route) => false,
+    );
+  }
+
+  String _formatStudentName(StudentResponseModel student) {
+    final parts = [
+      student.surname,
+      student.name,
+    ].where((part) => part != null && part.isNotEmpty).toList();
+
+    return parts.isNotEmpty ? parts.join(' ') : 'Неизвестный студент';
+  }
+
+  // Сортируем студентов по фамилии и имени
+  List<Map<String, dynamic>> _getSortedStudents() {
+    return List.from(_students)..sort((a, b) {
+      final studentA = a['student'] as StudentResponseModel?;
+      final studentB = b['student'] as StudentResponseModel?;
+
+      if (studentA == null || studentB == null) return 0;
+
+      final surnameCompare = (studentA.surname ?? '').compareTo(
+        studentB.surname ?? '',
+      );
+      if (surnameCompare != 0) return surnameCompare;
+
+      return (studentA.name ?? '').compareTo(studentB.name ?? '');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final double availableWidth = MediaQuery.of(context).size.width - 40;
+    final sortedStudents = _getSortedStudents();
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Заголовок и кнопка
-              _buildHeader(availableWidth),
-              const SizedBox(height: 20),
-
-              // Информация о занятии
-              LessonInfoCard(
-                lesson: _currentLesson,
-                availableWidth: availableWidth,
+    return BlocListener<SchedulesBloc, ScheduleState>(
+      bloc: widget.schedulesBloc,
+      listener: (context, state) {
+        if (state is StudentGroupLoading) {
+          setState(() {
+            _isLoading = true;
+            _errorMessage = null;
+          });
+        } else if (state is StudentGroupLoaded) {
+          setState(() {
+            _isLoading = false;
+            _students = state.group.students.asMap().entries.map((entry) {
+              final student = entry.value;
+              final index = entry.key;
+              return {
+                'id': student.id ?? index + 1,
+                'name': _formatStudentName(student),
+                'avatar': student.avatar ?? '',
+                'attendance': 'not_marked',
+                'student': student,
+              };
+            }).toList();
+          });
+        } else if (state is StudentGroupError) {
+          setState(() {
+            _isLoading = false;
+            _errorMessage = state.message;
+          });
+        } else if (state is AttendanceOperationSuccess) {
+          setState(() {
+            _isSaving = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Посещаемость для "${_currentLesson['subject']}" сохранена',
               ),
-              const SizedBox(height: 20),
-
-              // Статистика
-              StatisticsRow(
-                availableWidth: availableWidth,
-                totalStudents: totalStudents,
-                presentCount: presentCount,
-                absentCount: absentCount,
-                notMarkedCount: notMarkedCount,
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else if (state is AttendanceError) {
+          setState(() {
+            _isSaving = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: AppBar(
+          backgroundColor: AppColors.white,
+          elevation: 0,
+          titleSpacing: 0,
+          title: Text(
+            'Посещаемость',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
+              fontFamily: 'TT Norms',
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            if (_students.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: ElevatedButton(
+                  onPressed: _markAllPresent,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.calendarButton,
+                    foregroundColor: AppColors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.5),
+                    ),
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 0,
+                    ),
+                  ),
+                  child: const Text(
+                    '+ отметить всех',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'TT Norms',
+                    ),
+                  ),
+                ),
               ),
-              const SizedBox(height: 30),
+          ],
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Информация о занятии
+                LessonInfoCard(
+                  lesson: _currentLesson,
+                  availableWidth: availableWidth,
+                ),
+                const SizedBox(height: 20),
 
-              _buildStudentsHeader(),
-              const SizedBox(height: 16),
+                // Статистика
+                StatisticsRow(
+                  availableWidth: availableWidth,
+                  totalStudents: totalStudents,
+                  presentCount: presentCount,
+                  absentCount: absentCount,
+                  notMarkedCount: notMarkedCount,
+                ),
+                const SizedBox(height: 30),
 
-              // Список студентов
-              Column(
-                children: _students.map((student) {
-                  return StudentCard(
-                    student: student,
-                    availableWidth: availableWidth,
-                    onMarkPresent: () => _markPresent(student['id']),
-                    onMarkAbsent: () => _markAbsent(student['id']),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 20),
+                Text(
+                  'Список обучающихся: ${_students.length}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Arial',
+                    color: AppColors.grayFieldText,
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-              // Кнопка сохранения
-              _buildSaveButton(availableWidth),
-            ],
+                // Список студентов
+                if (_isLoading)
+                  _buildLoadingIndicator()
+                else if (_errorMessage != null)
+                  _buildErrorState(_errorMessage!)
+                else if (_students.isEmpty)
+                  _buildEmptyState()
+                else
+                  Column(
+                    children: sortedStudents.map((student) {
+                      return StudentCard(
+                        student: student,
+                        availableWidth: availableWidth,
+                        onMarkPresent: () => _markPresent(student['id']),
+                        onMarkAbsent: () => _markAbsent(student['id']),
+                      );
+                    }).toList(),
+                  ),
+                const SizedBox(height: 20),
+
+                // Кнопка сохранения
+                if (_students.isNotEmpty) _buildSaveButton(availableWidth),
+
+                if (_students.isNotEmpty && !canSaveAttendance)
+                  _buildSaveHintText(),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: 0,
-        onTap: (index) => _onNavBarTap(index, context),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: 0,
+          onTap: _onTabTapped,
+        ),
       ),
     );
   }
 
-  Widget _buildHeader(double availableWidth) {
+  Widget _buildLoadingIndicator() {
     return SizedBox(
-      width: availableWidth,
-      child: Row(
-        children: [
-          Expanded(
-            child: const Text(
-              'Посещаемость',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w900,
-                fontFamily: 'TT Norms',
-                color: Colors.black,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          SizedBox(
-            width: 130,
-            height: 32,
-            child: ElevatedButton(
-              onPressed: _markAllPresent,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.calendarButton,
-                foregroundColor: AppColors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.5),
-                ),
-                elevation: 0,
-                shadowColor: Colors.transparent,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-              ),
-              child: const Text(
-                '+ отметить всех',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'TT Norms',
-                ),
-              ),
-            ),
-          ),
-        ],
+      height: 100,
+      child: Center(
+        child: CircularProgressIndicator(color: AppColors.calendarButton),
       ),
     );
   }
 
-  Widget _buildStudentsHeader() {
-    return Text(
-      'Список обучающихся:',
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        fontFamily: 'Arial',
-        color: AppColors.grayFieldText,
+  Widget _buildErrorState(String message) {
+    return SizedBox(
+      height: 100,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Ошибка загрузки студентов',
+              style: TextStyle(
+                fontSize: 16,
+                color: AppColors.grayFieldText,
+                fontFamily: 'TT Norms',
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red,
+                fontFamily: 'TT Norms',
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return SizedBox(
+      height: 100,
+      child: Center(
+        child: Text(
+          'В группе нет студентов',
+          style: TextStyle(
+            fontSize: 16,
+            color: AppColors.grayFieldText,
+            fontFamily: 'TT Norms',
+          ),
+        ),
       ),
     );
   }
@@ -214,19 +428,21 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       width: availableWidth,
       height: 56,
       child: ElevatedButton(
-        onPressed: _saveAttendance,
+        onPressed: _isSaving
+            ? null
+            : (canSaveAttendance ? _saveAttendance : null),
         style: ElevatedButton.styleFrom(
-          backgroundColor: notMarkedCount == 0
+          backgroundColor: canSaveAttendance && !_isSaving
               ? AppColors.calendarButton
               : AppColors.eventTap,
-          foregroundColor: notMarkedCount == 0
+          foregroundColor: canSaveAttendance && !_isSaving
               ? AppColors.white
               : AppColors.calendarButton,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.5),
           ),
           side: BorderSide(
-            color: notMarkedCount == 0
+            color: canSaveAttendance && !_isSaving
                 ? AppColors.calendarButton
                 : AppColors.calendarButton,
             width: 1,
@@ -235,19 +451,45 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         ),
+        child: _isSaving
+            ? SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.calendarButton,
+                ),
+              )
+            : Text(
+                canSaveAttendance
+                    ? 'Сохранить посещаемость'
+                    : 'Сохранить ($notMarkedCount не отмечено)',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'TT Norms',
+                  color: canSaveAttendance
+                      ? AppColors.white
+                      : AppColors.calendarButton,
+                ),
+                textAlign: TextAlign.center,
+              ),
+      ),
+    );
+  }
+
+  Widget _buildSaveHintText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Center(
         child: Text(
-          notMarkedCount == 0
-              ? 'Сохранить посещаемость'
-              : 'Сохранить ($notMarkedCount не отмечено)',
+          'Отметьте всех, чтобы сохранить',
           style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
             fontFamily: 'TT Norms',
-            color: notMarkedCount == 0
-                ? AppColors.white
-                : AppColors.calendarButton,
+            color: Colors.black,
           ),
-          textAlign: TextAlign.center,
         ),
       ),
     );

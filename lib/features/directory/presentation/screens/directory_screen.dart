@@ -1,94 +1,220 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/directory/data/mocks/mock_directory_data.dart';
-import 'package:treemov/features/directory/domain/entities/group_entity.dart';
-import 'package:treemov/features/directory/domain/entities/subject_entity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/app/di/di.config.dart';
+import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
 import 'package:treemov/features/directory/presentation/screens/student_directory.dart';
 import 'package:treemov/features/directory/presentation/widgets/app_bar_title.dart';
 import 'package:treemov/features/directory/presentation/widgets/group_item.dart';
 import 'package:treemov/features/directory/presentation/widgets/search_field.dart';
+import 'package:treemov/shared/data/models/student_group_response_model.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
-class DirectoryScreen extends StatefulWidget {
+class DirectoryScreen extends StatelessWidget {
   const DirectoryScreen({super.key});
 
   @override
-  State<DirectoryScreen> createState() => _DirectoryScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<DirectoryBloc>()..add(LoadStudentGroups()),
+      child: const _DirectoryScreenContent(),
+    );
+  }
 }
 
-class _DirectoryScreenState extends State<DirectoryScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  List<GroupEntity> _filteredGroups = MockDirectoryData.groups;
+class _DirectoryScreenContent extends StatefulWidget {
+  const _DirectoryScreenContent();
 
-  SubjectEntity _getSubjectById(String subjectId) {
-    switch (subjectId) {
-      case '1':
-        return MockDirectoryData.physics;
-      case '2':
-        return MockDirectoryData.math;
-      default:
-        return MockDirectoryData.physics;
-    }
-  }
+  @override
+  State<_DirectoryScreenContent> createState() => _DirectoryScreenState();
+}
+
+class _DirectoryScreenState extends State<_DirectoryScreenContent> {
+  final TextEditingController _searchController = TextEditingController();
+  List<StudentGroupResponseModel> _allGroups = [];
+  List<StudentGroupResponseModel> _filteredGroups = [];
+  bool _hasSearchQuery = false; // Флаг наличия поискового запроса
 
   void _onSearchChanged(String query) {
     setState(() {
+      _hasSearchQuery = query.isNotEmpty;
+
       if (query.isEmpty) {
-        _filteredGroups = MockDirectoryData.groups;
+        // Пустой запрос
+        _filteredGroups = _allGroups;
       } else {
-        _filteredGroups = MockDirectoryData.groups.where((group) {
-          final subject = _getSubjectById(group.subjectId);
-          return subject.name.toLowerCase().contains(query.toLowerCase()) ||
-              group.name.contains(query);
+        _filteredGroups = _allGroups.where((group) {
+          return group.name?.toLowerCase().contains(query.toLowerCase()) ==
+              true;
         }).toList();
       }
     });
   }
 
-  void _onGroupTap(GroupEntity group) {
+  void _onGroupTap(StudentGroupResponseModel group) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => StudentDirectoryScreen(
-          groupName: group.name,
-          subjectName: _getSubjectById(group.subjectId).name,
-        ),
+        builder: (context) =>
+            StudentDirectoryScreen(group: group, allGroups: _allGroups),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: const AppBarTitle(text: 'Ученики'),
-        backgroundColor: AppColors.white,
-        foregroundColor: AppColors.grayFieldText,
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          SearchField(
-            controller: _searchController,
-            onChanged: _onSearchChanged,
+    return BlocConsumer<DirectoryBloc, DirectoryState>(
+      listener: (context, state) {
+        if (state is GroupsLoaded) {
+          setState(() {
+            _allGroups = state.groups;
+            _filteredGroups = state.groups;
+          });
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppColors.white,
+          appBar: AppBar(
+            title: const AppBarTitle(text: 'Ученики'),
+            backgroundColor: AppColors.white,
+            foregroundColor: AppColors.grayFieldText,
+            elevation: 0,
           ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                ..._filteredGroups.map(
-                  (group) => GroupItem(
-                    group: group,
-                    subject: _getSubjectById(group.subjectId),
-                    onTap: () => _onGroupTap(group),
-                  ),
-                ),
-              ],
+          body: Column(
+            children: [
+              SearchField(
+                controller: _searchController,
+                onChanged: _onSearchChanged,
+              ),
+              Expanded(child: _buildContent(state)),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent(DirectoryState state) {
+    if (state is DirectoryLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is DirectoryError) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.error_outline,
+              size: 64,
+              color: AppColors.directoryTextSecondary,
             ),
+            const SizedBox(height: 16),
+            Text(
+              'Ошибка загрузки',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.grayFieldText,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              state.message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.directoryTextSecondary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () =>
+                  context.read<DirectoryBloc>().add(LoadStudentGroups()),
+              child: const Text('Попробовать снова'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (_hasSearchQuery && _filteredGroups.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.search_off,
+              size: 64,
+              color: AppColors.directoryTextSecondary,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Группы не найдены',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.grayFieldText,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Попробуйте изменить поисковый запрос',
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.directoryTextSecondary,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (_allGroups.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.group_outlined,
+              size: 64,
+              color: AppColors.directoryTextSecondary,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Нет доступных групп',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.grayFieldText,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Группы появятся после их создания',
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.directoryTextSecondary,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Показываем список групп (все или отфильтрованные)
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      children: [
+        ..._filteredGroups.map(
+          (group) => GroupItem(
+            groupName: group.name ?? 'Без названия',
+            studentCount: group.students.length,
+            onTap: () => _onGroupTap(group),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
