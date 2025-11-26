@@ -9,19 +9,16 @@ class RepNotsButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Кнопка Отчеты
         Expanded(
           child: Container(
             height: 80,
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.teacherPrimary),
               borderRadius: BorderRadius.circular(8),
-              color: const Color(0xFFF0F0FF),
+              color: AppColors.eventTap,
             ),
             child: TextButton(
-              onPressed: () {
-                // Переход к отчетам
-              },
+              onPressed: () {},
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -47,14 +44,14 @@ class RepNotsButtons extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        // Кнопка Заметки
+
         Expanded(
           child: Container(
             height: 80,
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.teacherPrimary),
               borderRadius: BorderRadius.circular(8),
-              color: const Color(0xFFF0F0FF),
+              color: AppColors.eventTap,
             ),
             child: TextButton(
               onPressed: () {

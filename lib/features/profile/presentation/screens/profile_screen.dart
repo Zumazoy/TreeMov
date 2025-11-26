@@ -67,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
       body: Column(
         children: [
           ProfileHeader(teacher: teacher),
-          Container(height: 1, color: const Color(0xFFF0F0FF)),
+          Container(height: 1, color: AppColors.eventTap),
           const SizedBox(height: 24),
           Expanded(
             child: SingleChildScrollView(

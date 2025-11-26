@@ -13,7 +13,7 @@ class DailyScheduleCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: const Color(0xFFF0F0FF),
+        color: AppColors.eventTap,
       ),
       child: Column(
         children: [
@@ -47,7 +47,7 @@ class DailyScheduleCard extends StatelessWidget {
                 _buildScheduleItem(
                   'assets/images/book_icon.png',
                   '${dailySchedule.totalLessons} занятия сегодня',
-                  const Color(0xFF16A34A),
+                  AppColors.statsTotalText,
                   isNumberColored: true,
                 ),
                 const SizedBox(height: 12),
@@ -55,7 +55,7 @@ class DailyScheduleCard extends StatelessWidget {
                   _buildScheduleItem(
                     'assets/images/clock_icon.png',
                     'Следующий: ${dailySchedule.nextLesson!.group} ${dailySchedule.nextLesson!.time}',
-                    const Color(0xFF3A72ED),
+                    AppColors.statsPinnedText,
                     isTimeColored: true,
                   ),
                 const SizedBox(height: 12),
@@ -65,7 +65,7 @@ class DailyScheduleCard extends StatelessWidget {
                     child: _buildScheduleItem(
                       'assets/images/bell_icon.png',
                       'Напоминание: ${reminder.text} ${reminder.time}',
-                      const Color(0xFFF97316),
+                      AppColors.categoryGeneralText,
                       isReminderColored: true,
                     ),
                   ),
@@ -81,7 +81,7 @@ class DailyScheduleCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, 
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Нажмите для просмотра расписания',
@@ -89,7 +89,7 @@ class DailyScheduleCard extends StatelessWidget {
                     fontSize: 12,
                     fontFamily: 'Arial',
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF5853FF),
+                    color: AppColors.teacherPrimary,
                     height: 1.0,
                   ),
                 ),
