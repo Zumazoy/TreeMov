@@ -1,32 +1,31 @@
-import '../../domain/entities/point_entity.dart';
 import '../../domain/entities/point_category_entity.dart';
 
 class MockPointsData {
   static final List<PointAction> pointActions = [
     PointAction(
       id: 'act1',
-      category: PointCategory.activity,
+      category: PointCategory.participation,
       title: 'Активность на занятии',
       description: 'проявлял интерес на занятии',
       points: 5,
     ),
     PointAction(
       id: 'act2',
-      category: PointCategory.activity,
+      category: PointCategory.participation,
       title: 'Хороший ответ/вопрос',
       description: 'Включен в дискуссию',
       points: 3,
     ),
     PointAction(
       id: 'act3',
-      category: PointCategory.activity,
+      category: PointCategory.participation,
       title: 'Помощь другу',
       description: 'Помог товарищу',
       points: 4,
     ),
     PointAction(
       id: 'act4',
-      category: PointCategory.activity,
+      category: PointCategory.participation,
       title: 'Пассивность',
       description: 'Игнорировал задания',
       points: -2,
@@ -68,21 +67,21 @@ class MockPointsData {
     ),
     PointAction(
       id: 'ach1',
-      category: PointCategory.achievement,
+      category: PointCategory.achievements,
       title: 'Победа в конкурсе',
       description: 'Занял 1 место',
       points: 10,
     ),
     PointAction(
       id: 'ach2',
-      category: PointCategory.achievement,
+      category: PointCategory.achievements,
       title: 'Призовое место',
       description: 'Занял призовое место',
       points: 7,
     ),
     PointAction(
       id: 'ach3',
-      category: PointCategory.achievement,
+      category: PointCategory.achievements,
       title: 'Участие в конкурсе',
       description: 'Был участником конкурса',
       points: 3,
@@ -124,94 +123,7 @@ class MockPointsData {
     ),
   ];
 
-  static final List<PointEntity> mockPointsHistory = [
-    PointEntity(
-      id: '1',
-      studentId: '1',
-      studentName: 'Иван Петров',
-      points: 5,
-      category: PointCategory.activity,
-      actionTitle: 'Активность на занятии',
-      reason: 'проявлял интерес на занятии',
-      date: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    PointEntity(
-      id: '2',
-      studentId: '1',
-      studentName: 'Иван Петров',
-      points: -2,
-      category: PointCategory.activity,
-      actionTitle: 'Пассивность',
-      reason: 'Игнорировал задания',
-      date: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-  ];
-
-  static final List<StudentWithPoints> mockStudentsWithPoints = [
-    StudentWithPoints(
-      studentId: '1',
-      fullName: 'Иван Петров',
-      totalPoints: 265,
-      attendancePercentage: 0.85,
-    ),
-    StudentWithPoints(
-      studentId: '2',
-      fullName: 'Мария Сидорова',
-      totalPoints: 240,
-      attendancePercentage: 0.92,
-    ),
-    StudentWithPoints(
-      studentId: '3',
-      fullName: 'Алексей Иванов',
-      totalPoints: 255,
-      attendancePercentage: 0.78,
-    ),
-    StudentWithPoints(
-      studentId: '4',
-      fullName: 'Екатерина Смирнова',
-      totalPoints: 230,
-      attendancePercentage: 0.95,
-    ),
-  ];
-
   static List<PointAction> getActionsByCategory(PointCategory category) {
     return pointActions.where((action) => action.category == category).toList();
   }
-}
-
-class StudentWithPoints {
-  final String studentId;
-  final String fullName;
-  final String? avatarUrl;
-  final int totalPoints;
-  final double attendancePercentage;
-
-  StudentWithPoints({
-    required this.studentId,
-    required this.fullName,
-    this.avatarUrl,
-    required this.totalPoints,
-    required this.attendancePercentage,
-  });
-}
-
-class GroupEntity {
-  final String id;
-  final String name;
-  final int studentCount;
-
-  GroupEntity({
-    required this.id,
-    required this.name,
-    required this.studentCount,
-  });
-}
-
-class MockGroupsData {
-  static final List<GroupEntity> groups = [
-    GroupEntity(id: '1', name: 'Физика', studentCount: 25),
-    GroupEntity(id: '2', name: 'Технология', studentCount: 23),
-    GroupEntity(id: '3', name: 'Математика', studentCount: 28),
-    GroupEntity(id: '4', name: 'Робототехника', studentCount: 24),
-  ];
 }

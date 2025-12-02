@@ -4,12 +4,37 @@ import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
+import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
 
 class SharedRemoteDataSource {
   final DioClient _dioClient;
 
   SharedRemoteDataSource(this._dioClient);
+
+  Future<TeacherProfileResponseModel> getMyTeacherProfile() async {
+    try {
+      final Response response = await _dioClient.get(
+        ApiConstants.employersP + ApiConstants.myTeacherProfile,
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+
+        if (responseData is Map<String, dynamic>) {
+          return TeacherProfileResponseModel.fromJson(responseData);
+        } else {
+          throw Exception(
+            'Некорректный формат ответа от сервера:\n$responseData',
+          );
+        }
+      } else {
+        throw Exception('Ошибка сервера: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Ошибка загрузки моего препод. профиля: $e');
+    }
+  }
 
   Future<int?> getTeacherId() async {
     try {

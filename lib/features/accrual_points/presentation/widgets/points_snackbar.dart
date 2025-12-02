@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
+
 import '../../../../core/themes/app_colors.dart';
 import '../../domain/entities/point_category_entity.dart';
-import '../../data/mocks/mock_points_data.dart';
 
 class PointsSnackBar {
   static void show({
     required BuildContext context,
-    required StudentWithPoints student,
+    required StudentEntity student,
     required PointAction action,
   }) {
     final isPositive = action.points > 0;

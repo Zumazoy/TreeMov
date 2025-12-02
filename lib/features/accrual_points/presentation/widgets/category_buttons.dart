@@ -20,7 +20,7 @@ class CategoryButtons extends StatelessWidget {
           children: [
             Expanded(
               child: _buildCategoryButton(
-                category: PointCategory.activity,
+                category: PointCategory.participation,
                 label: 'Участие',
                 iconPath: 'assets/images/team_icon.png',
               ),
@@ -40,7 +40,7 @@ class CategoryButtons extends StatelessWidget {
           children: [
             Expanded(
               child: _buildCategoryButton(
-                category: PointCategory.achievement,
+                category: PointCategory.achievements,
                 label: 'Достижения',
                 iconPath: 'assets/images/achievement_icon.png',
               ),

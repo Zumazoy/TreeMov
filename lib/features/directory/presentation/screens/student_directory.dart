@@ -5,6 +5,7 @@ import 'package:treemov/features/directory/presentation/widgets/search_field.dar
 import 'package:treemov/features/directory/presentation/widgets/student_item.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/student_response_model.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
 import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../../core/themes/app_colors.dart';
@@ -28,32 +29,52 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<StudentResponseModel> _filteredStudents = [];
 
+  List<StudentResponseModel> _getSortedStudents(
+    List<StudentResponseModel> students,
+  ) {
+    // Сортировка по фамилии, затем по имени
+    students.sort((a, b) {
+      final aSurname = a.surname ?? '';
+      final bSurname = b.surname ?? '';
+      final aName = a.name ?? '';
+      final bName = b.name ?? '';
+
+      final surnameCompare = aSurname.toLowerCase().compareTo(
+        bSurname.toLowerCase(),
+      );
+      if (surnameCompare != 0) return surnameCompare;
+      return aName.toLowerCase().compareTo(bName.toLowerCase());
+    });
+    return students;
+  }
+
   @override
   void initState() {
     super.initState();
-    _filteredStudents = widget.group.students;
+    _filteredStudents = _getSortedStudents(widget.group.students);
   }
 
   void _onSearchChanged(String query) {
     setState(() {
       if (query.isEmpty) {
-        _filteredStudents = widget.group.students;
+        _filteredStudents = _getSortedStudents(widget.group.students);
       } else {
-        _filteredStudents = widget.group.students.where((student) {
-          final fullName = '${student.name} ${student.surname}'.toLowerCase();
-          return fullName.contains(query.toLowerCase());
-        }).toList();
+        _filteredStudents = _getSortedStudents(
+          widget.group.students.where((student) {
+            final fullName = '${student.name} ${student.surname}'.toLowerCase();
+            return fullName.contains(query.toLowerCase());
+          }).toList(),
+        );
       }
     });
   }
 
-  void _onStudentTap(StudentResponseModel student) {
-    final studentEntity = student.toEntity();
+  void _onStudentTap(StudentEntity student) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => StudentProfileScreen(
-          student: studentEntity,
+          student: student,
           groupName: widget.group.name ?? 'Группа',
           allGroups: widget.allGroups,
         ),
@@ -125,7 +146,7 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
                         (student) => StudentItem(
                           student: student.toEntity(),
                           groupName: widget.group.name ?? 'Группа',
-                          onTap: () => _onStudentTap(student),
+                          onTap: () => _onStudentTap(student.toEntity()),
                         ),
                       ),
                     ],

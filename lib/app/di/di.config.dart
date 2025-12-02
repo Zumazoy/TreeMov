@@ -1,5 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/features/accrual_points/data/datasources/accrual_remote_data_source.dart';
+import 'package:treemov/features/accrual_points/data/repositories/accrual_repository_impl.dart';
+import 'package:treemov/features/accrual_points/domain/repositories/accrual_repository.dart';
+import 'package:treemov/features/accrual_points/presentation/bloc/accrual_bloc.dart';
 import 'package:treemov/features/authorization/data/datasources/auth_remote_data_source.dart';
 import 'package:treemov/features/authorization/data/repositories/auth_repository_impl.dart';
 import 'package:treemov/features/authorization/data/repositories/auth_storage_repository_impl.dart';
@@ -44,6 +48,9 @@ void setupDependencies() {
   getIt.registerSingleton<SharedRemoteDataSource>(
     SharedRemoteDataSource(getIt<DioClient>()),
   );
+  getIt.registerSingleton<AccrualRemoteDataSource>(
+    AccrualRemoteDataSource(getIt<DioClient>()),
+  );
   getIt.registerSingleton<TeacherNotesRemoteDataSource>(
     TeacherNotesRemoteDataSource(getIt<DioClient>()),
   );
@@ -60,6 +67,9 @@ void setupDependencies() {
   );
   getIt.registerSingleton<SharedRepository>(
     SharedRepositoryImpl(getIt<SharedRemoteDataSource>()),
+  );
+  getIt.registerSingleton<AccrualRepository>(
+    AccrualRepositoryImpl(getIt<AccrualRemoteDataSource>()),
   );
   getIt.registerSingleton<TeacherNotesRepository>(
     TeacherNotesRepositoryImpl(getIt<TeacherNotesRemoteDataSource>()),
@@ -89,5 +99,9 @@ void setupDependencies() {
       getIt<TeacherNotesRepository>(),
       getIt<LocalNotesRepository>(),
     ),
+  );
+
+  getIt.registerFactory<AccrualBloc>(
+    () => AccrualBloc(getIt<SharedRepository>(), getIt<AccrualRepository>()),
   );
 }

@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/point_category_entity.dart';
-import '../widgets/category_buttons.dart';
-import '../widgets/student_header.dart';
-import '../widgets/custom_action_form.dart';
-import '../../data/mocks/mock_points_data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/features/accrual_points/data/models/accrual_request_model.dart';
+import 'package:treemov/features/accrual_points/presentation/bloc/accrual_bloc.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
+
 import '../../../../core/themes/app_colors.dart';
+import '../../data/mocks/mock_points_data.dart';
+import '../../domain/entities/point_category_entity.dart';
+import 'category_buttons.dart';
+import 'custom_action_form.dart';
+import 'student_header.dart';
 
 class ActionSelectionDialog extends StatefulWidget {
-  final StudentWithPoints student;
+  final StudentEntity student;
+  final AccrualBloc accrualBloc;
 
-  const ActionSelectionDialog({super.key, required this.student});
+  const ActionSelectionDialog({
+    super.key,
+    required this.student,
+    required this.accrualBloc,
+  });
 
   @override
   State<ActionSelectionDialog> createState() => _ActionSelectionDialogState();
@@ -20,11 +30,33 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
   PointAction? _selectedAction;
   List<PointAction> _currentActions = [];
   bool _showCustomAction = false;
+  int? _teacherProfileId;
+  bool _isLoadingProfile = false;
 
   @override
   void initState() {
     super.initState();
     _updateActions();
+
+    // Загружаем ID профиля учителя при инициализации диалога
+    _loadTeacherProfileId();
+  }
+
+  void _loadTeacherProfileId() {
+    setState(() {
+      _isLoadingProfile = true;
+    });
+
+    // Проверяем, есть ли уже загруженный ID в BLoC
+    if (widget.accrualBloc.teacherProfileId != null) {
+      setState(() {
+        _teacherProfileId = widget.accrualBloc.teacherProfileId;
+        _isLoadingProfile = false;
+      });
+    } else {
+      // Если нет, загружаем
+      widget.accrualBloc.add(LoadTeacherProfileId());
+    }
   }
 
   void _updateActions() {
@@ -83,49 +115,82 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
     Navigator.of(context).pop();
   }
 
-  void _onConfirm() {
+  void _createAccrual() {
     if (_selectedAction != null) {
+      if (_teacherProfileId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Загрузка профиля учителя...'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        return;
+      }
+
+      // Создаем AccrualRequestModel
+      final request = AccrualRequestModel(
+        teacherProfile: _teacherProfileId!,
+        student: widget.student.id ?? 0,
+        amount: _selectedAction!.points,
+        category: _selectedAction!.category.name,
+        comment: _selectedAction!.title,
+      );
+
+      // Отправляем событие с request моделью
+      widget.accrualBloc.add(CreateAccrual(request));
+
+      // Закрываем диалог и передаем действие для показа снекбара
       Navigator.of(context).pop(_selectedAction);
     }
   }
 
+  Widget _buildLoadingState() {
+    return const Center(child: CircularProgressIndicator());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: AppColors.notesBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            StudentHeader(student: widget.student, onClose: _onClose),
+    return BlocListener<AccrualBloc, AccrualState>(
+      bloc: widget.accrualBloc,
+      listener: (context, state) {
+        if (state is TeacherProfileIdLoaded) {
+          setState(() {
+            _teacherProfileId = state.teacherProfileId;
+            _isLoadingProfile = false;
+          });
+        } else if (state is AccrualError) {
+          setState(() {
+            _isLoadingProfile = false;
+          });
 
-            const SizedBox(height: 16),
-
-            const Text(
-              'Категория:',
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w400,
-                color: AppColors.directoryTextSecondary,
-                height: 1.0,
-              ),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Ошибка: ${state.message}'),
+              backgroundColor: Colors.red,
             ),
-            const SizedBox(height: 8),
+          );
+        }
+      },
+      child: Dialog(
+        backgroundColor: AppColors.notesBackground,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              StudentHeader(student: widget.student, onClose: _onClose),
 
-            CategoryButtons(
-              selectedCategory: _selectedCategory,
-              onCategorySelected: _onCategorySelected,
-            ),
+              const SizedBox(height: 16),
 
-            const SizedBox(height: 16),
+              if (_isLoadingProfile) ...[
+                _buildLoadingState(),
+                const SizedBox(height: 16),
+              ],
 
-            if (_selectedCategory != null && !_showCustomAction) ...[
               const Text(
-                'Действие:',
+                'Категория:',
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'Arial',
@@ -136,20 +201,41 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
               ),
               const SizedBox(height: 8),
 
-              _buildActionsList(),
-            ],
-
-            if (_showCustomAction) ...[
-              CustomActionForm(
-                onSave: _onSaveCustomAction,
-                onCancel: _onCancelCustomAction,
+              CategoryButtons(
+                selectedCategory: _selectedCategory,
+                onCategorySelected: _onCategorySelected,
               ),
+
+              const SizedBox(height: 16),
+
+              if (_selectedCategory != null && !_showCustomAction) ...[
+                const Text(
+                  'Действие:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Arial',
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.directoryTextSecondary,
+                    height: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 8),
+
+                _buildActionsList(),
+              ],
+
+              if (_showCustomAction) ...[
+                CustomActionForm(
+                  onSave: _onSaveCustomAction,
+                  onCancel: _onCancelCustomAction,
+                ),
+              ],
+
+              const SizedBox(height: 16),
+
+              _buildConfirmationButtons(),
             ],
-
-            const SizedBox(height: 16),
-
-            _buildConfirmationButtons(),
-          ],
+          ),
         ),
       ),
     );
@@ -289,6 +375,13 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
   }
 
   Widget _buildConfirmationButtons() {
+    final isButtonDisabled = _selectedAction == null || _isLoadingProfile;
+    final buttonText = _isLoadingProfile
+        ? 'Загрузка...'
+        : _selectedAction == null
+        ? 'Выберите действие'
+        : 'Подтвердить ${_selectedAction!.points > 0 ? '+' : ''}${_selectedAction!.points}';
+
     return Row(
       children: [
         Expanded(
@@ -315,9 +408,9 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
         const SizedBox(width: 8),
         Expanded(
           child: ElevatedButton(
-            onPressed: _selectedAction == null ? null : _onConfirm,
+            onPressed: isButtonDisabled ? null : _createAccrual,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _selectedAction == null
+              backgroundColor: isButtonDisabled
                   ? AppColors.lightGrey
                   : const Color(0xFFDC2626),
               foregroundColor: AppColors.white,
@@ -327,9 +420,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
               ),
             ),
             child: Text(
-              _selectedAction == null
-                  ? 'Выберите действие'
-                  : 'Подтвердить ${_selectedAction!.points > 0 ? '+' : ''}${_selectedAction!.points}',
+              buttonText,
               style: const TextStyle(
                 fontFamily: 'Arial',
                 fontWeight: FontWeight.w400,

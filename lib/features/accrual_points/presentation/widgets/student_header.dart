@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../widgets/student_avatar.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
+
 import '../../../../core/themes/app_colors.dart';
-import '../../data/mocks/mock_points_data.dart';
+import 'student_avatar.dart';
 
 class StudentHeader extends StatelessWidget {
-  final StudentWithPoints student;
+  final StudentEntity student;
   final VoidCallback onClose;
 
   const StudentHeader({
@@ -23,14 +24,14 @@ class StudentHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          StudentAvatar(avatarUrl: student.avatarUrl, size: 40),
+          StudentAvatar(avatarUrl: student.avatar, size: 40),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  student.fullName,
+                  '${student.name} ${student.surname}',
                   style: const TextStyle(
                     fontSize: 14,
                     fontFamily: 'Arial',
@@ -50,7 +51,7 @@ class StudentHeader extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      '${student.totalPoints} баллов',
+                      '${student.score} баллов',
                       style: const TextStyle(
                         fontSize: 12,
                         fontFamily: 'Arial',

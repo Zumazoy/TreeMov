@@ -1,8 +1,8 @@
 enum PointCategory {
+  participation('Участие'),
   behavior('Поведение'),
-  activity('Активность'),
-  homework('Домашняя работа'),
-  achievement('Достижения');
+  achievements('Достижения'),
+  homework('Домашнее задание');
 
   final String displayName;
 

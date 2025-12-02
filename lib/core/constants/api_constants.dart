@@ -20,7 +20,9 @@ class ApiConstants {
   static const String periodLessons = 'period_lessons/';
 
   static const String studentGroups = 'student_groups/';
+  static const String accruals = 'accruals/';
 
   static const String teachers = 'teachers/';
   static const String teacherNotes = 'teacher_notes/';
+  static const String myTeacherProfile = 'teacher_profile/me/';
 }
