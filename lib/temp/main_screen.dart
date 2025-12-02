@@ -3,6 +3,7 @@ import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/directory/presentation/screens/directory_screen.dart';
 import 'package:treemov/features/profile/presentation/screens/profile_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
+import 'package:treemov/features/points/presentation/screens/groups_list_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final int initialIndex;
@@ -18,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     const CalendarScreen(),
-    Center(child: Text('Заглушка рейтинга', style: TextStyle(fontSize: 20))),
+    const GroupsListScreen(),
     const DirectoryScreen(),
     const ProfileScreen(),
   ];
