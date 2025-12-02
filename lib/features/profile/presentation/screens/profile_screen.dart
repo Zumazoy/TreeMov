@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/widgets/auth/logout_dialog.dart';
 
 import '../../../../core/themes/app_colors.dart';
@@ -31,6 +32,7 @@ class ProfileScreen extends StatelessWidget {
             },
             onSettings: () {
               Navigator.pop(context);
+              Navigator.pushNamed(context, AppRoutes.settings);
               // настройки
             },
             onLogout: () {
