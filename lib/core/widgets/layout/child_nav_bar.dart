@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../themes/app_colors.dart';
 
-class CustomBottomNavigationBar extends StatelessWidget {
+class ChildBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  const CustomBottomNavigationBar({
+  const ChildBottomNavigationBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
@@ -38,19 +38,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
           gradient: selectedGradient,
         ),
         _buildNavItem(
-          iconPath: 'assets/images/stars_filled_icon.png',
+          iconPath: 'assets/images/leaderboard_icon.png',
           isSelected: currentIndex == 1,
           unselectedColor: unselectedColor,
           gradient: selectedGradient,
         ),
         _buildNavItem(
-          iconPath: 'assets/images/idcard_icon.png',
+          iconPath: 'assets/images/shop_icon.png',
           isSelected: currentIndex == 2,
           unselectedColor: unselectedColor,
           gradient: selectedGradient,
         ),
         _buildNavItem(
-          iconPath: 'assets/images/person_icon.png',
+          iconPath: 'assets/images/tree_profile.png',
           isSelected: currentIndex == 3,
           unselectedColor: unselectedColor,
           gradient: selectedGradient,
