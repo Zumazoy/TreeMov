@@ -382,6 +382,18 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
         ? 'Выберите действие'
         : 'Подтвердить ${_selectedAction!.points > 0 ? '+' : ''}${_selectedAction!.points}';
 
+    // Определяем цвет кнопки в зависимости от количества баллов
+    Color buttonColor;
+    if (isButtonDisabled) {
+      buttonColor = AppColors.lightGrey;
+    } else if (_selectedAction!.points > 0) {
+      buttonColor = Colors.green;
+    } else if (_selectedAction!.points < 0) {
+      buttonColor = const Color(0xFFDC2626);
+    } else {
+      buttonColor = AppColors.teacherPrimary;
+    }
+
     return Row(
       children: [
         Expanded(
@@ -410,9 +422,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
           child: ElevatedButton(
             onPressed: isButtonDisabled ? null : _createAccrual,
             style: ElevatedButton.styleFrom(
-              backgroundColor: isButtonDisabled
-                  ? AppColors.lightGrey
-                  : const Color(0xFFDC2626),
+              backgroundColor: buttonColor,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(vertical: 12),
               shape: RoundedRectangleBorder(
@@ -423,7 +433,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
               buttonText,
               style: const TextStyle(
                 fontFamily: 'Arial',
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
