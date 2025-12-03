@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
-  const ProfileHeaderCard({super.key});
+  final TeacherProfileResponseModel teacherProfile;
+
+  const ProfileHeaderCard({super.key, required this.teacherProfile});
+
+  String _getFullName() {
+    final employer = teacherProfile.teacher?.employer;
+    if (employer == null) return 'Не указано';
+
+    final parts = [
+      employer.surname,
+      employer.name,
+      employer.patronymic,
+    ].where((part) => part != null && part.isNotEmpty).toList();
+
+    return parts.join(' ');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,32 +39,33 @@ class ProfileHeaderCard extends StatelessWidget {
               color: AppColors.teacherPrimary.withAlpha(51),
               border: Border.all(color: AppColors.teacherPrimary, width: 1.5),
             ),
-            child: const Center(
-              child: Text(
-                'ЕП',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.teacherPrimary,
-                ),
-              ),
+            child: CircleAvatar(
+              radius: 36,
+              backgroundColor: AppColors.directoryAvatarBackground,
+              child: teacherProfile.teacher?.employer.inn != null
+                  ? Image.network(teacherProfile.teacher!.employer.inn!)
+                  : Icon(
+                      Icons.person,
+                      size: 32,
+                      color: AppColors.teacherPrimary,
+                    ),
             ),
           ),
           const SizedBox(width: 12),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Елена Ивановна Петрова',
-                style: TextStyle(
+                _getFullName(),
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.notesDarkText,
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
-                'Преподаватель по робототехнике',
+                teacherProfile.teacher?.employer.email ?? 'Заглушка должности',
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.directoryTextSecondary,

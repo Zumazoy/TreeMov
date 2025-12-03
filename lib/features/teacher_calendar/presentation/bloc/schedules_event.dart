@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/lesson_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
+import 'package:treemov/shared/data/models/lesson_request_model.dart';
 
 abstract class ScheduleEvent extends Equatable {
   const ScheduleEvent();

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
-import 'package:treemov/features/teacher_calendar/data/models/lesson_response_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/test_schedule_update_screen.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
 class TestScheduleScreen extends StatelessWidget {
   const TestScheduleScreen({super.key});

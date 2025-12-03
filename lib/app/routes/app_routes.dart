@@ -4,7 +4,6 @@ import 'package:treemov/features/authorization/presentation/screens/entrance_kid
 import 'package:treemov/features/authorization/presentation/screens/entrance_teacher_screen.dart';
 import 'package:treemov/features/authorization/presentation/screens/test_token_screen.dart';
 import 'package:treemov/features/kid_calendar/presentation/screens/calendar_kid.dart';
-import 'package:treemov/features/profile/presentation/screens/settings_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/kid_info_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/parent_info_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/registration_screen.dart';
@@ -37,8 +36,6 @@ class AppRoutes {
   static const String testToken = '/test_token';
   static const String testSchedule = '/test_schedule';
 
-  static const String settings = '/settings';
-
   static final Map<String, WidgetBuilder> routes = {
     home: (context) => AuthCheckerFeature.createAuthChecker(),
     entrance: (context) => AuthCheckerFeature.createEntranceScreen(),
@@ -54,6 +51,5 @@ class AppRoutes {
     testHome: (context) => HomeScreen(),
     testToken: (context) => TokenTestScreen(),
     testSchedule: (context) => TestScheduleScreen(),
-    settings: (context) => const SettingsScreen(),
   };
 }

@@ -7,10 +7,10 @@ import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_st
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
-  final ScheduleRepository _repository;
+  final ScheduleRepository _scheduleRepository;
   final SharedRepository _sharedRepository;
 
-  SchedulesBloc(this._repository, this._sharedRepository)
+  SchedulesBloc(this._scheduleRepository, this._sharedRepository)
     : super(ScheduleInitial()) {
     on<LoadLessonsEvent>(_onLoadLessons);
     on<LoadLessonByIdEvent>(_onLoadLessonById);
@@ -27,7 +27,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
   ) async {
     emit(ScheduleLoading());
     try {
-      final lessons = await _repository.getLessons();
+      final lessons = await _sharedRepository.getLessons();
       emit(LessonsLoaded(lessons));
     } catch (e) {
       emit(LessonError('Ошибка загрузки расписания: $e'));
@@ -40,7 +40,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
   ) async {
     emit(ScheduleLoading());
     try {
-      final lesson = await _repository.getLessonById(event.lessonId);
+      final lesson = await _scheduleRepository.getLessonById(event.lessonId);
       emit(LessonLoaded(lesson));
     } catch (e) {
       emit(LessonError('Ошибка загрузки занятия: $e'));
@@ -66,7 +66,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
   ) async {
     emit(ScheduleLoading());
     try {
-      await _repository.createLesson(event.request);
+      await _scheduleRepository.createLesson(event.request);
       emit(LessonOperationSuccess('Занятие успешно создано'));
       add(LoadLessonsEvent());
     } catch (e) {
@@ -80,7 +80,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
   ) async {
     emit(ScheduleLoading());
     try {
-      await _repository.createPeriodLesson(event.request);
+      await _scheduleRepository.createPeriodLesson(event.request);
       emit(LessonOperationSuccess('Периодическое занятие успешно создано'));
       add(LoadLessonsEvent());
     } catch (e) {
@@ -96,7 +96,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     try {
       // Отправляем все запросы последовательно
       for (final attendanceRequest in event.requests) {
-        await _repository.createAttendance(attendanceRequest);
+        await _scheduleRepository.createAttendance(attendanceRequest);
       }
       emit(AttendanceOperationSuccess('Посещаемость успешно сохранена'));
     } catch (e) {

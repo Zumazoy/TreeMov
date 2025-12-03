@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/widgets/auth/logout_dialog.dart';
-import 'package:treemov/features/profile/presentation/widgets/profile_header_card.dart';
-import 'package:treemov/features/profile/presentation/widgets/settings_nav_row.dart';
-import 'package:treemov/features/profile/presentation/widgets/settings_section_title.dart';
-import 'package:treemov/features/profile/presentation/widgets/settings_toggle_row.dart';
+import 'package:treemov/features/teacher_profile/presentation/widgets/profile_header_card.dart';
+import 'package:treemov/features/teacher_profile/presentation/widgets/settings_nav_row.dart';
+import 'package:treemov/features/teacher_profile/presentation/widgets/settings_section_title.dart';
+import 'package:treemov/features/teacher_profile/presentation/widgets/settings_toggle_row.dart';
+import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final TeacherProfileResponseModel teacherProfile;
+
+  const SettingsScreen({super.key, required this.teacherProfile});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -54,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.only(bottom: 24),
         children: [
           // 1. Профиль (Header)
-          const ProfileHeaderCard(),
+          ProfileHeaderCard(teacherProfile: widget.teacherProfile),
           const SizedBox(height: 16),
 
           // 2. Секция "Профиль"

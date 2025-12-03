@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
 
 import '../../../../core/themes/app_colors.dart';
-import '../../domain/entities/teacher_entity.dart';
 
 class ProfileHeader extends StatelessWidget {
-  final TeacherEntity teacher;
+  final TeacherProfileResponseModel teacherProfile;
 
-  const ProfileHeader({super.key, required this.teacher});
+  const ProfileHeader({super.key, required this.teacherProfile});
+
+  String _getFullName() {
+    final employer = teacherProfile.teacher?.employer;
+    if (employer == null) return 'Не указано';
+
+    final parts = [
+      employer.surname,
+      employer.name,
+      employer.patronymic,
+    ].where((part) => part != null && part.isNotEmpty).toList();
+
+    return parts.join(' ');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
       child: Row(
         children: [
           Container(
@@ -28,8 +41,8 @@ class ProfileHeader extends StatelessWidget {
             child: CircleAvatar(
               radius: 36,
               backgroundColor: AppColors.directoryAvatarBackground,
-              child: teacher.avatarUrl != null
-                  ? Image.network(teacher.avatarUrl!)
+              child: teacherProfile.teacher?.employer.inn != null
+                  ? Image.network(teacherProfile.teacher!.employer.inn!)
                   : Icon(
                       Icons.person,
                       size: 32,
@@ -44,7 +57,7 @@ class ProfileHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  teacher.fullName,
+                  _getFullName(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -54,7 +67,8 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  teacher.position,
+                  teacherProfile.teacher?.employer.email ??
+                      'Заглушка должности',
                   style: TextStyle(
                     fontSize: 14,
                     color: AppColors.directoryTextSecondary,

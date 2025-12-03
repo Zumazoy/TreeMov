@@ -1,15 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
+import 'package:treemov/temp/main_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
-import '../../domain/entities/daily_schedule_entity.dart';
 
 class DailyScheduleCard extends StatelessWidget {
-  final DailyScheduleEntity dailySchedule;
+  final List<LessonResponseModel> todayLessons;
 
-  const DailyScheduleCard({super.key, required this.dailySchedule});
+  const DailyScheduleCard({super.key, required this.todayLessons});
+
+  int get totalLessons => todayLessons.length;
+
+  LessonResponseModel? get nextLesson {
+    final now = DateTime.now();
+
+    // Фильтруем уроки, которые еще не начались или идут сейчас
+    final upcomingLessons = todayLessons.where((lesson) {
+      if (lesson.startTime == null) return false;
+
+      final lessonTimeParts = lesson.startTime!.split(':');
+      if (lessonTimeParts.length < 2) return false;
+
+      final lessonHour = int.tryParse(lessonTimeParts[0]) ?? 0;
+      final lessonMinute = int.tryParse(lessonTimeParts[1]) ?? 0;
+
+      final lessonDateTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        lessonHour,
+        lessonMinute,
+      );
+
+      return lessonDateTime.isAfter(now) ||
+          (lessonDateTime.isBefore(
+                now.add(
+                  Duration(
+                    minutes: lesson.duration != null
+                        ? int.tryParse(lesson.duration!) ?? 45
+                        : 45,
+                  ),
+                ),
+              ) &&
+              lessonDateTime.isAfter(now.subtract(const Duration(minutes: 5))));
+    }).toList();
+
+    if (upcomingLessons.isEmpty) return null;
+
+    // Находим ближайший урок
+    upcomingLessons.sort((a, b) {
+      if (a.startTime == null || b.startTime == null) return 0;
+      return a.startTime!.compareTo(b.startTime!);
+    });
+
+    return upcomingLessons.first;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final hasLessonsToday = todayLessons.isNotEmpty;
+    final nextLesson = this.nextLesson;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -45,31 +96,48 @@ class DailyScheduleCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                _buildScheduleItem(
-                  'assets/images/book_icon.png',
-                  '${dailySchedule.totalLessons} занятия сегодня',
-                  AppColors.statsTotalText,
-                  isNumberColored: true,
-                ),
-                const SizedBox(height: 12),
-                if (dailySchedule.nextLesson != null)
+
+                if (hasLessonsToday)
+                  _buildScheduleItem(
+                    'assets/images/book_icon.png',
+                    '$totalLessons ${_getLessonWord(totalLessons)} сегодня',
+                    AppColors.statsTotalText,
+                    isNumberColored: true,
+                  ),
+
+                if (!hasLessonsToday)
+                  _buildScheduleItem(
+                    'assets/images/book_icon.png',
+                    'Сегодня нет занятий',
+                    AppColors.statsTotalText,
+                  ),
+
+                if (hasLessonsToday) const SizedBox(height: 12),
+
+                if (nextLesson != null && hasLessonsToday)
                   _buildScheduleItem(
                     'assets/images/clock_icon.png',
-                    'Следующий: ${dailySchedule.nextLesson!.group} ${dailySchedule.nextLesson!.time}',
+                    'Следующий: ${nextLesson.group?.name ?? "Группа не указана"} ${_formatTimeRange(nextLesson)}',
                     AppColors.statsPinnedText,
                     isTimeColored: true,
                   ),
-                const SizedBox(height: 12),
-                for (final reminder in dailySchedule.reminders)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: _buildScheduleItem(
-                      'assets/images/bell_icon.png',
-                      'Напоминание: ${reminder.text} ${reminder.time}',
-                      AppColors.categoryGeneralText,
-                      isReminderColored: true,
-                    ),
+
+                if (nextLesson == null && hasLessonsToday)
+                  _buildScheduleItem(
+                    'assets/images/clock_icon.png',
+                    'Занятия на сегодня закончились',
+                    AppColors.statsPinnedText,
                   ),
+
+                const SizedBox(height: 12),
+
+                // Заглушка для напоминания
+                _buildScheduleItem(
+                  'assets/images/bell_icon.png',
+                  'Напоминание: Родительское собрание 17:00',
+                  AppColors.categoryGeneralText,
+                  isReminderColored: true,
+                ),
               ],
             ),
           ),
@@ -78,34 +146,63 @@ class DailyScheduleCard extends StatelessWidget {
             height: 1,
             color: AppColors.teacherPrimary,
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Нажмите для просмотра расписания',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF5853FF),
-                    height: 1.0,
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const MainScreen(initialIndex: 0),
+                ),
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Нажмите для просмотра расписания',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Arial',
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF5853FF),
+                      height: 1.0,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Image.asset(
-                  'assets/images/purple_arrow.png',
-                  width: 16,
-                  height: 16,
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Image.asset(
+                    'assets/images/purple_arrow.png',
+                    width: 16,
+                    height: 16,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _getLessonWord(int count) {
+    if (count % 10 == 1 && count % 100 != 11) return 'занятие';
+    if (count % 10 >= 2 &&
+        count % 10 <= 4 &&
+        (count % 100 < 10 || count % 100 >= 20)) {
+      return 'занятия';
+    }
+    return 'занятий';
+  }
+
+  String _formatTimeRange(LessonResponseModel lesson) {
+    if (lesson.startTime == null || lesson.endTime == null) {
+      return lesson.formattedTimeRange;
+    }
+
+    final start = lesson.formatTime(lesson.startTime!);
+    final end = lesson.formatTime(lesson.endTime!);
+    return '$start–$end';
   }
 
   Widget _buildScheduleItem(

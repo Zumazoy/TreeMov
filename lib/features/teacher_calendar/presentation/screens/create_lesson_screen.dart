@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:treemov/features/teacher_calendar/data/models/lesson_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
+import 'package:treemov/shared/data/models/lesson_request_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
+import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 import '../../../../core/themes/app_colors.dart';
@@ -72,14 +73,15 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
         widget.sharedRepository.getStudentGroups(),
         widget.sharedRepository.getSubjects(),
         widget.sharedRepository.getClassrooms(),
-        widget.sharedRepository.getTeacherId(),
+        widget.sharedRepository.getMyTeacherProfile(),
       ]);
 
       setState(() {
         _groups = results[0] as List<StudentGroupResponseModel>;
         _subjects = results[1] as List<SubjectResponseModel>;
         _classrooms = results[2] as List<ClassroomResponseModel>;
-        _teacherId = results[3] as int?;
+        final teacherProfile = results[3] as TeacherProfileResponseModel;
+        _teacherId = teacherProfile.teacher?.id ?? 0;
 
         // Устанавливаем значения по умолчанию
         if (_groups.isNotEmpty) {

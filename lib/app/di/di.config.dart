@@ -22,6 +22,7 @@ import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remo
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_profile/presentation/bloc/teacher_profile_bloc.dart';
 import 'package:treemov/shared/data/datasources/shared_remote_data_source.dart';
 import 'package:treemov/shared/data/repositories/shared_repository_impl.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
@@ -103,5 +104,9 @@ void setupDependencies() {
 
   getIt.registerFactory<AccrualBloc>(
     () => AccrualBloc(getIt<SharedRepository>(), getIt<AccrualRepository>()),
+  );
+
+  getIt.registerFactory<TeacherProfileBloc>(
+    () => TeacherProfileBloc(getIt<SharedRepository>()),
   );
 }

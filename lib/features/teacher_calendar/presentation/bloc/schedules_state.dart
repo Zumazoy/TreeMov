@@ -1,4 +1,4 @@
-import 'package:treemov/features/teacher_calendar/data/models/lesson_response_model.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 
 abstract class ScheduleState {

@@ -1,47 +1,16 @@
-import 'package:dio/dio.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/lesson_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/lesson_response_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_lesson_response_model.dart';
+import 'package:treemov/shared/data/models/lesson_request_model.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
 class ScheduleRemoteDataSource {
   final DioClient _dioClient;
 
   ScheduleRemoteDataSource(this._dioClient);
-
-  Future<List<LessonResponseModel>> getLessons() async {
-    try {
-      final Response response = await _dioClient.get(
-        ApiConstants.scheduleP + ApiConstants.lessons,
-      );
-
-      if (response.statusCode == 200) {
-        final responseData = response.data;
-
-        if (responseData is List) {
-          // Если ответ - массив занятий
-          return responseData
-              .map<LessonResponseModel>(
-                (json) => LessonResponseModel.fromJson(json),
-              )
-              .toList();
-        } else if (responseData is Map<String, dynamic>) {
-          // Если ответ - одиночное занятие (оборачиваем в список)
-          return [LessonResponseModel.fromJson(responseData)];
-        } else {
-          throw Exception('Некорректный формат ответа от сервера');
-        }
-      } else {
-        throw Exception('Ошибка сервера: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Ошибка загрузки расписания: $e');
-    }
-  }
 
   Future<LessonResponseModel> getLessonById(int scheduleId) async {
     try {

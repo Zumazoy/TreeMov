@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:treemov/features/teacher_calendar/data/models/lesson_response_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
 class ScheduleUpdateScreen extends StatefulWidget {
   final int scheduleId;
