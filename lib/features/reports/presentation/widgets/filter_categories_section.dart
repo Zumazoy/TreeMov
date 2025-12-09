@@ -54,7 +54,7 @@ class ReportFilterCategoriesSection extends StatelessWidget {
                 const SizedBox(height: 8),
             ],
           );
-        }),
+        }).toList(),
       ],
     );
   }
@@ -125,11 +125,14 @@ class _ReportCategoryItem extends StatelessWidget {
                 ),
               ),
               child: isSelected
-                  ? const Center(
-                      child: Icon(
-                        Icons.circle,
-                        size: 10,
-                        color: AppColors.teacherPrimary,
+                  ? Center(
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.teacherPrimary,
+                        ),
                       ),
                     )
                   : null,

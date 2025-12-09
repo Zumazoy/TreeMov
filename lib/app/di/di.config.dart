@@ -14,6 +14,11 @@ import 'package:treemov/features/notes/domain/repositories/local_notes_repositor
 import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository.dart';
 import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository_impl.dart';
 import 'package:treemov/features/notes/presentation/blocs/notes/notes_bloc.dart';
+import 'package:treemov/features/reports/data/repositories/attendance_report_parser.dart';
+import 'package:treemov/features/reports/data/repositories/excel_report_generator.dart';
+import 'package:treemov/features/reports/domain/repositories/reports_repository.dart';
+import 'package:treemov/features/reports/domain/repositories/reports_repository_impl.dart';
+import 'package:treemov/features/reports/presentation/blocs/reports/reports_bloc.dart';
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
@@ -89,5 +94,20 @@ void setupDependencies() {
       getIt<TeacherNotesRepository>(),
       getIt<LocalNotesRepository>(),
     ),
+  );
+
+  // --- Отчеты ---
+  getIt.registerSingleton<AttendanceReportParser>(AttendanceReportParser());
+  getIt.registerSingleton<ExcelReportGenerator>(ExcelReportGenerator());
+
+  getIt.registerSingleton<ReportsRepository>(
+    ReportsRepositoryImpl(
+      getIt<AttendanceReportParser>(),
+      getIt<ExcelReportGenerator>(),
+    ),
+  );
+
+  getIt.registerFactory<ReportsBloc>(
+    () => ReportsBloc(getIt<ReportsRepository>()),
   );
 }
