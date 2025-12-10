@@ -18,19 +18,35 @@ enum ReportPeriod {
 }
 
 class ReportCreationModal extends StatefulWidget {
-  final VoidCallback onReportCreated;
+  // Добавлены параметры для передачи в BLoC
+  final Function(
+    ReportType type,
+    ReportPeriod periodType,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool includeGraphs,
+    bool includeDetails,
+  )
+  onReportCreated;
 
   const ReportCreationModal({super.key, required this.onReportCreated});
 
   static Future<void> show({
     required BuildContext context,
-    required VoidCallback onReportCreated,
+    required Function(
+      ReportType type,
+      ReportPeriod periodType,
+      DateTime? startDate,
+      DateTime? endDate,
+      bool includeGraphs,
+      bool includeDetails,
+    )
+    onReportCreated,
   }) {
     return showDialog(
       context: context,
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
-        // Удаляем фиксированный отступ, чтобы модальное окно могло быть выше
         insetPadding: const EdgeInsets.symmetric(horizontal: 20),
         child: ReportCreationModal(onReportCreated: onReportCreated),
       ),
@@ -62,7 +78,22 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
   }
 
   void _createReport() {
-    widget.onReportCreated();
+    // Определяем даты для отправки в BLoC
+    DateTime? finalStartDate = _selectedPeriod == ReportPeriod.custom
+        ? _startDate
+        : null;
+    DateTime? finalEndDate = _selectedPeriod == ReportPeriod.custom
+        ? _endDate
+        : null;
+
+    widget.onReportCreated(
+      _selectedReportType!,
+      _selectedPeriod,
+      finalStartDate,
+      finalEndDate,
+      _includeGraphs,
+      _includeDetails,
+    );
     Navigator.of(context).pop();
   }
 
@@ -100,7 +131,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
   }
 
   String _formatDate(DateTime date) {
-    // Формат даты, как в макете: "14-апреля-2025"
     final months = {
       1: 'января',
       2: 'февраля',
@@ -120,7 +150,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
 
   @override
   Widget build(BuildContext context) {
-    // Задаем максимальную высоту, чтобы контент помещался (до 90% экрана)
     final screenHeight = MediaQuery.of(context).size.height;
     final maxModalHeight = screenHeight * 0.9;
 
@@ -138,7 +167,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
           _buildHeader(),
           const SizedBox(height: 20),
 
-          // Flexible с SingleChildScrollView для предотвращения переполнения
           Flexible(
             child: SingleChildScrollView(
               child: _currentStep == 1 ? _buildStepOne() : _buildStepTwo(),
@@ -150,8 +178,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
       ),
     );
   }
-
-  // --- Виджеты построения шагов ---
 
   Widget _buildHeader() {
     return Row(
@@ -213,7 +239,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
   }
 
   Widget _buildStepTwo() {
-    // В зависимости от выбранного типа отчета, меняем заголовок
     String reportTitle;
     String reportDescription;
     IconData reportIcon;
@@ -243,7 +268,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Отображаем выбранный тип отчета сверху
         ReportSelectionCard(
           icon: reportIcon,
           title: reportTitle,
@@ -262,7 +286,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
         ),
         const SizedBox(height: 8),
 
-        // Выбор периода
         _buildPeriodOption(ReportPeriod.monthly, 'За месяц', 'Текущий месяц'),
         _buildPeriodOption(
           ReportPeriod.quarterly,
@@ -276,7 +299,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
         ),
         const SizedBox(height: 20),
 
-        // Выбор произвольного периода (если выбран)
         if (_selectedPeriod == ReportPeriod.custom)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,14 +324,12 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
         ),
         const SizedBox(height: 8),
 
-        // Включить графики (чекбокс)
         _buildCheckboxOption(
           'Включить графики',
           'Диаграммы и визуализация данных',
           _includeGraphs,
           (value) => setState(() => _includeGraphs = value),
         ),
-        // Детальная информация (чекбокс)
         _buildCheckboxOption(
           'Детальная информация',
           'Подробные данные по каждому ученику',
@@ -431,7 +451,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
         ),
         child: Row(
           children: [
-            // Иконка (имитация радио/чекбокса)
             Container(
               width: 20,
               height: 20,
@@ -477,7 +496,6 @@ class _ReportCreationModalState extends State<ReportCreationModal> {
   }
 
   Widget _buildFooter() {
-    // Проверяем, можно ли перейти вперед (для Step 1)
     final isStepOneComplete = _currentStep == 1 && _selectedReportType != null;
 
     return Padding(

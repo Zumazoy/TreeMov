@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+// NOTE: BLoC imports are assumed for this screen to be functional
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:treemov/app/di/di.config.dart';
+// import 'package:treemov/features/reports/presentation/blocs/reports/reports_bloc.dart';
+
 import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/features/reports/data/mocks/mock_reports_data.dart';
 import 'package:treemov/features/reports/domain/entities/report_entity.dart';
 import 'package:treemov/features/reports/presentation/widgets/report_creation_modal.dart';
-// import 'package:treemov/features/reports/presentation/widgets/filter_categories_section.dart';
-// import 'package:treemov/features/reports/presentation/widgets/filter_quick_section.dart';
 import 'package:treemov/features/reports/presentation/widgets/report_filter_modal.dart';
 import 'package:treemov/features/reports/presentation/widgets/report_item.dart';
 import 'package:treemov/features/reports/presentation/widgets/reports_stats.dart';
@@ -37,19 +40,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   List<ReportEntity> get _filteredReports {
-    List<ReportEntity> filtered = _reports.where((report) {
+    return _reports.where((report) {
       final matchesFilter =
           _selectedFilter == 'Все отчеты' ||
-          (_selectedFilter == 'Успеваемость' &&
-              report.title.contains('Успеваемость')) ||
-          (_selectedFilter == 'Посещаемость' &&
-              report.title.contains('Посещаемость')) ||
-          (_selectedFilter == 'Рейтинг' && report.title.contains('Рейтинг'));
-
+          (report.title.contains('Успеваемость') &&
+              _selectedFilter == 'Успеваемость') ||
+          (report.title.contains('Посещаемость') &&
+              _selectedFilter == 'Посещаемость') ||
+          (report.title.contains('Рейтинг') && _selectedFilter == 'Рейтинг');
       return matchesFilter;
     }).toList();
-
-    return filtered;
   }
 
   void _onFilterSelected(String filter) {
@@ -72,12 +72,47 @@ class _ReportsScreenState extends State<ReportsScreen> {
       context: context,
       onApplyFilters: (category, quickFilter, startDate, endDate) {
         setState(() {
+          // Логика применения фильтров (закомментирована, но готова)
           // _activeCategoryFilter = category;
           // _activeQuickFilter = quickFilter;
           // _activeStartDate = startDate;
           // _activeEndDate = endDate;
         });
       },
+    );
+  }
+
+  void _showCreateReportModal() {
+    ReportCreationModal.show(
+      context: context,
+      // ИСПРАВЛЕНИЕ: Функция должна принимать 6 обязательных аргументов
+      onReportCreated:
+          (
+            type,
+            periodType,
+            startDate,
+            endDate,
+            includeGraphs,
+            includeDetails,
+          ) {
+            // В BLoC архитектуре, здесь отправляется CreateReportEvent:
+            // context.read<ReportsBloc>().add(
+            //   CreateReportEvent(
+            //     type: type,
+            //     periodType: periodType,
+            //     startDate: startDate,
+            //     endDate: endDate,
+            //     includeGraphs: includeGraphs,
+            //     includeDetails: includeDetails,
+            //   ),
+            // );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Запрос на создание отчета отправлен!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          },
     );
   }
 
@@ -121,20 +156,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               width: 150,
               height: 40,
               child: ElevatedButton(
-                onPressed: () {
-                  ReportCreationModal.show(
-                    context: context,
-                    onReportCreated: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Запрос на создание отчета отправлен!'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                      // Здесь можно добавить логику для немедленного обновления списка
-                    },
-                  );
-                },
+                onPressed: _showCreateReportModal,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.teacherPrimary,
                   foregroundColor: AppColors.white,
@@ -147,6 +169,92 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final filteredReports = _filteredReports;
+
+    // В BLoC приложении этот код будет обернут в BlocConsumer
+
+    return Scaffold(
+      backgroundColor: AppColors.notesBackground,
+      appBar: AppBar(
+        backgroundColor: AppColors.notesBackground,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        title: const Row(
+          children: [
+            Icon(
+              Icons.description_outlined,
+              color: AppColors.notesDarkText,
+              size: 28,
+            ),
+            SizedBox(width: 8),
+            Text(
+              'Отчеты',
+              style: TextStyle(
+                fontFamily: 'TT Norms',
+                fontWeight: FontWeight.w900,
+                fontSize: 22,
+                color: AppColors.notesDarkText,
+              ),
+            ),
+          ],
+        ),
+        actions: const [SizedBox.shrink()],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCategoryFilters(),
+
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ReportsStats(
+              totalReports: _readyReportsCount,
+              thisWeekCount: _thisWeekCount,
+              thisMonthCount: _thisMonthCount,
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Все отчеты',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                _buildFilterButton(),
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: ListView(
+              children: [
+                ...filteredReports.map((report) {
+                  return ReportItem(
+                    report: report,
+                    onDownload: report.status == ReportStatus.ready
+                        ? () => _onDownloadReport(report)
+                        : null,
+                  );
+                }).toList(),
+
+                _buildCreateReportSection(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -222,90 +330,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
       style: TextButton.styleFrom(
         padding: EdgeInsets.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final filteredReports = _filteredReports;
-
-    return Scaffold(
-      backgroundColor: AppColors.notesBackground,
-      appBar: AppBar(
-        backgroundColor: AppColors.notesBackground,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: false,
-        title: const Row(
-          children: [
-            Icon(
-              Icons.description_outlined,
-              color: AppColors.notesDarkText,
-              size: 28,
-            ),
-            SizedBox(width: 8),
-            Text(
-              'Отчеты',
-              style: TextStyle(
-                fontFamily: 'TT Norms',
-                fontWeight: FontWeight.w900,
-                fontSize: 22,
-                color: AppColors.notesDarkText,
-              ),
-            ),
-          ],
-        ),
-        actions: const [SizedBox.shrink()],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCategoryFilters(),
-
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ReportsStats(
-              totalReports: _readyReportsCount,
-              thisWeekCount: _thisWeekCount,
-              thisMonthCount: _thisMonthCount,
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Все отчеты',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                _buildFilterButton(),
-              ],
-            ),
-          ),
-
-          Expanded(
-            child: ListView(
-              children: [
-                ...filteredReports.map((report) {
-                  return ReportItem(
-                    report: report,
-                    onDownload: report.status == ReportStatus.ready
-                        ? () => _onDownloadReport(report)
-                        : null,
-                  );
-                }),
-
-                _buildCreateReportSection(),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

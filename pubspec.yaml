@@ -44,7 +44,8 @@ dependencies:
   provider: ^6.1.5+1
   equatable: ^2.0.7
   shared_preferences: ^2.2.2
-  gradient_icon: ^2.0.9
+  excel: ^4.0.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
