@@ -22,7 +22,7 @@ class TokenBloc extends Bloc<TokenEvent, TokenState> {
   ) async {
     emit(TokenLoading());
     try {
-      await authRepository.login(event.username, event.password);
+      await authRepository.token(event.username, event.password);
       final accessToken = await authStorageRepository.getAccessToken();
       final refreshToken = await authStorageRepository.getRefreshToken();
 

@@ -9,7 +9,8 @@ import 'package:treemov/features/authorization/data/repositories/auth_repository
 import 'package:treemov/features/authorization/data/repositories/auth_storage_repository_impl.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
-import 'package:treemov/features/authorization/presentation/blocs/token/token_bloc.dart';
+import 'package:treemov/features/authorization/presentation/bloc/login_bloc.dart';
+import 'package:treemov/features/authorization/presentation/blocs/token_bloc.dart';
 import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
 import 'package:treemov/features/notes/data/datasources/local_notes_datasource.dart';
 import 'package:treemov/features/notes/data/datasources/teacher_notes_remote_data_source.dart';
@@ -18,6 +19,10 @@ import 'package:treemov/features/notes/domain/repositories/local_notes_repositor
 import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository.dart';
 import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository_impl.dart';
 import 'package:treemov/features/notes/presentation/blocs/notes/notes_bloc.dart';
+import 'package:treemov/features/registration/data/datasources/register_remote_data_source.dart';
+import 'package:treemov/features/registration/data/repositories/register_repository_impl.dart';
+import 'package:treemov/features/registration/domain/repositories/register_repository.dart';
+import 'package:treemov/features/registration/presentation/bloc/register_bloc.dart';
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
@@ -55,6 +60,9 @@ void setupDependencies() {
   getIt.registerSingleton<TeacherNotesRemoteDataSource>(
     TeacherNotesRemoteDataSource(getIt<DioClient>()),
   );
+  getIt.registerSingleton<RegisterRemoteDataSource>(
+    RegisterRemoteDataSource(getIt<DioClient>()),
+  );
 
   // Репозитории
   getIt.registerSingleton<AuthRepository>(
@@ -78,6 +86,9 @@ void setupDependencies() {
   getIt.registerSingleton<LocalNotesRepository>(
     LocalNotesRepositoryImpl(getIt<LocalNotesDataSource>()),
   );
+  getIt.registerSingleton<RegisterRepository>(
+    RegisterRepositoryImpl(getIt<RegisterRemoteDataSource>()),
+  );
 
   // BLoC - регистрируем фабрику, так как BLoC должен создаваться заново
   getIt.registerFactory<TokenBloc>(
@@ -85,6 +96,10 @@ void setupDependencies() {
       authRepository: getIt<AuthRepository>(),
       authStorageRepository: getIt<AuthStorageRepository>(),
     ),
+  );
+
+  getIt.registerFactory<LoginBloc>(
+    () => LoginBloc(getIt<AuthRepository>(), getIt<AuthStorageRepository>()),
   );
 
   getIt.registerFactory<SchedulesBloc>(
@@ -108,5 +123,9 @@ void setupDependencies() {
 
   getIt.registerFactory<TeacherProfileBloc>(
     () => TeacherProfileBloc(getIt<SharedRepository>()),
+  );
+
+  getIt.registerFactory<RegisterBloc>(
+    () => RegisterBloc(getIt<RegisterRepository>()),
   );
 }

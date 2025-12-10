@@ -25,4 +25,12 @@ class ApiConstants {
   static const String teachers = 'teachers/';
   static const String teacherNotes = 'teacher_notes/';
   static const String myTeacherProfile = 'teacher_profile/me/';
+
+  // v1/
+  static const String baseV1Url = 'http://10.0.2.2:8000/api/v1/';
+
+  static const String register = 'auth/register';
+  static const String login = 'auth/login';
+
+  static const String myUser = 'users/me';
 }

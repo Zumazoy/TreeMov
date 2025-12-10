@@ -8,7 +8,7 @@ import 'package:treemov/features/teacher_profile/presentation/widgets/settings_t
 import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final TeacherProfileResponseModel teacherProfile;
+  final TeacherProfileResponseModel? teacherProfile;
 
   const SettingsScreen({super.key, required this.teacherProfile});
 

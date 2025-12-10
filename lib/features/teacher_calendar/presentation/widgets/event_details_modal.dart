@@ -165,7 +165,7 @@ class EventDetailsModal extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AttendanceScreen(
-                            event: event,
+                            lesson: event,
                             schedulesBloc: schedulesBloc,
                           ),
                         ),

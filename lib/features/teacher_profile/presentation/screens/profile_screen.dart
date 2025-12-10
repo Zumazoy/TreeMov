@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
-import 'package:treemov/core/widgets/auth/logout_dialog.dart';
 import 'package:treemov/features/teacher_profile/presentation/bloc/teacher_profile_bloc.dart';
 import 'package:treemov/features/teacher_profile/presentation/screens/settings_screen.dart';
 import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
@@ -10,7 +9,6 @@ import '../../../../core/themes/app_colors.dart';
 import '../widgets/daily_schedule_card.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/rep_nots_buttons.dart';
-import '../widgets/settings_menu.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -29,46 +27,46 @@ class ProfileScreen extends StatelessWidget {
 class _ProfileScreenContent extends StatelessWidget {
   const _ProfileScreenContent();
 
-  void _showSettingsMenu(
-    BuildContext context,
-    TeacherProfileResponseModel? teacherProfile,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          alignment: Alignment.topRight,
-          insetPadding: const EdgeInsets.only(top: 60, right: 16),
-          child: SettingsMenu(
-            onEditData: () {
-              Navigator.pop(context);
-            },
-            onChangePassword: () {
-              Navigator.pop(context);
-            },
-            onSettings: () {
-              Navigator.pop(context);
-              if (teacherProfile != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        SettingsScreen(teacherProfile: teacherProfile),
-                  ),
-                );
-              }
-            },
-            onLogout: () {
-              Navigator.pop(context);
-              LogoutDialog.show(context: context);
-            },
-          ),
-        );
-      },
-    );
-  }
+  // void _showSettingsMenu(
+  //   BuildContext context,
+  //   TeacherProfileResponseModel? teacherProfile,
+  // ) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         backgroundColor: Colors.transparent,
+  //         elevation: 0,
+  //         alignment: Alignment.topRight,
+  //         insetPadding: const EdgeInsets.only(top: 60, right: 16),
+  //         child: SettingsMenu(
+  //           onEditData: () {
+  //             Navigator.pop(context);
+  //           },
+  //           onChangePassword: () {
+  //             Navigator.pop(context);
+  //           },
+  //           onSettings: () {
+  //             Navigator.pop(context);
+  //             if (teacherProfile != null) {
+  //               Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) =>
+  //                       SettingsScreen(teacherProfile: teacherProfile),
+  //                 ),
+  //               );
+  //             }
+  //           },
+  //           onLogout: () {
+  //             Navigator.pop(context);
+  //             LogoutDialog.show(context: context);
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +142,24 @@ class _ProfileScreenContent extends StatelessWidget {
       centerTitle: false,
       actions: [
         IconButton(
-          icon: Icon(Icons.more_vert, color: AppColors.notesDarkText),
-          onPressed: () => _showSettingsMenu(context, teacherProfile),
+          icon: Image.asset(
+            'assets/images/gear_icon.png',
+            width: 20,
+            height: 20,
+            color: AppColors.notesDarkText,
+          ),
+          onPressed: () => {
+            // if (teacherProfile != null)
+            //   {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    SettingsScreen(teacherProfile: teacherProfile),
+              ),
+            ),
+            // },
+          },
         ),
       ],
     );

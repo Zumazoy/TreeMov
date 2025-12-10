@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/themes/app_colors.dart';
 
 class StudentAvatar extends StatelessWidget {
@@ -10,23 +11,33 @@ class StudentAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size,
-      height: size,
+      width: 52,
+      height: 52,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.directoryAvatarBorder, width: 4),
-        borderRadius: BorderRadius.circular(size / 2),
+        color: AppColors.directoryAvatarBackground,
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(color: AppColors.directoryAvatarBorder, width: 2),
       ),
-      child: CircleAvatar(
-        radius: (size - 8) / 2,
-        backgroundColor: AppColors.directoryAvatarBackground,
-        child: avatarUrl != null
-            ? Image.network(avatarUrl!)
-            : Icon(
-                Icons.person,
-                size: size * 0.5,
-                color: AppColors.teacherPrimary,
+      child: avatarUrl != null
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.network(
+                avatarUrl!,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(
+                    Icons.person,
+                    color: AppColors.directoryTextSecondary,
+                    size: 28,
+                  );
+                },
               ),
-      ),
+            )
+          : const Icon(
+              Icons.person,
+              color: AppColors.directoryTextSecondary,
+              size: 28,
+            ),
     );
   }
 }
