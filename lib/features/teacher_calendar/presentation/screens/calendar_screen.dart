@@ -130,14 +130,26 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
         appBar: AppBar(
           backgroundColor: AppColors.white,
           elevation: 0,
-          title: Text(
-            'Календарь',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Arial',
-              color: Colors.black,
-            ),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/calendar_simple_icon.png',
+                width: 24,
+                height: 24,
+                color: Colors.black,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Календарь',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Arial',
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ),
         body: Column(
@@ -179,11 +191,11 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
                               child: Text(
                                 _getMonthYearText(),
                                 style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
                                   color: AppColors.white,
-                                  fontFamily: 'TT Norms',
-                                  height: 1.2,
+                                  fontFamily: 'Arial',
+                                  height: 1.0,
                                 ),
                               ),
                             ),
@@ -273,11 +285,12 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
           alignment: Alignment.center,
           child: Text(
             day,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'TT Norms',
-              color: Colors.black,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Arial',
+              color: AppColors.violet800WithOpacity,
+              height: 1.0,
             ),
           ),
         ),
@@ -320,47 +333,47 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
             });
             _showEventsPanel(day);
           },
-          child: Stack(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.calendarButton
-                      : (isToday
-                            ? AppColors.todayBackground
-                            : Colors.transparent),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
+          child: Container(
+            margin: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              border: isToday
+                  ? Border.all(color: AppColors.teacherPrimary, width: 1)
+                  : null,
+              borderRadius: BorderRadius.circular(8),
+              color: isSelected
+                  ? AppColors.selectedDateBackground
+                  : Colors.transparent,
+            ),
+            child: Stack(
+              children: [
+                Center(
                   child: Text(
                     day.day.toString(),
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: isSelected || isToday
-                          ? AppColors.white
-                          : Colors.black,
-                      fontFamily: 'TT Norms',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Arial',
+                      height: 1.0,
+                      color: AppColors.notesDarkText,
                     ),
                   ),
                 ),
-              ),
-              if (hasEvents)
-                Positioned(
-                  bottom: 2,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: AppColors.calendarButton,
-                      shape: BoxShape.circle,
+                if (hasEvents)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      width: 7,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        color: AppColors.calendarButton, // #7A75FF
+                        shape: BoxShape.circle,
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },

@@ -11,6 +11,8 @@ class AppColors {
   static const Color calendarButton = Color(0xFF7A75FF);
   static const Color plusButton = Color(0xFF605CC8);
   static const Color todayBackground = Color(0xFF9C99FF);
+  static const Color selectedDateBackground = Color(0x809C99FF);
+  static const Color violet800WithOpacity = Color(0x9E2F213E);
   static const Color eventTap = Color(0xFFF0F0FF);
   static const Color lightGrey = Color(0xFFE0E0E0);
 
