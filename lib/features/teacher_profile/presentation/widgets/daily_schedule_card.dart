@@ -129,15 +129,15 @@ class DailyScheduleCard extends StatelessWidget {
                     AppColors.statsPinnedText,
                   ),
 
-                const SizedBox(height: 12),
+                // const SizedBox(height: 12),
 
                 // Заглушка для напоминания
-                _buildScheduleItem(
-                  'assets/images/bell_icon.png',
-                  'Напоминание: Родительское собрание 17:00',
-                  AppColors.categoryGeneralText,
-                  isReminderColored: true,
-                ),
+                // _buildScheduleItem(
+                //   'assets/images/bell_icon.png',
+                //   'Напоминание: Родительское собрание 17:00',
+                //   AppColors.categoryGeneralText,
+                //   isReminderColored: true,
+                // ),
               ],
             ),
           ),
