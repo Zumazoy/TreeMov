@@ -43,7 +43,7 @@ class AppRoutes {
     kidInfoScreen: (context) => const KidInfoScreen(),
     parentInfoScreen: (context) => const ParentInfoScreen(),
     teacherVerificationScreen: (context) => const TeacherVerificationScreen(),
-    teacherInfoScreen: (context) => const TeacherInfoScreen(),
+    teacherInfoScreen: (context) => const TeacherInfoScreen(teacherCode: '1'),
     kidCalendar: (context) => const CalendarKidScreen(),
     mainApp: (context) => const MainScreen(),
     testHome: (context) => HomeScreen(),

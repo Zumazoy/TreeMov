@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/schedule_entity.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../widgets/events_panel.dart';
-import 'create_schedule_screen.dart';
+import 'create_lesson_screen.dart';
 
 class CalendarScreen extends StatelessWidget {
   const CalendarScreen({super.key});
@@ -18,7 +18,7 @@ class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<SchedulesBloc>()..add(LoadSchedulesEvent()),
+      create: (context) => getIt<SchedulesBloc>()..add(LoadLessonsEvent()),
       child: const _CalendarScreenContent(),
     );
   }
@@ -35,7 +35,7 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
   DateTime _currentDate = DateTime.now();
   DateTime? _selectedDate;
 
-  Map<String, List<ScheduleEntity>> _events = {};
+  Map<String, List<LessonEntity>> _events = {};
 
   void _showEventsPanel(DateTime date) {
     final schedulesBloc = context.read<SchedulesBloc>();
@@ -48,14 +48,14 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
     );
   }
 
-  void _navigateToCreateSchedule() {
+  void _navigateToCreateLessons() {
     final sharedRepository = getIt<SharedRepository>();
     final schedulesBloc = context.read<SchedulesBloc>();
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CreateScheduleScreen(
+        builder: (context) => CreateLessonScreen(
           sharedRepository: sharedRepository,
           schedulesBloc: schedulesBloc,
         ),
@@ -63,41 +63,42 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
     );
   }
 
-  List<ScheduleEntity> _getEventsForDate(DateTime date) {
+  List<LessonEntity> _getEventsForDate(DateTime date) {
     final String dateKey = _formatDate(date);
     return _events[dateKey] ?? [];
   }
 
-  void _updateEventsFromSchedules(List<ScheduleResponseModel> schedules) {
-    final Map<String, List<ScheduleEntity>> newEvents = {};
+  void _updateEventsFromLessons(List<LessonResponseModel> lessons) {
+    final Map<String, List<LessonEntity>> newEvents = {};
 
-    for (final schedule in schedules) {
-      final dateKey = _formatScheduleDate(schedule);
+    for (final lesson in lessons) {
+      final dateKey = _formatLessonDate(lesson);
 
       if (!newEvents.containsKey(dateKey)) {
         newEvents[dateKey] = [];
       }
 
       newEvents[dateKey]!.add(
-        ScheduleEntity(
-          id: schedule.id,
-          org: schedule.org,
-          createdBy: schedule.createdBy,
-          createdAt: schedule.createdAt,
-          title: schedule.title,
-          startTime: schedule.startTime,
-          endTime: schedule.endTime,
-          date: schedule.date,
-          weekDay: schedule.weekDay,
-          isCanceled: schedule.isCanceled,
-          isCompleted: schedule.isCompleted,
-          duration: schedule.duration,
-          comment: schedule.comment,
-          periodSchedule: schedule.periodSchedule,
-          teacher: schedule.teacher,
-          subject: schedule.subject,
-          group: schedule.group,
-          classroom: schedule.classroom,
+        LessonEntity(
+          id: lesson.id,
+          org: lesson.org,
+          createdBy: lesson.createdBy,
+          createdAt: lesson.createdAt,
+          title: lesson.title,
+          startTime: lesson.startTime,
+          endTime: lesson.endTime,
+          date: lesson.date,
+          weekDay: lesson.weekDay,
+          isCanceled: lesson.isCanceled,
+          isCompleted: lesson.isCompleted,
+          duration: lesson.duration,
+          comment: lesson.comment,
+          periodSchedule: lesson.periodSchedule,
+          periodLesson: lesson.periodLesson,
+          teacher: lesson.teacher,
+          subject: lesson.subject,
+          group: lesson.group,
+          classroom: lesson.classroom,
         ),
       );
     }
@@ -107,12 +108,12 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
     });
   }
 
-  String _formatScheduleDate(ScheduleResponseModel schedule) {
+  String _formatLessonDate(LessonResponseModel lesson) {
     try {
-      final date = DateTime.parse(schedule.date!);
+      final date = DateTime.parse(lesson.date!);
       return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     } catch (e) {
-      return schedule.date!;
+      return lesson.date!;
     }
   }
 
@@ -120,8 +121,8 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
   Widget build(BuildContext context) {
     return BlocListener<SchedulesBloc, ScheduleState>(
       listener: (context, state) {
-        if (state is SchedulesLoaded) {
-          _updateEventsFromSchedules(state.schedules);
+        if (state is LessonsLoaded) {
+          _updateEventsFromLessons(state.lessons);
         }
       },
       child: Scaffold(
@@ -129,14 +130,26 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
         appBar: AppBar(
           backgroundColor: AppColors.white,
           elevation: 0,
-          title: Text(
-            'Календарь',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Arial',
-              color: Colors.black,
-            ),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/calendar_simple_icon.png',
+                width: 24,
+                height: 24,
+                color: Colors.black,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Календарь',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Arial',
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ),
         body: Column(
@@ -178,11 +191,11 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
                               child: Text(
                                 _getMonthYearText(),
                                 style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
                                   color: AppColors.white,
-                                  fontFamily: 'TT Norms',
-                                  height: 1.2,
+                                  fontFamily: 'Arial',
+                                  height: 1.0,
                                 ),
                               ),
                             ),
@@ -234,7 +247,7 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
             width: double.infinity,
             margin: const EdgeInsets.only(left: 60, right: 60, bottom: 10),
             child: ElevatedButton(
-              onPressed: _navigateToCreateSchedule,
+              onPressed: _navigateToCreateLessons,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.plusButton,
                 foregroundColor: Colors.white,
@@ -272,11 +285,12 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
           alignment: Alignment.center,
           child: Text(
             day,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'TT Norms',
-              color: Colors.black,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Arial',
+              color: AppColors.violet800WithOpacity,
+              height: 1.0,
             ),
           ),
         ),
@@ -319,47 +333,47 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
             });
             _showEventsPanel(day);
           },
-          child: Stack(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.calendarButton
-                      : (isToday
-                            ? AppColors.todayBackground
-                            : Colors.transparent),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
+          child: Container(
+            margin: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              border: isToday
+                  ? Border.all(color: AppColors.teacherPrimary, width: 1)
+                  : null,
+              borderRadius: BorderRadius.circular(8),
+              color: isSelected
+                  ? AppColors.selectedDateBackground
+                  : Colors.transparent,
+            ),
+            child: Stack(
+              children: [
+                Center(
                   child: Text(
                     day.day.toString(),
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: isSelected || isToday
-                          ? AppColors.white
-                          : Colors.black,
-                      fontFamily: 'TT Norms',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Arial',
+                      height: 1.0,
+                      color: AppColors.notesDarkText,
                     ),
                   ),
                 ),
-              ),
-              if (hasEvents)
-                Positioned(
-                  bottom: 2,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: AppColors.calendarButton,
-                      shape: BoxShape.circle,
+                if (hasEvents)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      width: 7,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        color: AppColors.calendarButton, // #7A75FF
+                        shape: BoxShape.circle,
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },

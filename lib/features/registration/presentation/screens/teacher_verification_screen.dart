@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/app/routes/app_routes.dart';
-import 'package:treemov/core/widgets/auth/auth_header.dart';
+import 'package:treemov/features/registration/presentation/screens/teacher_info_screen.dart';
 
 import '../../../../../core/themes/app_colors.dart';
+import '../../../../core/widgets/auth/auth_header.dart';
 
 class TeacherVerificationScreen extends StatelessWidget {
   const TeacherVerificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final teacherCodeController = TextEditingController();
+
     return Scaffold(
       backgroundColor: AppColors.teacherPrimary,
       body: Stack(
         children: [
           const AuthHeader(),
-
           Center(
             child: SingleChildScrollView(
               child: Container(
@@ -24,7 +25,6 @@ class TeacherVerificationScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 60),
-
                     const Text(
                       'Регистрация',
                       style: TextStyle(
@@ -36,7 +36,10 @@ class TeacherVerificationScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
 
-                    _buildTextField('Код преподавателя'),
+                    _buildTextField(
+                      'Код преподавателя',
+                      controller: teacherCodeController,
+                    ),
                     const SizedBox(height: 20),
 
                     SizedBox(
@@ -44,9 +47,14 @@ class TeacherVerificationScreen extends StatelessWidget {
                       height: 44,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(
+                          final teacherCode = teacherCodeController.text.trim();
+
+                          Navigator.push(
                             context,
-                            AppRoutes.teacherInfoScreen,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  TeacherInfoScreen(teacherCode: teacherCode),
+                            ),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -79,7 +87,10 @@ class TeacherVerificationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String hintText, {bool isPassword = false}) {
+  Widget _buildTextField(
+    String hintText, {
+    required TextEditingController controller,
+  }) {
     return Container(
       width: 316,
       height: 44,
@@ -88,7 +99,7 @@ class TeacherVerificationScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
-        obscureText: isPassword,
+        controller: controller,
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(

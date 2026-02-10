@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/schedule_entity.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
-import 'package:treemov/features/teacher_calendar/presentation/screens/about_event_details.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/attendance_screen.dart';
+import 'package:treemov/features/teacher_calendar/presentation/screens/lesson_details_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
 
 class EventDetailsModal extends StatelessWidget {
-  final ScheduleEntity event;
+  final LessonEntity event;
   final SchedulesBloc schedulesBloc;
 
   const EventDetailsModal({
@@ -18,7 +18,7 @@ class EventDetailsModal extends StatelessWidget {
 
   static void show({
     required BuildContext context,
-    required ScheduleEntity event,
+    required LessonEntity event,
     required SchedulesBloc schedulesBloc,
   }) {
     showDialog(
@@ -62,7 +62,9 @@ class EventDetailsModal extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                event.formatTitle(event.title),
+                event.group != null
+                    ? 'Группа "${event.formatTitle(event.group?.name)}"'
+                    : '(Не указан)',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -92,17 +94,15 @@ class EventDetailsModal extends StatelessWidget {
               children: [
                 _buildInfoRowWithIcon(
                   'assets/images/activity_icon.png',
-                  _extractActivityType(event.formatTitle(event.title)),
+                  event.subject != null
+                      ? event.formatTitle(event.subject?.name)
+                      : '(Не указан)',
                 ),
                 _buildInfoRowWithIcon(
                   'assets/images/place_icon.png',
-                  event.formatTitle(
-                    event.formatTitle(
-                      event.classroom != null
-                          ? event.classroom?.title
-                          : '(Не указана)',
-                    ),
-                  ),
+                  event.classroom != null
+                      ? event.formatTitle(event.classroom?.title)
+                      : '(Не указана)',
                 ),
                 _buildInfoRowWithIcon(
                   'assets/images/clock_icon.png',
@@ -128,22 +128,8 @@ class EventDetailsModal extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutEventDetailsScreen(
-                            groupName: event.formatTitle(event.title),
-                            activityType: _extractActivityType(
-                              event.formatTitle(event.title),
-                            ),
-                            location: event.formatTitle(
-                              event.classroom != null
-                                  ? event.classroom?.title
-                                  : '(Не указана)',
-                            ),
-                            startTime: startTime,
-                            endTime: endTime,
-                            repeat: 'Еженедельно',
-                            description:
-                                event.comment ?? 'Описание отсутствует',
-                          ),
+                          builder: (context) =>
+                              LessonDetailsScreen(event: event),
                         ),
                       );
                     },
@@ -179,7 +165,7 @@ class EventDetailsModal extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AttendanceScreen(
-                            event: event,
+                            lesson: event,
                             schedulesBloc: schedulesBloc,
                           ),
                         ),
@@ -242,13 +228,5 @@ class EventDetailsModal extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _extractActivityType(String title) {
-    final bracketIndex = title.indexOf('(');
-    if (bracketIndex > 0) {
-      return title.substring(0, bracketIndex).trim();
-    }
-    return title;
   }
 }

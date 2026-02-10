@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/features/authorization/data/datasources/auth_remote_data_source.dart';
+import 'package:treemov/features/authorization/data/models/login_request_model.dart';
+import 'package:treemov/features/authorization/data/models/login_response_model.dart';
 import 'package:treemov/features/authorization/data/models/token_request.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
@@ -15,10 +17,10 @@ class AuthRepositoryImpl implements AuthRepository {
        _authStorageRepository = authStorageRepository;
 
   @override
-  Future<void> login(String username, String password) async {
+  Future<void> token(String username, String password) async {
     try {
       final request = TokenRequest(username: username, password: password);
-      final response = await _authRemoteDataSource.login(request);
+      final response = await _authRemoteDataSource.token(request);
 
       if (response.isSuccess) {
         await _authStorageRepository.saveAccessToken(response.accessToken!);
@@ -31,5 +33,10 @@ class AuthRepositoryImpl implements AuthRepository {
       debugPrint('❌ Ошибка получения токена: $e');
       rethrow;
     }
+  }
+
+  @override
+  Future<LoginResponseModel> login(LoginRequestModel request) async {
+    return await _authRemoteDataSource.login(request);
   }
 }

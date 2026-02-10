@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+// NOTE: BLoC imports are assumed for this screen to be functional
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:treemov/app/di/di.config.dart';
+// import 'package:treemov/features/reports/presentation/blocs/reports/reports_bloc.dart';
+
 import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/features/reports/data/mocks/mock_reports_data.dart';
 import 'package:treemov/features/reports/domain/entities/report_entity.dart';
-// import 'package:treemov/features/reports/presentation/widgets/filter_categories_section.dart';
-// import 'package:treemov/features/reports/presentation/widgets/filter_quick_section.dart';
+import 'package:treemov/features/reports/presentation/widgets/report_creation_modal.dart';
 import 'package:treemov/features/reports/presentation/widgets/report_filter_modal.dart';
 import 'package:treemov/features/reports/presentation/widgets/report_item.dart';
 import 'package:treemov/features/reports/presentation/widgets/reports_stats.dart';
@@ -19,13 +23,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
   final List<ReportEntity> _reports = MockReportsData.mockReports;
   String _selectedFilter = 'Все отчеты';
 
-  // Состояния для хранения активных фильтров
+  // Состояния для хранения активных фильтров (оставлены закомментированными)
   // ReportFilterCategory? _activeCategoryFilter;
   // ReportQuickFilter? _activeQuickFilter;
   // DateTime? _activeStartDate;
   // DateTime? _activeEndDate;
 
-  // Статистика
   int get _readyReportsCount =>
       _reports.where((r) => r.status == ReportStatus.ready).length;
   int get _thisWeekCount => 3;
@@ -36,24 +39,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
     super.dispose();
   }
 
-  // Упрощаем фильтрацию, оставляем только фильтр по табам
   List<ReportEntity> get _filteredReports {
-    List<ReportEntity> filtered = _reports.where((report) {
+    return _reports.where((report) {
       final matchesFilter =
           _selectedFilter == 'Все отчеты' ||
-          (_selectedFilter == 'Успеваемость' &&
-              report.title.contains('Успеваемость')) ||
-          (_selectedFilter == 'Посещаемость' &&
-              report.title.contains('Посещаемость')) ||
-          (_selectedFilter == 'Рейтинг' && report.title.contains('Рейтинг'));
-
-      // Дополнительная логика фильтрации по _activeCategoryFilter, _activeQuickFilter, _activeStartDate и т.д.
-      // Сейчас используется только _selectedFilter (табы), но переменные готовы к использованию.
-
+          (report.title.contains('Успеваемость') &&
+              _selectedFilter == 'Успеваемость') ||
+          (report.title.contains('Посещаемость') &&
+              _selectedFilter == 'Посещаемость') ||
+          (report.title.contains('Рейтинг') && _selectedFilter == 'Рейтинг');
       return matchesFilter;
     }).toList();
-
-    return filtered;
   }
 
   void _onFilterSelected(String filter) {
@@ -71,27 +67,117 @@ class _ReportsScreenState extends State<ReportsScreen> {
     );
   }
 
-  // --- Метод вызова модального окна фильтров ---
   void _showFilterModal() {
     ReportFilterModal.show(
       context: context,
       onApplyFilters: (category, quickFilter, startDate, endDate) {
         setState(() {
+          // Логика применения фильтров (закомментирована, но готова)
           // _activeCategoryFilter = category;
           // _activeQuickFilter = quickFilter;
           // _activeStartDate = startDate;
           // _activeEndDate = endDate;
-
-          // После применения фильтров, можно обновить _selectedFilter, если категория была выбрана,
-          // или просто вызвать метод для перезагрузки данных.
         });
       },
+    );
+  }
+
+  void _showCreateReportModal() {
+    ReportCreationModal.show(
+      context: context,
+      // ИСПРАВЛЕНИЕ: Функция должна принимать 6 обязательных аргументов
+      onReportCreated:
+          (
+            type,
+            periodType,
+            startDate,
+            endDate,
+            includeGraphs,
+            includeDetails,
+          ) {
+            // В BLoC архитектуре, здесь отправляется CreateReportEvent:
+            // context.read<ReportsBloc>().add(
+            //   CreateReportEvent(
+            //     type: type,
+            //     periodType: periodType,
+            //     startDate: startDate,
+            //     endDate: endDate,
+            //     includeGraphs: includeGraphs,
+            //     includeDetails: includeDetails,
+            //   ),
+            // );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Запрос на создание отчета отправлен!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          },
+    );
+  }
+
+  Widget _buildCreateReportSection() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.directoryBorder, width: 1),
+        ),
+        child: Column(
+          children: [
+            const Icon(
+              Icons.description_outlined,
+              size: 40,
+              color: AppColors.directoryTextSecondary,
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Создать новый отчет',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.grayFieldText,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Выберите отчет и период для генерации',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.directoryTextSecondary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: 150,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: _showCreateReportModal,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.teacherPrimary,
+                  foregroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text('Создать отчет'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final filteredReports = _filteredReports;
+
+    // В BLoC приложении этот код будет обернут в BlocConsumer
 
     return Scaffold(
       backgroundColor: AppColors.notesBackground,
@@ -100,7 +186,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        // Заголовок "Отчеты"
         title: const Row(
           children: [
             Icon(
@@ -120,20 +205,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ],
         ),
-        actions: const [
-          // Кнопка "+" удалена
-          SizedBox.shrink(),
-        ],
+        actions: const [SizedBox.shrink()],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Поле поиска и кнопка фильтра (сверху) удалены
-
-          // Категории (табы)
           _buildCategoryFilters(),
 
-          // Статистика
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ReportsStats(
@@ -143,7 +221,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ),
 
-          // Заголовок списка и ВОССТАНОВЛЕННАЯ КНОПКА ФИЛЬТРА
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
@@ -156,12 +233,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   'Все отчеты',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                _buildFilterButton(), // <-- Кнопка фильтра
+                _buildFilterButton(),
               ],
             ),
           ),
 
-          // Список отчетов
           Expanded(
             child: ListView(
               children: [
@@ -172,9 +248,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         ? () => _onDownloadReport(report)
                         : null,
                   );
-                }),
+                }).toList(),
 
-                // Секция "Создать новый отчет"
                 _buildCreateReportSection(),
               ],
             ),
@@ -238,7 +313,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   Widget _buildFilterButton() {
     return TextButton.icon(
-      onPressed: _showFilterModal, // <-- ВЫЗЫВАЕМ МОДАЛЬНОЕ ОКНО
+      onPressed: _showFilterModal,
       icon: const Icon(
         Icons.filter_list,
         size: 20,
@@ -255,65 +330,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
       style: TextButton.styleFrom(
         padding: EdgeInsets.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-    );
-  }
-
-  Widget _buildCreateReportSection() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.directoryBorder, width: 1),
-        ),
-        child: Column(
-          children: [
-            const Icon(
-              Icons.description_outlined,
-              size: 40,
-              color: AppColors.directoryTextSecondary,
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Создать новый отчет',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.grayFieldText,
-              ),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Выберите отчет и период для генерации',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.directoryTextSecondary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: 150,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Логика создания отчета
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.teacherPrimary,
-                  foregroundColor: AppColors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text('Создать отчет'),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

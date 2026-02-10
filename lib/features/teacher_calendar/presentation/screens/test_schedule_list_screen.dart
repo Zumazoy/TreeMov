@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/test_schedule_update_screen.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
 class TestScheduleScreen extends StatelessWidget {
   const TestScheduleScreen({super.key});
@@ -13,7 +13,7 @@ class TestScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<SchedulesBloc>()..add(LoadSchedulesEvent()),
+      create: (_) => getIt<SchedulesBloc>()..add(LoadLessonsEvent()),
       child: const _TestScheduleView(),
     );
   }
@@ -31,14 +31,14 @@ class _TestScheduleView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              context.read<SchedulesBloc>().add(LoadSchedulesEvent());
+              context.read<SchedulesBloc>().add(LoadLessonsEvent());
             },
           ),
         ],
       ),
       body: BlocListener<SchedulesBloc, ScheduleState>(
         listener: (context, state) {
-          if (state is ScheduleError) {
+          if (state is LessonError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -46,7 +46,7 @@ class _TestScheduleView extends StatelessWidget {
               ),
             );
           }
-          if (state is ScheduleOperationSuccess) {
+          if (state is LessonOperationSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -61,7 +61,7 @@ class _TestScheduleView extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            if (state is ScheduleError) {
+            if (state is LessonError) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +74,7 @@ class _TestScheduleView extends StatelessWidget {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
-                        context.read<SchedulesBloc>().add(LoadSchedulesEvent());
+                        context.read<SchedulesBloc>().add(LoadLessonsEvent());
                       },
                       child: const Text('Попробовать снова'),
                     ),
@@ -83,8 +83,8 @@ class _TestScheduleView extends StatelessWidget {
               );
             }
 
-            if (state is SchedulesLoaded) {
-              final schedules = state.schedules;
+            if (state is LessonsLoaded) {
+              final schedules = state.lessons;
 
               if (schedules.isEmpty) {
                 return const Center(
@@ -94,7 +94,7 @@ class _TestScheduleView extends StatelessWidget {
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<SchedulesBloc>().add(LoadSchedulesEvent());
+                  context.read<SchedulesBloc>().add(LoadLessonsEvent());
                 },
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
@@ -110,7 +110,7 @@ class _TestScheduleView extends StatelessWidget {
             return Center(
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<SchedulesBloc>().add(LoadSchedulesEvent());
+                  context.read<SchedulesBloc>().add(LoadLessonsEvent());
                 },
                 child: const Text('Загрузить расписание'),
               ),
@@ -123,7 +123,7 @@ class _TestScheduleView extends StatelessWidget {
 }
 
 class _ScheduleCard extends StatelessWidget {
-  final ScheduleResponseModel schedule;
+  final LessonResponseModel schedule;
 
   const _ScheduleCard({required this.schedule});
 
@@ -244,7 +244,7 @@ class _ScheduleCard extends StatelessWidget {
 
         // Если вернулись с результатом true - обновляем список
         if (result == true) {
-          schedulesBloc.add(LoadSchedulesEvent());
+          schedulesBloc.add(LoadLessonsEvent());
         }
         break;
       case 'cancel':

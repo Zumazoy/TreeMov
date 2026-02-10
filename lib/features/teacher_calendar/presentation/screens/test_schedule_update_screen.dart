@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
 class ScheduleUpdateScreen extends StatefulWidget {
   final int scheduleId;
@@ -39,7 +39,7 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
   void initState() {
     super.initState();
     if (_isInitialLoad) {
-      widget.schedulesBloc.add(LoadScheduleByIdEvent(widget.scheduleId));
+      widget.schedulesBloc.add(LoadLessonByIdEvent(widget.scheduleId));
       _isInitialLoad = false;
     }
   }
@@ -54,7 +54,7 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
         ),
         body: BlocListener<SchedulesBloc, ScheduleState>(
           listener: (context, state) {
-            if (state is ScheduleError) {
+            if (state is LessonError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
@@ -63,7 +63,7 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
               );
             }
 
-            if (state is ScheduleOperationSuccess) {
+            if (state is LessonOperationSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
@@ -73,8 +73,8 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
               Navigator.pop(context, true);
             }
 
-            if (state is ScheduleLoaded) {
-              _populateForm(state.schedule);
+            if (state is LessonLoaded) {
+              _populateForm(state.lesson);
             }
           },
           child: BlocBuilder<SchedulesBloc, ScheduleState>(
@@ -343,7 +343,7 @@ class _ScheduleUpdateScreenState extends State<ScheduleUpdateScreen> {
     }
   }
 
-  void _populateForm(ScheduleResponseModel schedule) {
+  void _populateForm(LessonResponseModel schedule) {
     setState(() {
       _titleController.text = schedule.title ?? '(Без названия)';
       _isCanceled = schedule.isCanceled!;

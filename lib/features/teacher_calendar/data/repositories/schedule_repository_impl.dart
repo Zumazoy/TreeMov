@@ -1,11 +1,11 @@
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/period_schedule_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_response_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_lesson_response_model.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
+import 'package:treemov/shared/data/models/lesson_request_model.dart';
+import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
 class ScheduleRepositoryImpl implements ScheduleRepository {
   final ScheduleRemoteDataSource _remoteDataSource;
@@ -13,27 +13,20 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   ScheduleRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<List<ScheduleResponseModel>> getAllSchedules() async {
-    return await _remoteDataSource.getAllSchedules();
+  Future<LessonResponseModel> getLessonById(int scheduleId) async {
+    return await _remoteDataSource.getLessonById(scheduleId);
   }
 
   @override
-  Future<ScheduleResponseModel> getScheduleById(int scheduleId) async {
-    return await _remoteDataSource.getScheduleById(scheduleId);
+  Future<LessonResponseModel> createLesson(LessonRequestModel request) async {
+    return await _remoteDataSource.createLesson(request);
   }
 
   @override
-  Future<ScheduleResponseModel> createSchedule(
-    ScheduleRequestModel request,
+  Future<PeriodLessonResponseModel> createPeriodLesson(
+    PeriodLessonRequestModel request,
   ) async {
-    return await _remoteDataSource.createSchedule(request);
-  }
-
-  @override
-  Future<PeriodScheduleResponseModel> createPeriodSchedule(
-    PeriodScheduleRequestModel request,
-  ) async {
-    return await _remoteDataSource.createPeriodSchedule(request);
+    return await _remoteDataSource.createPeriodLesson(request);
   }
 
   @override

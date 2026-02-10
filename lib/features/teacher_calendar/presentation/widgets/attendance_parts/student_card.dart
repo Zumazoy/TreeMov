@@ -84,14 +84,33 @@ class StudentCard extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.lightGrey,
+              color: AppColors.directoryAvatarBackground,
+              borderRadius: BorderRadius.circular(26),
               border: Border.all(
-                color: _getAttendanceColor(attendanceStatus),
+                color: AppColors.directoryAvatarBorder,
                 width: 2,
               ),
             ),
-            child: Icon(Icons.person, color: AppColors.grayFieldText, size: 24),
+            child: student['student'].avatar != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: Image.network(
+                      student['student'].avatar!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.person,
+                          color: AppColors.directoryTextSecondary,
+                          size: 28,
+                        );
+                      },
+                    ),
+                  )
+                : const Icon(
+                    Icons.person,
+                    color: AppColors.directoryTextSecondary,
+                    size: 28,
+                  ),
           ),
 
           const SizedBox(width: 12),

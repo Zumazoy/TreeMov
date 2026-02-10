@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/schedule_entity.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
@@ -15,12 +15,12 @@ import '../widgets/attendance_parts/statistics_row.dart';
 import '../widgets/attendance_parts/student_card.dart';
 
 class AttendanceScreen extends StatefulWidget {
-  final ScheduleEntity event;
+  final LessonEntity lesson;
   final SchedulesBloc schedulesBloc;
 
   const AttendanceScreen({
     super.key,
-    required this.event,
+    required this.lesson,
     required this.schedulesBloc,
   });
 
@@ -41,14 +41,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   void _loadStudents() {
-    if (widget.event.group?.id != null) {
+    if (widget.lesson.group?.id != null) {
       setState(() {
         _isLoading = true;
         _errorMessage = null;
       });
 
       widget.schedulesBloc.add(
-        LoadStudentGroupByIdEvent(widget.event.group!.id!),
+        LoadStudentGroupByIdEvent(widget.lesson.group!.id!),
       );
     }
   }
@@ -67,23 +67,23 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   // Получаем данные о занятии из события
   Map<String, dynamic> get _currentLesson {
-    final timeParts = widget.event
-        .formatTime(widget.event.startTime, widget.event.endTime)
+    final timeParts = widget.lesson
+        .formatTime(widget.lesson.startTime, widget.lesson.endTime)
         .split('\n');
     final startTime = timeParts.isNotEmpty ? timeParts[0] : '';
     final endTime = timeParts.length > 1 ? timeParts[1] : '';
 
-    final groupName = widget.event.group?.name ?? '';
+    final groupName = widget.lesson.group?.name ?? '';
     final formattedGroup = groupName.isNotEmpty
         ? 'Группа "$groupName"'
         : 'Группа не указана';
 
-    final subjectName = widget.event.subject?.name ?? '';
+    final subjectName = widget.lesson.subject?.name ?? '';
     final formattedSubject = subjectName.isNotEmpty
         ? subjectName
         : 'Предмет не указан';
 
-    final classroomTitle = widget.event.classroom?.title ?? '';
+    final classroomTitle = widget.lesson.classroom?.title ?? '';
     final formattedClassroom = classroomTitle.isNotEmpty
         ? classroomTitle
         : 'Аудитория не указана';
@@ -136,7 +136,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       return;
     }
 
-    if (widget.event.id == null) {
+    if (widget.lesson.id == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Ошибка: ID занятия не указан'),
@@ -154,7 +154,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     final attendanceRequests = _students.map((student) {
       return AttendanceRequestModel(
         student: student['student']?.id ?? student['id'],
-        lesson: widget.event.id!,
+        lesson: widget.lesson.id!,
         wasPresent: student['attendance'] == 'present',
       );
     }).toList();

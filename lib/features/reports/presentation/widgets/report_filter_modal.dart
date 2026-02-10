@@ -29,6 +29,7 @@ class ReportFilterModal extends StatefulWidget {
 
   static Future<void> show({
     required BuildContext context,
+    // В реальном приложении сюда передаются текущие активные фильтры
     required Function(
       ReportFilterCategory?,
       ReportQuickFilter?,
@@ -37,7 +38,6 @@ class ReportFilterModal extends StatefulWidget {
     )
     onApplyFilters,
   }) {
-    // В реальном приложении здесь передаются текущие активные фильтры
     return showDialog(
       context: context,
       builder: (context) => ReportFilterModal(onApplyFilters: onApplyFilters),
@@ -150,7 +150,6 @@ class _ReportFilterModalState extends State<ReportFilterModal> {
               selectedCategory: _selectedCategory,
               onCategorySelected: (category) {
                 setState(() {
-                  // Для радио-кнопок: если выбрана та же категория, сбрасываем ее (null)
                   _selectedCategory = _selectedCategory == category
                       ? null
                       : category;

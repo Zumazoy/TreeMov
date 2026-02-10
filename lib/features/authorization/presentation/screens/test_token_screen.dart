@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
-import 'package:treemov/features/authorization/presentation/blocs/token/token_bloc.dart';
+import 'package:treemov/features/authorization/presentation/blocs/token_bloc.dart';
 
 class TokenTestScreen extends StatelessWidget {
   const TokenTestScreen({super.key});

@@ -5,7 +5,7 @@ import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/widgets/auth/auth_header.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
-import 'package:treemov/features/authorization/presentation/blocs/token/token_bloc.dart';
+import 'package:treemov/features/authorization/presentation/blocs/token_bloc.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
