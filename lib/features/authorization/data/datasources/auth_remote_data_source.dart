@@ -12,7 +12,7 @@ class AuthRemoteDataSource {
 
   Future<TokenResponse> token(TokenRequest request) async {
     final response = await _dioClient.post(
-      ApiConstants.token,
+      ApiConstants.authUrl + ApiConstants.login,
       data: request.toJson(),
     );
 
@@ -22,7 +22,7 @@ class AuthRemoteDataSource {
   Future<LoginResponseModel> login(LoginRequestModel request) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.baseV1Url + ApiConstants.login,
+        ApiConstants.authUrl + ApiConstants.login,
         data: request.toJson(),
       );
 

@@ -29,7 +29,7 @@ class TokenTestContent extends StatefulWidget {
 }
 
 class _TokenTestContentState extends State<TokenTestContent> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -41,24 +41,24 @@ class _TokenTestContentState extends State<TokenTestContent> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   void _getToken() {
-    final username = _usernameController.text.trim();
+    final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (username.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Введите username и пароль')),
-      );
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Введите email и пароль')));
       return;
     }
 
     context.read<TokenBloc>().add(
-      GetTokenEvent(username: username, password: password),
+      GetTokenEvent(email: email, password: password),
     );
   }
 
@@ -75,11 +75,11 @@ class _TokenTestContentState extends State<TokenTestContent> {
         children: [
           // Поля ввода
           TextField(
-            controller: _usernameController,
+            controller: _emailController,
             decoration: const InputDecoration(
-              labelText: 'username',
+              labelText: 'email',
               border: OutlineInputBorder(),
-              hintText: 'Введите ваш username',
+              hintText: 'Введите ваш email',
             ),
           ),
           const SizedBox(height: 16),
@@ -168,7 +168,7 @@ class _TokenTestContentState extends State<TokenTestContent> {
             ),
             SizedBox(height: 8),
             Text(
-              'Получите новый токен, введя username и пароль',
+              'Получите новый токен, введя email и пароль',
               textAlign: TextAlign.center,
             ),
           ],

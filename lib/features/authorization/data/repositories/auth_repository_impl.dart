@@ -17,9 +17,9 @@ class AuthRepositoryImpl implements AuthRepository {
        _authStorageRepository = authStorageRepository;
 
   @override
-  Future<void> token(String username, String password) async {
+  Future<void> token(String email, String password) async {
     try {
-      final request = TokenRequest(username: username, password: password);
+      final request = TokenRequest(email: email, password: password);
       final response = await _authRemoteDataSource.token(request);
 
       if (response.isSuccess) {

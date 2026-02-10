@@ -10,7 +10,7 @@ class TeacherNotesRemoteDataSource {
 
   Future<List<TeacherNoteResponseModel>> fetchTeacherNotes() async {
     final response = await _dioClient.get(
-      ApiConstants.employersP + ApiConstants.teacherNotes,
+      ApiConstants.employeesP + ApiConstants.teacherNotes,
     );
     if (response.statusCode == 200 && response.data is List) {
       return (response.data as List)
@@ -25,7 +25,7 @@ class TeacherNotesRemoteDataSource {
     TeacherNoteRequestModel model,
   ) async {
     final response = await _dioClient.post(
-      ApiConstants.employersP + ApiConstants.teacherNotes,
+      ApiConstants.employeesP + ApiConstants.teacherNotes,
       data: model.toJson(),
     );
     if ((response.statusCode == 200 || response.statusCode == 201) &&
@@ -40,7 +40,7 @@ class TeacherNotesRemoteDataSource {
   /// DELETE /teacher-notes/{id}/
   Future<void> deleteTeacherNote(int id) async {
     final response = await _dioClient.delete(
-      '${ApiConstants.employersP + ApiConstants.teacherNotes}$id/',
+      '${ApiConstants.employeesP + ApiConstants.teacherNotes}$id/',
     );
     if (response.statusCode == 200 || response.statusCode == 204) {
       return;
@@ -54,7 +54,7 @@ class TeacherNotesRemoteDataSource {
     TeacherNoteRequestModel model,
   ) async {
     final response = await _dioClient.patch(
-      '${ApiConstants.employersP + ApiConstants.teacherNotes}$id/',
+      '${ApiConstants.employeesP + ApiConstants.teacherNotes}$id/',
       data: model.toJson(),
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
