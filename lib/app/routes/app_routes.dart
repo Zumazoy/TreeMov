@@ -50,7 +50,6 @@ class AppRoutes {
     testToken: (context) => TokenTestScreen(),
     testSchedule: (context) => TestScheduleScreen(),
     
-    // ✅ ИСПРАВЛЕНО: создаем цепочку зависимостей для RatingScreen
     rating: (context) {
       final authStorageRepository = AuthStorageRepositoryImpl();
       final dioClient = DioClient(authStorageRepository: authStorageRepository);

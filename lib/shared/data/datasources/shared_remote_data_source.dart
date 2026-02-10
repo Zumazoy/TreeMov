@@ -16,7 +16,7 @@ class SharedRemoteDataSource {
   Future<TeacherProfileResponseModel> getMyTeacherProfile() async {
     try {
       final Response response = await _dioClient.get(
-        ApiConstants.employersP + ApiConstants.myTeacherProfile,
+        ApiConstants.employeesP + ApiConstants.myTeacherProfile,
       );
 
       if (response.statusCode == 200) {
@@ -70,7 +70,7 @@ class SharedRemoteDataSource {
   Future<int?> getTeacherId() async {
     try {
       final Response response = await _dioClient.get(
-        ApiConstants.employersP + ApiConstants.teachers,
+        ApiConstants.employeesP + ApiConstants.teachers,
       );
 
       if (response.statusCode == 200) {

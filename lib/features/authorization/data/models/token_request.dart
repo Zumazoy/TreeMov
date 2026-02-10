@@ -1,10 +1,10 @@
 class TokenRequest {
-  final String username;
+  final String email;
   final String password;
 
-  TokenRequest({required this.username, required this.password});
+  TokenRequest({required this.email, required this.password});
 
   Map<String, dynamic> toJson() {
-    return {'username': username, 'password': password};
+    return {'email': email, 'password': password};
   }
 }

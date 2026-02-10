@@ -11,8 +11,8 @@ class TokenResponse {
 
   factory TokenResponse.fromJson(Map<String, dynamic> json) {
     return TokenResponse(
-      accessToken: json['access'],
-      refreshToken: json['refresh'],
+      accessToken: json['access_token'],
+      refreshToken: json['refresh_token'],
       detail: json['detail'],
     );
   }

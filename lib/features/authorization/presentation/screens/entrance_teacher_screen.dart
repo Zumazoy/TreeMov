@@ -120,7 +120,7 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
     setState(() => _isLoading = true);
 
     context.read<TokenBloc>().add(
-      GetTokenEvent(username: email, password: password),
+      GetTokenEvent(email: email, password: password),
     );
   }
 

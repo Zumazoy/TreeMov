@@ -27,7 +27,7 @@ class RegisterRemoteDataSource {
   Future<RegisterResponseModel> register(RegisterRequestModel request) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.baseV1Url + ApiConstants.register,
+        ApiConstants.authUrl + ApiConstants.register,
         data: request.toJson(),
       );
 

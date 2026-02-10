@@ -4,10 +4,10 @@ part of 'token_bloc.dart';
 abstract class TokenEvent {}
 
 class GetTokenEvent extends TokenEvent {
-  final String username;
+  final String email;
   final String password;
 
-  GetTokenEvent({required this.username, required this.password});
+  GetTokenEvent({required this.email, required this.password});
 }
 
 class CheckTokenEvent extends TokenEvent {}
