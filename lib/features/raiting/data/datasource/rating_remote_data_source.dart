@@ -10,9 +10,7 @@ class RatingRemoteDataSource {
 
   Future<List<StudentResponseModel>> getAllStudents() async {
     try {
-      final Response response = await _dioClient.get(
-        ApiConstants.studentsP + ApiConstants.students,
-      );
+      final Response response = await _dioClient.get(ApiConstants.students);
 
       if (response.statusCode == 200) {
         final responseData = response.data;

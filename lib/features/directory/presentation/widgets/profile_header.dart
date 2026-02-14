@@ -80,7 +80,7 @@ class ProfileHeader extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: student.email ?? 'Не указана',
+                        //text: student.email ?? 'Не указана',
                         style: const TextStyle(
                           fontFamily: 'Arial',
                           fontWeight: FontWeight.w400,
@@ -134,26 +134,11 @@ class ProfileHeader extends StatelessWidget {
                 width: 4,
               ),
             ),
-            child: student.avatar != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(46),
-                    child: Image.network(
-                      student.avatar!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(
-                          Icons.person,
-                          color: AppColors.directoryTextSecondary,
-                          size: 50,
-                        );
-                      },
-                    ),
-                  )
-                : const Icon(
-                    Icons.person,
-                    color: AppColors.directoryTextSecondary,
-                    size: 50,
-                  ),
+            child: const Icon(
+              Icons.person,
+              color: AppColors.directoryTextSecondary,
+              size: 50,
+            ),
           ),
         ],
       ),

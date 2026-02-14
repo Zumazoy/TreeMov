@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/features/teacher_profile/presentation/bloc/teacher_profile_bloc.dart';
 import 'package:treemov/features/teacher_profile/presentation/screens/settings_screen.dart';
-import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
+import 'package:treemov/shared/data/models/org_member_response_model.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../widgets/daily_schedule_card.dart';
@@ -129,7 +129,7 @@ class _ProfileScreenContent extends StatelessWidget {
 
   AppBar _buildAppBar(
     BuildContext context,
-    TeacherProfileResponseModel? teacherProfile,
+    OrgMemberResponseModel? teacherProfile,
   ) {
     return AppBar(
       backgroundColor: AppColors.white,

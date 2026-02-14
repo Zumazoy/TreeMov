@@ -124,7 +124,7 @@ class LessonDetailsScreen extends StatelessWidget {
                             margin: const EdgeInsets.only(bottom: 16),
                             child: Text(
                               event.group != null
-                                  ? 'Группа "${event.formatTitle(event.group?.name)}"'
+                                  ? 'Группа "${event.formatTitle(event.group?.title)}"'
                                   : '(Не указан)',
                               style: const TextStyle(
                                 fontFamily: 'Arial',
@@ -139,7 +139,7 @@ class LessonDetailsScreen extends StatelessWidget {
                           _buildInfoRow(
                             iconPath: 'assets/images/activity_icon.png',
                             text: event.subject != null
-                                ? event.formatTitle(event.subject?.name)
+                                ? event.formatTitle(event.subject?.title)
                                 : '(Не указан)',
                           ),
                           const SizedBox(height: 12),
@@ -153,18 +153,6 @@ class LessonDetailsScreen extends StatelessWidget {
                           const SizedBox(height: 16),
 
                           _buildTimeSection(),
-                          const SizedBox(height: 16),
-
-                          _buildInfoRow(
-                            iconPath: 'assets/images/repeat_icon.png',
-                            text:
-                                event.periodLesson != null &&
-                                    event.periodLesson?.period != null
-                                ? event.formatPeriodLesson(
-                                    event.periodLesson?.period,
-                                  )
-                                : 'Без повтора',
-                          ),
                           const SizedBox(height: 12),
 
                           _buildInfoRow(

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
-import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
+import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 part 'teacher_profile_event.dart';
@@ -23,7 +23,7 @@ class TeacherProfileBloc
   ) async {
     emit(state.copyWith(isLoadingProfile: true, profileError: null));
     try {
-      final teacherProfile = await _sharedRepository.getMyTeacherProfile();
+      final teacherProfile = await _sharedRepository.getMyOrgProfile();
       emit(
         state.copyWith(teacherProfile: teacherProfile, isLoadingProfile: false),
       );

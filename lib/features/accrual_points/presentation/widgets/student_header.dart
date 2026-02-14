@@ -24,7 +24,7 @@ class StudentHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          StudentAvatar(avatarUrl: student.avatar, size: 40),
+          StudentAvatar(avatarUrl: null, size: 40),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

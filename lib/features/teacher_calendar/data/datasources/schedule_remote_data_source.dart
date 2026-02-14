@@ -2,8 +2,6 @@ import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_response_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/period_lesson_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_request_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
@@ -15,7 +13,7 @@ class ScheduleRemoteDataSource {
   Future<LessonResponseModel> getLessonById(int scheduleId) async {
     try {
       final response = await _dioClient.get(
-        '${ApiConstants.scheduleP + ApiConstants.lessons}$scheduleId/',
+        '${ApiConstants.lessons}$scheduleId/',
       );
 
       if (response.statusCode == 200) {
@@ -31,11 +29,11 @@ class ScheduleRemoteDataSource {
   Future<LessonResponseModel> createLesson(LessonRequestModel request) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.scheduleP + ApiConstants.lessons,
+        ApiConstants.lessons,
         data: request.toJson(),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return LessonResponseModel.fromJson(response.data);
       } else {
         throw Exception('Ошибка создания занятия: ${response.statusCode}');
@@ -45,33 +43,33 @@ class ScheduleRemoteDataSource {
     }
   }
 
-  Future<PeriodLessonResponseModel> createPeriodLesson(
-    PeriodLessonRequestModel request,
-  ) async {
-    try {
-      final response = await _dioClient.post(
-        ApiConstants.scheduleP + ApiConstants.periodLessons,
-        data: request.toJson(),
-      );
+  // Future<PeriodLessonResponseModel> createPeriodLesson(
+  //   PeriodLessonRequestModel request,
+  // ) async {
+  //   try {
+  //     final response = await _dioClient.post(
+  //       ApiConstants.periodLessons,
+  //       data: request.toJson(),
+  //     );
 
-      if (response.statusCode == 201) {
-        return PeriodLessonResponseModel.fromJson(response.data);
-      } else {
-        throw Exception(
-          'Ошибка создания периодического занятия: ${response.statusCode}',
-        );
-      }
-    } catch (e) {
-      throw Exception('Ошибка создания периодического занятия: $e');
-    }
-  }
+  //     if (response.statusCode == 201) {
+  //       return PeriodLessonResponseModel.fromJson(response.data);
+  //     } else {
+  //       throw Exception(
+  //         'Ошибка создания периодического занятия: ${response.statusCode}',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Ошибка создания периодического занятия: $e');
+  //   }
+  // }
 
   Future<AttendanceResponseModel> createAttendance(
     AttendanceRequestModel request,
   ) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.scheduleP + ApiConstants.attendances,
+        ApiConstants.attendances,
         data: request.toJson(),
       );
 

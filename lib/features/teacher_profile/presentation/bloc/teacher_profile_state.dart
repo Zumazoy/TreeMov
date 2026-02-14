@@ -1,7 +1,7 @@
 part of 'teacher_profile_bloc.dart';
 
 class TeacherProfileState extends Equatable {
-  final TeacherProfileResponseModel? teacherProfile;
+  final OrgMemberResponseModel? teacherProfile;
   final List<LessonResponseModel>? lessons;
   final bool isLoadingProfile;
   final bool isLoadingLessons;
@@ -20,7 +20,7 @@ class TeacherProfileState extends Equatable {
   factory TeacherProfileState.initial() => const TeacherProfileState();
 
   TeacherProfileState copyWith({
-    TeacherProfileResponseModel? teacherProfile,
+    OrgMemberResponseModel? teacherProfile,
     List<LessonResponseModel>? lessons,
     bool? isLoadingProfile,
     bool? isLoadingLessons,

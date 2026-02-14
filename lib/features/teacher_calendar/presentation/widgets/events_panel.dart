@@ -170,8 +170,8 @@ class EventsPanel extends StatelessWidget {
                   Text(
                     event.formatLessonTitle(
                       event.title,
-                      event.subject?.name,
-                      event.group?.name,
+                      event.subject?.title,
+                      event.group?.title,
                     ),
                     style: TextStyle(
                       fontSize: 14,

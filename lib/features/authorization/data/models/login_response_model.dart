@@ -1,7 +1,6 @@
 class LoginResponseModel {
   final String? accessToken;
   final String? refreshToken;
-
   final String? detail;
 
   LoginResponseModel({

@@ -117,7 +117,7 @@ class DailyScheduleCard extends StatelessWidget {
                 if (nextLesson != null && hasLessonsToday)
                   _buildScheduleItem(
                     'assets/images/clock_icon.png',
-                    'Следующий: ${nextLesson.group?.name ?? "Группа не указана"} ${_formatTimeRange(nextLesson)}',
+                    'Следующий: ${nextLesson.group?.title ?? "Группа не указана"} ${_formatTimeRange(nextLesson)}',
                     AppColors.statsPinnedText,
                     isTimeColored: true,
                   ),

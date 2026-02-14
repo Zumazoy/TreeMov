@@ -2,13 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/auth_interceptor.dart';
 import 'package:treemov/core/network/logging_interceptor.dart';
-import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
+import 'package:treemov/core/network/org_id_interceptor.dart';
+import 'package:treemov/shared/data/services/token_refresh_service_impl.dart';
+import 'package:treemov/shared/domain/services/token_refresh_service.dart';
+import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 class DioClient {
   late final Dio _dio;
-  final AuthStorageRepository authStorageRepository;
+  final SecureStorageRepository secureStorage;
+  late final TokenRefreshService _refreshService;
 
-  DioClient({required this.authStorageRepository}) {
+  DioClient({required this.secureStorage}) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
@@ -18,18 +22,23 @@ class DioClient {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        validateStatus: (status) =>
-            status! < 500, // Разрешаем все статусы кроме 5xx
+        // validateStatus: (status) => status! < 500,
       ),
     );
 
+    _refreshService = TokenRefreshServiceImpl(this, secureStorage);
     _addInterceptors();
   }
 
   void _addInterceptors() {
     _dio.interceptors.addAll([
+      OrgIdInterceptor(secureStorage: secureStorage),
       LoggingInterceptor(),
-      AuthInterceptor(authStorageRepository: authStorageRepository),
+      AuthInterceptor(
+        secureStorage: secureStorage,
+        refreshService: _refreshService,
+        dio: _dio,
+      ),
     ]);
   }
 

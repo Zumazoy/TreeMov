@@ -81,9 +81,6 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
       newEvents[dateKey]!.add(
         LessonEntity(
           id: lesson.id,
-          org: lesson.org,
-          createdBy: lesson.createdBy,
-          createdAt: lesson.createdAt,
           title: lesson.title,
           startTime: lesson.startTime,
           endTime: lesson.endTime,
@@ -93,12 +90,10 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
           isCompleted: lesson.isCompleted,
           duration: lesson.duration,
           comment: lesson.comment,
-          periodSchedule: lesson.periodSchedule,
-          periodLesson: lesson.periodLesson,
           teacher: lesson.teacher,
-          subject: lesson.subject,
-          group: lesson.group,
           classroom: lesson.classroom,
+          group: lesson.group,
+          subject: lesson.subject,
         ),
       );
     }

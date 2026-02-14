@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/app/routes/app_routes.dart';
-import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
+import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 class LogoutDialog {
   static Future<void> show({required BuildContext context}) async {
-    final authStorageRepository = getIt<AuthStorageRepository>();
+    final secureStorageRepository = getIt<SecureStorageRepository>();
 
     return showDialog(
       context: context,
@@ -20,7 +20,7 @@ class LogoutDialog {
           TextButton(
             onPressed: () async {
               Navigator.of(context).pop();
-              await _performLogout(context, authStorageRepository);
+              await _performLogout(context, secureStorageRepository);
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Выйти'),
@@ -32,7 +32,7 @@ class LogoutDialog {
 
   static Future<void> _performLogout(
     BuildContext context,
-    AuthStorageRepository authStorageRepository,
+    SecureStorageRepository authStorageRepository,
   ) async {
     try {
       await authStorageRepository.clearAllTokens();

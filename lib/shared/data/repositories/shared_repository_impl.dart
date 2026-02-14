@@ -1,9 +1,9 @@
 import 'package:treemov/shared/data/datasources/shared_remote_data_source.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
+import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
-import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 class SharedRepositoryImpl implements SharedRepository {
@@ -12,8 +12,8 @@ class SharedRepositoryImpl implements SharedRepository {
   SharedRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<TeacherProfileResponseModel> getMyTeacherProfile() async {
-    return await _remoteDataSource.getMyTeacherProfile();
+  Future<OrgMemberResponseModel> getMyOrgProfile() async {
+    return await _remoteDataSource.getMyOrgProfile();
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
-import 'package:treemov/features/teacher_calendar/presentation/screens/attendance_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/lesson_details_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
@@ -63,7 +62,7 @@ class EventDetailsModal extends StatelessWidget {
             child: Center(
               child: Text(
                 event.group != null
-                    ? 'Группа "${event.formatTitle(event.group?.name)}"'
+                    ? 'Группа "${event.formatTitle(event.group?.title)}"'
                     : '(Не указан)',
                 style: const TextStyle(
                   fontSize: 16,
@@ -95,7 +94,7 @@ class EventDetailsModal extends StatelessWidget {
                 _buildInfoRowWithIcon(
                   'assets/images/activity_icon.png',
                   event.subject != null
-                      ? event.formatTitle(event.subject?.name)
+                      ? event.formatTitle(event.subject?.title)
                       : '(Не указан)',
                 ),
                 _buildInfoRowWithIcon(
@@ -160,16 +159,16 @@ class EventDetailsModal extends StatelessWidget {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AttendanceScreen(
-                            lesson: event,
-                            schedulesBloc: schedulesBloc,
-                          ),
-                        ),
-                      );
+                      // Navigator.pop(context);
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => AttendanceScreen(
+                      //       lesson: event,
+                      //       schedulesBloc: schedulesBloc,
+                      //     ),
+                      //   ),
+                      // );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.teacherPrimary,

@@ -9,10 +9,10 @@ import 'package:treemov/features/teacher_profile/presentation/widgets/settings_p
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_security_section.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_support_section.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_system_section.dart';
-import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
+import 'package:treemov/shared/data/models/org_member_response_model.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final TeacherProfileResponseModel? teacherProfile;
+  final OrgMemberResponseModel? teacherProfile;
 
   const SettingsScreen({super.key, required this.teacherProfile});
 

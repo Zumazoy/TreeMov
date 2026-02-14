@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:treemov/features/reports/presentation/screens/reports_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
-import '../../../notes/presentation/screens/notes_screen.dart';
 
 class RepNotsButtons extends StatelessWidget {
   const RepNotsButtons({super.key});
@@ -64,10 +63,10 @@ class RepNotsButtons extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NotesScreen()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const NotesScreen()),
+                // );
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

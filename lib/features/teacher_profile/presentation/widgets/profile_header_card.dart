@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
-import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
+import 'package:treemov/shared/data/models/org_member_response_model.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
-  final TeacherProfileResponseModel? teacherProfile;
+  final OrgMemberResponseModel? teacherProfile;
 
   const ProfileHeaderCard({super.key, required this.teacherProfile});
 
@@ -11,7 +11,7 @@ class ProfileHeaderCard extends StatelessWidget {
     if (teacherProfile == null) {
       return 'Профиль null';
     }
-    final employer = teacherProfile!.teacher?.employer;
+    final employer = null; //teacherProfile!.teacher?.employee;
     if (employer == null) return 'Не указано';
 
     final parts = [
@@ -45,19 +45,11 @@ class ProfileHeaderCard extends StatelessWidget {
             child: CircleAvatar(
               radius: 36,
               backgroundColor: AppColors.directoryAvatarBackground,
-              child: teacherProfile != null
-                  ? teacherProfile!.teacher?.employer.inn != null
-                        ? Image.network(teacherProfile!.teacher!.employer.inn!)
-                        : Icon(
-                            Icons.person,
-                            size: 32,
-                            color: AppColors.teacherPrimary,
-                          )
-                  : Icon(
-                      Icons.person,
-                      size: 32,
-                      color: AppColors.teacherPrimary,
-                    ),
+              child: Icon(
+                Icons.person,
+                size: 32,
+                color: AppColors.teacherPrimary,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -74,10 +66,11 @@ class ProfileHeaderCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                teacherProfile != null
-                    ? teacherProfile!.teacher?.employer.email ??
-                          'Заглушка должности'
-                    : 'Профиль null',
+                'Заглушка должности',
+                // teacherProfile != null
+                //     ? teacherProfile!.teacher?.employee.email ??
+                //           'Заглушка должности'
+                //     : 'Профиль null',
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.directoryTextSecondary,

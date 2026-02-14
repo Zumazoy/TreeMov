@@ -16,7 +16,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<LoadLessonByIdEvent>(_onLoadLessonById);
     on<LoadStudentGroupByIdEvent>(_onLoadStudentGroupById);
     on<CreateLessonEvent>(_onCreateLesson);
-    on<CreatePeriodLessonEvent>(_onCreatePeriodLesson);
+    // on<CreatePeriodLessonEvent>(_onCreatePeriodLesson);
     on<CreateMassAttendanceEvent>(_onCreateMassAttendance);
     // on<UpdateScheduleEvent>(_onUpdateSchedule);
   }
@@ -74,19 +74,19 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     }
   }
 
-  Future<void> _onCreatePeriodLesson(
-    CreatePeriodLessonEvent event,
-    Emitter<ScheduleState> emit,
-  ) async {
-    emit(ScheduleLoading());
-    try {
-      await _scheduleRepository.createPeriodLesson(event.request);
-      emit(LessonOperationSuccess('Периодическое занятие успешно создано'));
-      add(LoadLessonsEvent());
-    } catch (e) {
-      emit(LessonError('Ошибка создания периодического занятия: $e'));
-    }
-  }
+  // Future<void> _onCreatePeriodLesson(
+  //   CreatePeriodLessonEvent event,
+  //   Emitter<ScheduleState> emit,
+  // ) async {
+  //   emit(ScheduleLoading());
+  //   try {
+  //     await _scheduleRepository.createPeriodLesson(event.request);
+  //     emit(LessonOperationSuccess('Периодическое занятие успешно создано'));
+  //     add(LoadLessonsEvent());
+  //   } catch (e) {
+  //     emit(LessonError('Ошибка создания периодического занятия: $e'));
+  //   }
+  // }
 
   Future<void> _onCreateMassAttendance(
     CreateMassAttendanceEvent event,

@@ -1,27 +1,31 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
+import 'package:treemov/core/constants/api_constants.dart';
+import 'package:treemov/shared/domain/services/token_refresh_service.dart';
+import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 class AuthInterceptor extends Interceptor {
-  final AuthStorageRepository authStorageRepository;
+  final SecureStorageRepository secureStorage;
+  final TokenRefreshService refreshService;
+  final Dio dio;
 
-  AuthInterceptor({required this.authStorageRepository});
+  AuthInterceptor({
+    required this.secureStorage,
+    required this.refreshService,
+    required this.dio,
+  });
 
   @override
   Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // Пропускаем запросы на аутентификацию
-    if (!_isAuthEndpoint(options.path)) {
+    if (_shouldNotAddToken(options.path)) {
       try {
-        final token = await authStorageRepository.getAccessToken();
+        final token = await secureStorage.getAccessToken();
 
         if (token != null && token.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $token';
-          debugPrint('✅ Token added to request: ${options.path}');
-        } else {
-          debugPrint('⚠️ No token available for request: ${options.path}');
         }
       } catch (e) {
         debugPrint('❌ Error getting token: $e');
@@ -32,37 +36,57 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
-  ) async {
-    debugPrint(
-      '✅ Response ${response.statusCode}: ${response.requestOptions.path}',
-    );
-    return handler.next(response);
-  }
-
-  @override
   Future<void> onError(
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    debugPrint('❌ Dio Error: ${err.type} - ${err.message}');
-    debugPrint('❌ Path: ${err.requestOptions.path}');
-
-    // Обработка ошибки 401 (Unauthorized)
-    if (err.response?.statusCode == 401) {
-      debugPrint('🔄 Token expired');
-
-      // Здесь можно добавить логику обновления токена
-      // await _refreshTokenAndRetry(err, handler);
-      // return;
+    if (!_shouldNotAddToken(err.requestOptions.path)) {
+      handler.next(err);
+      return;
+    }
+    if (err.response?.statusCode != 401) {
+      handler.next(err);
+      return;
     }
 
-    return handler.next(err);
+    debugPrint('🔄 Token expired, refreshing...');
+
+    try {
+      final newToken = await refreshService.refreshToken();
+
+      if (newToken != null) {
+        final options = err.requestOptions;
+        options.headers['Authorization'] = 'Bearer $newToken';
+
+        final response = await dio.fetch(options);
+        handler.resolve(response);
+        return;
+      }
+
+      debugPrint('❌ Refresh failed, redirecting to login');
+      await secureStorage.clearAllTokens();
+
+      // Редирект на экран авторизации
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      //   navigatorKey.currentState?.pushNamedAndRemoveUntil(
+      //     '/entrance',
+      //     (route) => false,
+      //   );
+      // });
+
+      handler.next(err);
+    } catch (e) {
+      debugPrint('❌ Error in auth interceptor: $e');
+      handler.next(err);
+    }
   }
 
-  bool _isAuthEndpoint(String path) {
-    return path.contains('token/') || path.contains('auth/');
+  bool _shouldNotAddToken(String path) {
+    for (final excludedPath in ApiConstants.excludedTokenPaths) {
+      if (path.contains(excludedPath)) {
+        return false;
+      }
+    }
+    return true;
   }
 }

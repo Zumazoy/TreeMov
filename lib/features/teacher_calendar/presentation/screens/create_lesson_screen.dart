@@ -6,9 +6,9 @@ import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_ev
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_request_model.dart';
+import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
-import 'package:treemov/shared/data/models/teacher_profile_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 import '../../../../core/themes/app_colors.dart';
@@ -51,7 +51,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
   DateTime _startDateTime = DateTime.now();
   DateTime _endDateTime = DateTime.now().add(const Duration(hours: 1));
 
-  final List<String> _repeatOptions = ['Повтор', 'Ежедневно', 'Еженедельно'];
+  // final List<String> _repeatOptions = ['Повтор', 'Ежедневно', 'Еженедельно'];
 
   final List<String> _reminderOptions = [
     'Не напоминать',
@@ -73,25 +73,25 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
         widget.sharedRepository.getStudentGroups(),
         widget.sharedRepository.getSubjects(),
         widget.sharedRepository.getClassrooms(),
-        widget.sharedRepository.getMyTeacherProfile(),
+        widget.sharedRepository.getMyOrgProfile(),
       ]);
 
       setState(() {
         _groups = results[0] as List<StudentGroupResponseModel>;
         _subjects = results[1] as List<SubjectResponseModel>;
         _classrooms = results[2] as List<ClassroomResponseModel>;
-        final teacherProfile = results[3] as TeacherProfileResponseModel;
-        _teacherId = teacherProfile.teacher?.id ?? 0;
+        final teacherProfile = results[3] as OrgMemberResponseModel;
+        _teacherId = teacherProfile.profile?.id ?? 0;
 
         // Устанавливаем значения по умолчанию
         if (_groups.isNotEmpty) {
           _groupId = _groups.first.id;
-          _selectedGroupName = _groups.first.name ?? 'Без названия';
+          _selectedGroupName = _groups.first.title ?? 'Без названия';
         }
 
         if (_subjects.isNotEmpty) {
           _subjectId = _subjects.first.id;
-          _selectedSubjectName = _subjects.first.name ?? 'Без названия';
+          _selectedSubjectName = _subjects.first.title ?? 'Без названия';
         }
 
         if (_classrooms.isNotEmpty) {
@@ -148,7 +148,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
         date: _startDateTime,
         comment: _descriptionController.text.isNotEmpty
             ? _descriptionController.text
-            : '',
+            : null,
       );
 
       widget.schedulesBloc.add(CreateLessonEvent(request));
@@ -301,19 +301,19 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
     }
   }
 
-  Widget _buildRepeatDropdown() {
-    return _buildStringDropdownCard(
-      title: 'Повтор',
-      value: _selectedRepeatOption ?? 'Повтор',
-      options: _repeatOptions,
-      onSelected: (value) {
-        setState(() {
-          _selectedRepeatOption = value;
-        });
-      },
-      iconPath: 'assets/images/repeat_icon.png',
-    );
-  }
+  // Widget _buildRepeatDropdown() {
+  //   return _buildStringDropdownCard(
+  //     title: 'Повтор',
+  //     value: _selectedRepeatOption ?? 'Повтор',
+  //     options: _repeatOptions,
+  //     onSelected: (value) {
+  //       setState(() {
+  //         _selectedRepeatOption = value;
+  //       });
+  //     },
+  //     iconPath: 'assets/images/repeat_icon.png',
+  //   );
+  // }
 
   Widget _buildModelDropdownCard<T>({
     required String title,
@@ -659,14 +659,14 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                           displayValue: _selectedGroupName,
                           items: _groups,
                           getDisplayName: (group) =>
-                              group.name ?? 'Без названия',
+                              group.title ?? 'Без названия',
                           getId: (group) => group.id,
                           onSelected: (group) {
                             if (group != null) {
                               setState(() {
                                 _groupId = group.id;
                                 _selectedGroupName =
-                                    group.name ?? 'Без названия';
+                                    group.title ?? 'Без названия';
                               });
                             }
                           },
@@ -680,14 +680,14 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                           displayValue: _selectedSubjectName,
                           items: _subjects,
                           getDisplayName: (subject) =>
-                              subject.name ?? 'Без названия',
+                              subject.title ?? 'Без названия',
                           getId: (subject) => subject.id,
                           onSelected: (subject) {
                             if (subject != null) {
                               setState(() {
                                 _subjectId = subject.id;
                                 _selectedSubjectName =
-                                    subject.name ?? 'Без названия';
+                                    subject.title ?? 'Без названия';
                               });
                             }
                           },
@@ -717,9 +717,8 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                         const SizedBox(height: 8),
 
                         // Период расписания (повтор)
-                        _buildRepeatDropdown(),
-                        const SizedBox(height: 8),
-
+                        // _buildRepeatDropdown(),
+                        // const SizedBox(height: 8),
                         _buildDateTimeSection(),
                         const SizedBox(height: 8),
 

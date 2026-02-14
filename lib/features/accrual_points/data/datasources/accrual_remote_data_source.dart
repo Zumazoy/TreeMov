@@ -12,7 +12,7 @@ class AccrualRemoteDataSource {
   ) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.studentsP + ApiConstants.accruals,
+        ApiConstants.authUrl, // не работает
         data: request.toJson(),
       );
 

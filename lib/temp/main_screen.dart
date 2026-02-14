@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
-import 'package:treemov/features/accrual_points/presentation/screens/groups_list_screen.dart';
-import 'package:treemov/features/directory/presentation/screens/directory_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 import 'package:treemov/features/teacher_profile/presentation/screens/profile_screen.dart';
 
@@ -19,8 +17,8 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     const CalendarScreen(),
-    const GroupsListScreen(),
-    const DirectoryScreen(),
+    const Center(child: CircularProgressIndicator()),
+    const Center(child: CircularProgressIndicator()),
     const ProfileScreen(),
   ];
 

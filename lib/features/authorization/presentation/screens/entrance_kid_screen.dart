@@ -4,8 +4,8 @@ import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/widgets/auth/auth_header.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
-import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
 import 'package:treemov/features/authorization/presentation/bloc/login_bloc.dart';
+import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
@@ -66,7 +66,7 @@ class _EntranceKidScreenState extends State<EntranceKidScreen> {
                     BlocProvider(
                       create: (context) => LoginBloc(
                         getIt<AuthRepository>(),
-                        getIt<AuthStorageRepository>(),
+                        getIt<SecureStorageRepository>(),
                       ),
                       child: _LoginButton(
                         emailController: _emailController,
@@ -174,7 +174,7 @@ class _LoginButton extends StatelessWidget {
 
     context.read<LoginBloc>().add(
       LoginSubmitted(
-        username: emailController.text,
+        email: emailController.text,
         password: passwordController.text,
       ),
     );
@@ -196,7 +196,7 @@ class _LoginButton extends StatelessWidget {
             AppRoutes.mainApp,
             (route) => false,
           );
-        } else if (state is LoginFailure) {
+        } else if (state is LoginError) {
           _showErrorSnackbar(context, state.error);
         }
       },
