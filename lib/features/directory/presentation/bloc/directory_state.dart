@@ -12,7 +12,7 @@ class DirectoryInitial extends DirectoryState {}
 class DirectoryLoading extends DirectoryState {}
 
 class GroupsLoaded extends DirectoryState {
-  final List<StudentGroupResponseModel> groups;
+  final List<GroupStudentsResponseModel> groups;
 
   const GroupsLoaded(this.groups);
 

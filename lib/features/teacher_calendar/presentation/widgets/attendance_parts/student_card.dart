@@ -91,26 +91,11 @@ class StudentCard extends StatelessWidget {
                 width: 2,
               ),
             ),
-            child: student['student'].avatar != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: Image.network(
-                      student['student'].avatar!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(
-                          Icons.person,
-                          color: AppColors.directoryTextSecondary,
-                          size: 28,
-                        );
-                      },
-                    ),
-                  )
-                : const Icon(
-                    Icons.person,
-                    color: AppColors.directoryTextSecondary,
-                    size: 28,
-                  ),
+            child: const Icon(
+              Icons.person,
+              color: AppColors.directoryTextSecondary,
+              size: 28,
+            ),
           ),
 
           const SizedBox(width: 12),

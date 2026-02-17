@@ -13,7 +13,7 @@ class PeriodLessonResponseModel extends BaseResponseModel {
   final String? startDate;
   final TeacherResponseModel? teacher;
   final SubjectResponseModel? subject;
-  final StudentGroupResponseModel? group;
+  final GroupStudentsResponseModel? group;
   final ClassroomResponseModel? classroom;
 
   PeriodLessonResponseModel({
@@ -51,7 +51,7 @@ class PeriodLessonResponseModel extends BaseResponseModel {
           ? SubjectResponseModel.fromJson(subjectJson)
           : null,
       group: groupJson != null && groupJson is Map<String, dynamic>
-          ? StudentGroupResponseModel.fromJson(groupJson)
+          ? GroupStudentsResponseModel.fromJson(groupJson)
           : null,
       classroom: classroomJson != null && classroomJson is Map<String, dynamic>
           ? ClassroomResponseModel.fromJson(classroomJson)

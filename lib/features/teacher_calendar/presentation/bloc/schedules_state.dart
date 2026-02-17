@@ -1,5 +1,5 @@
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
-import 'package:treemov/shared/data/models/student_group_response_model.dart';
+import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 
 abstract class ScheduleState {
   const ScheduleState();
@@ -9,7 +9,7 @@ class ScheduleInitial extends ScheduleState {}
 
 class ScheduleLoading extends ScheduleState {}
 
-class StudentGroupLoading extends ScheduleState {}
+class StudentsLoading extends ScheduleState {}
 
 class LessonsLoaded extends ScheduleState {
   final List<LessonResponseModel> lessons;
@@ -18,9 +18,9 @@ class LessonsLoaded extends ScheduleState {
 }
 
 class StudentGroupLoaded extends ScheduleState {
-  final StudentGroupResponseModel group;
+  final List<StudentInGroupResponseModel> studentsInGroup;
 
-  const StudentGroupLoaded(this.group);
+  const StudentGroupLoaded(this.studentsInGroup);
 }
 
 class LessonLoaded extends ScheduleState {

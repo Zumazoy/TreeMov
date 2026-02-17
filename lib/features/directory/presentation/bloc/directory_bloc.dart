@@ -19,7 +19,7 @@ class DirectoryBloc extends Bloc<DirectoryEvent, DirectoryState> {
   ) async {
     emit(DirectoryLoading());
     try {
-      final groups = await _sharedRepository.getStudentGroups();
+      final groups = await _sharedRepository.getGroupStudents();
       emit(GroupsLoaded(groups));
     } catch (e) {
       emit(DirectoryError(e.toString()));
