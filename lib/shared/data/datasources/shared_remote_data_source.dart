@@ -5,8 +5,8 @@ import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
+import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
-import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
 import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
@@ -169,7 +169,7 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<List<StudentInGroupResponseModel>> getStudentsInGroup(
+  Future<List<StudentGroupMemberResponseModel>> getStudentsInGroup(
     int groupId,
   ) async {
     try {
@@ -183,13 +183,13 @@ class SharedRemoteDataSource {
         if (responseData is List) {
           // Если ответ - массив
           return responseData
-              .map<StudentInGroupResponseModel>(
-                (json) => StudentInGroupResponseModel.fromJson(json),
+              .map<StudentGroupMemberResponseModel>(
+                (json) => StudentGroupMemberResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
           // Если ответ - не массив (оборачиваем в список)
-          return [StudentInGroupResponseModel.fromJson(responseData)];
+          return [StudentGroupMemberResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
         }
