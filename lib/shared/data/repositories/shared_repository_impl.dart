@@ -22,10 +22,10 @@ class SharedRepositoryImpl implements SharedRepository {
     return await _remoteDataSource.getLessons();
   }
 
-  // @override
-  // Future<int?> getTeacherId() async {
-  //   return await _remoteDataSource.getTeacherId();
-  // }
+  @override
+  Future<int?> getTeacherId() async {
+    return await _remoteDataSource.getTeacherId();
+  }
 
   @override
   Future<List<SubjectResponseModel>> getSubjects() async {

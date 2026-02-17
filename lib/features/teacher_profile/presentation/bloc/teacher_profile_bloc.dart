@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
+import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 part 'teacher_profile_event.dart';
 part 'teacher_profile_state.dart';
@@ -10,8 +11,9 @@ part 'teacher_profile_state.dart';
 class TeacherProfileBloc
     extends Bloc<TeacherProfileEvent, TeacherProfileState> {
   final SharedRepository _sharedRepository;
+  final SecureStorageRepository _secureStorage;
 
-  TeacherProfileBloc(this._sharedRepository)
+  TeacherProfileBloc(this._sharedRepository, this._secureStorage)
     : super(TeacherProfileState.initial()) {
     on<LoadTeacherProfile>(_onLoadTeacherProfile);
     on<LoadLessons>(_onLoadLessons);
@@ -24,6 +26,7 @@ class TeacherProfileBloc
     emit(state.copyWith(isLoadingProfile: true, profileError: null));
     try {
       final teacherProfile = await _sharedRepository.getMyOrgProfile();
+      await _secureStorage.saveOrgMemberId(teacherProfile.id.toString());
       emit(
         state.copyWith(teacherProfile: teacherProfile, isLoadingProfile: false),
       );

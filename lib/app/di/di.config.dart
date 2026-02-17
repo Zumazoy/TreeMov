@@ -116,7 +116,10 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<TeacherProfileBloc>(
-    () => TeacherProfileBloc(getIt<SharedRepository>()),
+    () => TeacherProfileBloc(
+      getIt<SharedRepository>(),
+      getIt<SecureStorageRepository>(),
+    ),
   );
 
   getIt.registerFactory<RegisterBloc>(

@@ -43,7 +43,7 @@ class ProfileInfoSection extends StatelessWidget {
     }
   }
 
-  // TODO: Здесь нужно будет получать группы студента из отдельного API
+  // Здесь нужно будет получать группы студента из отдельного API
   List<GroupStudentsResponseModel> _getOtherGroups() {
     return [];
   }

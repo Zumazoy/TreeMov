@@ -19,9 +19,7 @@ class ApiConstants {
   static const String attendances = 'attendances';
   static const String students = 'students/';
   static const String studentGroups = 'student-groups/';
-  static const String studentGroupsMembers = 'student-groups-members/';
-
-  static const String teachers = 'teachers/';
+  static const String teachers = 'teachers';
   static const String myOrgs = 'organizations/me/';
 
   static const String addOrgMember = 'add_org_member/';
