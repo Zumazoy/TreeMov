@@ -381,17 +381,15 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
     final firstDay = DateTime(_currentDate.year, _currentDate.month, 1);
     final lastDay = DateTime(_currentDate.year, _currentDate.month + 1, 0);
 
-    int firstWeekday = firstDay.weekday;
-    if (firstWeekday == 7) firstWeekday = 0;
+    int firstWeekdayIndex = firstDay.weekday - 1;
 
-    for (int i = 0; i < firstWeekday; i++) {
+    for (int i = 0; i < firstWeekdayIndex; i++) {
       days.add(null);
     }
 
     for (int i = 1; i <= lastDay.day; i++) {
       days.add(DateTime(_currentDate.year, _currentDate.month, i));
     }
-
     return days;
   }
 
@@ -399,10 +397,9 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
     final firstDay = DateTime(_currentDate.year, _currentDate.month, 1);
     final lastDay = DateTime(_currentDate.year, _currentDate.month + 1, 0);
 
-    int firstWeekday = firstDay.weekday;
-    if (firstWeekday == 7) firstWeekday = 0;
+    int firstWeekdayIndex = firstDay.weekday - 1;
 
-    final totalCells = lastDay.day + firstWeekday;
+    final totalCells = lastDay.day + firstWeekdayIndex;
     final weeks = (totalCells / 7).ceil();
 
     return weeks * 56.0;
