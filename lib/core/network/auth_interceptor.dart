@@ -64,7 +64,7 @@ class AuthInterceptor extends Interceptor {
       }
 
       debugPrint('❌ Refresh failed, redirecting to login');
-      await secureStorage.clearAllTokens();
+      await secureStorage.deleteAllTokens();
 
       // Редирект на экран авторизации
       // WidgetsBinding.instance.addPostFrameCallback((_) {

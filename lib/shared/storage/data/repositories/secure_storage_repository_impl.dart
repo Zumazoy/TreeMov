@@ -27,7 +27,7 @@ class SecureStorageRepositoryImpl implements SecureStorageRepository {
   }
 
   @override
-  Future<void> clearAllTokens() async {
+  Future<void> deleteAllTokens() async {
     await _storage.delete(key: Constants.accessTokenKey);
     await _storage.delete(key: Constants.refreshTokenKey);
   }
@@ -41,5 +41,10 @@ class SecureStorageRepositoryImpl implements SecureStorageRepository {
   @override
   Future<String?> getOrgId() async {
     return await _storage.read(key: Constants.orgIdKey);
+  }
+
+  @override
+  Future<void> deleteOrgId() async {
+    await _storage.delete(key: Constants.orgIdKey);
   }
 }
