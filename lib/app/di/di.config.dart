@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:treemov/core/network/dio_client.dart';
-import 'package:treemov/core/themes/theme_cubit.dart';
 import 'package:treemov/features/authorization/data/datasources/auth_remote_data_source.dart';
 import 'package:treemov/features/authorization/data/repositories/auth_repository_impl.dart';
 import 'package:treemov/features/authorization/data/repositories/auth_storage_repository_impl.dart';
@@ -15,7 +14,6 @@ import 'package:treemov/features/notes/domain/repositories/local_notes_repositor
 import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository.dart';
 import 'package:treemov/features/notes/domain/repositories/teacher_notes_repository_impl.dart';
 import 'package:treemov/features/notes/presentation/blocs/notes/notes_bloc.dart';
-import 'package:treemov/features/profile/data/datasources/settings_service.dart';
 import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remote_data_source.dart';
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
@@ -30,9 +28,6 @@ void setupDependencies() {
   // Локальные хранилища
   getIt.registerSingleton<AuthStorageRepository>(AuthStorageRepositoryImpl());
   getIt.registerSingleton<LocalNotesDataSource>(LocalNotesDataSource());
-
-  // Добавляем SettingsService
-  getIt.registerSingleton<SettingsService>(SettingsService()); //
 
   // Клиент
   getIt.registerSingleton<DioClient>(
@@ -94,10 +89,5 @@ void setupDependencies() {
       getIt<TeacherNotesRepository>(),
       getIt<LocalNotesRepository>(),
     ),
-  );
-
-  // Добавляем ThemeCubit
-  getIt.registerSingleton<ThemeCubit>(
-    ThemeCubit(getIt<SettingsService>()), //
   );
 }
