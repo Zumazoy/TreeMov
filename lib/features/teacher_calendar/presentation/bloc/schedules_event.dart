@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/period_schedule_request_model.dart';
-import 'package:treemov/features/teacher_calendar/data/models/schedule_request_model.dart';
+import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
+import 'package:treemov/shared/data/models/lesson_request_model.dart';
 
 abstract class ScheduleEvent extends Equatable {
   const ScheduleEvent();
@@ -10,20 +10,20 @@ abstract class ScheduleEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadSchedulesEvent extends ScheduleEvent {
-  const LoadSchedulesEvent();
+class LoadLessonsEvent extends ScheduleEvent {
+  const LoadLessonsEvent();
 
   @override
   List<Object?> get props => [];
 }
 
-class LoadScheduleByIdEvent extends ScheduleEvent {
-  final int scheduleId;
+class LoadLessonByIdEvent extends ScheduleEvent {
+  final int lessonId;
 
-  const LoadScheduleByIdEvent(this.scheduleId);
+  const LoadLessonByIdEvent(this.lessonId);
 
   @override
-  List<Object?> get props => [scheduleId];
+  List<Object?> get props => [lessonId];
 }
 
 class LoadStudentGroupByIdEvent extends ScheduleEvent {
@@ -35,19 +35,19 @@ class LoadStudentGroupByIdEvent extends ScheduleEvent {
   List<Object?> get props => [groupId];
 }
 
-class CreateScheduleEvent extends ScheduleEvent {
-  final ScheduleRequestModel request;
+class CreateLessonEvent extends ScheduleEvent {
+  final LessonRequestModel request;
 
-  const CreateScheduleEvent(this.request);
+  const CreateLessonEvent(this.request);
 
   @override
   List<Object?> get props => [request];
 }
 
-class CreatePeriodScheduleEvent extends ScheduleEvent {
-  final PeriodScheduleRequestModel request;
+class CreatePeriodLessonEvent extends ScheduleEvent {
+  final PeriodLessonRequestModel request;
 
-  const CreatePeriodScheduleEvent(this.request);
+  const CreatePeriodLessonEvent(this.request);
 
   @override
   List<Object?> get props => [request];

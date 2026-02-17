@@ -4,8 +4,8 @@ import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/widgets/auth/auth_header.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
-import 'package:treemov/features/authorization/domain/repositories/auth_storage_repository.dart';
-import 'package:treemov/features/authorization/presentation/blocs/token/token_bloc.dart';
+import 'package:treemov/features/authorization/presentation/bloc/login_bloc.dart';
+import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
@@ -15,20 +15,18 @@ class EntranceTeacherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TokenBloc(
-        authRepository: getIt<AuthRepository>(),
-        authStorageRepository: getIt<AuthStorageRepository>(),
-      ),
-      child: BlocListener<TokenBloc, TokenState>(
+      create: (context) =>
+          LoginBloc(getIt<AuthRepository>(), getIt<SecureStorageRepository>()),
+      child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
-          if (state is TokenSuccess) {
+          if (state is LoginSuccess) {
             // Успешная авторизация
             Navigator.pushNamedAndRemoveUntil(
               context,
               AppRoutes.mainApp,
               (route) => false,
             );
-          } else if (state is TokenError) {
+          } else if (state is LoginError) {
             // Показ ошибки авторизации
             _showErrorDialog(context, state.error);
           }
@@ -119,8 +117,8 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
 
     setState(() => _isLoading = true);
 
-    context.read<TokenBloc>().add(
-      GetTokenEvent(username: email, password: password),
+    context.read<LoginBloc>().add(
+      LoginSubmitted(email: email, password: password),
     );
   }
 
@@ -139,11 +137,11 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TokenBloc, TokenState>(
+    return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state is TokenLoading) {
+        if (state is LoginLoading) {
           setState(() => _isLoading = true);
-        } else if (state is TokenError || state is TokenSuccess) {
+        } else if (state is LoginError || state is LoginSuccess) {
           setState(() => _isLoading = false);
         }
       },

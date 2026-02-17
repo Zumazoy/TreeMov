@@ -89,6 +89,13 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 15),
 
+              NavButton(
+                text: 'Рейтинг',
+                route: AppRoutes.rating,
+                color: Colors.blueAccent,
+              ),
+              const SizedBox(height: 15),
+
               const Text(
                 'Это тестовые кнопки',
                 style: TextStyle(fontSize: 16, color: Colors.grey),

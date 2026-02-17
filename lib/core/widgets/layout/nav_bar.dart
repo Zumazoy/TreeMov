@@ -15,81 +15,75 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final unselectedColor = AppColors.grey;
-    final selectedColor = AppColors.plusButton;
+    final selectedGradient = const LinearGradient(
+      colors: [Color(0xFF19BCDB), Color(0xFF741CDB)],
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+    );
 
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: onTap,
       type: BottomNavigationBarType.fixed,
       backgroundColor: AppColors.white,
-      selectedItemColor: selectedColor,
+      selectedItemColor: Colors.transparent,
       unselectedItemColor: unselectedColor,
-      selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
-      showSelectedLabels: true,
-      showUnselectedLabels: true,
-
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
+      elevation: 8,
       items: [
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'assets/images/calendar_icon.png',
-            width: 24,
-            height: 24,
-            color: unselectedColor,
-          ),
-          activeIcon: Image.asset(
-            'assets/images/calendar_icon.png',
-            width: 24,
-            height: 24,
-            color: selectedColor,
-          ),
-          label: 'Календарь',
+        _buildNavItem(
+          iconPath: 'assets/images/calendar_icon.png',
+          isSelected: currentIndex == 0,
+          unselectedColor: unselectedColor,
+          gradient: selectedGradient,
         ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'assets/images/leaderboard_icon.png',
-            width: 24,
-            height: 24,
-            color: unselectedColor,
-          ),
-          activeIcon: Image.asset(
-            'assets/images/leaderboard_icon.png',
-            width: 24,
-            height: 24,
-            color: selectedColor,
-          ),
-          label: 'Рейтинг',
+        _buildNavItem(
+          iconPath: 'assets/images/stars_filled_icon.png',
+          isSelected: currentIndex == 1,
+          unselectedColor: unselectedColor,
+          gradient: selectedGradient,
         ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'assets/images/shop_icon.png',
-            width: 24,
-            height: 24,
-            color: unselectedColor,
-          ),
-          activeIcon: Image.asset(
-            'assets/images/shop_icon.png',
-            width: 24,
-            height: 24,
-            color: selectedColor,
-          ),
-          label: 'Справка',
+        _buildNavItem(
+          iconPath: 'assets/images/idcard_icon.png',
+          isSelected: currentIndex == 2,
+          unselectedColor: unselectedColor,
+          gradient: selectedGradient,
         ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'assets/images/tree_profile.png',
-            width: 24,
-            height: 24,
-            color: unselectedColor,
-          ),
-          activeIcon: Image.asset(
-            'assets/images/tree_profile.png',
-            width: 24,
-            height: 24,
-            color: selectedColor,
-          ),
-          label: 'Профиль',
+        _buildNavItem(
+          iconPath: 'assets/images/person_icon.png',
+          isSelected: currentIndex == 3,
+          unselectedColor: unselectedColor,
+          gradient: selectedGradient,
         ),
       ],
+    );
+  }
+
+  BottomNavigationBarItem _buildNavItem({
+    required String iconPath,
+    required bool isSelected,
+    required Color unselectedColor,
+    required Gradient gradient,
+  }) {
+    return BottomNavigationBarItem(
+      icon: Image.asset(
+        iconPath,
+        width: 24,
+        height: 24,
+        color: isSelected ? null : unselectedColor,
+      ),
+      activeIcon: ShaderMask(
+        shaderCallback: (bounds) => gradient.createShader(bounds),
+        blendMode: BlendMode.srcIn,
+        child: Image.asset(
+          iconPath,
+          width: 24,
+          height: 24,
+          color: Colors.white,
+        ),
+      ),
+      label: '',
     );
   }
 }

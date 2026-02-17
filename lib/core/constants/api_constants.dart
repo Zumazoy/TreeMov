@@ -1,26 +1,59 @@
 class ApiConstants {
-  static const String baseUrl = 'http://10.0.2.2:8000/api/';
-  static const String tokenKey = 'jwt_token';
-  static const String refreshTokenKey = 'refresh_token';
   static const Duration connectTimeout = Duration(seconds: 10);
   static const Duration receiveTimeout = Duration(seconds: 10);
 
-  // Prefixes
-  static const String scheduleP = 'schedule/';
-  static const String studentsP = 'students/';
-  static const String employersP = 'employers/';
+  static const String baseUrl = 'http://10.0.2.2:8001/api/v1/';
+  static const String authUrl = 'http://10.0.2.2:8000/api/v1/';
+  static const String emailUrl = 'http://10.0.2.2:8002/email/';
 
-  // Endpoints
-  static const String token = 'token/';
+  // Auth
+  static const String register = 'auth/register';
+  static const String login = 'auth/login';
+  static const String refresh = 'auth/refresh';
+  static const String logout = 'auth/logout';
 
-  static const String lessons = 'lessons/';
+  // Main
+  static const String lessons = 'lessons';
   static const String subjects = 'subjects/';
   static const String classrooms = 'classrooms/';
   static const String attendances = 'attendances/';
-  static const String periodLessons = 'period_lessons/';
-
-  static const String studentGroups = 'student_groups/';
-
+  static const String students = 'students/';
+  static const String studentGroups = 'student-groups/';
   static const String teachers = 'teachers/';
-  static const String teacherNotes = 'teacher_notes/';
+  static const String myOrgs = 'organizations/me/';
+
+  static const String addOrgMember = 'add_org_member/';
+
+  // Endpoints requiring org-id header
+  static const List<String> endpointsRequiringOrgId = [
+    lessons,
+    subjects,
+    classrooms,
+    attendances,
+    students,
+    studentGroups,
+    teachers,
+    myOrgs,
+    addOrgMember,
+  ];
+
+  // Endpoints not requiring org-id header
+  static const List<String> excludedOrgIdPaths = [
+    register,
+    login,
+    refresh,
+    logout,
+  ];
+
+  // Endpoints not requiring token
+  static const List<String> excludedTokenPaths = [
+    register,
+    login,
+    refresh,
+    logout,
+  ];
+
+  // static const String periodLessons = 'period_lessons/'; Отсутcвует соответствующий роут в документации
+  // static const String accruals = 'accruals/'; Отсутствет соответствующий роут в документации
+  // static const String teacherNotes = 'teacher_notes/'; Отсутcвует соответствующий роут в документации
 }

@@ -1,35 +1,17 @@
-// Базовые данные для всех response моделей
 import 'package:treemov/shared/domain/models/base_entity.dart';
 
+// Базовые данные для всех response моделей
 class BaseResponseData {
   final int? id;
-  final int? org;
-  final int? createdBy;
-  final String? createdAt;
 
-  const BaseResponseData({
-    required this.id,
-    required this.org,
-    required this.createdBy,
-    required this.createdAt,
-  });
+  const BaseResponseData({required this.id});
 
   factory BaseResponseData.fromJson(Map<String, dynamic> json) {
-    return BaseResponseData(
-      id: json['id'] ?? 0,
-      org: json['org'] ?? 0,
-      createdBy: json['created_by'] ?? 0,
-      createdAt: json['created_at'],
-    );
+    return BaseResponseData(id: json['id'] ?? 0);
   }
 
   BaseEntityData toEntityData() {
-    return BaseEntityData(
-      id: id,
-      org: org,
-      createdBy: createdBy,
-      createdAt: createdAt,
-    );
+    return BaseEntityData(id: id);
   }
 }
 
@@ -40,9 +22,6 @@ abstract class BaseResponseModel {
   const BaseResponseModel({required this.baseData});
 
   int? get id => baseData.id;
-  int? get org => baseData.org;
-  int? get createdBy => baseData.createdBy;
-  String? get createdAt => baseData.createdAt;
 }
 
 extension BaseResponseParsing on Map<String, dynamic> {

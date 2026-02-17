@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/schedule_entity.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 
 import '../../../../core/themes/app_colors.dart';
@@ -7,7 +7,7 @@ import 'event_details_modal.dart';
 
 class EventsPanel extends StatelessWidget {
   final DateTime selectedDate;
-  final List<ScheduleEntity> events;
+  final List<LessonEntity> events;
   final SchedulesBloc schedulesBloc;
 
   const EventsPanel({
@@ -20,7 +20,7 @@ class EventsPanel extends StatelessWidget {
   static void show({
     required BuildContext context,
     required DateTime selectedDate,
-    required List<ScheduleEntity> events,
+    required List<LessonEntity> events,
     required SchedulesBloc schedulesBloc,
   }) {
     showModalBottomSheet(
@@ -105,7 +105,7 @@ class EventsPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildEventItem(ScheduleEntity event, BuildContext context) {
+  Widget _buildEventItem(LessonEntity event, BuildContext context) {
     final timeParts = event
         .formatTime(event.startTime, event.endTime)
         .split('\n');
@@ -168,7 +168,11 @@ class EventsPanel extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    event.formatTitle(event.title),
+                    event.formatLessonTitle(
+                      event.title,
+                      event.subject?.title,
+                      event.group?.title,
+                    ),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -180,11 +184,9 @@ class EventsPanel extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    event.formatTitle(
-                      event.classroom != null
-                          ? event.classroom?.title
-                          : '(Не указана)',
-                    ),
+                    event.classroom != null
+                        ? event.formatTitle(event.classroom?.title)
+                        : '(Не указана)',
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.grey,
@@ -220,7 +222,7 @@ class EventsPanel extends StatelessWidget {
     );
   }
 
-  void _showEventDetails(BuildContext context, ScheduleEntity event) {
+  void _showEventDetails(BuildContext context, LessonEntity event) {
     Navigator.pop(context);
     EventDetailsModal.show(
       context: context,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/widgets/auth/auth_header.dart';
+import 'package:treemov/features/registration/presentation/screens/parent_info_screen.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
@@ -14,6 +14,8 @@ class KidInfoScreen extends StatefulWidget {
 class _KidInfoScreenState extends State<KidInfoScreen> {
   bool _obscurePassword1 = true;
   bool _obscurePassword2 = true;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController1 = TextEditingController();
   final TextEditingController _passwordController2 = TextEditingController();
   String? _passwordError;
@@ -38,8 +40,41 @@ class _KidInfoScreenState extends State<KidInfoScreen> {
     });
   }
 
+  void _onNextPressed(BuildContext context) {
+    if (_passwordError != null) return;
+
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController1.text;
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Заполните все поля'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ParentInfoScreen(
+          registrationData: {
+            'username': name,
+            'email': email,
+            'password': password,
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
     _passwordController1.dispose();
     _passwordController2.dispose();
     super.dispose();
@@ -52,7 +87,6 @@ class _KidInfoScreenState extends State<KidInfoScreen> {
       body: Stack(
         children: [
           const AuthHeader(),
-
           Center(
             child: SingleChildScrollView(
               child: Container(
@@ -62,7 +96,6 @@ class _KidInfoScreenState extends State<KidInfoScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 180),
-
                     const Text(
                       'Регистрация',
                       style: TextStyle(
@@ -74,10 +107,10 @@ class _KidInfoScreenState extends State<KidInfoScreen> {
                     ),
                     const SizedBox(height: 40),
 
-                    _buildTextField('ФИО'),
+                    _buildTextField('ФИО', controller: _nameController),
                     const SizedBox(height: 20),
 
-                    _buildTextField('Личный код'),
+                    _buildTextField('Email', controller: _emailController),
                     const SizedBox(height: 20),
 
                     _buildPasswordField(
@@ -122,14 +155,7 @@ class _KidInfoScreenState extends State<KidInfoScreen> {
                       width: 316,
                       height: 44,
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (_passwordError == null) {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.parentInfoScreen,
-                            );
-                          }
-                        },
+                        onPressed: () => _onNextPressed(context),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.kidButton,
                           foregroundColor: AppColors.white,
@@ -160,7 +186,10 @@ class _KidInfoScreenState extends State<KidInfoScreen> {
     );
   }
 
-  Widget _buildTextField(String hintText) {
+  Widget _buildTextField(
+    String hintText, {
+    required TextEditingController controller,
+  }) {
     return Container(
       width: 316,
       height: 44,
@@ -169,6 +198,7 @@ class _KidInfoScreenState extends State<KidInfoScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
