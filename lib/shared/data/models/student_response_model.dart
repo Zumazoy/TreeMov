@@ -29,7 +29,9 @@ class StudentResponseModel extends BaseResponseModel
       progress: json['progress'],
       birthday: json['birthday'],
       score: json['score'],
-      orgMember: OrgMemberResponseModel.fromJson(json['org_member']),
+      orgMember: json['org_member'] != null
+          ? OrgMemberResponseModel.fromJson(json['org_member'])
+          : null,
     );
   }
 

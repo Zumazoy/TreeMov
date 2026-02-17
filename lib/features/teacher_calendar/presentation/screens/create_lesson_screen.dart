@@ -41,7 +41,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
 
   final TextEditingController _descriptionController = TextEditingController();
 
-  List<StudentGroupResponseModel> _groups = [];
+  List<GroupStudentsResponseModel> _groups = [];
   List<SubjectResponseModel> _subjects = [];
   List<ClassroomResponseModel> _classrooms = [];
 
@@ -70,14 +70,14 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
   Future<void> _loadInitialData() async {
     try {
       final results = await Future.wait([
-        widget.sharedRepository.getStudentGroups(),
+        widget.sharedRepository.getGroupStudents(),
         widget.sharedRepository.getSubjects(),
         widget.sharedRepository.getClassrooms(),
         widget.sharedRepository.getMyOrgProfile(),
       ]);
 
       setState(() {
-        _groups = results[0] as List<StudentGroupResponseModel>;
+        _groups = results[0] as List<GroupStudentsResponseModel>;
         _subjects = results[1] as List<SubjectResponseModel>;
         _classrooms = results[2] as List<ClassroomResponseModel>;
         final teacherProfile = results[3] as OrgMemberResponseModel;
@@ -654,7 +654,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                     child: Column(
                       children: [
                         // Группа
-                        _buildModelDropdownCard<StudentGroupResponseModel>(
+                        _buildModelDropdownCard<GroupStudentsResponseModel>(
                           title: 'Группа/ученик',
                           displayValue: _selectedGroupName,
                           items: _groups,

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/core/themes/theme_cubit.dart';
 import 'package:treemov/features/accrual_points/data/datasources/accrual_remote_data_source.dart';
 import 'package:treemov/features/accrual_points/data/repositories/accrual_repository_impl.dart';
 import 'package:treemov/features/accrual_points/domain/repositories/accrual_repository.dart';
@@ -21,6 +22,7 @@ import 'package:treemov/features/teacher_calendar/data/datasources/schedule_remo
 import 'package:treemov/features/teacher_calendar/data/repositories/schedule_repository_impl.dart';
 import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_profile/data/services/settings_service.dart';
 import 'package:treemov/features/teacher_profile/presentation/bloc/teacher_profile_bloc.dart';
 import 'package:treemov/shared/data/datasources/shared_remote_data_source.dart';
 import 'package:treemov/shared/data/repositories/shared_repository_impl.dart';
@@ -64,6 +66,7 @@ void setupDependencies() {
   getIt.registerSingleton<RegisterRemoteDataSource>(
     RegisterRemoteDataSource(getIt<DioClient>()),
   );
+  getIt.registerSingleton<SettingsService>(SettingsService());
 
   // Репозитории
   getIt.registerSingleton<AuthRepository>(
@@ -88,7 +91,7 @@ void setupDependencies() {
     RegisterRepositoryImpl(getIt<RegisterRemoteDataSource>()),
   );
 
-  // BLoC - регистрируем фабрику, так как BLoC должен создаваться заново
+  // BLoC
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(getIt<AuthRepository>(), getIt<SecureStorageRepository>()),
   );
@@ -119,4 +122,7 @@ void setupDependencies() {
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(getIt<RegisterRepository>()),
   );
+
+  // Тема
+  getIt.registerSingleton<ThemeCubit>(ThemeCubit(getIt<SettingsService>()));
 }

@@ -26,10 +26,10 @@ class LoadLessonByIdEvent extends ScheduleEvent {
   List<Object?> get props => [lessonId];
 }
 
-class LoadStudentGroupByIdEvent extends ScheduleEvent {
+class LoadStudentsInGroupByIdEvent extends ScheduleEvent {
   final int groupId;
 
-  const LoadStudentGroupByIdEvent(this.groupId);
+  const LoadStudentsInGroupByIdEvent(this.groupId);
 
   @override
   List<Object?> get props => [groupId];

@@ -7,6 +7,7 @@ import 'package:treemov/features/directory/presentation/widgets/app_bar_title.da
 import 'package:treemov/features/directory/presentation/widgets/group_item.dart';
 import 'package:treemov/features/directory/presentation/widgets/search_field.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
+import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
@@ -16,7 +17,8 @@ class DirectoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<DirectoryBloc>()..add(LoadStudentGroups()),
+      create: (context) =>
+          getIt<DirectoryBloc>()..add(LoadAllGroupsWithCounts()),
       child: const _DirectoryScreenContent(),
     );
   }
@@ -31,8 +33,10 @@ class _DirectoryScreenContent extends StatefulWidget {
 
 class _DirectoryScreenState extends State<_DirectoryScreenContent> {
   final TextEditingController _searchController = TextEditingController();
-  List<StudentGroupResponseModel> _allGroups = [];
-  List<StudentGroupResponseModel> _filteredGroups = [];
+  List<GroupStudentsResponseModel> _allGroups = [];
+  Map<int, int> _groupStudentCounts = {};
+  Map<int, List<StudentInGroupResponseModel>> _groupStudents = {};
+  List<GroupStudentsResponseModel> _filteredGroups = [];
   bool _hasSearchQuery = false;
 
   void _onSearchChanged(String query) {
@@ -50,12 +54,17 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
     });
   }
 
-  void _onGroupTap(StudentGroupResponseModel group) {
+  void _onGroupTap(GroupStudentsResponseModel group) {
+    final groupStudents = _groupStudents[group.id] ?? [];
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            StudentDirectoryScreen(group: group, allGroups: _allGroups),
+        builder: (context) => StudentDirectoryScreen(
+          group: group,
+          allGroups: _allGroups,
+          initialStudents: groupStudents,
+        ),
       ),
     );
   }
@@ -64,9 +73,11 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
   Widget build(BuildContext context) {
     return BlocConsumer<DirectoryBloc, DirectoryState>(
       listener: (context, state) {
-        if (state is GroupsLoaded) {
+        if (state is GroupsWithCountsLoaded) {
           setState(() {
             _allGroups = state.groups;
+            _groupStudentCounts = state.groupStudentCounts;
+            _groupStudents = state.groupStudents;
             _filteredGroups = state.groups;
           });
         }
@@ -110,7 +121,7 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
               color: AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'Ошибка загрузки',
               style: TextStyle(
                 fontSize: 16,
@@ -122,7 +133,7 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
             Text(
               state.message,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.directoryTextSecondary,
               ),
@@ -130,7 +141,7 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () =>
-                  context.read<DirectoryBloc>().add(LoadStudentGroups()),
+                  context.read<DirectoryBloc>().add(LoadAllGroupsWithCounts()),
               child: const Text('Попробовать снова'),
             ),
           ],
@@ -149,7 +160,7 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
               color: AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'Группы не найдены',
               style: TextStyle(
                 fontSize: 16,
@@ -158,7 +169,7 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Попробуйте изменить поисковый запрос',
               style: TextStyle(
                 fontSize: 14,
@@ -170,52 +181,55 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
       );
     }
 
-    if (_allGroups.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.group_outlined,
-              size: 64,
-              color: AppColors.directoryTextSecondary,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Нет доступных групп',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.grayFieldText,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Группы появятся после их создания',
-              style: TextStyle(
-                fontSize: 14,
+    if (state is GroupsWithCountsLoaded || _allGroups.isNotEmpty) {
+      if (_allGroups.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.group_outlined,
+                size: 64,
                 color: AppColors.directoryTextSecondary,
               ),
-            ),
-          ],
-        ),
+              const SizedBox(height: 16),
+              const Text(
+                'Нет доступных групп',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.grayFieldText,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Группы появятся после их создания',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.directoryTextSecondary,
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+
+      return ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: _filteredGroups.map((group) {
+          final studentCount = group.id != null
+              ? _groupStudentCounts[group.id] ?? 0
+              : 0;
+
+          return GroupItem(
+            groupName: group.title ?? 'Без названия',
+            studentCount: studentCount,
+            onTap: () => _onGroupTap(group),
+          );
+        }).toList(),
       );
     }
 
-    // Показываем список групп с реальным количеством студентов
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: [
-        ..._filteredGroups.map(
-          (group) => GroupItem(
-            groupName: group.title ?? 'Без названия',
-            studentCount:
-                group.students?.length ??
-                0, // ИСПРАВЛЕНО: реальное количество студентов
-            onTap: () => _onGroupTap(group),
-          ),
-        ),
-      ],
-    );
+    return const SizedBox.shrink();
   }
 }

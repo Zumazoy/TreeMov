@@ -16,9 +16,11 @@ class ApiConstants {
   static const String lessons = 'lessons';
   static const String subjects = 'subjects/';
   static const String classrooms = 'classrooms/';
-  static const String attendances = 'attendances/';
+  static const String attendances = 'attendances';
   static const String students = 'students/';
   static const String studentGroups = 'student-groups/';
+  static const String studentGroupsMembers = 'student-groups-members/';
+
   static const String teachers = 'teachers/';
   static const String myOrgs = 'organizations/me/';
 

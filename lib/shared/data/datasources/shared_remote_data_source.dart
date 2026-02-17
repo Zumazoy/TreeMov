@@ -6,8 +6,9 @@ import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
+import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
-import 'package:treemov/shared/data/models/teacher_response_model.dart';
+// import 'package:treemov/shared/data/models/teacher_response_model.dart';
 import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 class SharedRemoteDataSource {
@@ -77,27 +78,27 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<int?> getTeacherId() async {
-    try {
-      final Response response = await _dioClient.get(ApiConstants.teachers);
+  // Future<int?> getTeacherId() async {
+  //   try {
+  //     final Response response = await _dioClient.get(ApiConstants.teachers);
 
-      if (response.statusCode == 200) {
-        final responseData = response.data;
+  //     if (response.statusCode == 200) {
+  //       final responseData = response.data;
 
-        if (responseData is List && responseData.isNotEmpty) {
-          return TeacherResponseModel.fromJson(responseData.first).id;
-        } else if (responseData is Map<String, dynamic>) {
-          return TeacherResponseModel.fromJson(responseData).id;
-        } else {
-          return null;
-        }
-      } else {
-        throw Exception('Ошибка сервера: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Ошибка загрузки ID учителя: $e');
-    }
-  }
+  //       if (responseData is List && responseData.isNotEmpty) {
+  //         return TeacherResponseModel.fromJson(responseData.first).id;
+  //       } else if (responseData is Map<String, dynamic>) {
+  //         return TeacherResponseModel.fromJson(responseData).id;
+  //       } else {
+  //         return null;
+  //       }
+  //     } else {
+  //       throw Exception('Ошибка сервера: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Ошибка загрузки ID учителя: $e');
+  //   }
+  // }
 
   Future<List<SubjectResponseModel>> getSubjects() async {
     try {
@@ -127,7 +128,7 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<List<StudentGroupResponseModel>> getStudentGroups() async {
+  Future<List<GroupStudentsResponseModel>> getGroupStudents() async {
     try {
       final Response response = await _dioClient.get(
         ApiConstants.studentGroups,
@@ -139,13 +140,13 @@ class SharedRemoteDataSource {
         if (responseData is List) {
           // Если ответ - массив
           return responseData
-              .map<StudentGroupResponseModel>(
-                (json) => StudentGroupResponseModel.fromJson(json),
+              .map<GroupStudentsResponseModel>(
+                (json) => GroupStudentsResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
           // Если ответ - не массив (оборачиваем в список)
-          return [StudentGroupResponseModel.fromJson(responseData)];
+          return [GroupStudentsResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
         }
@@ -157,20 +158,35 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<StudentGroupResponseModel> getStudentGroupById(int groupId) async {
+  Future<List<StudentInGroupResponseModel>> getStudentsInGroup(
+    int groupId,
+  ) async {
     try {
       final Response response = await _dioClient.get(
-        '${ApiConstants.studentGroups}$groupId/',
+        '${ApiConstants.studentGroups}$groupId/${ApiConstants.students}',
       );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
-        return StudentGroupResponseModel.fromJson(responseData);
+
+        if (responseData is List) {
+          // Если ответ - массив
+          return responseData
+              .map<StudentInGroupResponseModel>(
+                (json) => StudentInGroupResponseModel.fromJson(json),
+              )
+              .toList();
+        } else if (responseData is Map<String, dynamic>) {
+          // Если ответ - не массив (оборачиваем в список)
+          return [StudentInGroupResponseModel.fromJson(responseData)];
+        } else {
+          throw Exception('Некорректный формат ответа от сервера');
+        }
       } else {
         throw Exception('Ошибка сервера: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Ошибка загрузки группы: $e');
+      throw Exception('Ошибка загрузки студентов в группе: $e');
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
+import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
@@ -21,10 +22,10 @@ class SharedRepositoryImpl implements SharedRepository {
     return await _remoteDataSource.getLessons();
   }
 
-  @override
-  Future<int?> getTeacherId() async {
-    return await _remoteDataSource.getTeacherId();
-  }
+  // @override
+  // Future<int?> getTeacherId() async {
+  //   return await _remoteDataSource.getTeacherId();
+  // }
 
   @override
   Future<List<SubjectResponseModel>> getSubjects() async {
@@ -32,13 +33,15 @@ class SharedRepositoryImpl implements SharedRepository {
   }
 
   @override
-  Future<List<StudentGroupResponseModel>> getStudentGroups() async {
-    return await _remoteDataSource.getStudentGroups();
+  Future<List<GroupStudentsResponseModel>> getGroupStudents() async {
+    return await _remoteDataSource.getGroupStudents();
   }
 
   @override
-  Future<StudentGroupResponseModel> getStudentGroupById(int groupId) async {
-    return await _remoteDataSource.getStudentGroupById(groupId);
+  Future<List<StudentInGroupResponseModel>> getStudentsInGroup(
+    int groupId,
+  ) async {
+    return await _remoteDataSource.getStudentsInGroup(groupId);
   }
 
   @override
