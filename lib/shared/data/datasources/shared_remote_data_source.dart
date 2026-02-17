@@ -8,7 +8,7 @@ import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
-// import 'package:treemov/shared/data/models/teacher_response_model.dart';
+import 'package:treemov/shared/data/models/teacher_response_model.dart';
 import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 class SharedRemoteDataSource {
@@ -52,7 +52,10 @@ class SharedRemoteDataSource {
 
   Future<List<LessonResponseModel>> getLessons() async {
     try {
-      final Response response = await _dioClient.get(ApiConstants.lessons);
+      final Response response = await _dioClient.get(
+        ApiConstants.lessons,
+        queryParameters: {'limit': 100},
+      );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
@@ -78,27 +81,35 @@ class SharedRemoteDataSource {
     }
   }
 
-  // Future<int?> getTeacherId() async {
-  //   try {
-  //     final Response response = await _dioClient.get(ApiConstants.teachers);
+  Future<int?> getTeacherId() async {
+    try {
+      String? orgMemberID = await _secureStorageRepository.getOrgMemberId();
+      if (orgMemberID == null) {
+        debugPrint('orgMemberID равно null');
+      }
 
-  //     if (response.statusCode == 200) {
-  //       final responseData = response.data;
+      final Response response = await _dioClient.get(
+        ApiConstants.teachers,
+        queryParameters: {'employee__org_member_id': orgMemberID},
+      );
 
-  //       if (responseData is List && responseData.isNotEmpty) {
-  //         return TeacherResponseModel.fromJson(responseData.first).id;
-  //       } else if (responseData is Map<String, dynamic>) {
-  //         return TeacherResponseModel.fromJson(responseData).id;
-  //       } else {
-  //         return null;
-  //       }
-  //     } else {
-  //       throw Exception('Ошибка сервера: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Ошибка загрузки ID учителя: $e');
-  //   }
-  // }
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+
+        if (responseData is List) {
+          return TeacherResponseModel.fromJson(responseData.first).id;
+        } else if (responseData is Map<String, dynamic>) {
+          return TeacherResponseModel.fromJson(responseData).id;
+        } else {
+          return null;
+        }
+      } else {
+        throw Exception('Ошибка сервера: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Ошибка загрузки ID учителя: $e');
+    }
+  }
 
   Future<List<SubjectResponseModel>> getSubjects() async {
     try {
