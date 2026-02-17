@@ -8,15 +8,97 @@ import 'package:treemov/features/registration/presentation/bloc/register_bloc.da
 
 import '../../../../../core/themes/app_colors.dart';
 
-class ParentInfoScreen extends StatelessWidget {
-  final Map<String, String>? registrationData;
+class ParentInfoScreen extends StatefulWidget {
+  const ParentInfoScreen({super.key});
 
-  const ParentInfoScreen({super.key, this.registrationData});
+  @override
+  State<ParentInfoScreen> createState() => _ParentInfoScreenState();
+}
+
+class _ParentInfoScreenState extends State<ParentInfoScreen> {
+  final TextEditingController _parentNameController = TextEditingController();
+  final TextEditingController _parentPhoneController = TextEditingController();
+
+  String? _nameError;
+  String? _phoneError;
+  Map<String, String>? _registrationData;
+
+  @override
+  void initState() {
+    super.initState();
+    _parentNameController.addListener(_validateName);
+    _parentPhoneController.addListener(_validatePhone);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_registrationData == null) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is Map<String, String>) {
+        _registrationData = args;
+      }
+    }
+  }
+
+  void _validateName() {
+    setState(() {
+      final name = _parentNameController.text.trim();
+      if (name.isEmpty) {
+        _nameError = 'Введите ФИО родителя';
+      } else if (name.split(' ').length < 2) {
+        _nameError = 'Введите полное ФИО (Имя Фамилия)';
+      } else if (name.length < 5) {
+        _nameError = 'Слишком короткое ФИО';
+      } else {
+        _nameError = null;
+      }
+    });
+  }
+
+  void _validatePhone() {
+    setState(() {
+      final phone = _parentPhoneController.text.trim();
+      if (phone.isEmpty) {
+        _phoneError = 'Введите номер телефона';
+      } else if (!RegExp(
+        r'^\+?[0-9]{10,15}$',
+      ).hasMatch(phone.replaceAll(' ', '').replaceAll('-', ''))) {
+        _phoneError = 'Введите корректный номер телефона';
+      } else {
+        _phoneError = null;
+      }
+    });
+  }
+
+  bool get _isFormValid {
+    return _nameError == null &&
+        _phoneError == null &&
+        _parentNameController.text.isNotEmpty &&
+        _parentPhoneController.text.isNotEmpty;
+  }
+
+  @override
+  void dispose() {
+    _parentNameController.dispose();
+    _parentPhoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final parentNameController = TextEditingController();
-    final parentPhoneController = TextEditingController();
+    if (_registrationData == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Ошибка: данные регистрации не найдены'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        Navigator.pop(context);
+      });
+      return const SizedBox.shrink();
+    }
 
     return BlocProvider(
       create: (context) => RegisterBloc(getIt<RegisterRepository>()),
@@ -33,7 +115,7 @@ class ParentInfoScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 180),
                       const Text(
                         'Регистрация',
                         style: TextStyle(
@@ -47,13 +129,16 @@ class ParentInfoScreen extends StatelessWidget {
 
                       _buildTextField(
                         'ФИО одного из родителей',
-                        controller: parentNameController,
+                        controller: _parentNameController,
+                        errorText: _nameError,
                       ),
                       const SizedBox(height: 20),
 
                       _buildTextField(
                         'Номер телефона родителя',
-                        controller: parentPhoneController,
+                        controller: _parentPhoneController,
+                        errorText: _phoneError,
+                        keyboardType: TextInputType.phone,
                       ),
                       const SizedBox(height: 20),
 
@@ -61,6 +146,13 @@ class ParentInfoScreen extends StatelessWidget {
                         listener: (context, state) {
                           if (state is RegisterSuccess) {
                             _navigateToMain(context);
+                          } else if (state is RegisterError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(state.message),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
                           }
                         },
                         builder: (context, state) {
@@ -68,41 +160,29 @@ class ParentInfoScreen extends StatelessWidget {
                             width: 316,
                             height: 44,
                             child: ElevatedButton(
-                              onPressed: state is RegisterLoading
+                              onPressed:
+                                  (state is RegisterLoading || !_isFormValid)
                                   ? null
                                   : () {
-                                      if (registrationData != null) {
-                                        // Используем RegisterKid событие
-                                        context.read<RegisterBloc>().add(
-                                          RegisterKid(
-                                            username:
-                                                registrationData!['username']!,
-                                            email: registrationData!['email']!,
-                                            password:
-                                                registrationData!['password']!,
-                                            parentName: parentNameController
-                                                .text
-                                                .trim(),
-                                            parentPhone: parentPhoneController
-                                                .text
-                                                .trim(),
-                                          ),
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Ошибка: данные регистрации не найдены',
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      }
+                                      context.read<RegisterBloc>().add(
+                                        RegisterKid(
+                                          username:
+                                              _registrationData!['username']!,
+                                          email: _registrationData!['email']!,
+                                          password:
+                                              _registrationData!['password']!,
+                                          parentName: _parentNameController.text
+                                              .trim(),
+                                          parentPhone: _parentPhoneController
+                                              .text
+                                              .trim(),
+                                        ),
+                                      );
                                     },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.kidButton,
+                                backgroundColor: _isFormValid
+                                    ? AppColors.kidButton
+                                    : AppColors.grey,
                                 foregroundColor: AppColors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -147,31 +227,54 @@ class ParentInfoScreen extends StatelessWidget {
   Widget _buildTextField(
     String hintText, {
     required TextEditingController controller,
+    String? errorText,
+    TextInputType? keyboardType,
   }) {
-    return Container(
-      width: 316,
-      height: 44,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 12,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 316,
+          height: 44,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: errorText != null
+                ? Border.all(color: Colors.red, width: 1)
+                : null,
           ),
-          hintText: hintText,
-          hintStyle: const TextStyle(
-            color: AppColors.grey,
-            fontSize: 16,
-            fontFamily: 'TT Norms',
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType ?? TextInputType.text,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 12,
+              ),
+              hintText: hintText,
+              hintStyle: const TextStyle(
+                color: AppColors.grey,
+                fontSize: 16,
+                fontFamily: 'TT Norms',
+              ),
+            ),
+            style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
           ),
         ),
-        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
-      ),
+        if (errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4, left: 15),
+            child: Text(
+              errorText,
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 12,
+                fontFamily: 'TT Norms',
+              ),
+            ),
+          ),
+      ],
     );
   }
 

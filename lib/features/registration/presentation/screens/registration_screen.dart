@@ -79,8 +79,7 @@ class RegistrationScreen extends StatelessWidget {
                               fontSize: 16,
                               fontFamily: 'TT Norms',
                               decoration: TextDecoration.underline,
-                              decorationColor:
-                                  AppColors.white, // ← ДОБАВИЛ БЕЛУЮ ЧЕРТОЧКУ
+                              decorationColor: AppColors.white,
                             ),
                           ),
                         ),
