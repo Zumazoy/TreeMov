@@ -6,7 +6,6 @@ import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_ev
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_request_model.dart';
-import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
@@ -73,15 +72,17 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
         widget.sharedRepository.getGroupStudents(),
         widget.sharedRepository.getSubjects(),
         widget.sharedRepository.getClassrooms(),
-        widget.sharedRepository.getMyOrgProfile(),
+        widget.sharedRepository.getTeacherId(),
       ]);
 
       setState(() {
         _groups = results[0] as List<GroupStudentsResponseModel>;
         _subjects = results[1] as List<SubjectResponseModel>;
         _classrooms = results[2] as List<ClassroomResponseModel>;
-        final teacherProfile = results[3] as OrgMemberResponseModel;
-        _teacherId = teacherProfile.profile?.id ?? 0;
+        final teacherId = results[3] as int?;
+        if (teacherId != null) {
+          _teacherId = teacherId;
+        }
 
         // Устанавливаем значения по умолчанию
         if (_groups.isNotEmpty) {

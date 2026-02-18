@@ -15,7 +15,7 @@
 // import '../widgets/student_avatar.dart';
 
 // class StudentsPointsListScreen extends StatefulWidget {
-//   final StudentGroupResponseModel group;
+//   final GroupStudentsResponseModel group;
 //   final AccrualBloc accrualBloc;
 
 //   const StudentsPointsListScreen({

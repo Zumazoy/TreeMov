@@ -27,9 +27,9 @@
 // }
 
 // class _GroupsListScreenState extends State<_GroupsListScreenContent> {
-//   List<StudentGroupResponseModel> _groups = [];
+//   List<GroupStudentsResponseModel> _groups = [];
 
-//   void _onGroupTap(StudentGroupResponseModel group, BuildContext context) {
+//   void _onGroupTap(GroupStudentsResponseModel group, BuildContext context) {
 //     final accrualBloc = context.read<AccrualBloc>();
 
 //     Navigator.push(
@@ -206,7 +206,7 @@
 
 //   Widget _buildGroupItem(
 //     BuildContext context,
-//     StudentGroupResponseModel group,
+//     GroupStudentsResponseModel group,
 //   ) {
 //     return GestureDetector(
 //       onTap: () => _onGroupTap(group, context),
