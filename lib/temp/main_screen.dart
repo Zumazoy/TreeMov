@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/directory/presentation/screens/directory_screen.dart';
+import 'package:treemov/features/raiting/presentation/screens/rating_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 import 'package:treemov/features/teacher_profile/presentation/screens/profile_screen.dart';
 
@@ -15,18 +18,22 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late int _currentIndex;
-
-  final List<Widget> _pages = [
-    const CalendarScreen(),
-    const Center(child: CircularProgressIndicator()),
-    const DirectoryScreen(),
-    const ProfileScreen(),
-  ];
+  late final List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
+
+    // Получаем DioClient из DI-контейнера
+    final dioClient = GetIt.instance<DioClient>();
+
+    _pages = [
+      const CalendarScreen(),
+      RatingScreen(dioClient: dioClient),
+      const DirectoryScreen(),
+      const ProfileScreen(),
+    ];
   }
 
   @override
