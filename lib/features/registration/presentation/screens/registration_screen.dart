@@ -141,7 +141,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, AppRoutes.entrance);
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.entranceKid,
+                              );
                             },
                             child: const Text(
                               'Войти',

@@ -33,7 +33,7 @@ class _AuthCheckerScreenState extends State<AuthCheckerScreen> {
         // Токена нет - переходим на авторизацию
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppRoutes.entrance,
+          AppRoutes.entranceKid,
           (route) => false,
         );
       }

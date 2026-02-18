@@ -73,6 +73,21 @@ class _EntranceKidScreenState extends State<EntranceKidScreen> {
                         passwordController: _passwordController,
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.registration);
+                      },
+                      child: const Text(
+                        'Регистрация',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'TT Norms',
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 40),
                   ],
                 ),
