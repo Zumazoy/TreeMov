@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/core/widgets/layout/child_nav_bar.dart';
 import 'package:treemov/features/raiting/data/repositories/rating_repository_impl.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_bloc.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_event.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_state.dart';
 import 'package:treemov/features/raiting/presentation/widgets/student_card.dart';
 import 'package:treemov/features/raiting/presentation/widgets/top_students_chart.dart';
+import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class RatingScreen extends StatefulWidget {
@@ -36,6 +38,42 @@ class _RatingScreenState extends State<RatingScreen> {
     bloc.add(const LoadStudentsEvent());
     bloc.add(const LoadCurrentStudentEvent());
     return bloc;
+  }
+
+  void _onNavBarTap(int index) {
+    switch (index) {
+      case 0:
+        // Переход на календарь
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const CalendarScreen(), // Экран календаря ученика
+          ),
+        );
+        break;
+      case 1:
+        // Уже на рейтинге, ничего не делаем или можно обновить
+        break;
+      case 2:
+        // Переход в магазин
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const ShopScreen(),
+        //   ),
+        // );
+        break;
+      case 3:
+        // Переход в профиль дерева
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const TreeProfileScreen(),
+        //   ),
+        // );
+        break;
+    }
   }
 
   @override
@@ -86,7 +124,11 @@ class _RatingScreenState extends State<RatingScreen> {
           );
         },
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      // Используем готовый компонент BottomNavigationBar
+      bottomNavigationBar: ChildBottomNavigationBar(
+        currentIndex: 1, // Рейтинг - второй элемент (индекс 1)
+        onTap: _onNavBarTap,
+      ),
     );
   }
 
@@ -268,33 +310,32 @@ class _RatingScreenState extends State<RatingScreen> {
             sortedStudents,
             currentStudent,
           ),
-          if (currentStudent != null)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: AnimatedOpacity(
-                opacity: _showPinnedCard ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 200),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
-                  ),
-                  child: StudentCard(
-                    student: currentStudent,
-                    position: currentUserPosition,
-                    isCurrentUser: true,
-                  ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: AnimatedOpacity(
+              opacity: _showPinnedCard ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: const Offset(0, -2),
+                    ),
+                  ],
+                ),
+                child: StudentCard(
+                  student: currentStudent,
+                  position: currentUserPosition,
+                  isCurrentUser: true,
                 ),
               ),
             ),
+          ),
         ],
       ),
     );
@@ -351,43 +392,6 @@ class _RatingScreenState extends State<RatingScreen> {
       child: Text(
         'Ошибка: $message',
         style: const TextStyle(color: Color(0xFF1A237E), fontSize: 16),
-      ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavIcon('assets/images/calendar_icon.png'),
-          _buildNavIcon('assets/images/raiting_icon.png', isActive: true),
-          _buildNavIcon('assets/images/shop_icon.png'),
-          _buildNavIcon('assets/images/tree_profile.png'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavIcon(String iconPath, {bool isActive = false}) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: isActive
-          ? BoxDecoration(
-              color: const Color(0xFF1A237E).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            )
-          : null,
-      child: Image.asset(
-        iconPath,
-        width: 32,
-        height: 32,
-        color: isActive ? const Color(0xFF1A237E) : Colors.grey,
       ),
     );
   }

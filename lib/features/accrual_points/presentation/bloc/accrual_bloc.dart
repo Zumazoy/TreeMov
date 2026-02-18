@@ -27,8 +27,35 @@ class AccrualBloc extends Bloc<AccrualEvent, AccrualState> {
   ) async {
     emit(AccrualLoading());
     try {
+      // Сначала загружаем группы
       final groups = await _sharedRepository.getGroupStudents();
-      emit(GroupsLoaded(groups));
+
+      // Затем для каждой группы загружаем учеников
+      final Map<int, int> groupStudentCounts = {};
+      final Map<int, List<dynamic>> groupStudents = {};
+
+      for (var group in groups) {
+        if (group.baseData.id != null) {
+          try {
+            final students = await _sharedRepository.getStudentsInGroup(
+              group.baseData.id!,
+            );
+            groupStudentCounts[group.baseData.id!] = students.length;
+            groupStudents[group.baseData.id!] = students;
+          } catch (e) {
+            groupStudentCounts[group.baseData.id!] = 0;
+            groupStudents[group.baseData.id!] = [];
+          }
+        }
+      }
+
+      emit(
+        GroupsLoaded(
+          groups: groups,
+          groupStudentCounts: groupStudentCounts,
+          groupStudents: groupStudents,
+        ),
+      );
     } catch (e) {
       emit(AccrualError(e.toString()));
     }
@@ -63,7 +90,7 @@ class AccrualBloc extends Bloc<AccrualEvent, AccrualState> {
     try {
       await _accrualRepository.createAccrual(event.request);
       emit(AccrualCreated('Начисление успешно создано'));
-      add(LoadStudentGroups());
+      add(LoadStudentGroups()); // Обновляем список
     } catch (e) {
       emit(AccrualError('Ошибка создания начисления: $e'));
     }
