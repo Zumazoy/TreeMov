@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/features/accrual_points/presentation/bloc/accrual_bloc.dart';
+import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
-import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import 'students_points_list_screen.dart';

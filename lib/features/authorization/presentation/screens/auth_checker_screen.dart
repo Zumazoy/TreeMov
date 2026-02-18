@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/app/routes/app_routes.dart';
-import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
+import 'package:treemov/core/storage/secure_storage_repository.dart';
 
 class AuthCheckerScreen extends StatefulWidget {
   final SecureStorageRepository secureStorageRepository;

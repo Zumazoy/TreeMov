@@ -1,8 +1,18 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:treemov/core/constants/constants.dart';
-import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
+import 'package:treemov/core/storage/secure_storage_repository.dart';
 
 class SecureStorageRepositoryImpl implements SecureStorageRepository {
+  SecureStorageRepositoryImpl() {
+    if (kIsWeb) {
+      throw UnsupportedError(
+        'SecureStorageRepositoryImpl не поддерживается на вебе. '
+        'Используйте SecureStorageRepositoryWeb через SecureStorageFactory',
+      );
+    }
+  }
+
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
   // Tokens

@@ -217,7 +217,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               final student = entry.value.student;
               final index = entry.key;
               return {
-                'id': student.id ?? index + 1,
+                'id': index + 1,
                 'name': _formatStudentName(student),
                 'attendance': 'not_marked',
                 'student': student,

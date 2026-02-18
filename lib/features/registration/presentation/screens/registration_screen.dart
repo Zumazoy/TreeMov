@@ -1,130 +1,167 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/app/routes/app_routes.dart';
-import 'package:treemov/core/widgets/auth/auth_header.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../core/themes/app_colors.dart';
+import '../../../../app/routes/app_routes.dart';
+import '../../../../core/themes/app_colors.dart';
+import '../../../../core/widgets/auth/auth_header.dart';
+import '../../../../shared/presentation/widgets/app_primary_button.dart';
+import '../../../../shared/presentation/widgets/app_text_field.dart';
+import '../bloc/register_bloc.dart';
+import '../bloc/register_event.dart';
+import '../bloc/register_state.dart';
+import 'verification_code_screen.dart';
 
-class RegistrationScreen extends StatelessWidget {
+class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
+
+  @override
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kidPrimary,
-      body: Stack(
-        children: [
-          const AuthHeader(),
+      body: BlocListener<RegisterBloc, RegisterState>(
+        listener: (context, state) {
+          if (state is RegisterCodeSent) {
+            final registerBloc = context.read<RegisterBloc>();
 
-          Center(
-            child: SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: registerBloc,
+                  child: const VerificationCodeScreen(),
+                ),
+              ),
+            );
+          } else if (state is RegisterFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+            );
+          }
+        },
+        child: Stack(
+          children: [
+            const AuthHeader(),
+            Center(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 60),
-
-                    const Text(
-                      'Регистрация',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.white,
-                        fontFamily: 'TT Norms',
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-
-                    _buildRoleButton(
-                      context,
-                      'Ученик',
-                      AppRoutes.kidInfoScreen,
-                      AppColors.entranceKidButton,
-                    ),
-                    const SizedBox(height: 20),
-
-                    _buildRoleButton(
-                      context,
-                      'Преподаватель',
-                      AppRoutes.teacherVerificationScreen,
-                      AppColors.kidButton,
-                    ),
-                    const SizedBox(height: 40),
-
-                    Column(
-                      children: [
-                        const Text(
-                          'Есть аккаунт?',
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 16,
-                            fontFamily: 'TT Norms',
-                          ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 80),
+                      const Text(
+                        'Регистрация',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.white,
+                          fontFamily: 'TT Norms',
                         ),
-                        const SizedBox(height: 2),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, AppRoutes.entrance);
-                          },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: const Text(
-                            'Войти',
+                      ),
+                      const SizedBox(height: 30),
+
+                      AppTextField(
+                        controller: _usernameController,
+                        hintText: "Имя пользователя",
+                        fillColor: AppColors.white,
+                      ),
+                      const SizedBox(height: 16),
+                      AppTextField(
+                        controller: _emailController,
+                        hintText: "Email",
+                        fillColor: AppColors.white,
+                      ),
+                      const SizedBox(height: 16),
+                      AppTextField(
+                        controller: _passwordController,
+                        hintText: "Пароль",
+                        obscureText: true,
+                        fillColor: AppColors.white,
+                      ),
+                      const SizedBox(height: 24),
+
+                      BlocBuilder<RegisterBloc, RegisterState>(
+                        builder: (context, state) {
+                          if (state is RegisterLoading) {
+                            return const CircularProgressIndicator(
+                              color: Colors.white,
+                            );
+                          }
+                          return SizedBox(
+                            width: double.infinity,
+                            child: AppPrimaryButton(
+                              text: "Зарегистрироваться",
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  context.read<RegisterBloc>().add(
+                                    SubmitRegistrationEvent(
+                                      username: _usernameController.text,
+                                      email: _emailController.text,
+                                      password: _passwordController.text,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Кнопка "Войти"
+                      Column(
+                        children: [
+                          const Text(
+                            'Есть аккаунт?',
                             style: TextStyle(
                               color: AppColors.white,
                               fontSize: 16,
                               fontFamily: 'TT Norms',
-                              decoration: TextDecoration.underline,
-                              decorationColor:
-                                  AppColors.white, // ← ДОБАВИЛ БЕЛУЮ ЧЕРТОЧКУ
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, AppRoutes.entrance);
+                            },
+                            child: const Text(
+                              'Войти',
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: 16,
+                                fontFamily: 'TT Norms',
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRoleButton(
-    BuildContext context,
-    String text,
-    String route,
-    Color buttonColor,
-  ) {
-    return SizedBox(
-      width: 316,
-      height: 44,
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.pushNamed(context, route);
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttonColor,
-          foregroundColor: AppColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 0,
-          shadowColor: Colors.transparent,
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'TT Norms',
-          ),
+          ],
         ),
       ),
     );

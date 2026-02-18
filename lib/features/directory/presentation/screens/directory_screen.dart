@@ -6,8 +6,8 @@ import 'package:treemov/features/directory/presentation/screens/student_director
 import 'package:treemov/features/directory/presentation/widgets/app_bar_title.dart';
 import 'package:treemov/features/directory/presentation/widgets/group_item.dart';
 import 'package:treemov/features/directory/presentation/widgets/search_field.dart';
+import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
-import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 

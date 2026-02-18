@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/accrual_points/presentation/bloc/accrual_bloc.dart';
+import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
-import 'package:treemov/shared/data/models/student_in_group_response_model.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 import 'package:treemov/temp/main_screen.dart';
 

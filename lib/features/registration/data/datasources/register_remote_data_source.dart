@@ -1,47 +1,65 @@
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/features/registration/data/models/register_request_model.dart';
-import 'package:treemov/features/registration/data/models/register_response_model.dart';
 
-class RegisterRemoteDataSource {
+// 1. Абстрактный контракт (Интерфейс)
+abstract class RegisterRemoteDataSource {
+  Future<void> register(RegisterRequestModel request);
+  Future<void> sendEmailCode(String email);
+  Future<void> verifyEmailCode(String email, String code);
+}
+
+// 2. Реализация (Implementation)
+class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
   final DioClient _dioClient;
 
-  RegisterRemoteDataSource(this._dioClient);
+  RegisterRemoteDataSourceImpl(this._dioClient);
 
-  // Future<LessonResponseModel> getLessonById(int scheduleId) async {
-  //   try {
-  //     final response = await _dioClient.get(
-  //       '${ApiConstants.scheduleP + ApiConstants.lessons}$scheduleId/',
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       return LessonResponseModel.fromJson(response.data);
-  //     } else {
-  //       throw Exception('Failed to fetch schedule: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Ошибка получения занятия: $e');
-  //   }
-  // }
-
-  Future<RegisterResponseModel> register(RegisterRequestModel request) async {
+  @override
+  Future<void> register(RegisterRequestModel request) async {
     try {
       final response = await _dioClient.post(
         ApiConstants.authUrl + ApiConstants.register,
         data: request.toJson(),
       );
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        return RegisterResponseModel.fromJson(response.data);
-      } else if (response.statusCode == 400) {
-        throw Exception(
-          'Bad Request: ${RegisterResponseModel.fromJson(response.data)}',
-        );
-      } else {
-        throw Exception('Ошибка регистрации (код): ${response.statusCode}');
+      // Проверка успешности (200 или 201)
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Ошибка регистрации: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Ошибка регистрации: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> sendEmailCode(String email) async {
+    try {
+      await _dioClient.post(
+        '${ApiConstants.emailUrl}send',
+        data: {"email": email, "purpose": "verify_email"},
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> verifyEmailCode(String email, String code) async {
+    try {
+      final response = await _dioClient.post(
+        '${ApiConstants.emailUrl}verify',
+        data: {"email": email, "code": code, "purpose": "verify_email"},
+      );
+
+      final data = response.data;
+
+      if (data['succes'] != true) {
+        final errorDetail = data['detail'] ?? 'Не удалось подтвердить почту';
+        throw Exception(errorDetail);
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }
