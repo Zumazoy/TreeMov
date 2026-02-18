@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:treemov/core/constants/api_constants.dart';
-import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
+import 'package:treemov/core/storage/secure_storage_repository.dart';
 
 class OrgIdInterceptor extends Interceptor {
   final SecureStorageRepository secureStorage;

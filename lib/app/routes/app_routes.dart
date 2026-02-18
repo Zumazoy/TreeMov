@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/network/dio_client.dart'; // ← Добавлено
+import 'package:treemov/core/storage/secure_storage_repository_impl.dart';
 import 'package:treemov/features/authorization/auth_checker_feature.dart';
 import 'package:treemov/features/authorization/presentation/screens/entrance_kid_screen.dart';
 import 'package:treemov/features/authorization/presentation/screens/entrance_teacher_screen.dart';
@@ -11,7 +12,6 @@ import 'package:treemov/features/registration/presentation/screens/registration_
 import 'package:treemov/features/registration/presentation/screens/teacher_info_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/teacher_verification_screen.dart';
 import 'package:treemov/features/test_home/home_screen.dart';
-import 'package:treemov/shared/storage/data/repositories/secure_storage_repository_impl.dart';
 import 'package:treemov/temp/main_screen.dart';
 
 class AppRoutes {

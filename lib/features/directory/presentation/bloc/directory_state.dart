@@ -11,17 +11,6 @@ class DirectoryInitial extends DirectoryState {}
 
 class DirectoryLoading extends DirectoryState {}
 
-class StudentsLoading extends DirectoryState {}
-
-class GroupsLoaded extends DirectoryState {
-  final List<GroupStudentsResponseModel> groups;
-
-  const GroupsLoaded({required this.groups});
-
-  @override
-  List<Object> get props => [groups];
-}
-
 class GroupsWithCountsLoaded extends DirectoryState {
   final List<GroupStudentsResponseModel> groups;
   final Map<int, int> groupStudentCounts;
@@ -35,16 +24,6 @@ class GroupsWithCountsLoaded extends DirectoryState {
 
   @override
   List<Object> get props => [groups, groupStudentCounts, groupStudents];
-}
-
-class StudentsInGroupLoaded extends DirectoryState {
-  final List<StudentGroupMemberResponseModel> students;
-  final int groupId;
-
-  const StudentsInGroupLoaded({required this.students, required this.groupId});
-
-  @override
-  List<Object> get props => [students, groupId];
 }
 
 class DirectoryError extends DirectoryState {
