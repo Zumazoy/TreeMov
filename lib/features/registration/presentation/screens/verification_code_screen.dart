@@ -46,7 +46,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
 
             Navigator.pushNamedAndRemoveUntil(
               context,
-              AppRoutes.entrance,
+              AppRoutes.entranceKid,
               (route) => false,
             );
           } else if (state is RegisterFailure) {
