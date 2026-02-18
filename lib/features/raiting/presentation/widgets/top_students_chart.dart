@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/student_entity.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class TopStudentsChart extends StatelessWidget {
   final List<StudentEntity> students;
@@ -10,17 +10,17 @@ class TopStudentsChart extends StatelessWidget {
   Widget build(BuildContext context) {
     // Фильтруем студентов с 0 очков
     final studentsWithScore = students.where((s) => s.score > 0).toList();
-    
+
     if (studentsWithScore.length < 3) {
       return _buildChartForAvailableStudents(studentsWithScore);
     }
-    
+
     final topThreeStudents = studentsWithScore
       ..sort((a, b) => b.score.compareTo(a.score))
       ..sublist(0, 3);
-    
+
     final maxScore = topThreeStudents.first.score.toDouble();
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Column(
@@ -33,16 +33,28 @@ class TopStudentsChart extends StatelessWidget {
                 Positioned(
                   left: 20,
                   bottom: 0,
-                  child: _buildChartWithAvatar(topThreeStudents[1], 2, maxScore),
+                  child: _buildChartWithAvatar(
+                    topThreeStudents[1],
+                    2,
+                    maxScore,
+                  ),
                 ),
                 Positioned(
                   bottom: 0,
-                  child: _buildChartWithAvatar(topThreeStudents[0], 1, maxScore),
+                  child: _buildChartWithAvatar(
+                    topThreeStudents[0],
+                    1,
+                    maxScore,
+                  ),
                 ),
                 Positioned(
                   right: 20,
                   bottom: 0,
-                  child: _buildChartWithAvatar(topThreeStudents[2], 3, maxScore),
+                  child: _buildChartWithAvatar(
+                    topThreeStudents[2],
+                    3,
+                    maxScore,
+                  ),
                 ),
               ],
             ),
@@ -52,7 +64,9 @@ class TopStudentsChart extends StatelessWidget {
     );
   }
 
-  Widget _buildChartForAvailableStudents(List<StudentEntity> studentsWithScore) {
+  Widget _buildChartForAvailableStudents(
+    List<StudentEntity> studentsWithScore,
+  ) {
     if (studentsWithScore.isEmpty) {
       return SizedBox(
         height: 300,
@@ -69,7 +83,8 @@ class TopStudentsChart extends StatelessWidget {
       );
     }
 
-    final sortedStudents = [...studentsWithScore]..sort((a, b) => b.score.compareTo(a.score));
+    final sortedStudents = [...studentsWithScore]
+      ..sort((a, b) => b.score.compareTo(a.score));
     final maxScore = sortedStudents.first.score.toDouble();
     final studentCount = sortedStudents.length;
 
@@ -85,19 +100,30 @@ class TopStudentsChart extends StatelessWidget {
                 if (studentCount == 1) ...[
                   Positioned(
                     bottom: 0,
-                    child: _buildChartWithAvatar(sortedStudents[0], 1, maxScore),
+                    child: _buildChartWithAvatar(
+                      sortedStudents[0],
+                      1,
+                      maxScore,
+                    ),
                   ),
-                ]
-                else if (studentCount == 2) ...[
+                ] else if (studentCount == 2) ...[
                   Positioned(
                     left: 60,
                     bottom: 0,
-                    child: _buildChartWithAvatar(sortedStudents[0], 1, maxScore),
+                    child: _buildChartWithAvatar(
+                      sortedStudents[0],
+                      1,
+                      maxScore,
+                    ),
                   ),
                   Positioned(
                     right: 60,
                     bottom: 0,
-                    child: _buildChartWithAvatar(sortedStudents[1], 2, maxScore),
+                    child: _buildChartWithAvatar(
+                      sortedStudents[1],
+                      2,
+                      maxScore,
+                    ),
                   ),
                 ],
               ],
@@ -108,7 +134,11 @@ class TopStudentsChart extends StatelessWidget {
     );
   }
 
-  Widget _buildChartWithAvatar(StudentEntity student, int position, double maxScore) {
+  Widget _buildChartWithAvatar(
+    StudentEntity student,
+    int position,
+    double maxScore,
+  ) {
     final chartHeight = _calculateChartHeight(student.score, maxScore);
     final width = position == 1 ? 130.0 : 110.0;
 
@@ -123,8 +153,11 @@ class TopStudentsChart extends StatelessWidget {
                 radius: 36,
                 backgroundColor: const Color(0xFF1A237E),
                 child: Text(
-                  student.avatar,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  student.initials,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Positioned(
@@ -139,8 +172,8 @@ class TopStudentsChart extends StatelessWidget {
                   child: Text(
                     position.toString(),
                     style: const TextStyle(
-                      color: Color.fromARGB(255, 57, 119, 199), 
-                      fontSize: 12, 
+                      color: Color.fromARGB(255, 57, 119, 199),
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -160,36 +193,17 @@ class TopStudentsChart extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (student.name.contains(' ')) ...[
-                Text(
-                  student.name.split(' ')[0],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Color(0xFF1A237E), 
-                    fontSize: 12, 
-                    fontWeight: FontWeight.bold,
-                  ),
+              Text(
+                student.fullName,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Color(0xFF1A237E),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(
-                  student.name.split(' ')[1],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Color(0xFF1A237E), 
-                    fontSize: 12, 
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ] else ...[
-                Text(
-                  student.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Color(0xFF1A237E), 
-                    fontSize: 12, 
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+              ),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -197,8 +211,8 @@ class TopStudentsChart extends StatelessWidget {
                   Text(
                     student.score.toString(),
                     style: const TextStyle(
-                      color: Color(0xFF1A237E), 
-                      fontSize: 16, 
+                      color: Color(0xFF1A237E),
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

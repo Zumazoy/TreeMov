@@ -18,7 +18,7 @@ class LessonsLoaded extends ScheduleState {
 }
 
 class StudentGroupLoaded extends ScheduleState {
-  final List<StudentGroupMemberResponseModel> studentsInGroup;
+  final List<StudentInGroupResponseModel> studentsInGroup;
 
   const StudentGroupLoaded(this.studentsInGroup);
 }

@@ -35,7 +35,7 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
   final TextEditingController _searchController = TextEditingController();
   List<GroupStudentsResponseModel> _allGroups = [];
   Map<int, int> _groupStudentCounts = {};
-  Map<int, List<StudentGroupMemberResponseModel>> _groupStudents = {};
+  Map<int, List<StudentInGroupResponseModel>> _groupStudents = {};
   List<GroupStudentsResponseModel> _filteredGroups = [];
   bool _hasSearchQuery = false;
 

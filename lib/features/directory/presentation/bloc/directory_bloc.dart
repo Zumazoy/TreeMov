@@ -25,7 +25,7 @@ class DirectoryBloc extends Bloc<DirectoryEvent, DirectoryState> {
 
       // Затем для каждой группы загружаем студентов и считаем их количество
       final Map<int, int> groupStudentCounts = {};
-      final Map<int, List<StudentGroupMemberResponseModel>> groupStudents = {};
+      final Map<int, List<StudentInGroupResponseModel>> groupStudents = {};
 
       for (var group in groups) {
         if (group.id != null) {

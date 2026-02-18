@@ -1,7 +1,6 @@
-import '../entities/student_entity.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 abstract class RatingRepository {
   Future<List<StudentEntity>> getStudents();
-  
-  Future<StudentEntity> getCurrentStudent();
+  Future<StudentEntity?> getCurrentStudent();
 }

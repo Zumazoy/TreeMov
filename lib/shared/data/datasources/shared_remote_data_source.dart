@@ -166,7 +166,7 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<List<StudentGroupMemberResponseModel>> getStudentsInGroup(
+  Future<List<StudentInGroupResponseModel>> getStudentsInGroup(
     int groupId,
   ) async {
     try {
@@ -181,13 +181,13 @@ class SharedRemoteDataSource {
         if (responseData is List) {
           // Если ответ - массив
           return responseData
-              .map<StudentGroupMemberResponseModel>(
-                (json) => StudentGroupMemberResponseModel.fromJson(json),
+              .map<StudentInGroupResponseModel>(
+                (json) => StudentInGroupResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
           // Если ответ - не массив (оборачиваем в список)
-          return [StudentGroupMemberResponseModel.fromJson(responseData)];
+          return [StudentInGroupResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
         }

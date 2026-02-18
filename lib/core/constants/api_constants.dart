@@ -41,6 +41,7 @@ class ApiConstants {
     teachers,
     myOrgs,
     addOrgMember,
+    accruals,
   ];
 
   // Endpoints not requiring org-id header
@@ -62,6 +63,6 @@ class ApiConstants {
   ];
 
   // static const String periodLessons = 'period_lessons/'; Отсутcвует соответствующий роут в документации
-  // static const String accruals = 'accruals/'; Отсутствет соответствующий роут в документации
+  static const String accruals = 'accruals';
   // static const String teacherNotes = 'teacher_notes/'; Отсутcвует соответствующий роут в документации
 }

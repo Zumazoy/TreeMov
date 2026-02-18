@@ -38,7 +38,7 @@ class SharedRepositoryImpl implements SharedRepository {
   }
 
   @override
-  Future<List<StudentGroupMemberResponseModel>> getStudentsInGroup(
+  Future<List<StudentInGroupResponseModel>> getStudentsInGroup(
     int groupId,
   ) async {
     return await _remoteDataSource.getStudentsInGroup(groupId);

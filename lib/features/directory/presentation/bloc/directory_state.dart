@@ -14,7 +14,7 @@ class DirectoryLoading extends DirectoryState {}
 class GroupsWithCountsLoaded extends DirectoryState {
   final List<GroupStudentsResponseModel> groups;
   final Map<int, int> groupStudentCounts;
-  final Map<int, List<StudentGroupMemberResponseModel>> groupStudents;
+  final Map<int, List<StudentInGroupResponseModel>> groupStudents;
 
   const GroupsWithCountsLoaded({
     required this.groups,
