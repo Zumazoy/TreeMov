@@ -5,6 +5,7 @@ import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
+import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
@@ -51,7 +52,10 @@ class SharedRemoteDataSource {
 
   Future<List<LessonResponseModel>> getLessons() async {
     try {
-      final Response response = await _dioClient.get(ApiConstants.lessons);
+      final Response response = await _dioClient.get(
+        ApiConstants.lessons,
+        queryParameters: {'limit': 100},
+      );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
@@ -79,12 +83,20 @@ class SharedRemoteDataSource {
 
   Future<int?> getTeacherId() async {
     try {
-      final Response response = await _dioClient.get(ApiConstants.teachers);
+      String? orgMemberID = await _secureStorageRepository.getOrgMemberId();
+      if (orgMemberID == null) {
+        debugPrint('orgMemberID равно null');
+      }
+
+      final Response response = await _dioClient.get(
+        ApiConstants.teachers,
+        queryParameters: {'employee__org_member_id': orgMemberID},
+      );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
 
-        if (responseData is List && responseData.isNotEmpty) {
+        if (responseData is List) {
           return TeacherResponseModel.fromJson(responseData.first).id;
         } else if (responseData is Map<String, dynamic>) {
           return TeacherResponseModel.fromJson(responseData).id;
@@ -127,7 +139,7 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<List<StudentGroupResponseModel>> getStudentGroups() async {
+  Future<List<GroupStudentsResponseModel>> getGroupStudents() async {
     try {
       final Response response = await _dioClient.get(
         ApiConstants.studentGroups,
@@ -139,13 +151,13 @@ class SharedRemoteDataSource {
         if (responseData is List) {
           // Если ответ - массив
           return responseData
-              .map<StudentGroupResponseModel>(
-                (json) => StudentGroupResponseModel.fromJson(json),
+              .map<GroupStudentsResponseModel>(
+                (json) => GroupStudentsResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
           // Если ответ - не массив (оборачиваем в список)
-          return [StudentGroupResponseModel.fromJson(responseData)];
+          return [GroupStudentsResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
         }
@@ -157,20 +169,35 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<StudentGroupResponseModel> getStudentGroupById(int groupId) async {
+  Future<List<StudentGroupMemberResponseModel>> getStudentsInGroup(
+    int groupId,
+  ) async {
     try {
       final Response response = await _dioClient.get(
-        '${ApiConstants.studentGroups}$groupId/',
+        '${ApiConstants.studentGroups}$groupId/${ApiConstants.students}',
       );
 
       if (response.statusCode == 200) {
         final responseData = response.data;
-        return StudentGroupResponseModel.fromJson(responseData);
+
+        if (responseData is List) {
+          // Если ответ - массив
+          return responseData
+              .map<StudentGroupMemberResponseModel>(
+                (json) => StudentGroupMemberResponseModel.fromJson(json),
+              )
+              .toList();
+        } else if (responseData is Map<String, dynamic>) {
+          // Если ответ - не массив (оборачиваем в список)
+          return [StudentGroupMemberResponseModel.fromJson(responseData)];
+        } else {
+          throw Exception('Некорректный формат ответа от сервера');
+        }
       } else {
         throw Exception('Ошибка сервера: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Ошибка загрузки группы: $e');
+      throw Exception('Ошибка загрузки студентов в группе: $e');
     }
   }
 

@@ -16,7 +16,7 @@ class LessonEntity {
   final String? comment;
   final TeacherResponseModel? teacher;
   final ClassroomResponseModel? classroom;
-  final StudentGroupResponseModel? group;
+  final GroupStudentsResponseModel? group;
   final SubjectResponseModel? subject;
 
   LessonEntity({

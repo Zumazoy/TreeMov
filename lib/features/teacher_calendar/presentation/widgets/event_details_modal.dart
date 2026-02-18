@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/screens/attendance_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/lesson_details_screen.dart';
 
 import '../../../../core/themes/app_colors.dart';
@@ -159,16 +160,16 @@ class EventDetailsModal extends StatelessWidget {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigator.pop(context);
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => AttendanceScreen(
-                      //       lesson: event,
-                      //       schedulesBloc: schedulesBloc,
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AttendanceScreen(
+                            lesson: event,
+                            schedulesBloc: schedulesBloc,
+                          ),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.teacherPrimary,

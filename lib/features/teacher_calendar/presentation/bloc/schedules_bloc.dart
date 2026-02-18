@@ -14,7 +14,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     : super(ScheduleInitial()) {
     on<LoadLessonsEvent>(_onLoadLessons);
     on<LoadLessonByIdEvent>(_onLoadLessonById);
-    on<LoadStudentGroupByIdEvent>(_onLoadStudentGroupById);
+    on<LoadStudentsInGroupByIdEvent>(_onLoadStudentsInGroupById);
     on<CreateLessonEvent>(_onCreateLesson);
     // on<CreatePeriodLessonEvent>(_onCreatePeriodLesson);
     on<CreateMassAttendanceEvent>(_onCreateMassAttendance);
@@ -47,14 +47,16 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     }
   }
 
-  Future<void> _onLoadStudentGroupById(
-    LoadStudentGroupByIdEvent event,
+  Future<void> _onLoadStudentsInGroupById(
+    LoadStudentsInGroupByIdEvent event,
     Emitter<ScheduleState> emit,
   ) async {
-    emit(StudentGroupLoading());
+    emit(StudentsLoading());
     try {
-      final group = await _sharedRepository.getStudentGroupById(event.groupId);
-      emit(StudentGroupLoaded(group));
+      final students = await _sharedRepository.getStudentsInGroup(
+        event.groupId,
+      );
+      emit(StudentGroupLoaded(students));
     } catch (e) {
       emit(StudentGroupError('Ошибка загрузки группы: $e'));
     }

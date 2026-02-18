@@ -1,12 +1,12 @@
 import 'package:treemov/shared/domain/models/base_response_model.dart';
 
-class StudentGroupResponseModel extends BaseResponseModel {
+class GroupStudentsResponseModel extends BaseResponseModel {
   final String? title;
 
-  StudentGroupResponseModel({required super.baseData, required this.title});
+  GroupStudentsResponseModel({required super.baseData, required this.title});
 
-  factory StudentGroupResponseModel.fromJson(Map<String, dynamic> json) {
-    return StudentGroupResponseModel(
+  factory GroupStudentsResponseModel.fromJson(Map<String, dynamic> json) {
+    return GroupStudentsResponseModel(
       baseData: json.baseData,
       title: json['title'],
     );

@@ -14,7 +14,7 @@ class AccrualLoading extends AccrualState {}
 class AccrualCreating extends AccrualState {}
 
 class GroupsLoaded extends AccrualState {
-  final List<StudentGroupResponseModel> groups;
+  final List<GroupStudentsResponseModel> groups;
 
   const GroupsLoaded(this.groups);
 

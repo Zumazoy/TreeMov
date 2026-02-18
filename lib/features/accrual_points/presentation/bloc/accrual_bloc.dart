@@ -27,7 +27,7 @@ class AccrualBloc extends Bloc<AccrualEvent, AccrualState> {
   ) async {
     emit(AccrualLoading());
     try {
-      final groups = await _sharedRepository.getStudentGroups();
+      final groups = await _sharedRepository.getGroupStudents();
       emit(GroupsLoaded(groups));
     } catch (e) {
       emit(AccrualError(e.toString()));

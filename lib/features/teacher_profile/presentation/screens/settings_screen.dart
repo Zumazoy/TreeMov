@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/theme_cubit.dart';
 import 'package:treemov/core/widgets/auth/logout_dialog.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/profile_header_card.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_appearance_section.dart';
@@ -21,19 +23,15 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // Состояние (в реальном приложении лучше использовать Bloc/Provider)
   bool _notificationsEnabled = true;
   bool _emailNotificationsEnabled = false;
   bool _pushNotificationsEnabled = true;
-  bool _darkModeEnabled = false;
   bool _showPhotosInLists = true;
   bool _soundEnabled = true;
   bool _autoSaveEnabled = true;
 
-  // Методы-заглушки для навигации
   void _navigate(String destination) {
     print('Navigate to: $destination');
-    // Здесь будет логика навигации
   }
 
   @override
@@ -75,12 +73,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onPushChanged: (v) => setState(() => _pushNotificationsEnabled = v),
           ),
 
-          SettingsAppearanceSection(
-            darkModeEnabled: _darkModeEnabled,
-            showPhotosInLists: _showPhotosInLists,
-            onDarkModeChanged: (v) => setState(() => _darkModeEnabled = v),
-            onShowPhotosChanged: (v) => setState(() => _showPhotosInLists = v),
-          ),
+          BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              final themeCubit = context.read<ThemeCubit>();
+              return SettingsAppearanceSection(
+                darkModeEnabled: themeMode == ThemeMode.dark,
+                showPhotosInLists: _showPhotosInLists,
+                onDarkModeChanged: (v) => themeCubit.setTheme(v),
+                onShowPhotosChanged: (v) =>
+                    setState(() => _showPhotosInLists = v),
+              );
+            },
+          ), //
 
           SettingsSystemSection(
             soundEnabled: _soundEnabled,

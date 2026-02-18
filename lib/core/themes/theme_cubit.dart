@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:treemov/features/profile/data/datasources/settings_service.dart';
+import 'package:treemov/features/teacher_profile/data/services/settings_service.dart';
 
 class ThemeCubit extends Cubit<ThemeMode> {
   final SettingsService _settingsService;

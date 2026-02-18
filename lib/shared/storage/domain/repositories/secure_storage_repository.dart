@@ -4,9 +4,15 @@ abstract class SecureStorageRepository {
   Future<void> saveRefreshToken(String refreshToken);
   Future<String?> getAccessToken();
   Future<String?> getRefreshToken();
-  Future<void> clearAllTokens();
+  Future<void> deleteAllTokens();
 
   // Org_id
   Future<void> saveOrgId(String orgId);
   Future<String?> getOrgId();
+  Future<void> deleteOrgId();
+
+  // OrgMember_id
+  Future<void> saveOrgMemberId(String orgMemberId);
+  Future<String?> getOrgMemberId();
+  Future<void> deleteOrgMemberId();
 }

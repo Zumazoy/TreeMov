@@ -16,7 +16,7 @@ class LessonResponseModel extends BaseResponseModel {
   final String? comment;
   final TeacherResponseModel? teacher;
   final ClassroomResponseModel? classroom;
-  final StudentGroupResponseModel? group;
+  final GroupStudentsResponseModel? group;
   final SubjectResponseModel? subject;
 
   LessonResponseModel({
@@ -48,10 +48,18 @@ class LessonResponseModel extends BaseResponseModel {
       isCompleted: json['is_completed'],
       duration: json['duration'],
       comment: json['comment'],
-      teacher: TeacherResponseModel.fromJson(json['teacher']),
-      classroom: ClassroomResponseModel.fromJson(json['classroom']),
-      group: StudentGroupResponseModel.fromJson(json['student_group']),
-      subject: SubjectResponseModel.fromJson(json['subject']),
+      teacher: json['teacher'] != null
+          ? TeacherResponseModel.fromJson(json['teacher'])
+          : null,
+      classroom: json['classroom'] != null
+          ? ClassroomResponseModel.fromJson(json['classroom'])
+          : null,
+      group: json['student_group'] != null
+          ? GroupStudentsResponseModel.fromJson(json['student_group'])
+          : null,
+      subject: json['subject'] != null
+          ? SubjectResponseModel.fromJson(json['subject'])
+          : null,
     );
   }
 
