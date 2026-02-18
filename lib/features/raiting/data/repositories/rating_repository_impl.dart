@@ -1,14 +1,16 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/shared/data/models/student_response_model.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
 
-import '../../domain/entities/student_entity.dart';
 import '../../domain/repositories/rating_repository.dart';
 
 class RatingRepositoryImpl implements RatingRepository {
   final DioClient _dioClient;
+  final SharedPreferences _prefs;
 
-  RatingRepositoryImpl(this._dioClient);
+  RatingRepositoryImpl(this._dioClient, this._prefs);
 
   @override
   Future<List<StudentEntity>> getStudents() async {
@@ -25,55 +27,38 @@ class RatingRepositoryImpl implements RatingRepository {
         try {
           final student = StudentResponseModel.fromJson(json);
           final entity = student.toEntity();
-
-          final fullName = _formatName(entity.name, entity.surname);
-          if (fullName.isEmpty) continue;
-
-          students.add(
-            StudentEntity(
-              name: fullName,
-              score: entity.score ?? 0,
-              avatar: _generateAvatar(entity.name, entity.surname),
-            ),
-          );
-        } catch (_) {
+          students.add(entity);
+        } catch (e) {
           continue;
         }
       }
 
       students.sort((a, b) => b.score.compareTo(a.score));
       return students;
-    } catch (_) {
+    } catch (e) {
       return [];
     }
   }
 
   @override
-  Future<StudentEntity> getCurrentStudent() async {
+  Future<StudentEntity?> getCurrentStudent() async {
+    final currentStudentId = _prefs.getInt('current_student_id');
+
+    if (currentStudentId == null) return null;
+
     final students = await getStudents();
-    return students.isNotEmpty
-        ? students.reduce((a, b) => a.score > b.score ? a : b)
-        : StudentEntity(name: 'Текущий Ученик', score: 0, avatar: 'ТУ');
+    try {
+      return students.firstWhere((student) => student.id == currentStudentId);
+    } catch (e) {
+      return null;
+    }
   }
 
-  String _formatName(String? name, String? surname) {
-    return [
-      surname,
-      name,
-    ].where((part) => part != null && part.isNotEmpty).join(' ').trim();
+  Future<void> setCurrentStudentId(int studentId) async {
+    await _prefs.setInt('current_student_id', studentId);
   }
 
-  String _generateAvatar(String? firstName, String? surname) {
-    final firstInitial = (firstName?.isNotEmpty == true)
-        ? firstName![0].toUpperCase()
-        : '';
-    final lastInitial = (surname?.isNotEmpty == true)
-        ? surname![0].toUpperCase()
-        : '';
-
-    String avatar = '$firstInitial$lastInitial';
-    if (avatar.isEmpty) return '??';
-    if (avatar.length == 1) return '$avatar$avatar';
-    return avatar;
+  Future<void> clearCurrentStudentId() async {
+    await _prefs.remove('current_student_id');
   }
 }

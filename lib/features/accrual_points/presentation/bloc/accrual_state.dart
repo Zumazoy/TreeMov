@@ -15,11 +15,17 @@ class AccrualCreating extends AccrualState {}
 
 class GroupsLoaded extends AccrualState {
   final List<GroupStudentsResponseModel> groups;
+  final Map<int, int> groupStudentCounts;
+  final Map<int, List<dynamic>> groupStudents;
 
-  const GroupsLoaded(this.groups);
+  const GroupsLoaded({
+    required this.groups,
+    required this.groupStudentCounts,
+    required this.groupStudents,
+  });
 
   @override
-  List<Object?> get props => [groups];
+  List<Object?> get props => [groups, groupStudentCounts, groupStudents];
 }
 
 class TeacherProfileIdLoaded extends AccrualState {

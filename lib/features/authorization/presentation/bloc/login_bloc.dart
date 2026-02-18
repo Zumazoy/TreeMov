@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:treemov/core/storage/secure_storage_repository.dart';
 import 'package:treemov/features/authorization/data/models/login_request_model.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
-import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

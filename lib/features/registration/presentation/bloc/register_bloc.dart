@@ -1,56 +1,67 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:treemov/features/registration/data/models/register_request_model.dart';
-import 'package:treemov/features/registration/domain/repositories/register_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'register_event.dart';
-part 'register_state.dart';
+import '../../domain/repositories/register_repository.dart';
+import 'register_event.dart';
+import 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final RegisterRepository _registerRepository;
+  final RegisterRepository repository;
 
-  RegisterBloc(this._registerRepository) : super(RegisterInitial()) {
-    on<RegisterKid>(_onRegisterKid);
-    on<RegisterTeacher>(_onRegisterTeacher);
+  String? _email;
+
+  RegisterBloc({required this.repository}) : super(RegisterInitial()) {
+    on<SubmitRegistrationEvent>(_onRegister);
+    on<SubmitVerificationCodeEvent>(_onVerify);
+    on<ResendCodeEvent>(_onResend);
   }
 
-  Future<void> _onRegisterKid(
-    RegisterKid event,
+  Future<void> _onRegister(
+    SubmitRegistrationEvent event,
     Emitter<RegisterState> emit,
   ) async {
     emit(RegisterLoading());
     try {
-      final request = RegisterRequestModel(
+      _email = event.email;
+
+      await repository.registerUser(
         username: event.username,
         email: event.email,
         password: event.password,
-        orgId: null,
       );
 
-      await _registerRepository.register(request);
-      emit(RegisterSuccess('Регистрация успешно завершена'));
+      emit(RegisterCodeSent(email: event.email));
     } catch (e) {
-      emit(RegisterError('Ошибка регистрации ребенка: $e'));
+      emit(RegisterFailure("Ошибка регистрации: ${e.toString()}"));
     }
   }
 
-  Future<void> _onRegisterTeacher(
-    RegisterTeacher event,
+  Future<void> _onVerify(
+    SubmitVerificationCodeEvent event,
     Emitter<RegisterState> emit,
   ) async {
+    if (_email == null) {
+      emit(RegisterFailure("Ошибка сессии. Перезапустите регистрацию."));
+      return;
+    }
+
     emit(RegisterLoading());
     try {
-      final request = RegisterRequestModel(
-        username: event.username,
-        email: event.email,
-        password: event.password,
-        orgId: null,
-      );
-
-      await _registerRepository.register(request);
-      emit(RegisterSuccess('Регистрация успешно завершена'));
+      await repository.verifyEmailOnly(email: _email!, code: event.code);
+      emit(RegisterSuccess());
     } catch (e) {
-      emit(RegisterError('Ошибка регистрации учителя: $e'));
+      emit(RegisterFailure("Ошибка верификации: ${e.toString()}"));
+      emit(RegisterCodeSent(email: _email!));
+    }
+  }
+
+  Future<void> _onResend(
+    ResendCodeEvent event,
+    Emitter<RegisterState> emit,
+  ) async {
+    if (_email != null) {
+      try {
+        await repository.resendCode(_email!);
+      } catch (_) {}
     }
   }
 }

@@ -14,7 +14,7 @@ import '../../../../../core/widgets/layout/nav_bar.dart';
 class StudentDirectoryScreen extends StatefulWidget {
   final GroupStudentsResponseModel group;
   final List<GroupStudentsResponseModel> allGroups;
-  final List<StudentGroupMemberResponseModel> initialStudents;
+  final List<StudentInGroupResponseModel> initialStudents;
 
   const StudentDirectoryScreen({
     super.key,
@@ -32,7 +32,7 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
   List<StudentEntity> _filteredStudents = [];
 
   List<StudentEntity> _convertToEntities(
-    List<StudentGroupMemberResponseModel> students,
+    List<StudentInGroupResponseModel> students,
   ) {
     return students.map((item) => item.student.toEntity()).toList();
   }

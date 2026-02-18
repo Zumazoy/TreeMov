@@ -12,17 +12,22 @@ class ApiConstants {
   static const String refresh = 'auth/refresh';
   static const String logout = 'auth/logout';
 
+  // Email
+  static const String sendEmail = 'send';
+  static const String verifyEmail = 'verify';
+
   // Main
   static const String lessons = 'lessons';
-  static const String subjects = 'subjects/';
-  static const String classrooms = 'classrooms/';
+  static const String subjects = 'subjects';
+  static const String classrooms = 'classrooms';
   static const String attendances = 'attendances';
-  static const String students = 'students/';
-  static const String studentGroups = 'student-groups/';
+  static const String students = 'students';
+  static const String studentGroups = 'student-groups';
+  static const String studentGroupMembers = 'student-group-members';
   static const String teachers = 'teachers';
-  static const String myOrgs = 'organizations/me/';
+  static const String myOrgs = 'organizations/me';
 
-  static const String addOrgMember = 'add_org_member/';
+  static const String addOrgMember = 'add_org_member';
 
   // Endpoints requiring org-id header
   static const List<String> endpointsRequiringOrgId = [
@@ -32,9 +37,11 @@ class ApiConstants {
     attendances,
     students,
     studentGroups,
+    studentGroupMembers,
     teachers,
     myOrgs,
     addOrgMember,
+    accruals,
   ];
 
   // Endpoints not requiring org-id header
@@ -51,9 +58,11 @@ class ApiConstants {
     login,
     refresh,
     logout,
+    sendEmail,
+    verifyEmail,
   ];
 
   // static const String periodLessons = 'period_lessons/'; Отсутcвует соответствующий роут в документации
-  // static const String accruals = 'accruals/'; Отсутствет соответствующий роут в документации
+  static const String accruals = 'accruals';
   // static const String teacherNotes = 'teacher_notes/'; Отсутcвует соответствующий роут в документации
 }

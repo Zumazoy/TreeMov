@@ -1,50 +1,37 @@
-part of 'register_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-sealed class RegisterEvent extends Equatable {
+abstract class RegisterEvent extends Equatable {
   const RegisterEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class RegisterKid extends RegisterEvent {
+// Событие отправки формы регистрации
+class SubmitRegistrationEvent extends RegisterEvent {
   final String username;
   final String email;
   final String password;
-  final String parentName;
-  final String parentPhone;
 
-  const RegisterKid({
+  const SubmitRegistrationEvent({
     required this.username,
     required this.email,
     required this.password,
-    required this.parentName,
-    required this.parentPhone,
   });
 
   @override
-  List<Object> get props => [
-    username,
-    email,
-    password,
-    parentName,
-    parentPhone,
-  ];
+  List<Object> get props => [username, email, password];
 }
 
-class RegisterTeacher extends RegisterEvent {
-  final String username;
-  final String email;
-  final String password;
-  final String teacherCode;
+// Событие отправки кода подтверждения
+class SubmitVerificationCodeEvent extends RegisterEvent {
+  final String code;
 
-  const RegisterTeacher({
-    required this.username,
-    required this.email,
-    required this.password,
-    required this.teacherCode,
-  });
+  const SubmitVerificationCodeEvent(this.code);
 
   @override
-  List<Object> get props => [username, email, password, teacherCode];
+  List<Object> get props => [code];
 }
+
+// Событие повторной отправки кода
+class ResendCodeEvent extends RegisterEvent {}

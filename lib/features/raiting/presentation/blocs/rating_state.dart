@@ -1,4 +1,4 @@
-import '../../domain/entities/student_entity.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 abstract class RatingState {
   const RatingState();
@@ -15,7 +15,7 @@ class StudentsLoaded extends RatingState {
 }
 
 class CurrentStudentLoaded extends RatingState {
-  final StudentEntity currentStudent;
+  final StudentEntity? currentStudent;
 
   const CurrentStudentLoaded(this.currentStudent);
 }

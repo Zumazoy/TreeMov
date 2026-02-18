@@ -4,8 +4,10 @@ import 'package:treemov/shared/domain/models/base_response_model.dart';
 
 class StudentResponseModel extends BaseResponseModel
     with EntityConvertible<StudentEntity> {
+  final int? id;
   final String? name;
   final String? surname;
+  final String? patronymic;
   final String? progress;
   final String? birthday;
   final int? score;
@@ -13,8 +15,10 @@ class StudentResponseModel extends BaseResponseModel
 
   StudentResponseModel({
     required super.baseData,
+    required this.id,
     required this.name,
     required this.surname,
+    required this.patronymic,
     required this.progress,
     required this.birthday,
     required this.score,
@@ -24,8 +28,10 @@ class StudentResponseModel extends BaseResponseModel
   factory StudentResponseModel.fromJson(Map<String, dynamic> json) {
     return StudentResponseModel(
       baseData: json.baseData,
+      id: json['id'],
       name: json['name'],
       surname: json['surname'],
+      patronymic: json['patronymic'],
       progress: json['progress'],
       birthday: json['birthday'],
       score: json['score'],
@@ -39,11 +45,13 @@ class StudentResponseModel extends BaseResponseModel
   StudentEntity toEntity() {
     return StudentEntity(
       baseData: baseData.toEntityData(),
+      id: id ?? 0,
       name: name,
       surname: surname,
+      patronymic: patronymic,
       progress: progress,
       birthday: birthday,
-      score: score,
+      score: score ?? 0,
       orgMember: orgMember,
     );
   }

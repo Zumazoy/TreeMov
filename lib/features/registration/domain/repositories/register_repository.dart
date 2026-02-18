@@ -1,7 +1,11 @@
-import 'package:treemov/features/registration/data/models/register_request_model.dart';
-import 'package:treemov/features/registration/data/models/register_response_model.dart';
-
 abstract class RegisterRepository {
-  // Future<LessonResponseModel> getLessonById(int lessonId);
-  Future<RegisterResponseModel> register(RegisterRequestModel request);
+  Future<void> registerUser({
+    required String username,
+    required String email,
+    required String password,
+  });
+
+  Future<void> verifyEmailOnly({required String email, required String code});
+
+  Future<void> resendCode(String email);
 }

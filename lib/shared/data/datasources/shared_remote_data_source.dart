@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/core/storage/secure_storage_repository.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
@@ -9,7 +10,6 @@ import 'package:treemov/shared/data/models/student_group_member_response_model.d
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
-import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 class SharedRemoteDataSource {
   final DioClient _dioClient;
@@ -52,10 +52,7 @@ class SharedRemoteDataSource {
 
   Future<List<LessonResponseModel>> getLessons() async {
     try {
-      final Response response = await _dioClient.get(
-        ApiConstants.lessons,
-        queryParameters: {'limit': 100},
-      );
+      final Response response = await _dioClient.get(ApiConstants.lessons);
 
       if (response.statusCode == 200) {
         final responseData = response.data;
@@ -169,12 +166,13 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<List<StudentGroupMemberResponseModel>> getStudentsInGroup(
+  Future<List<StudentInGroupResponseModel>> getStudentsInGroup(
     int groupId,
   ) async {
     try {
       final Response response = await _dioClient.get(
-        '${ApiConstants.studentGroups}$groupId/${ApiConstants.students}',
+        ApiConstants.studentGroupMembers,
+        queryParameters: {'student_group__id': groupId},
       );
 
       if (response.statusCode == 200) {
@@ -183,13 +181,13 @@ class SharedRemoteDataSource {
         if (responseData is List) {
           // Если ответ - массив
           return responseData
-              .map<StudentGroupMemberResponseModel>(
-                (json) => StudentGroupMemberResponseModel.fromJson(json),
+              .map<StudentInGroupResponseModel>(
+                (json) => StudentInGroupResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
           // Если ответ - не массив (оборачиваем в список)
-          return [StudentGroupMemberResponseModel.fromJson(responseData)];
+          return [StudentInGroupResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
         }

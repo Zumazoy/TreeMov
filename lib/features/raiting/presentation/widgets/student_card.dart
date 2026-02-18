@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/student_entity.dart';
+import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class StudentCard extends StatelessWidget {
   final StudentEntity student;
@@ -19,7 +19,9 @@ class StudentCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isCurrentUser ? const Color(0xFFE8EAF6) : Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: isCurrentUser ? Border.all(color: const Color(0xFF1A237E), width: 1.5) : null,
+        border: isCurrentUser
+            ? Border.all(color: const Color(0xFF1A237E), width: 1.5)
+            : null,
       ),
       child: ListTile(
         leading: Container(
@@ -40,17 +42,23 @@ class StudentCard extends StatelessWidget {
               radius: 16,
               backgroundColor: const Color(0xFF1A237E),
               child: Text(
-                student.avatar,
-                style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                student.initials,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                student.name,
+                student.fullName,
                 style: TextStyle(
                   color: const Color(0xFF1A237E),
-                  fontWeight: isCurrentUser ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isCurrentUser
+                      ? FontWeight.bold
+                      : FontWeight.normal,
                 ),
               ),
             ),

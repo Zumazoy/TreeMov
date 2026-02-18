@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
+
 import '../../domain/repositories/rating_repository.dart';
 import 'rating_event.dart';
 import 'rating_state.dart';
