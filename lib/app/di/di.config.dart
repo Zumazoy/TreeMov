@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/core/storage/secure_storage_factory.dart';
+import 'package:treemov/core/storage/secure_storage_repository.dart';
 import 'package:treemov/core/themes/theme_cubit.dart';
 import 'package:treemov/features/accrual_points/data/datasources/accrual_remote_data_source.dart';
 import 'package:treemov/features/accrual_points/data/repositories/accrual_repository_impl.dart';
@@ -27,15 +29,13 @@ import 'package:treemov/features/teacher_profile/presentation/bloc/teacher_profi
 import 'package:treemov/shared/data/datasources/shared_remote_data_source.dart';
 import 'package:treemov/shared/data/repositories/shared_repository_impl.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
-import 'package:treemov/shared/storage/data/repositories/secure_storage_repository_impl.dart';
-import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 final getIt = GetIt.instance;
 
 void setupDependencies() {
   // Локальные хранилища
-  getIt.registerSingleton<SecureStorageRepository>(
-    SecureStorageRepositoryImpl(),
+  getIt.registerLazySingleton<SecureStorageRepository>(
+    () => SecureStorageFactory.create(),
   );
   getIt.registerSingleton<LocalNotesDataSource>(LocalNotesDataSource());
 

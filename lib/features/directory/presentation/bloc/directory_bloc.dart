@@ -11,37 +11,7 @@ class DirectoryBloc extends Bloc<DirectoryEvent, DirectoryState> {
   final SharedRepository _sharedRepository;
 
   DirectoryBloc(this._sharedRepository) : super(DirectoryInitial()) {
-    on<LoadStudentGroups>(_onLoadStudentGroups);
-    on<LoadStudentsInGroup>(_onLoadStudentsInGroup);
     on<LoadAllGroupsWithCounts>(_onLoadAllGroupsWithCounts);
-  }
-
-  Future<void> _onLoadStudentGroups(
-    LoadStudentGroups event,
-    Emitter<DirectoryState> emit,
-  ) async {
-    emit(DirectoryLoading());
-    try {
-      final groups = await _sharedRepository.getGroupStudents();
-      emit(GroupsLoaded(groups: groups));
-    } catch (e) {
-      emit(DirectoryError(e.toString()));
-    }
-  }
-
-  Future<void> _onLoadStudentsInGroup(
-    LoadStudentsInGroup event,
-    Emitter<DirectoryState> emit,
-  ) async {
-    emit(StudentsLoading());
-    try {
-      final students = await _sharedRepository.getStudentsInGroup(
-        event.groupId,
-      );
-      emit(StudentsInGroupLoaded(students: students, groupId: event.groupId));
-    } catch (e) {
-      emit(DirectoryError(e.toString()));
-    }
   }
 
   Future<void> _onLoadAllGroupsWithCounts(

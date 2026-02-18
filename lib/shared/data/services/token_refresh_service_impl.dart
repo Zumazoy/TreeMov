@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/core/storage/secure_storage_repository.dart';
 import 'package:treemov/shared/data/models/refresh_request_model.dart';
 import 'package:treemov/shared/domain/services/token_refresh_service.dart';
-import 'package:treemov/shared/storage/domain/repositories/secure_storage_repository.dart';
 
 class TokenRefreshServiceImpl implements TokenRefreshService {
   final DioClient _dioClient;
