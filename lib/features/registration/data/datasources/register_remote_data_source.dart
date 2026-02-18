@@ -35,7 +35,6 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
   @override
   Future<void> sendEmailCode(String email) async {
     try {
-      // Используем emailUrl + 'send' (как мы настраивали)
       await _dioClient.post(
         '${ApiConstants.emailUrl}send',
         data: {"email": email, "purpose": "verify_email"},
@@ -55,7 +54,6 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
 
       final data = response.data;
 
-      // Проверяем поле "succes" (с вашей опечаткой в API)
       if (data['succes'] != true) {
         final errorDetail = data['detail'] ?? 'Не удалось подтвердить почту';
         throw Exception(errorDetail);
