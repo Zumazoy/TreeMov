@@ -7,6 +7,7 @@ class AppTextField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final TextInputType? keyboardType;
+  final Color? fillColor;
 
   const AppTextField({
     super.key,
@@ -15,15 +16,16 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.suffixIcon,
     this.keyboardType,
+    this.fillColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 316,
+      width: double.infinity,
       height: 44,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: fillColor ?? AppColors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(

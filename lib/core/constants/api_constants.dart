@@ -12,6 +12,10 @@ class ApiConstants {
   static const String refresh = 'auth/refresh';
   static const String logout = 'auth/logout';
 
+  // Email
+  static const String sendEmail = 'send';
+  static const String verifyEmail = 'verify';
+
   // Main
   static const String lessons = 'lessons';
   static const String subjects = 'subjects/';
@@ -51,6 +55,8 @@ class ApiConstants {
     login,
     refresh,
     logout,
+    sendEmail,
+    verifyEmail,
   ];
 
   // static const String periodLessons = 'period_lessons/'; Отсутcвует соответствующий роут в документации

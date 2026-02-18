@@ -64,7 +64,7 @@ void setupDependencies() {
   //   TeacherNotesRemoteDataSource(getIt<DioClient>()),
   // );
   getIt.registerSingleton<RegisterRemoteDataSource>(
-    RegisterRemoteDataSource(getIt<DioClient>()),
+    RegisterRemoteDataSourceImpl(getIt<DioClient>()),
   );
   getIt.registerSingleton<SettingsService>(SettingsService());
 
@@ -88,7 +88,7 @@ void setupDependencies() {
     LocalNotesRepositoryImpl(getIt<LocalNotesDataSource>()),
   );
   getIt.registerSingleton<RegisterRepository>(
-    RegisterRepositoryImpl(getIt<RegisterRemoteDataSource>()),
+    RegisterRepositoryImpl(remoteDataSource: getIt<RegisterRemoteDataSource>()),
   );
 
   // BLoC
@@ -120,7 +120,7 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<RegisterBloc>(
-    () => RegisterBloc(getIt<RegisterRepository>()),
+    () => RegisterBloc(repository: getIt<RegisterRepository>()),
   );
 
   // Тема
