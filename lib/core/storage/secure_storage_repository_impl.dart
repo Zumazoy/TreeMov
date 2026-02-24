@@ -73,4 +73,20 @@ class SecureStorageRepositoryImpl implements SecureStorageRepository {
   Future<void> deleteOrgMemberId() async {
     await _storage.delete(key: Constants.orgMemberIdKey);
   }
+
+  // Role
+  @override
+  Future<void> saveRole(String role) async {
+    await _storage.write(key: Constants.roleKey, value: role);
+  }
+
+  @override
+  Future<String?> getRole() async {
+    return await _storage.read(key: Constants.roleKey);
+  }
+
+  @override
+  Future<void> deleteRole() async {
+    await _storage.delete(key: Constants.roleKey);
+  }
 }

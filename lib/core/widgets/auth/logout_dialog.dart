@@ -38,6 +38,7 @@ class LogoutDialog {
       await authStorageRepository.deleteAllTokens();
       await authStorageRepository.deleteOrgId();
       await authStorageRepository.deleteOrgMemberId();
+      await authStorageRepository.deleteRole();
 
       if (context.mounted) {
         Navigator.pushNamedAndRemoveUntil(

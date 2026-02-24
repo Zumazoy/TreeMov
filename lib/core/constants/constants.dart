@@ -4,4 +4,5 @@ class Constants {
 
   static const String orgIdKey = 'org_id';
   static const String orgMemberIdKey = 'org_member_id';
+  static const String roleKey = 'role';
 }

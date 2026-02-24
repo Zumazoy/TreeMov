@@ -15,4 +15,9 @@ abstract class SecureStorageRepository {
   Future<void> saveOrgMemberId(String orgMemberId);
   Future<String?> getOrgMemberId();
   Future<void> deleteOrgMemberId();
+
+  // Role
+  Future<void> saveRole(String role);
+  Future<String?> getRole();
+  Future<void> deleteRole();
 }

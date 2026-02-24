@@ -39,9 +39,7 @@ class EmptySearchView extends StatelessWidget {
 }
 
 class EmptyOrganizationsView extends StatelessWidget {
-  final VoidCallback onCreatePressed;
-
-  const EmptyOrganizationsView({super.key, required this.onCreatePressed});
+  const EmptyOrganizationsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,21 +63,12 @@ class EmptyOrganizationsView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Создайте первую организацию или примите приглашение',
+            'Создайте первую организацию и примите приглашение',
             style: TextStyle(
               fontSize: 14,
               color: AppColors.directoryTextSecondary,
             ),
             textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onCreatePressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.plusButton,
-              foregroundColor: AppColors.white,
-            ),
-            child: const Text('Создать организацию'),
           ),
         ],
       ),

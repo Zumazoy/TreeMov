@@ -26,6 +26,8 @@ class ApiConstants {
   static const String studentGroupMembers = 'student-group-members';
   static const String teachers = 'teachers';
   static const String myOrgs = 'organizations/me';
+  static const String myInvites = 'invites/me';
+  static const String acceptInvite = 'invites/accept';
 
   static const String addOrgMember = 'add_org_member';
 
@@ -39,7 +41,6 @@ class ApiConstants {
     studentGroups,
     studentGroupMembers,
     teachers,
-    myOrgs,
     addOrgMember,
     accruals,
   ];
@@ -50,6 +51,9 @@ class ApiConstants {
     login,
     refresh,
     logout,
+    myOrgs,
+    myInvites,
+    acceptInvite,
   ];
 
   // Endpoints not requiring token

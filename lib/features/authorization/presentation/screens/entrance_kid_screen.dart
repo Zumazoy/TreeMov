@@ -208,7 +208,7 @@ class _LoginButton extends StatelessWidget {
         if (state is LoginSuccess) {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            AppRoutes.mainApp,
+            AppRoutes.myOrgs,
             (route) => false,
           );
         } else if (state is LoginError) {
