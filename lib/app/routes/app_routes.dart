@@ -5,6 +5,7 @@ import 'package:treemov/features/authorization/auth_checker_feature.dart';
 import 'package:treemov/features/authorization/presentation/screens/entrance_kid_screen.dart';
 import 'package:treemov/features/authorization/presentation/screens/entrance_teacher_screen.dart';
 import 'package:treemov/features/kid_calendar/presentation/screens/calendar_kid.dart';
+import 'package:treemov/features/organizations/presentation/screens/organizations_screen.dart';
 import 'package:treemov/features/raiting/presentation/screens/rating_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/registration_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/verification_code_screen.dart';
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String testToken = '/test_token';
   static const String testSchedule = '/test_schedule';
   static const String rating = '/rating';
+  static const String myOrgs = '/my_orgs';
 
   static const String registration = '/registration';
   static const String verificationCode = '/verification_code';
@@ -47,12 +49,11 @@ class AppRoutes {
     kidCalendar: (context) => const CalendarKidScreen(),
     mainApp: (context) => const MainScreen(),
     // testHome: (context) => HomeScreen(),
-
-    // testToken: (context) => TokenTestScreen(),
     rating: (context) {
       final secureStorageRepository = SecureStorageRepositoryImpl();
       final dioClient = DioClient(secureStorage: secureStorageRepository);
       return RatingScreen(dioClient: dioClient);
     },
+    myOrgs: (context) => const OrganizationsScreen(),
   };
 }
