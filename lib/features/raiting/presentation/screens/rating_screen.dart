@@ -187,7 +187,7 @@ class _RatingScreenState extends State<RatingScreen> {
               ),
               elevation: 0,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 0),
             if (sortedStudents.isNotEmpty)
               TopStudentsChart(students: topThree)
             else
