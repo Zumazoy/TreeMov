@@ -126,7 +126,7 @@ class _RatingScreenState extends State<RatingScreen> {
       ),
       // Используем готовый компонент BottomNavigationBar
       bottomNavigationBar: ChildBottomNavigationBar(
-        currentIndex: 1, // Рейтинг - второй элемент (индекс 1)
+        currentIndex: 1,
         onTap: _onNavBarTap,
       ),
     );

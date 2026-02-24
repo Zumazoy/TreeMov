@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/accrual_points/presentation/bloc/accrual_bloc.dart';
 import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
@@ -55,27 +56,35 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
   @override
   void initState() {
     super.initState();
+    _loadStudents();
+  }
+
+  void _loadStudents() {
     _students = widget.initialStudents
         .map((item) => item.student.toEntity())
         .toList();
     _filteredStudents = _getSortedStudents(List.from(_students));
   }
 
+  void _applySearchFilter() {
+    final query = _searchController.text;
+    if (query.isEmpty) {
+      _filteredStudents = _getSortedStudents(List.from(_students));
+    } else {
+      _filteredStudents = _getSortedStudents(
+        _students.where((student) {
+          final fullName = '${student.name ?? ''} ${student.surname ?? ''}'
+              .toLowerCase();
+          return fullName.contains(query.toLowerCase());
+        }).toList(),
+      );
+    }
+  }
+
   void _onSearchChanged(String query) {
     setState(() {
       _hasSearchQuery = query.isNotEmpty;
-
-      if (query.isEmpty) {
-        _filteredStudents = _getSortedStudents(List.from(_students));
-      } else {
-        _filteredStudents = _getSortedStudents(
-          _students.where((student) {
-            final fullName = '${student.name ?? ''} ${student.surname ?? ''}'
-                .toLowerCase();
-            return fullName.contains(query.toLowerCase());
-          }).toList(),
-        );
-      }
+      _applySearchFilter();
     });
   }
 
@@ -107,34 +116,54 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: Text(
-          widget.group.title ?? 'Группа',
-          style: const TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            color: AppColors.notesDarkText,
-          ),
-        ),
+    return BlocListener<AccrualBloc, AccrualState>(
+      bloc: widget.accrualBloc,
+      listener: (context, state) {
+        if (state is GroupsLoaded) {
+          // Когда приходят обновленные группы, обновляем список студентов для текущей группы
+          final updatedStudents = state.groupStudents[widget.group.baseData.id];
+          if (updatedStudents != null) {
+            setState(() {
+              _students = updatedStudents
+                  .map(
+                    (item) => (item as StudentInGroupResponseModel).student
+                        .toEntity(),
+                  )
+                  .toList();
+              _applySearchFilter();
+            });
+          }
+        }
+      },
+      child: Scaffold(
         backgroundColor: AppColors.white,
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          SearchField(
-            controller: _searchController,
-            onChanged: _onSearchChanged,
-            hintText: 'Поиск ученика...',
+        appBar: AppBar(
+          title: Text(
+            widget.group.title ?? 'Группа',
+            style: const TextStyle(
+              fontFamily: 'Arial',
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: AppColors.notesDarkText,
+            ),
           ),
-          Expanded(child: _buildContent()),
-        ],
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: 1,
-        onTap: _onTabTapped,
+          backgroundColor: AppColors.white,
+          elevation: 0,
+        ),
+        body: Column(
+          children: [
+            SearchField(
+              controller: _searchController,
+              onChanged: _onSearchChanged,
+              hintText: 'Поиск ученика...',
+            ),
+            Expanded(child: _buildContent()),
+          ],
+        ),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: 1,
+          onTap: _onTabTapped,
+        ),
       ),
     );
   }
@@ -242,7 +271,6 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                const SizedBox(height: 2),
                 Row(
                   children: [
                     Image.asset(

@@ -69,7 +69,7 @@ class AccrualBloc extends Bloc<AccrualEvent, AccrualState> {
     try {
       final teacherProfile = await _sharedRepository.getMyOrgProfile();
 
-      final teacherProfileId = teacherProfile.baseData.id;
+      final teacherProfileId = teacherProfile.profile?.baseData.id;
 
       if (teacherProfileId != null) {
         _teacherProfileId = teacherProfileId;
@@ -90,7 +90,10 @@ class AccrualBloc extends Bloc<AccrualEvent, AccrualState> {
     try {
       await _accrualRepository.createAccrual(event.request);
       emit(AccrualCreated('Начисление успешно создано'));
-      add(LoadStudentGroups()); // Обновляем список
+
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      add(LoadStudentGroups());
     } catch (e) {
       emit(AccrualError('Ошибка создания начисления: $e'));
     }
