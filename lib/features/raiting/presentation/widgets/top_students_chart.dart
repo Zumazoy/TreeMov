@@ -8,7 +8,6 @@ class TopStudentsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Фильтруем студентов с 0 очков
     final studentsWithScore = students.where((s) => s.score > 0).toList();
 
     if (studentsWithScore.length < 3) {
