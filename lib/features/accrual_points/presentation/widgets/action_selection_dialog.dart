@@ -130,7 +130,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
       // Создаем AccrualRequestModel
       final request = AccrualRequestModel(
         teacherId: _teacherProfileId!,
-        studentId: widget.student.id,
+        studentId: widget.student.id ?? 0,
         amount: _selectedAction!.points,
         category: _selectedAction!.category.name,
         comment: _selectedAction!.title,

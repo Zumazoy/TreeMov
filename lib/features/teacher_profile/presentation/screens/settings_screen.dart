@@ -14,9 +14,9 @@ import 'package:treemov/features/teacher_profile/presentation/widgets/settings_s
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final OrgMemberResponseModel? teacherProfile;
+  final OrgMemberResponseModel? orgMember;
 
-  const SettingsScreen({super.key, required this.teacherProfile});
+  const SettingsScreen({super.key, required this.orgMember});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.only(bottom: 24),
         children: [
           // 1. Профиль (Header)
-          ProfileHeaderCard(teacherProfile: widget.teacherProfile),
+          ProfileHeaderCard(orgMember: widget.orgMember),
           const SizedBox(height: 16),
 
           SettingsProfileSection(

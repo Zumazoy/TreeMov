@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:treemov/app/di/di.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/core/storage/secure_storage_repository_impl.dart';
 import 'package:treemov/features/authorization/auth_checker_feature.dart';
@@ -8,7 +6,6 @@ import 'package:treemov/features/authorization/presentation/screens/entrance_kid
 import 'package:treemov/features/authorization/presentation/screens/entrance_teacher_screen.dart';
 import 'package:treemov/features/kid_calendar/presentation/screens/calendar_kid.dart';
 import 'package:treemov/features/raiting/presentation/screens/rating_screen.dart';
-import 'package:treemov/features/registration/presentation/bloc/register_bloc.dart';
 import 'package:treemov/features/registration/presentation/screens/registration_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/verification_code_screen.dart';
 // import 'package:treemov/features/test_home/home_screen.dart';
@@ -41,10 +38,7 @@ class AppRoutes {
     entrance: (context) => AuthCheckerFeature.createEntranceScreen(),
     entranceKid: (context) => const EntranceKidScreen(),
     entranceTeacher: (context) => const EntranceTeacherScreen(),
-    registration: (context) => BlocProvider(
-      create: (context) => getIt<RegisterBloc>(),
-      child: const RegistrationScreen(),
-    ),
+    registration: (context) => const RegistrationScreen(),
     verificationCode: (context) => const VerificationCodeScreen(),
     // kidInfoScreen: (context) => const KidInfoScreen(),
     // parentInfoScreen: (context) => const ParentInfoScreen(),
