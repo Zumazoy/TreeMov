@@ -19,14 +19,32 @@ class RatingScreen extends StatefulWidget {
   State<RatingScreen> createState() => _RatingScreenState();
 }
 
-class _RatingScreenState extends State<RatingScreen> {
+class _RatingScreenState extends State<RatingScreen>
+    with AutomaticKeepAliveClientMixin {
   late final Future<RatingBloc> _ratingBlocFuture;
   bool _showPinnedCard = true;
+
+  @override
+  bool get wantKeepAlive => true; // Сохраняем состояние при переключении вкладок
 
   @override
   void initState() {
     super.initState();
     _ratingBlocFuture = _initializeBloc();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _refreshDataIfNeeded();
+  }
+
+  Future<void> _refreshDataIfNeeded() async {
+    final bloc = await _ratingBlocFuture;
+    if (mounted) {
+      bloc.add(const LoadStudentsEvent());
+      bloc.add(const LoadCurrentStudentEvent());
+    }
   }
 
   Future<RatingBloc> _initializeBloc() async {
@@ -40,6 +58,8 @@ class _RatingScreenState extends State<RatingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFF87CEEB),
       body: FutureBuilder<RatingBloc>(
@@ -57,8 +77,8 @@ class _RatingScreenState extends State<RatingScreen> {
             return _buildLoading();
           }
 
-          return BlocProvider<RatingBloc>(
-            create: (context) => snapshot.data!,
+          return BlocProvider<RatingBloc>.value(
+            value: snapshot.data!,
             child: BlocBuilder<RatingBloc, RatingState>(
               builder: (context, state) {
                 if (state is RatingLoading) {
@@ -138,10 +158,7 @@ class _RatingScreenState extends State<RatingScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
-              ),
+              automaticallyImplyLeading: false,
               elevation: 0,
             ),
             const SizedBox(height: 25),
