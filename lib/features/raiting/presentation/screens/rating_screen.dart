@@ -19,91 +19,81 @@ class RatingScreen extends StatefulWidget {
   State<RatingScreen> createState() => _RatingScreenState();
 }
 
-class _RatingScreenState extends State<RatingScreen>
-    with AutomaticKeepAliveClientMixin {
-  late final Future<RatingBloc> _ratingBlocFuture;
+class _RatingScreenState extends State<RatingScreen> {
+  late RatingBloc _ratingBloc;
   bool _showPinnedCard = true;
-
-  @override
-  bool get wantKeepAlive => true; // Сохраняем состояние при переключении вкладок
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _ratingBlocFuture = _initializeBloc();
+    debugPrint('RatingScreen: initState');
+    _initializeBloc();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _refreshDataIfNeeded();
+  void _initializeBloc() {
+    SharedPreferences.getInstance().then((prefs) {
+      final repository = RatingRepositoryImpl(widget.dioClient, prefs);
+      _ratingBloc = RatingBloc(repository);
+      _isInitialized = true;
+      _loadData();
+      if (mounted) setState(() {});
+    });
   }
 
-  Future<void> _refreshDataIfNeeded() async {
-    final bloc = await _ratingBlocFuture;
-    if (mounted) {
-      bloc.add(const LoadStudentsEvent());
-      bloc.add(const LoadCurrentStudentEvent());
+  void refreshData() {
+    debugPrint('RatingScreen: refreshData вызван');
+    if (_isInitialized) {
+      _loadData();
+    } else {
+      debugPrint(
+        'RatingScreen: еще не инициализирован, данные загрузятся при инициализации',
+      );
     }
   }
 
-  Future<RatingBloc> _initializeBloc() async {
-    final prefs = await SharedPreferences.getInstance();
-    final repository = RatingRepositoryImpl(widget.dioClient, prefs);
-    final bloc = RatingBloc(repository);
-    bloc.add(const LoadStudentsEvent());
-    bloc.add(const LoadCurrentStudentEvent());
-    return bloc;
+  void _loadData() {
+    debugPrint('RatingScreen: загружаем данные');
+    _ratingBloc.add(const LoadStudentsEvent());
+    _ratingBloc.add(const LoadCurrentStudentEvent());
+  }
+
+  @override
+  void dispose() {
+    debugPrint('RatingScreen: dispose');
+    _ratingBloc.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    if (!_isInitialized) {
+      return _buildLoading();
+    }
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF87CEEB),
-      body: FutureBuilder<RatingBloc>(
-        future: _ratingBlocFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+    return BlocProvider<RatingBloc>.value(
+      value: _ratingBloc,
+      child: BlocBuilder<RatingBloc, RatingState>(
+        builder: (context, state) {
+          if (state is RatingLoading) {
             return _buildLoading();
+          } else if (state is StudentsLoaded || state is CurrentStudentLoaded) {
+            final studentsState = context.read<RatingBloc>().state;
+            List<StudentEntity> students = [];
+            StudentEntity? currentStudent;
+
+            if (studentsState is StudentsLoaded) {
+              students = studentsState.students;
+            }
+            if (studentsState is CurrentStudentLoaded) {
+              currentStudent = studentsState.currentStudent;
+            }
+
+            return _buildContent(students, currentStudent);
+          } else if (state is RatingError) {
+            return _buildError(state.message);
           }
-
-          if (snapshot.hasError) {
-            return _buildError('Ошибка инициализации: ${snapshot.error}');
-          }
-
-          if (!snapshot.hasData) {
-            return _buildLoading();
-          }
-
-          return BlocProvider<RatingBloc>.value(
-            value: snapshot.data!,
-            child: BlocBuilder<RatingBloc, RatingState>(
-              builder: (context, state) {
-                if (state is RatingLoading) {
-                  return _buildLoading();
-                } else if (state is StudentsLoaded ||
-                    state is CurrentStudentLoaded) {
-                  final studentsState = context.read<RatingBloc>().state;
-                  List<StudentEntity> students = [];
-                  StudentEntity? currentStudent;
-
-                  if (studentsState is StudentsLoaded) {
-                    students = studentsState.students;
-                  }
-                  if (studentsState is CurrentStudentLoaded) {
-                    currentStudent = studentsState.currentStudent;
-                  }
-
-                  return _buildContent(students, currentStudent);
-                } else if (state is RatingError) {
-                  return _buildError(state.message);
-                }
-                return _buildLoading();
-              },
-            ),
-          );
+          return _buildLoading();
         },
       ),
     );
@@ -121,115 +111,141 @@ class _RatingScreenState extends State<RatingScreen>
       currentStudent,
     );
 
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: ShaderMask(
-            shaderCallback: (Rect bounds) {
-              return LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.white.withOpacity(1.0),
-                  Colors.white.withOpacity(0.0),
-                ],
-                stops: const [0.0, 0.3],
-              ).createShader(bounds);
-            },
-            blendMode: BlendMode.dstIn,
-            child: Image.asset(
-              'assets/images/background_raiting.png',
-              fit: BoxFit.fitWidth,
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.4,
-              alignment: Alignment.topCenter,
+    return Scaffold(
+      backgroundColor: const Color(0xFF87CEEB),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withOpacity(1.0),
+                    Colors.white.withOpacity(0.0),
+                  ],
+                  stops: const [0.0, 0.3],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.dstIn,
+              child: Image.asset(
+                'assets/images/background_raiting.png',
+                fit: BoxFit.fitWidth,
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.4,
+                alignment: Alignment.topCenter,
+              ),
             ),
           ),
-        ),
-        Column(
-          children: [
-            AppBar(
-              backgroundColor: Colors.transparent,
-              title: const Text(
-                'Рейтинг',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              automaticallyImplyLeading: false,
-              elevation: 0,
-            ),
-            const SizedBox(height: 25),
-            if (sortedStudents.isNotEmpty)
-              TopStudentsChart(students: topThree)
-            else
-              const Expanded(
-                child: Center(
-                  child: Text(
-                    'Нет данных о студентах',
-                    style: TextStyle(color: Color(0xFF1A237E), fontSize: 16),
-                  ),
-                ),
-              ),
-          ],
-        ),
-        if (sortedStudents.isNotEmpty)
-          DraggableScrollableSheet(
-            initialChildSize: 0.45,
-            minChildSize: 0.45,
-            maxChildSize: 0.87,
-            snap: true,
-            snapSizes: const [0.45, 0.85],
-            builder: (BuildContext context, ScrollController scrollController) {
-              return Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 16,
-                      offset: Offset(0, -2),
+          RefreshIndicator(
+            onRefresh: () async {
+              debugPrint('RatingScreen: ручное обновление');
+              _loadData();
+              await Future.delayed(const Duration(milliseconds: 500));
+            },
+            color: const Color(0xFF1A237E),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  AppBar(
+                    backgroundColor: Colors.transparent,
+                    title: const Text(
+                      'Рейтинг',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.only(top: 14, bottom: 4),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 40,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1A237E),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                          ],
+                    automaticallyImplyLeading: false,
+                    elevation: 0,
+                  ),
+                  const SizedBox(height: 25),
+                  if (sortedStudents.isNotEmpty)
+                    TopStudentsChart(students: topThree)
+                  else
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text(
+                          'Нет данных о студентах',
+                          style: TextStyle(
+                            color: Color(0xFF1A237E),
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: _buildStudentsList(
-                        scrollController,
-                        sortedStudents,
-                        currentStudent,
-                        currentUserPosition,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  const SizedBox(height: 400),
+                ],
+              ),
+            ),
           ),
-      ],
+          if (sortedStudents.isNotEmpty)
+            DraggableScrollableSheet(
+              initialChildSize: 0.45,
+              minChildSize: 0.45,
+              maxChildSize: 0.87,
+              snap: true,
+              snapSizes: const [0.45, 0.85],
+              builder:
+                  (BuildContext context, ScrollController scrollController) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 16,
+                            offset: Offset(0, -2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {},
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.only(
+                                top: 14,
+                                bottom: 4,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 40,
+                                    height: 4,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF1A237E),
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: _buildStudentsList(
+                              scrollController,
+                              sortedStudents,
+                              currentStudent,
+                              currentUserPosition,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+            ),
+        ],
+      ),
     );
   }
 
