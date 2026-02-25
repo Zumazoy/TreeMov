@@ -48,7 +48,7 @@ class KidProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kidPrimary, // Color(0xFFB6E4FB)
+      backgroundColor: AppColors.kidPrimary,
       body: SafeArea(
         child: Column(
           children: [

@@ -90,7 +90,7 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color(0xFF2F213E),
+                        color: AppColors.grayFieldText,
                         width: 1,
                       ),
                     ),
@@ -111,7 +111,7 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.white,
-                      foregroundColor: const Color(0xFF1E40AF),
+                      foregroundColor: AppColors.categoryBehaviorText,
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -136,7 +136,7 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                 height: 20,
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFF2F213E), width: 1),
+                  border: Border.all(color: AppColors.grayFieldText, width: 1),
                 ),
               ),
 
@@ -150,7 +150,7 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.white,
-                      foregroundColor: const Color(0xFFBE2B29),
+                      foregroundColor: AppColors.deleteRed,
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),

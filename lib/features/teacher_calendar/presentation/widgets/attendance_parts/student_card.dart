@@ -30,9 +30,9 @@ class StudentCard extends StatelessWidget {
   Color _getAttendanceColor(String status) {
     switch (status) {
       case 'present':
-        return const Color(0xFF166534);
+        return AppColors.statsTotalText;
       case 'absent':
-        return const Color(0xFFDC2626);
+        return AppColors.statsAbsentText;
       default:
         return AppColors.grayFieldText;
     }
@@ -41,9 +41,9 @@ class StudentCard extends StatelessWidget {
   Color _getAttendanceBackgroundColor(String status) {
     switch (status) {
       case 'present':
-        return const Color(0xFFF0FDF4);
+        return AppColors.statsTotalBg;
       case 'absent':
-        return const Color(0xFFFEF2F2);
+        return AppColors.statsAbsentBg;
       default:
         return AppColors.white;
     }
@@ -52,9 +52,9 @@ class StudentCard extends StatelessWidget {
   Color _getAttendanceBorderColor(String status) {
     switch (status) {
       case 'present':
-        return const Color(0xFFBBF7D0);
+        return AppColors.statsTotalBorder;
       case 'absent':
-        return const Color(0xFFFECACA);
+        return AppColors.statsAbsentBorder;
       default:
         return AppColors.lightGrey;
     }
@@ -114,7 +114,7 @@ class StudentCard extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'TT Norms',
-                      color: Colors.black,
+                      color: AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -169,12 +169,12 @@ class StudentCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12.5),
                       border: Border.all(
                         color: attendanceStatus == 'present'
-                            ? const Color(0xFF166534)
+                            ? AppColors.statsTotalText
                             : AppColors.lightGrey,
                         width: 1,
                       ),
                       color: attendanceStatus == 'present'
-                          ? const Color(0xFFF0FDF4)
+                          ? AppColors.statsTotalBg
                           : AppColors.white,
                     ),
                     child: Center(
@@ -183,7 +183,7 @@ class StudentCard extends StatelessWidget {
                         width: 16,
                         height: 16,
                         color: attendanceStatus == 'present'
-                            ? const Color(0xFF166534)
+                            ? AppColors.statsTotalText
                             : AppColors.grayFieldText,
                       ),
                     ),
@@ -202,12 +202,12 @@ class StudentCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12.5),
                       border: Border.all(
                         color: attendanceStatus == 'absent'
-                            ? const Color(0xFFDC2626)
+                            ? AppColors.statsAbsentText
                             : AppColors.lightGrey,
                         width: 1,
                       ),
                       color: attendanceStatus == 'absent'
-                          ? const Color(0xFFFEF2F2)
+                          ? AppColors.statsAbsentBg
                           : AppColors.white,
                     ),
                     child: Center(
@@ -216,7 +216,7 @@ class StudentCard extends StatelessWidget {
                         width: 16,
                         height: 16,
                         color: attendanceStatus == 'absent'
-                            ? const Color(0xFFDC2626)
+                            ? AppColors.statsAbsentText
                             : AppColors.grayFieldText,
                       ),
                     ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/widgets/layout/child_nav_bar.dart';
 import 'package:treemov/features/raiting/data/repositories/rating_repository_impl.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_bloc.dart';
@@ -79,7 +80,7 @@ class _RatingScreenState extends State<RatingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF87CEEB),
+      backgroundColor: AppColors.skyBlue,
       body: FutureBuilder<RatingBloc>(
         future: _ratingBlocFuture,
         builder: (context, snapshot) {
@@ -152,10 +153,7 @@ class _RatingScreenState extends State<RatingScreen> {
               return LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Colors.white.withOpacity(1.0),
-                  Colors.white.withOpacity(0.0),
-                ],
+                colors: [Colors.white, Colors.white.withAlpha(0)],
                 stops: const [0.0, 0.3],
               ).createShader(bounds);
             },
@@ -195,7 +193,10 @@ class _RatingScreenState extends State<RatingScreen> {
                 child: Center(
                   child: Text(
                     'Нет данных о студентах',
-                    style: TextStyle(color: Color(0xFF1A237E), fontSize: 16),
+                    style: TextStyle(
+                      color: AppColors.achievementDeepBlue,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
@@ -234,7 +235,7 @@ class _RatingScreenState extends State<RatingScreen> {
                               width: 40,
                               height: 4,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF1A237E),
+                                color: AppColors.achievementDeepBlue,
                                 borderRadius: BorderRadius.circular(2),
                               ),
                             ),
@@ -383,7 +384,7 @@ class _RatingScreenState extends State<RatingScreen> {
 
   Widget _buildLoading() {
     return const Center(
-      child: CircularProgressIndicator(color: Color(0xFF1A237E)),
+      child: CircularProgressIndicator(color: AppColors.achievementDeepBlue),
     );
   }
 
@@ -391,7 +392,10 @@ class _RatingScreenState extends State<RatingScreen> {
     return Center(
       child: Text(
         'Ошибка: $message',
-        style: const TextStyle(color: Color(0xFF1A237E), fontSize: 16),
+        style: const TextStyle(
+          color: AppColors.achievementDeepBlue,
+          fontSize: 16,
+        ),
       ),
     );
   }

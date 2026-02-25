@@ -24,7 +24,7 @@ class PointsSnackBar {
         ),
         backgroundColor: isPositive
             ? AppColors.teacherPrimary
-            : const Color(0xFFDC2626),
+            : AppColors.activityRed,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         duration: const Duration(seconds: 3),

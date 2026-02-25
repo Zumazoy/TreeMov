@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class StudentCard extends StatelessWidget {
@@ -17,10 +18,10 @@ class StudentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: isCurrentUser ? const Color(0xFFE8EAF6) : Colors.white,
+        color: isCurrentUser ? AppColors.eventTap : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: isCurrentUser
-            ? Border.all(color: const Color(0xFF1A237E), width: 1.5)
+            ? Border.all(color: AppColors.achievementDeepBlue, width: 1.5)
             : null,
       ),
       child: ListTile(
@@ -30,7 +31,7 @@ class StudentCard extends StatelessWidget {
           child: Text(
             position.toString(),
             style: TextStyle(
-              color: const Color(0xFF1A237E),
+              color: AppColors.achievementDeepBlue,
               fontSize: 16,
               fontWeight: isCurrentUser ? FontWeight.bold : FontWeight.normal,
             ),
@@ -40,7 +41,7 @@ class StudentCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 16,
-              backgroundColor: const Color(0xFF1A237E),
+              backgroundColor: AppColors.achievementDeepBlue,
               child: Text(
                 student.initials,
                 style: const TextStyle(
@@ -55,7 +56,7 @@ class StudentCard extends StatelessWidget {
               child: Text(
                 student.fullName,
                 style: TextStyle(
-                  color: const Color(0xFF1A237E),
+                  color: AppColors.achievementDeepBlue,
                   fontWeight: isCurrentUser
                       ? FontWeight.bold
                       : FontWeight.normal,
@@ -70,13 +71,17 @@ class StudentCard extends StatelessWidget {
             Text(
               student.score.toString(),
               style: const TextStyle(
-                color: Color(0xFF1A237E),
+                color: AppColors.achievementDeepBlue,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.bolt, color: Color(0xFF1A237E), size: 20),
+            const Icon(
+              Icons.bolt,
+              color: AppColors.achievementDeepBlue,
+              size: 20,
+            ),
           ],
         ),
       ),

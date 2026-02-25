@@ -1,5 +1,3 @@
-// lib/features/kid_profile/domain/kid_profile_models.dart
-
 class ActivityItemData {
   final String title;
   final String date;
@@ -20,8 +18,5 @@ class AchievementChipData {
   final String label;
   final String iconPath;
 
-  const AchievementChipData({
-    required this.label,
-    required this.iconPath,
-  });
+  const AchievementChipData({required this.label, required this.iconPath});
 }

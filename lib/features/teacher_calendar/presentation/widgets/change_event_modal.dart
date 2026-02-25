@@ -67,7 +67,7 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color(0xFF2F213E),
+                        color: AppColors.grayFieldText,
                         width: 1,
                       ),
                     ),

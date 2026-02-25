@@ -268,13 +268,13 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
         ? AppColors.statsTotalBg
         : isZero
         ? AppColors.eventTap
-        : const Color(0xFFFADFDF);
+        : AppColors.eventNegativeBg;
 
     final chipTextColor = isPositive
         ? AppColors.statsTotalText
         : isZero
         ? AppColors.teacherPrimary
-        : const Color(0xFFDC2626);
+        : AppColors.activityRed;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -389,7 +389,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
     } else if (_selectedAction!.points > 0) {
       buttonColor = Colors.green;
     } else if (_selectedAction!.points < 0) {
-      buttonColor = const Color(0xFFDC2626);
+      buttonColor = AppColors.activityRed;
     } else {
       buttonColor = AppColors.teacherPrimary;
     }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/themes/app_colors.dart';
+
 class StatisticsRow extends StatelessWidget {
   final double availableWidth;
   final int totalStudents;
@@ -27,9 +29,9 @@ class StatisticsRow extends StatelessWidget {
             child: _buildStatContainer(
               count: totalStudents,
               title: 'Всего',
-              bgColor: const Color(0xFFFAF5FF),
-              borderColor: const Color(0xFFE9D5FF),
-              countColor: const Color(0xFF6D28D9),
+              bgColor: AppColors.statsTodayBg,
+              borderColor: AppColors.statsTodayBorder,
+              countColor: AppColors.statsTodayText,
             ),
           ),
           const SizedBox(width: 5),
@@ -37,9 +39,9 @@ class StatisticsRow extends StatelessWidget {
             child: _buildStatContainer(
               count: presentCount,
               title: 'Присутствует',
-              bgColor: const Color(0xFFF0FDF4),
-              borderColor: const Color(0xFFBBF7D0),
-              countColor: const Color(0xFF15803D),
+              bgColor: AppColors.statsTotalBg,
+              borderColor: AppColors.statsTotalBorder,
+              countColor: AppColors.statsTotalText,
             ),
           ),
           const SizedBox(width: 5),
@@ -47,9 +49,9 @@ class StatisticsRow extends StatelessWidget {
             child: _buildStatContainer(
               count: absentCount,
               title: 'Отсутствует',
-              bgColor: const Color(0xFFFEF2F2),
-              borderColor: const Color(0xFFFECACA),
-              countColor: const Color(0xFFB91C1C),
+              bgColor: AppColors.statsAbsentBg,
+              borderColor: AppColors.statsAbsentBorder,
+              countColor: AppColors.statsAbsentText,
             ),
           ),
           const SizedBox(width: 5),
@@ -57,9 +59,9 @@ class StatisticsRow extends StatelessWidget {
             child: _buildStatContainer(
               count: notMarkedCount,
               title: 'Не отмечено',
-              bgColor: const Color(0xFFF9FAFB),
-              borderColor: const Color(0xFFD1D5DB),
-              countColor: Colors.black,
+              bgColor: AppColors.notesBackground,
+              borderColor: AppColors.statsNotMarkedBorder,
+              countColor: AppColors.black,
             ),
           ),
         ],
