@@ -17,43 +17,43 @@ class ApiConstants {
   static const String verifyEmail = 'verify';
 
   // Main
-  static const String lessons = 'lessons';
-  static const String subjects = 'subjects';
-  static const String classrooms = 'classrooms';
-  static const String attendances = 'attendances';
-  static const String students = 'students';
-  static const String studentGroups = 'student-groups';
-  static const String studentGroupMembers = 'student-group-members';
-  static const String teachers = 'teachers';
-  static const String myOrgs = 'organizations/me';
   static const String myInvites = 'invites/me';
   static const String acceptInvite = 'invites/accept';
-
-  static const String addOrgMember = 'add_org_member';
+  static const String myOrgs = 'organizations/me';
+  static const String students = 'students';
+  static const String teachers = 'teachers';
+  static const String classrooms = 'classrooms';
+  static const String subjects = 'subjects';
+  static const String lessons = 'lessons';
+  static const String studentGroups = 'student-groups';
+  static const String studentGroupMembers = 'student-group-members';
+  static const String attendances = 'attendances';
+  static const String accruals = 'accruals';
+  static const String teacherNotes = 'teacher-notes';
 
   // Endpoints requiring org-id header
-  static const List<String> endpointsRequiringOrgId = [
-    lessons,
-    subjects,
-    classrooms,
-    attendances,
+  static const List<String> endpointsRequiringOrgMemberId = [
     students,
+    teachers,
+    classrooms,
+    subjects,
+    lessons,
     studentGroups,
     studentGroupMembers,
-    teachers,
-    addOrgMember,
+    attendances,
     accruals,
+    teacherNotes,
   ];
 
   // Endpoints not requiring org-id header
-  static const List<String> excludedOrgIdPaths = [
+  static const List<String> excludedOrgMemberIdPaths = [
     register,
     login,
     refresh,
     logout,
-    myOrgs,
     myInvites,
     acceptInvite,
+    myOrgs,
   ];
 
   // Endpoints not requiring token
@@ -67,6 +67,4 @@ class ApiConstants {
   ];
 
   // static const String periodLessons = 'period_lessons/'; Отсутcвует соответствующий роут в документации
-  static const String accruals = 'accruals';
-  // static const String teacherNotes = 'teacher_notes/'; Отсутcвует соответствующий роут в документации
 }

@@ -3,11 +3,12 @@ import 'package:treemov/shared/domain/models/base_entity.dart';
 // Базовые данные для всех response моделей
 class BaseResponseData {
   final int? id;
+  final dynamic detail;
 
-  const BaseResponseData({required this.id});
+  const BaseResponseData({required this.id, required this.detail});
 
   factory BaseResponseData.fromJson(Map<String, dynamic> json) {
-    return BaseResponseData(id: json['id'] ?? 0);
+    return BaseResponseData(id: json['id'] ?? 0, detail: json['detail']);
   }
 
   BaseEntityData toEntityData() {
@@ -22,6 +23,7 @@ abstract class BaseResponseModel {
   const BaseResponseModel({required this.baseData});
 
   int? get id => baseData.id;
+  dynamic get detail => baseData.detail;
 }
 
 extension BaseResponseParsing on Map<String, dynamic> {

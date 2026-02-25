@@ -6,11 +6,6 @@ abstract class SecureStorageRepository {
   Future<String?> getRefreshToken();
   Future<void> deleteAllTokens();
 
-  // Org_id
-  Future<void> saveOrgId(String orgId);
-  Future<String?> getOrgId();
-  Future<void> deleteOrgId();
-
   // OrgMember_id
   Future<void> saveOrgMemberId(String orgMemberId);
   Future<String?> getOrgMemberId();

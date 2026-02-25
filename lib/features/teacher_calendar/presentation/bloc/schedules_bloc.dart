@@ -96,10 +96,7 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
   ) async {
     emit(ScheduleLoading());
     try {
-      // Отправляем все запросы последовательно
-      for (final attendanceRequest in event.requests) {
-        await _scheduleRepository.createAttendance(attendanceRequest);
-      }
+      await _scheduleRepository.createMassAttendance(event.requests);
       emit(AttendanceOperationSuccess('Посещаемость успешно сохранена'));
     } catch (e) {
       emit(AttendanceError('Ошибка сохранения посещаемости: $e'));

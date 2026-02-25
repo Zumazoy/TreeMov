@@ -64,13 +64,13 @@ class ScheduleRemoteDataSource {
   //   }
   // }
 
-  Future<AttendanceResponseModel> createAttendance(
-    AttendanceRequestModel request,
+  Future<AttendanceResponseModel> createMassAttendance(
+    List<AttendanceRequestModel> request,
   ) async {
     try {
       final response = await _dioClient.post(
-        ApiConstants.attendances,
-        data: request.toJson(),
+        '${ApiConstants.attendances}/batch',
+        data: request,
       );
 
       if (response.statusCode == 201) {

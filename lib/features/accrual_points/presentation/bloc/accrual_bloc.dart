@@ -67,7 +67,7 @@ class AccrualBloc extends Bloc<AccrualEvent, AccrualState> {
   ) async {
     emit(AccrualLoading());
     try {
-      final teacherProfile = await _sharedRepository.getMyOrgProfile();
+      final teacherProfile = await _sharedRepository.getMyOrgMember();
 
       final teacherProfileId = teacherProfile.profile?.baseData.id;
 

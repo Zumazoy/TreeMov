@@ -36,7 +36,6 @@ class LogoutDialog {
   ) async {
     try {
       await authStorageRepository.deleteAllTokens();
-      await authStorageRepository.deleteOrgId();
       await authStorageRepository.deleteOrgMemberId();
       await authStorageRepository.deleteRole();
 

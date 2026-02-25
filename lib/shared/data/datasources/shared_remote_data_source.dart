@@ -17,9 +17,9 @@ class SharedRemoteDataSource {
 
   SharedRemoteDataSource(this._dioClient, this._secureStorageRepository);
 
-  Future<OrgMemberResponseModel> getMyOrgProfile() async {
+  Future<OrgMemberResponseModel> getMyOrgMember() async {
     try {
-      final orgId = await _secureStorageRepository.getOrgId();
+      final orgMemberId = await _secureStorageRepository.getOrgMemberId();
       final Response response = await _dioClient.get(ApiConstants.myOrgs);
 
       if (response.statusCode == 200) {
@@ -27,15 +27,14 @@ class SharedRemoteDataSource {
 
         if (responseData is List) {
           final orgMember = responseData.firstWhere(
-            (member) => member['org']['id'].toString() == orgId,
+            (member) => member['id'].toString() == orgMemberId,
             orElse: () => null,
           );
 
           if (orgMember != null) {
-            debugPrint('$orgMember');
             return OrgMemberResponseModel.fromJson(orgMember);
           } else {
-            throw Exception('Организация с id $orgId не найдена');
+            throw Exception('Организация с id $orgMemberId не найдена');
           }
         } else {
           throw Exception(

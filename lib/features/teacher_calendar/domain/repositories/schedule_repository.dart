@@ -9,8 +9,8 @@ abstract class ScheduleRepository {
   // Future<PeriodLessonResponseModel> createPeriodLesson(
   //   PeriodLessonRequestModel request,
   // );
-  Future<AttendanceResponseModel> createAttendance(
-    AttendanceRequestModel request,
+  Future<AttendanceResponseModel> createMassAttendance(
+    List<AttendanceRequestModel> request,
   );
   // Future<ScheduleResponseModel> updateSchedule({
   //   required int scheduleId,

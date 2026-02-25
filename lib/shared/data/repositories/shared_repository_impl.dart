@@ -13,8 +13,8 @@ class SharedRepositoryImpl implements SharedRepository {
   SharedRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<OrgMemberResponseModel> getMyOrgProfile() async {
-    return await _remoteDataSource.getMyOrgProfile();
+  Future<OrgMemberResponseModel> getMyOrgMember() async {
+    return await _remoteDataSource.getMyOrgMember();
   }
 
   @override

@@ -23,7 +23,7 @@ class TeacherProfileBloc
   ) async {
     emit(state.copyWith(isLoadingProfile: true, profileError: null));
     try {
-      final teacherProfile = await _sharedRepository.getMyOrgProfile();
+      final teacherProfile = await _sharedRepository.getMyOrgMember();
       emit(
         state.copyWith(teacherProfile: teacherProfile, isLoadingProfile: false),
       );

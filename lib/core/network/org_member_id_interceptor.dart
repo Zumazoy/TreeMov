@@ -13,24 +13,24 @@ class OrgIdInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     if (_shouldAddOrgId(options.path)) {
-      final orgId = await secureStorage.getOrgId();
-      if (orgId != null) {
-        options.headers['org-id'] = orgId;
+      final orgMemberId = await secureStorage.getOrgMemberId();
+      if (orgMemberId != null) {
+        options.headers['X_ORG_MEMBER_ID'] = orgMemberId;
       }
     }
     handler.next(options);
   }
 
   bool _shouldAddOrgId(String path) {
-    // Исключаем пути, где org-id не нужен
-    for (final excludedPath in ApiConstants.excludedOrgIdPaths) {
+    // Исключаем пути, где orgMemberId не нужен
+    for (final excludedPath in ApiConstants.excludedOrgMemberIdPaths) {
       if (path.contains(excludedPath)) {
         return false;
       }
     }
 
-    // Проверяем, нужен ли org-id для этого пути
-    for (final endpoint in ApiConstants.endpointsRequiringOrgId) {
+    // Проверяем, нужен ли orgMemberId для этого пути
+    for (final endpoint in ApiConstants.endpointsRequiringOrgMemberId) {
       if (path.contains(endpoint)) {
         return true;
       }

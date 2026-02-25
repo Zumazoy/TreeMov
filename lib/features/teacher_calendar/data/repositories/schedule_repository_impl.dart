@@ -28,10 +28,10 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   // }
 
   @override
-  Future<AttendanceResponseModel> createAttendance(
-    AttendanceRequestModel request,
+  Future<AttendanceResponseModel> createMassAttendance(
+    List<AttendanceRequestModel> request,
   ) async {
-    return await _remoteDataSource.createAttendance(request);
+    return await _remoteDataSource.createMassAttendance(request);
   }
 
   // @override

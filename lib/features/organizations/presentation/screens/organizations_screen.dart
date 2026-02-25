@@ -110,9 +110,6 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
   Future<void> _onTeacherOrganizationTap(
     OrgMemberResponseModel organization,
   ) async {
-    if (organization.org?.id != null) {
-      await _secureStorage.saveOrgId(organization.org!.id.toString());
-    }
     if (organization.id != null) {
       await _secureStorage.saveOrgMemberId(organization.id!.toString());
     }
@@ -130,9 +127,6 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
   Future<void> _onStudentOrganizationTap(
     OrgMemberResponseModel organization,
   ) async {
-    if (organization.org?.id != null) {
-      await _secureStorage.saveOrgId(organization.org!.id.toString());
-    }
     if (organization.id != null) {
       await _secureStorage.saveOrgMemberId(organization.id!.toString());
     }
