@@ -8,6 +8,7 @@ class AccrualResponseModel {
   final TeacherResponseModel teacher;
   final StudentResponseModel student;
   final String category;
+  final DateTime createdAt;
 
   AccrualResponseModel({
     required this.id,
@@ -16,6 +17,7 @@ class AccrualResponseModel {
     required this.teacher,
     required this.student,
     required this.category,
+    required this.createdAt,
   });
 
   factory AccrualResponseModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,9 @@ class AccrualResponseModel {
           ? StudentResponseModel.fromJson(json['student'])
           : StudentResponseModel.fromJson({}),
       category: json['category'] ?? '',
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
     );
   }
 }

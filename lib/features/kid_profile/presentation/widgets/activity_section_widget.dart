@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
 
-import '../../domain/kid_profile_models.dart';
+import '../../domain/student_profile_models.dart';
 import 'activity_item_widget.dart';
 
 class ActivitySectionWidget extends StatelessWidget {

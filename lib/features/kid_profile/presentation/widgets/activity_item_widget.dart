@@ -28,64 +28,55 @@ class ActivityItemWidget extends StatelessWidget {
     final pointsColor = isPositive ? AppColors.statsTotalText : Colors.red;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: circleColor,
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: Center(
               child: Image.asset(
                 iconPath,
-                width: 24,
-                height: 24,
+                width: 20,
+                height: 20,
                 color: iconColor,
               ),
             ),
           ),
           const SizedBox(width: 12),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'TT Norms',
-                    color: AppColors.kidButton,
-                    height: 1.0,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.notesDarkText,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Text(
                   '$date в $time',
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'TT Norms',
-                    color: AppColors.kidButton,
-                    height: 1.0,
+                    color: AppColors.directoryTextSecondary,
                   ),
                 ),
               ],
             ),
           ),
-
           Text(
             pointsText,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               fontWeight: FontWeight.w700,
-              fontFamily: 'TT Norms',
               color: pointsColor,
-              height: 1.0,
             ),
           ),
         ],
