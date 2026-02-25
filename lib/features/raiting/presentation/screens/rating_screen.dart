@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treemov/core/network/dio_client.dart';
-import 'package:treemov/core/widgets/layout/child_nav_bar.dart';
 import 'package:treemov/features/raiting/data/repositories/rating_repository_impl.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_bloc.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_event.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_state.dart';
 import 'package:treemov/features/raiting/presentation/widgets/student_card.dart';
 import 'package:treemov/features/raiting/presentation/widgets/top_students_chart.dart';
-import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class RatingScreen extends StatefulWidget {
@@ -38,42 +36,6 @@ class _RatingScreenState extends State<RatingScreen> {
     bloc.add(const LoadStudentsEvent());
     bloc.add(const LoadCurrentStudentEvent());
     return bloc;
-  }
-
-  void _onNavBarTap(int index) {
-    switch (index) {
-      case 0:
-        // Переход на календарь
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                const CalendarScreen(), // Экран календаря ученика
-          ),
-        );
-        break;
-      case 1:
-        // Уже на рейтинге, ничего не делаем или можно обновить
-        break;
-      case 2:
-        // Переход в магазин
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const ShopScreen(),
-        //   ),
-        // );
-        break;
-      case 3:
-        // Переход в профиль дерева
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const TreeProfileScreen(),
-        //   ),
-        // );
-        break;
-    }
   }
 
   @override
@@ -123,11 +85,6 @@ class _RatingScreenState extends State<RatingScreen> {
             ),
           );
         },
-      ),
-      // Используем готовый компонент BottomNavigationBar
-      bottomNavigationBar: ChildBottomNavigationBar(
-        currentIndex: 1,
-        onTap: _onNavBarTap,
       ),
     );
   }
@@ -187,7 +144,7 @@ class _RatingScreenState extends State<RatingScreen> {
               ),
               elevation: 0,
             ),
-            const SizedBox(height: 0),
+            const SizedBox(height: 25),
             if (sortedStudents.isNotEmpty)
               TopStudentsChart(students: topThree)
             else

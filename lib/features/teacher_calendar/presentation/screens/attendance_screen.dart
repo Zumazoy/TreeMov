@@ -166,7 +166,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   void _onTabTapped(int index) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => MainScreen(initialIndex: index)),
+      MaterialPageRoute(
+        builder: (context) => TeacherScreen(initialIndex: index),
+      ),
       (route) => false,
     );
   }

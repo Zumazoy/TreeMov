@@ -70,7 +70,9 @@ class LessonDetailsScreen extends StatelessWidget {
   void _onTabTapped(int index, BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => MainScreen(initialIndex: index)),
+      MaterialPageRoute(
+        builder: (context) => TeacherScreen(initialIndex: index),
+      ),
       (route) => false,
     );
   }
