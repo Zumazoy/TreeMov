@@ -3,21 +3,21 @@ import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
-  final OrgMemberResponseModel? teacherProfile;
+  final OrgMemberResponseModel? orgMember;
 
-  const ProfileHeaderCard({super.key, required this.teacherProfile});
+  const ProfileHeaderCard({super.key, required this.orgMember});
 
   String _getFullName() {
-    if (teacherProfile == null) {
+    if (orgMember == null) {
       return 'Профиль null';
     }
-    final employer = null; //teacherProfile!.teacher?.employee;
-    if (employer == null) return 'Не указано';
+    final profile = orgMember?.profile;
+    if (profile == null) return 'Не указано';
 
     final parts = [
-      employer.surname,
-      employer.name,
-      employer.patronymic,
+      profile.surname,
+      profile.name,
+      profile.patronymic,
     ].where((part) => part != null && part.isNotEmpty).toList();
 
     return parts.join(' ');
@@ -66,7 +66,7 @@ class ProfileHeaderCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Заглушка должности',
+                ' ',
                 // teacherProfile != null
                 //     ? teacherProfile!.teacher?.employee.email ??
                 //           'Заглушка должности'

@@ -3,13 +3,11 @@ import 'package:treemov/core/themes/app_colors.dart';
 
 class AcceptInviteDialog extends StatelessWidget {
   final String organizationName;
-  final String inviterName;
   final VoidCallback onConfirm;
 
   const AcceptInviteDialog({
     super.key,
     required this.organizationName,
-    required this.inviterName,
     required this.onConfirm,
   });
 
@@ -26,14 +24,6 @@ class AcceptInviteDialog extends StatelessWidget {
           Text(
             organizationName,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Приглашение от: $inviterName',
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.directoryTextSecondary,
-            ),
           ),
         ],
       ),

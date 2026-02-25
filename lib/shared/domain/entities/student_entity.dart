@@ -2,7 +2,6 @@ import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/domain/models/base_entity.dart';
 
 class StudentEntity extends BaseEntity {
-  final int id;
   final String? name;
   final String? surname;
   final String? patronymic;
@@ -33,7 +32,6 @@ class StudentEntity extends BaseEntity {
 
   StudentEntity({
     required super.baseData,
-    required this.id,
     this.name,
     this.surname,
     this.patronymic,

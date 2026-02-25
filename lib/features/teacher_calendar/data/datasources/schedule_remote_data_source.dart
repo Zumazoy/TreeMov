@@ -33,7 +33,7 @@ class ScheduleRemoteDataSource {
         data: request.toJson(),
       );
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return LessonResponseModel.fromJson(response.data);
       } else {
         throw Exception('Ошибка создания занятия: ${response.statusCode}');

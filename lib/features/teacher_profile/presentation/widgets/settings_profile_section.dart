@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/themes/app_colors.dart';
-import 'package:treemov/features/organizations/presentation/screens/organizations_screen.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_card.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_nav_row.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_section_title.dart';
@@ -86,12 +86,7 @@ class SettingsProfileSection extends StatelessWidget {
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OrganizationsScreen(),
-                  ),
-                );
+                Navigator.pushNamed(context, AppRoutes.myOrgs);
               },
             ),
           ],

@@ -1,49 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/app/di/di.config.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
+import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
+import 'package:treemov/features/teacher_calendar/presentation/utils/calendar_utils.dart';
 
-class CalendarKidScreen extends StatefulWidget {
+class CalendarKidScreen extends StatelessWidget {
   const CalendarKidScreen({super.key});
 
   @override
-  State<CalendarKidScreen> createState() => _CalendarKidScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          getIt<SchedulesBloc>()..add(const LoadLessonsEvent()),
+      child: const _CalendarKidScreenContent(),
+    );
+  }
 }
 
-class _CalendarKidScreenState extends State<CalendarKidScreen> {
-  DateTime _currentDate = DateTime.now();
-  int _selectedDay = DateTime.now().day;
+class _CalendarKidScreenContent extends StatefulWidget {
+  const _CalendarKidScreenContent();
+
+  @override
+  State<_CalendarKidScreenContent> createState() =>
+      _CalendarKidScreenContentState();
+}
+
+class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PersistentBottomSheetController? _lessonsSheetController;
+  DateTime _currentDate = DateTime.now();
+  DateTime? _selectedDate;
+  Map<String, List<LessonEntity>> _events = {};
 
-  // Дни с занятиями (точки)
-  final Set<int> _daysWithLessons = {
-    1,
-    3,
-    5,
-    10,
-    12,
-    15,
-    17,
-    19,
-    22,
-    24,
-    26,
-    29,
-    31,
-  };
-
-  void _previousMonth() {
-    setState(() {
-      _currentDate = DateTime(_currentDate.year, _currentDate.month - 1);
-    });
-  }
-
-  void _nextMonth() {
-    setState(() {
-      _currentDate = DateTime(_currentDate.year, _currentDate.month + 1);
-    });
-  }
-
-  String _getMonthName(DateTime date) {
-    final months = [
+  String _getMonthYearText(DateTime date) {
+    const months = [
       'Январь',
       'Февраль',
       'Март',
@@ -57,118 +50,41 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
       'Ноябрь',
       'Декабрь',
     ];
-    return months[date.month - 1];
+    return '${months[date.month - 1]} ${date.year}';
   }
 
-  List<Widget> _buildCalendarDays() {
-    final firstDay = DateTime(_currentDate.year, _currentDate.month, 1);
-    final startingWeekday = firstDay.weekday; // 1-7 (понедельник-воскресенье)
-
-    // Количество дней в месяце
-    final daysInMonth = DateTime(
-      _currentDate.year,
-      _currentDate.month + 1,
-      0,
-    ).day;
-
-    List<Widget> dayWidgets = [];
-
-    // Добавляем пустые ячейки для дней предыдущего месяца
-    for (int i = 1; i < startingWeekday; i++) {
-      dayWidgets.add(Container());
-    }
-
-    // Добавляем дни текущего месяца
-    for (int day = 1; day <= daysInMonth; day++) {
-      final hasLesson = _daysWithLessons.contains(day);
-      final isSelected = day == _selectedDay;
-      final isToday =
-          day == DateTime.now().day &&
-          _currentDate.month == DateTime.now().month &&
-          _currentDate.year == DateTime.now().year;
-
-      dayWidgets.add(
-        GestureDetector(
-          onTap: () {
-            final bool wasSelected = _selectedDay == day;
-            setState(() {
-              _selectedDay = wasSelected ? -1 : day;
-            });
-
-            if (wasSelected) {
-              if (_lessonsSheetController != null) {
-                _lessonsSheetController!.close();
-                _lessonsSheetController = null;
-              }
-              return;
-            }
-
-            if (hasLesson) {
-              _showLessonsPanel(day);
-            } else {
-              if (_lessonsSheetController != null) {
-                _lessonsSheetController!.close();
-                _lessonsSheetController = null;
-              }
-            }
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: isSelected ? const Color(0xFF0087CD) : Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
-              border: isToday
-                  ? Border.all(color: const Color(0xFF0087CD), width: 2)
-                  : null,
-            ),
-
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 0,
-              children: [
-                SizedBox(height: 8),
-                Text(
-                  day.toString(),
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    fontFamily: 'TT Norms',
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                  child: hasLesson
-                      ? Transform.translate(
-                          offset: const Offset(0, -2),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF004C75),
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    return dayWidgets;
+  void _changeMonth(int offset) {
+    setState(() {
+      _currentDate = DateTime(_currentDate.year, _currentDate.month + offset);
+    });
   }
 
-  void _showLessonsPanel(int day) {
-    if (_lessonsSheetController != null) {
-      setState(() {});
-      return;
+  void _processLessons(List<LessonEntity> lessons) {
+    final Map<String, List<LessonEntity>> events = {};
+
+    for (final lesson in lessons) {
+      if (lesson.date != null) {
+        final dateKey = CalendarUtils.formatDateKey(
+          DateTime.parse(lesson.date!),
+        );
+        if (!events.containsKey(dateKey)) {
+          events[dateKey] = [];
+        }
+        events[dateKey]!.add(lesson);
+      }
     }
+
+    setState(() {
+      _events = events;
+    });
+  }
+
+  void _showLessonsPanel(DateTime date) {
+    if (_lessonsSheetController != null) return;
+
+    final dateKey = CalendarUtils.formatDateKey(date);
+    final lessons = _events[dateKey] ?? [];
+
     _lessonsSheetController = _scaffoldKey.currentState?.showBottomSheet(
       (context) {
         return Container(
@@ -185,7 +101,7 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
               children: [
                 Center(
                   child: Container(
-                    margin: EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(top: 10),
                     width: 53,
                     height: 7,
                     decoration: BoxDecoration(
@@ -197,26 +113,26 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
                 const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.only(left: 36, right: 28),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildLessonItem(
-                        '18:30',
-                        '20:00',
-                        'Растяжка',
-                        'О.А. Зеленина',
-                        'Малый зал',
-                      ),
-                      const SizedBox(height: 20),
-                      _buildLessonItem(
-                        '20:15',
-                        '21:00',
-                        'Аэробика',
-                        'И.И. Иванова',
-                        'Большой зал',
-                      ),
-                    ],
-                  ),
+                  child: lessons.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'На этот день нет занятий',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF004C75),
+                              fontFamily: 'TT Norms',
+                            ),
+                          ),
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: lessons.map((lesson) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: _buildLessonItem(lesson),
+                            );
+                          }).toList(),
+                        ),
                 ),
               ],
             ),
@@ -226,22 +142,42 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
       backgroundColor: Colors.transparent,
       elevation: 8,
     );
+
     _lessonsSheetController?.closed.whenComplete(() {
-      _lessonsSheetController = null;
+      if (mounted) {
+        _lessonsSheetController = null;
+        setState(() {
+          _selectedDate = null;
+        });
+      }
     });
   }
 
-  Widget _buildLessonItem(
-    String startTime,
-    String endTime,
-    String title,
-    String teacher,
-    String room,
-  ) {
+  Widget _buildLessonItem(LessonEntity lesson) {
+    final startTime = lesson.startTime?.substring(0, 5) ?? '--:--';
+    final endTime = lesson.endTime?.substring(0, 5) ?? '--:--';
+
+    String teacherName = 'Преподаватель';
+    if (lesson.teacher?.employee.name != null ||
+        lesson.teacher?.employee.surname != null) {
+      final parts = [
+        lesson.teacher?.employee.surname,
+        lesson.teacher?.employee.name,
+      ].where((part) => part != null && part.isNotEmpty).toList();
+
+      if (parts.isNotEmpty) {
+        teacherName = parts.join(' ');
+
+        if (lesson.teacher?.employee.patronymic != null &&
+            lesson.teacher!.employee.patronymic!.isNotEmpty) {
+          teacherName += ' ${lesson.teacher!.employee.patronymic![0]}.';
+        }
+      }
+    }
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Времена (старт сверху жирным, окончание ниже полупрозрачным)
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -256,17 +192,16 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
             ),
             Text(
               endTime,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
-                color: Color(0xFF004C75) /*.withOpacity(0.5)*/,
+                color: Color(0xFF004C75),
                 fontFamily: 'TT Norms',
               ),
             ),
           ],
         ),
         const SizedBox(width: 12),
-        // Вертикальная разделительная линия
         Container(
           width: 2,
           height: 30,
@@ -274,13 +209,12 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
           margin: const EdgeInsets.only(top: 2),
         ),
         const SizedBox(width: 9),
-        // Контент занятия
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '$title ($teacher)',
+                '${lesson.subject?.title ?? 'Занятие'} ($teacherName)',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -291,7 +225,7 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
                 ),
               ),
               Text(
-                room,
+                lesson.classroom?.title ?? 'Аудитория',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -306,108 +240,254 @@ class _CalendarKidScreenState extends State<CalendarKidScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xFF75D0FF),
-      appBar: AppBar(
-        title: const Text(
-          'Календарь',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'TT Norms',
-          ),
-        ),
-        backgroundColor: const Color(0xFF75D0FF),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+  // Виджет для заголовка месяца (аналог CalendarHeader)
+  Widget _buildMonthHeader() {
+    return Container(
+      width: 327,
+      height: 38,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF004C75),
+        borderRadius: BorderRadius.circular(16),
       ),
-      body: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Верхний синий прямоугольник с месяцем и стрелками
-          Container(
-            width: 327,
-            height: 38,
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF004C75),
-              borderRadius: BorderRadius.circular(16),
+          IconButton(
+            onPressed: () => _changeMonth(-1),
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 18,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+          Text(
+            _getMonthYearText(_currentDate),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'TT Norms',
+            ),
+          ),
+          IconButton(
+            onPressed: () => _changeMonth(1),
+            icon: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white,
+              size: 18,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCalendarGrid() {
+    final days = CalendarUtils.generateMonthDays(_currentDate);
+
+    return GridView.count(
+      crossAxisCount: 7,
+      childAspectRatio: 1,
+      mainAxisSpacing: 2,
+      crossAxisSpacing: 2,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      children: days.map((date) {
+        if (date == null) {
+          return const SizedBox.shrink();
+        }
+
+        final dateKey = CalendarUtils.formatDateKey(date);
+        final hasEvent = _events.containsKey(dateKey);
+        final isSelected =
+            _selectedDate != null &&
+            CalendarUtils.isSameDay(_selectedDate, date);
+
+        return GestureDetector(
+          onTap: () {
+            setState(() => _selectedDate = date);
+            _showLessonsPanel(date);
+          },
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: isSelected ? const Color(0xFF0087CD) : Colors.transparent,
+              shape: BoxShape.circle,
+            ),
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                // Стрелка влево
-                IconButton(
-                  onPressed: _previousMonth,
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-                // Название месяца
                 Text(
-                  _getMonthName(_currentDate),
+                  date.day.toString(),
                   style: const TextStyle(
-                    color: Colors.white,
                     fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
                     fontFamily: 'TT Norms',
-                  ),
-                ),
-                // Стрелка вправо
-                IconButton(
-                  onPressed: _nextMonth,
-                  icon: const Icon(
-                    Icons.arrow_forward_ios,
                     color: Colors.white,
-                    size: 18,
                   ),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
                 ),
+                if (hasEvent)
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      width: 4,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? Colors.white
+                            : const Color(0xFF004C75),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
+        );
+      }).toList(),
+    );
+  }
 
-          // Основной контент календаря
-          Expanded(
-            child: Container(
-              width: 327,
-              decoration: const BoxDecoration(
-                color: Color(0xFF75D0FF),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-              ),
-              child: Column(
-                children: [
-                  // Сетка календаря
-                  Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 7,
-                      childAspectRatio: 0.92,
-                      mainAxisSpacing: 1,
-                      crossAxisSpacing: 1,
-                      children: _buildCalendarDays(),
-                    ),
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<SchedulesBloc, ScheduleState>(
+      listener: (context, state) {
+        if (state is LessonsLoaded) {
+          _processLessons(
+            state.lessons
+                .map(
+                  (lesson) => LessonEntity(
+                    id: lesson.id,
+                    title: lesson.title,
+                    startTime: lesson.startTime,
+                    endTime: lesson.endTime,
+                    date: lesson.date,
+                    weekDay: lesson.weekDay,
+                    isCanceled: lesson.isCanceled,
+                    isCompleted: lesson.isCompleted,
+                    duration: lesson.duration,
+                    comment: lesson.comment,
+                    teacher: lesson.teacher,
+                    classroom: lesson.classroom,
+                    group: lesson.group,
+                    subject: lesson.subject,
                   ),
-
-                  // Нижний отступ
-                  const SizedBox(height: 20),
-                ],
-              ),
+                )
+                .toList(),
+          );
+        }
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: const Color(0xFF75D0FF),
+        appBar: AppBar(
+          title: const Text(
+            'Календарь',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'TT Norms',
             ),
           ),
-        ],
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: Stack(
+          children: [
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [Colors.white, Colors.white.withOpacity(0.0)],
+                    stops: const [0.1, 0.5],
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.dstIn,
+                child: Image.asset(
+                  'assets/images/background_raiting.png',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  alignment: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                _buildMonthHeader(),
+                const SizedBox(height: 10),
+                // Дни недели
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _WeekDayText('ПН'),
+                      _WeekDayText('ВТ'),
+                      _WeekDayText('СР'),
+                      _WeekDayText('ЧТ'),
+                      _WeekDayText('ПТ'),
+                      _WeekDayText('СБ'),
+                      _WeekDayText('ВС'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Календарь
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: _buildCalendarGrid(),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _WeekDayText extends StatelessWidget {
+  final String text;
+  const _WeekDayText(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        fontFamily: 'TT Norms',
       ),
     );
   }

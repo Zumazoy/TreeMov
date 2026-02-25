@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/app/di/di.config.dart';
 
 import '../../../../app/routes/app_routes.dart';
 import '../../../../core/themes/app_colors.dart';
@@ -11,14 +12,28 @@ import '../bloc/register_event.dart';
 import '../bloc/register_state.dart';
 import 'verification_code_screen.dart';
 
-class RegistrationScreen extends StatefulWidget {
+class RegistrationScreen extends StatelessWidget {
   const RegistrationScreen({super.key});
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<RegisterBloc>(),
+      child: const _RegistrationScreenContent(),
+    );
+  }
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _RegistrationScreenContent extends StatefulWidget {
+  const _RegistrationScreenContent();
+
+  @override
+  State<_RegistrationScreenContent> createState() =>
+      _RegistrationScreenContentState();
+}
+
+class _RegistrationScreenContentState
+    extends State<_RegistrationScreenContent> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();

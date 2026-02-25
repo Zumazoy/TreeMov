@@ -20,15 +20,33 @@ class _AuthCheckerScreenState extends State<AuthCheckerScreen> {
 
   Future<void> _checkAuthStatus() async {
     final token = await widget.secureStorageRepository.getAccessToken();
+    final role = await widget.secureStorageRepository.getRole();
 
     if (mounted) {
       if (token != null && token.isNotEmpty) {
-        // Токен есть - переходим на главную
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRoutes.mainApp,
-          (route) => false,
-        );
+        // Токен есть
+        if (role == 'teacher') {
+          // Навбар препода
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.mainApp,
+            (route) => false,
+          );
+        } else if (role == 'student') {
+          // Навбар студента
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.mainApp, //TODO: заменить на нужный экран для ученика
+            (route) => false,
+          );
+        } else {
+          // Экран выбора организации
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.myOrgs,
+            (route) => false,
+          );
+        }
       } else {
         // Токена нет - переходим на авторизацию
         Navigator.pushNamedAndRemoveUntil(

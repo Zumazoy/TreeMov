@@ -45,7 +45,6 @@ class StudentResponseModel extends BaseResponseModel
   StudentEntity toEntity() {
     return StudentEntity(
       baseData: baseData.toEntityData(),
-      id: id ?? 0,
       name: name,
       surname: surname,
       patronymic: patronymic,

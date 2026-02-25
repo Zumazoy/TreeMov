@@ -16,6 +16,10 @@ import 'package:treemov/features/notes/data/datasources/local_notes_datasource.d
 // import 'package:treemov/features/notes/data/datasources/teacher_notes_remote_data_source.dart';
 import 'package:treemov/features/notes/domain/repositories/local_notes_repository.dart';
 import 'package:treemov/features/notes/domain/repositories/local_notes_repository_impl.dart';
+import 'package:treemov/features/organizations/data/datasources/orgs_remote_data_source.dart';
+import 'package:treemov/features/organizations/data/repositories/orgs_repository_impl.dart';
+import 'package:treemov/features/organizations/domain/repositories/orgs_repository.dart';
+import 'package:treemov/features/organizations/presentation/bloc/orgs_bloc.dart';
 import 'package:treemov/features/registration/data/datasources/register_remote_data_source.dart';
 import 'package:treemov/features/registration/data/repositories/register_repository_impl.dart';
 import 'package:treemov/features/registration/domain/repositories/register_repository.dart';
@@ -66,6 +70,9 @@ void setupDependencies() {
   getIt.registerSingleton<RegisterRemoteDataSource>(
     RegisterRemoteDataSourceImpl(getIt<DioClient>()),
   );
+  getIt.registerSingleton<OrgsRemoteDataSource>(
+    OrgsRemoteDataSource(getIt<DioClient>()),
+  );
   getIt.registerSingleton<SettingsService>(SettingsService());
 
   // Репозитории
@@ -88,7 +95,10 @@ void setupDependencies() {
     LocalNotesRepositoryImpl(getIt<LocalNotesDataSource>()),
   );
   getIt.registerSingleton<RegisterRepository>(
-    RegisterRepositoryImpl(remoteDataSource: getIt<RegisterRemoteDataSource>()),
+    RegisterRepositoryImpl(getIt<RegisterRemoteDataSource>()),
+  );
+  getIt.registerSingleton<OrgsRepository>(
+    OrgsRepositoryImpl(getIt<OrgsRemoteDataSource>()),
   );
 
   // BLoC
@@ -116,15 +126,14 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<TeacherProfileBloc>(
-    () => TeacherProfileBloc(
-      getIt<SharedRepository>(),
-      getIt<SecureStorageRepository>(),
-    ),
+    () => TeacherProfileBloc(getIt<SharedRepository>()),
   );
 
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(repository: getIt<RegisterRepository>()),
   );
+
+  getIt.registerFactory<OrgsBloc>(() => OrgsBloc(getIt<OrgsRepository>()));
 
   // Тема
   getIt.registerSingleton<ThemeCubit>(ThemeCubit(getIt<SettingsService>()));

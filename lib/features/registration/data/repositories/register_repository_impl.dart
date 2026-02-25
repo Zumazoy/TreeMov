@@ -5,7 +5,7 @@ import '../models/register_request_model.dart';
 class RegisterRepositoryImpl implements RegisterRepository {
   final RegisterRemoteDataSource remoteDataSource;
 
-  RegisterRepositoryImpl({required this.remoteDataSource});
+  RegisterRepositoryImpl(this.remoteDataSource);
 
   @override
   Future<void> registerUser({

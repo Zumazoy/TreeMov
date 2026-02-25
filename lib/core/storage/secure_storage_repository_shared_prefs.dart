@@ -72,4 +72,23 @@ class SecureStorageRepositorySharedPrefs implements SecureStorageRepository {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(Constants.orgMemberIdKey);
   }
+
+  // Role
+  @override
+  Future<void> saveRole(String role) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(Constants.roleKey, role);
+  }
+
+  @override
+  Future<String?> getRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(Constants.roleKey);
+  }
+
+  @override
+  Future<void> deleteRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(Constants.roleKey);
+  }
 }

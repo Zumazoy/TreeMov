@@ -1,3 +1,4 @@
+import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/features/authorization/data/models/login_request_model.dart';
 import 'package:treemov/features/authorization/data/models/login_response_model.dart';
@@ -10,7 +11,7 @@ class AuthRemoteDataSource {
   Future<LoginResponseModel> login(LoginRequestModel request) async {
     try {
       final response = await _dioClient.post(
-        'http://10.0.2.2:8000/api/v1/auth/login',
+        ApiConstants.authUrl + ApiConstants.login,
         data: request.toJson(),
       );
 

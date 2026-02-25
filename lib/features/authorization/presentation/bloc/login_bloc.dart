@@ -38,7 +38,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         return;
       }
 
-      await secureStorageRepository.saveOrgId('1');
       await secureStorageRepository.saveAccessToken(response.accessToken!);
       await secureStorageRepository.saveRefreshToken(response.refreshToken!);
       emit(LoginSuccess());

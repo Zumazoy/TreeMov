@@ -3,8 +3,8 @@ import 'package:treemov/core/themes/app_colors.dart';
 
 class InviteItem extends StatelessWidget {
   final String organizationName;
-  final String inviterName;
-  final String inviterEmail;
+  final String role;
+  final String email;
   final String createdAt;
   final VoidCallback onAccept;
   final VoidCallback onDecline;
@@ -12,123 +12,141 @@ class InviteItem extends StatelessWidget {
   const InviteItem({
     super.key,
     required this.organizationName,
-    required this.inviterName,
-    required this.inviterEmail,
+    required this.role,
+    required this.email,
     required this.createdAt,
     required this.onAccept,
     required this.onDecline,
   });
 
-  String _getFormattedDate() {
-    final date = DateTime.parse(createdAt);
-    final now = DateTime.now();
-    final difference = now.difference(date).inDays;
-
-    if (difference == 0) return 'Сегодня';
-    if (difference == 1) return 'Вчера';
-    if (difference < 7) return '$difference дн. назад';
-    return '${date.day}.${date.month}.${date.year}';
+  String _formatDate(String dateStr) {
+    try {
+      final date = DateTime.parse(dateStr).toLocal();
+      return '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    } catch (e) {
+      return dateStr;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.notesBackground,
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.directoryBorder),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: AppColors.plusButton.withOpacity(0.1),
-                  shape: BoxShape.circle,
+          // Иконка
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.plusButton.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              Icons.mail_outline,
+              size: 20,
+              color: AppColors.plusButton,
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          // Основная информация
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  organizationName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.grayFieldText,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.mail,
-                  size: 20,
-                  color: AppColors.plusButton,
+                const SizedBox(height: 2),
+                Text(
+                  email,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.directoryTextSecondary,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 3),
+                Row(
                   children: [
-                    Text(
-                      organizationName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.grayFieldText,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      inviterName,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.grayFieldText,
-                      ),
-                    ),
-                    Text(
-                      inviterEmail,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.directoryTextSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
+                        horizontal: 6,
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.directoryTextSecondary.withOpacity(
-                          0.1,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.plusButton.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        _getFormattedDate(),
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: AppColors.directoryTextSecondary,
+                        role,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.plusButton,
                         ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.access_time,
+                      size: 11,
+                      color: AppColors.directoryTextSecondary,
+                    ),
+                    const SizedBox(width: 2),
+                    Text(
+                      _formatDate(createdAt),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.directoryTextSecondary,
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: 12),
+
+          // Кнопки
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              TextButton(
-                onPressed: onDecline,
-                style: TextButton.styleFrom(foregroundColor: Colors.red),
-                child: const Text('Отклонить'),
-              ),
-              const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: onAccept,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.plusButton,
-                  foregroundColor: AppColors.white,
+              InkWell(
+                onTap: onDecline,
+                borderRadius: BorderRadius.circular(4),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: const Icon(Icons.close, size: 18, color: Colors.red),
                 ),
-                child: const Text('Принять'),
+              ),
+              const SizedBox(width: 4),
+              InkWell(
+                onTap: onAccept,
+                borderRadius: BorderRadius.circular(4),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.plusButton,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Icon(
+                    Icons.check,
+                    size: 18,
+                    color: AppColors.white,
+                  ),
+                ),
               ),
             ],
           ),

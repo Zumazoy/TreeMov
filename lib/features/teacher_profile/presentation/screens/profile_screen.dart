@@ -108,7 +108,7 @@ class _ProfileScreenContent extends StatelessWidget {
           body: Column(
             children: [
               if (state.teacherProfile != null)
-                ProfileHeader(teacherProfile: state.teacherProfile!),
+                ProfileHeader(orgMember: state.teacherProfile!),
 
               Container(height: 1, color: AppColors.eventTap),
               const SizedBox(height: 15),
@@ -154,8 +154,7 @@ class _ProfileScreenContent extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    SettingsScreen(teacherProfile: teacherProfile),
+                builder: (context) => SettingsScreen(orgMember: teacherProfile),
               ),
             ),
             // },

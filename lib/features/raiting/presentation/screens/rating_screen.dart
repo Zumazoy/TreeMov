@@ -126,7 +126,7 @@ class _RatingScreenState extends State<RatingScreen> {
       ),
       // Используем готовый компонент BottomNavigationBar
       bottomNavigationBar: ChildBottomNavigationBar(
-        currentIndex: 1, // Рейтинг - второй элемент (индекс 1)
+        currentIndex: 1,
         onTap: _onNavBarTap,
       ),
     );
@@ -187,7 +187,7 @@ class _RatingScreenState extends State<RatingScreen> {
               ),
               elevation: 0,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 0),
             if (sortedStudents.isNotEmpty)
               TopStudentsChart(students: topThree)
             else
