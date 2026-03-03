@@ -3,8 +3,6 @@ import 'package:treemov/core/themes/app_colors.dart';
 
 class ActivityItemWidget extends StatelessWidget {
   final String title;
-  final String date;
-  final String time;
   final int points;
   final String iconPath;
   final Color circleColor;
@@ -13,8 +11,6 @@ class ActivityItemWidget extends StatelessWidget {
   const ActivityItemWidget({
     super.key,
     required this.title,
-    required this.date,
-    required this.time,
     required this.points,
     required this.iconPath,
     required this.circleColor,
@@ -44,31 +40,23 @@ class ActivityItemWidget extends StatelessWidget {
                 width: 20,
                 height: 20,
                 color: iconColor,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.star, size: 20, color: iconColor);
+                },
               ),
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.notesDarkText,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '$date в $time',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.directoryTextSecondary,
-                  ),
-                ),
-              ],
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.notesDarkText,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Text(

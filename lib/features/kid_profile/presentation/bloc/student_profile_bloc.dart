@@ -15,7 +15,6 @@ class StudentProfileBloc
     : super(StudentProfileState.initial()) {
     on<LoadStudentProfile>(_onLoadStudentProfile);
     on<LoadStudentActivities>(_onLoadStudentActivities);
-    on<LoadMoreActivities>(_onLoadMoreActivities);
   }
 
   Future<void> _onLoadStudentProfile(
@@ -28,7 +27,15 @@ class StudentProfileBloc
       emit(
         state.copyWith(studentProfile: studentProfile, isLoadingProfile: false),
       );
+
+      if (studentProfile.id != null) {
+        print(
+          '🔄 Автоматическая загрузка активностей для ученика ID: ${studentProfile.id}',
+        );
+        add(LoadStudentActivities());
+      }
     } catch (e) {
+      print('❌ Ошибка загрузки профиля: $e');
       emit(state.copyWith(isLoadingProfile: false, profileError: e.toString()));
     }
   }
@@ -37,57 +44,50 @@ class StudentProfileBloc
     LoadStudentActivities event,
     Emitter<StudentProfileState> emit,
   ) async {
+    final studentId = state.studentProfile?.id;
+    print('📝 Загрузка активностей для ученика ID: $studentId');
+
+    if (studentId == null) {
+      print('❌ ID ученика не найден');
+      emit(
+        state.copyWith(
+          activitiesError: 'ID ученика не найден',
+          isLoadingActivities: false,
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(isLoadingActivities: true, activitiesError: null));
+
     try {
-      final activities = await _sharedRepository.getStudentAccruals(
-        studentId: state.studentProfile?.id,
+      final allActivities = await _sharedRepository.getStudentAccruals(
+        studentId: studentId,
         page: 1,
       );
+
+      print('📊 Получено всего начислений от сервера: ${allActivities.length}');
+      final filteredActivities = allActivities.where((accrual) {
+        return accrual.student?.id == studentId;
+      }).toList();
+
+      print(
+        '📊 Отфильтровано для ученика $studentId: ${filteredActivities.length}',
+      );
+      final lastTenActivities = filteredActivities.take(10).toList();
+
+      print('📊 Показываем последние 10: ${lastTenActivities.length}');
       emit(
         state.copyWith(
-          activities: activities,
-          currentPage: 1,
-          hasMorePages: activities.length >= 20,
+          activities: lastTenActivities,
           isLoadingActivities: false,
         ),
       );
     } catch (e) {
+      print('❌ Ошибка загрузки активностей: $e');
       emit(
         state.copyWith(
           isLoadingActivities: false,
-          activitiesError: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> _onLoadMoreActivities(
-    LoadMoreActivities event,
-    Emitter<StudentProfileState> emit,
-  ) async {
-    if (state.isLoadingMoreActivities || !state.hasMorePages) return;
-
-    emit(state.copyWith(isLoadingMoreActivities: true));
-    try {
-      final nextPage = state.currentPage + 1;
-      final moreActivities = await _sharedRepository.getStudentAccruals(
-        studentId: state.studentProfile?.id,
-        page: nextPage,
-      );
-      final updatedActivities = [...state.activities, ...moreActivities];
-
-      emit(
-        state.copyWith(
-          activities: updatedActivities,
-          currentPage: nextPage,
-          hasMorePages: moreActivities.length >= 20,
-          isLoadingMoreActivities: false,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          isLoadingMoreActivities: false,
           activitiesError: e.toString(),
         ),
       );
