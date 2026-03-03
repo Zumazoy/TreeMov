@@ -14,6 +14,7 @@ class LessonResponseModel extends BaseResponseModel {
   final bool? isCompleted;
   final String? duration;
   final String? comment;
+  final int? periodLessonId;
   final TeacherResponseModel? teacher;
   final ClassroomResponseModel? classroom;
   final GroupStudentsResponseModel? group;
@@ -30,6 +31,7 @@ class LessonResponseModel extends BaseResponseModel {
     required this.isCompleted,
     required this.duration,
     required this.comment,
+    required this.periodLessonId,
     required this.teacher,
     required this.classroom,
     required this.group,
@@ -48,6 +50,7 @@ class LessonResponseModel extends BaseResponseModel {
       isCompleted: json['is_completed'],
       duration: json['duration'],
       comment: json['comment'],
+      periodLessonId: json['period_lesson_id'],
       teacher: json['teacher'] != null
           ? TeacherResponseModel.fromJson(json['teacher'])
           : null,
