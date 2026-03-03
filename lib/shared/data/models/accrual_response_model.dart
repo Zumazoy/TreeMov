@@ -8,7 +8,6 @@ class AccrualResponseModel {
   final TeacherResponseModel? teacher;
   final StudentResponseModel? student;
   final String category;
-  final DateTime createdAt;
 
   AccrualResponseModel({
     required this.id,
@@ -17,24 +16,42 @@ class AccrualResponseModel {
     this.teacher,
     this.student,
     required this.category,
-    required this.createdAt,
   });
 
   factory AccrualResponseModel.fromJson(Map<String, dynamic> json) {
+    TeacherResponseModel? parseTeacher() {
+      try {
+        if (json['teacher'] != null && json['teacher'] is Map) {
+          return TeacherResponseModel.fromJson(
+            Map<String, dynamic>.from(json['teacher']),
+          );
+        }
+      } catch (e) {
+        print('⚠️ Ошибка парсинга teacher: $e');
+      }
+      return null;
+    }
+
+    StudentResponseModel? parseStudent() {
+      try {
+        if (json['student'] != null && json['student'] is Map) {
+          return StudentResponseModel.fromJson(
+            Map<String, dynamic>.from(json['student']),
+          );
+        }
+      } catch (e) {
+        print('⚠️ Ошибка парсинга student: $e');
+      }
+      return null;
+    }
+
     return AccrualResponseModel(
       id: json['id'] ?? 0,
       amount: json['amount'] ?? 0,
-      comment: json['comment'] ?? '',
-      teacher: json['teacher'] != null && json['teacher'] is Map
-          ? TeacherResponseModel.fromJson(json['teacher'])
-          : null,
-      student: json['student'] != null && json['student'] is Map
-          ? StudentResponseModel.fromJson(json['student'])
-          : null,
-      category: json['category'] ?? '',
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at']) ?? DateTime.now()
-          : DateTime.now(),
+      comment: json['comment']?.toString() ?? '',
+      teacher: parseTeacher(),
+      student: parseStudent(),
+      category: json['category']?.toString() ?? '',
     );
   }
 }

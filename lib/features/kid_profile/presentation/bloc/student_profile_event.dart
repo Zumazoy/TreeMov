@@ -10,5 +10,3 @@ abstract class StudentProfileEvent extends Equatable {
 class LoadStudentProfile extends StudentProfileEvent {}
 
 class LoadStudentActivities extends StudentProfileEvent {}
-
-class LoadMoreActivities extends StudentProfileEvent {}

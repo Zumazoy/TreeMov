@@ -1,14 +1,10 @@
 class ActivityItemData {
   final String title;
-  final String date;
-  final String time;
   final int points;
   final String iconPath;
 
   const ActivityItemData({
     required this.title,
-    required this.date,
-    required this.time,
     required this.points,
     required this.iconPath,
   });

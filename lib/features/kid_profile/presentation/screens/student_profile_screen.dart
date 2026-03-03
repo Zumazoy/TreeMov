@@ -116,16 +116,7 @@ class _StudentProfileContent extends StatelessWidget {
                             activities: state.activities
                                 .map((a) => ActivityConverter.fromAccrual(a))
                                 .toList(),
-                            isLoading:
-                                state.isLoadingActivities ||
-                                state.isLoadingMoreActivities,
-                            onLoadMore: state.hasMorePages
-                                ? () {
-                                    context.read<StudentProfileBloc>().add(
-                                      LoadMoreActivities(),
-                                    );
-                                  }
-                                : null,
+                            isLoading: state.isLoadingActivities,
                           ),
                         ),
                         const SizedBox(height: 16),
