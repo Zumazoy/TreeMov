@@ -388,21 +388,35 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
         key: _scaffoldKey,
         backgroundColor: AppColors.kidPrimary,
         appBar: AppBar(
-          title: const Text(
-            'Календарь',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'TT Norms',
-            ),
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/images/kid_calendar_icon.png',
+                width: 24,
+                height: 24,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                    size: 24,
+                  );
+                },
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Календарь',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'TT Norms',
+                ),
+              ),
+            ],
           ),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
+          automaticallyImplyLeading: false,
         ),
         body: Stack(
           children: [
