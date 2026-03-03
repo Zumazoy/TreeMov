@@ -136,6 +136,7 @@ class _RatingScreenState extends State<RatingScreen> {
               ),
             ),
           ),
+
           RefreshIndicator(
             onRefresh: () async {
               debugPrint('RatingScreen: ручное обновление');
@@ -143,44 +144,49 @@ class _RatingScreenState extends State<RatingScreen> {
               await Future.delayed(const Duration(milliseconds: 500));
             },
             color: const Color(0xFF1A237E),
-            child: SingleChildScrollView(
+            child: CustomScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  AppBar(
-                    backgroundColor: Colors.transparent,
-                    title: const Text(
-                      'Рейтинг',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    automaticallyImplyLeading: false,
-                    elevation: 0,
-                  ),
-                  const SizedBox(height: 25),
-                  if (sortedStudents.isNotEmpty)
-                    TopStudentsChart(students: topThree)
-                  else
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Text(
-                          'Нет данных о студентах',
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      AppBar(
+                        backgroundColor: Colors.transparent,
+                        title: const Text(
+                          'Рейтинг',
                           style: TextStyle(
-                            color: AppColors.achievementDeepBlue,
-                            fontSize: 16,
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
+                        automaticallyImplyLeading: false,
+                        elevation: 0,
                       ),
-                    ),
-                  const SizedBox(height: 400),
-                ],
-              ),
+                      const SizedBox(height: 25),
+                      if (sortedStudents.isNotEmpty)
+                        TopStudentsChart(students: topThree)
+                      else
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text(
+                              'Нет данных о студентах',
+                              style: TextStyle(
+                                color: AppColors.achievementDeepBlue,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 300),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
+
           if (sortedStudents.isNotEmpty)
             DraggableScrollableSheet(
               initialChildSize: 0.45,
@@ -298,13 +304,11 @@ class _RatingScreenState extends State<RatingScreen> {
             sortedStudents,
             currentStudent,
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: AnimatedOpacity(
-              opacity: _showPinnedCard ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 200),
+          if (_showPinnedCard)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -323,7 +327,6 @@ class _RatingScreenState extends State<RatingScreen> {
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

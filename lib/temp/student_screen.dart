@@ -10,7 +10,7 @@ import 'package:treemov/temp/directory_placeholder.dart';
 class StudentScreen extends StatefulWidget {
   final int initialIndex;
 
-  const StudentScreen({super.key, this.initialIndex = 1});
+  const StudentScreen({super.key, this.initialIndex = 3});
 
   @override
   State<StudentScreen> createState() => _StudentScreenState();
