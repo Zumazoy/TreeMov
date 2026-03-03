@@ -8,6 +8,7 @@ class AppColors {
   static const Color kidPrimary = Color(0xFF75D0FF);
   static const Color kidButton = Color(0xFF004C75);
   static const Color entranceKidButton = Color(0xFF0099E9);
+  static const Color kidCalendarBlue = Color(0xFF0087CD);
 
   static const Color calendarButton = Color(0xFF7A75FF);
   static const Color plusButton = Color(0xFF605CC8);
@@ -74,6 +75,14 @@ class AppColors {
   static Color get activityRedWithOpacity => activityRed.withAlpha(0x26);
   static Color get activityBlueWithOpacity => activityBlue.withAlpha(0x26);
   static Color get activityPurpleWithOpacity => activityPurple.withAlpha(0x26);
+  static const Color eventNegativeBg = Color(0xFFFADFDF);
+  static const Color deleteRed = Color(0xFFBE2B29);
+  static const Color lightRed = Color(0xFFDF9594);
+  static const Color skyBlue = Color(0xFF87CEEB);
+  static const Color statsAbsentBg = Color(0xFFFEF2F2);
+  static const Color statsAbsentBorder = Color(0xFFFECACA);
+  static const Color statsAbsentText = Color(0xFFB91C1C);
+  static const Color statsNotMarkedBorder = Color(0xFFD1D5DB);
 
   // Dark Theme Colors
   static const Color darkBackground = Color(0xFF121212);

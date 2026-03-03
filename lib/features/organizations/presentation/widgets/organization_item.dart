@@ -95,7 +95,7 @@ class OrganizationItem extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: roleColor.withOpacity(0.1),
+                          color: roleColor.withAlpha(25),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(

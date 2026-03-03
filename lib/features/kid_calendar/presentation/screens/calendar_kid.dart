@@ -7,6 +7,8 @@ import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_ev
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/features/teacher_calendar/presentation/utils/calendar_utils.dart';
 
+import '../../../../../core/themes/app_colors.dart';
+
 class CalendarKidScreen extends StatelessWidget {
   const CalendarKidScreen({super.key});
 
@@ -105,7 +107,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                     width: 53,
                     height: 7,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF004C75),
+                      color: AppColors.kidButton,
                       borderRadius: BorderRadius.circular(4.5),
                     ),
                   ),
@@ -119,7 +121,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                             'На этот день нет занятий',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Color(0xFF004C75),
+                              color: AppColors.kidButton,
                               fontFamily: 'TT Norms',
                             ),
                           ),
@@ -186,7 +188,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
-                color: Color(0xFF004C75),
+                color: AppColors.kidButton,
                 fontFamily: 'TT Norms',
               ),
             ),
@@ -195,7 +197,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
-                color: Color(0xFF004C75),
+                color: AppColors.kidButton,
                 fontFamily: 'TT Norms',
               ),
             ),
@@ -205,7 +207,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
         Container(
           width: 2,
           height: 30,
-          color: const Color(0xFF004C75),
+          color: AppColors.kidButton,
           margin: const EdgeInsets.only(top: 2),
         ),
         const SizedBox(width: 9),
@@ -220,7 +222,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
-                  color: Color(0xFF004C75),
+                  color: AppColors.kidButton,
                   fontFamily: 'TT Norms',
                 ),
               ),
@@ -229,7 +231,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF004C75),
+                  color: AppColors.kidButton,
                   fontFamily: 'TT Norms',
                 ),
               ),
@@ -247,7 +249,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
       height: 38,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF004C75),
+        color: AppColors.kidButton,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -316,7 +318,9 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: isSelected ? const Color(0xFF0087CD) : Colors.transparent,
+              color: isSelected
+                  ? AppColors.kidCalendarBlue
+                  : Colors.transparent,
               shape: BoxShape.circle,
             ),
             child: Stack(
@@ -338,9 +342,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                       width: 4,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? Colors.white
-                            : const Color(0xFF004C75),
+                        color: isSelected ? Colors.white : AppColors.kidButton,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -384,7 +386,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: const Color(0xFF75D0FF),
+        backgroundColor: AppColors.kidPrimary,
         appBar: AppBar(
           title: const Text(
             'Календарь',
@@ -413,7 +415,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                   return LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    colors: [Colors.white, Colors.white.withOpacity(0.0)],
+                    colors: [Colors.white, Colors.white.withAlpha(0)],
                     stops: const [0.1, 0.5],
                   ).createShader(bounds);
                 },

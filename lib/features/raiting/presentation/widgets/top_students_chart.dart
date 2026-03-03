@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class TopStudentsChart extends StatelessWidget {
@@ -73,7 +74,7 @@ class TopStudentsChart extends StatelessWidget {
           child: Text(
             'Нет данных для отображения',
             style: TextStyle(
-              color: Color(0xFF1A237E),
+              color: AppColors.achievementDeepBlue,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -150,7 +151,7 @@ class TopStudentsChart extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 36,
-                backgroundColor: const Color(0xFF1A237E),
+                backgroundColor: AppColors.achievementDeepBlue,
                 child: Text(
                   student.initials,
                   style: const TextStyle(
@@ -186,7 +187,7 @@ class TopStudentsChart extends StatelessWidget {
           width: width,
           height: chartHeight,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withAlpha(128),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -198,7 +199,7 @@ class TopStudentsChart extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  color: Color(0xFF1A237E),
+                  color: AppColors.achievementDeepBlue,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -210,13 +211,17 @@ class TopStudentsChart extends StatelessWidget {
                   Text(
                     student.score.toString(),
                     style: const TextStyle(
-                      color: Color(0xFF1A237E),
+                      color: AppColors.achievementDeepBlue,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Icon(Icons.bolt, color: Color(0xFF1A237E), size: 18),
+                  const Icon(
+                    Icons.bolt,
+                    color: AppColors.achievementDeepBlue,
+                    size: 18,
+                  ),
                 ],
               ),
             ],

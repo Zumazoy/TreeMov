@@ -45,7 +45,7 @@ class InviteItem extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.plusButton.withOpacity(0.1),
+              color: AppColors.plusButton.withAlpha(25),
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
@@ -87,7 +87,7 @@ class InviteItem extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.plusButton.withOpacity(0.1),
+                        color: AppColors.plusButton.withAlpha(25),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(

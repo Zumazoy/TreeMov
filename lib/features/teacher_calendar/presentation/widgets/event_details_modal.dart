@@ -136,7 +136,7 @@ class EventDetailsModal extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       backgroundColor: AppColors.white,
                       side: const BorderSide(
-                        color: Color(0xFF616161),
+                        color: AppColors.directoryTextSecondary,
                         width: 1,
                       ),
                       shape: RoundedRectangleBorder(
