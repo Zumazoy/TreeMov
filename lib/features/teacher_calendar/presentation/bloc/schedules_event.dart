@@ -61,16 +61,3 @@ class CreateMassAttendanceEvent extends ScheduleEvent {
   @override
   List<Object?> get props => [requests];
 }
-
-// class UpdateScheduleEvent extends ScheduleEvent {
-//   final int scheduleId;
-//   final ScheduleUpdateModel updateData;
-
-//   const UpdateScheduleEvent({
-//     required this.scheduleId,
-//     required this.updateData,
-//   });
-
-//   @override
-//   List<Object?> get props => [scheduleId, updateData];
-// }

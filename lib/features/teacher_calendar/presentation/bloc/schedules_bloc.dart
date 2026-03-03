@@ -16,9 +16,8 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<LoadLessonByIdEvent>(_onLoadLessonById);
     on<LoadStudentsInGroupByIdEvent>(_onLoadStudentsInGroupById);
     on<CreateLessonEvent>(_onCreateLesson);
-    // on<CreatePeriodLessonEvent>(_onCreatePeriodLesson);
+    on<CreatePeriodLessonEvent>(_onCreatePeriodLesson);
     on<CreateMassAttendanceEvent>(_onCreateMassAttendance);
-    // on<UpdateScheduleEvent>(_onUpdateSchedule);
   }
 
   Future<void> _onLoadLessons(
@@ -76,19 +75,19 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     }
   }
 
-  // Future<void> _onCreatePeriodLesson(
-  //   CreatePeriodLessonEvent event,
-  //   Emitter<ScheduleState> emit,
-  // ) async {
-  //   emit(ScheduleLoading());
-  //   try {
-  //     await _scheduleRepository.createPeriodLesson(event.request);
-  //     emit(LessonOperationSuccess('Периодическое занятие успешно создано'));
-  //     add(LoadLessonsEvent());
-  //   } catch (e) {
-  //     emit(LessonError('Ошибка создания периодического занятия: $e'));
-  //   }
-  // }
+  Future<void> _onCreatePeriodLesson(
+    CreatePeriodLessonEvent event,
+    Emitter<ScheduleState> emit,
+  ) async {
+    emit(ScheduleLoading());
+    try {
+      await _scheduleRepository.createPeriodLesson(event.request);
+      emit(LessonOperationSuccess('Периодическое занятие успешно создано'));
+      add(LoadLessonsEvent());
+    } catch (e) {
+      emit(LessonError('Ошибка создания периодического занятия: $e'));
+    }
+  }
 
   Future<void> _onCreateMassAttendance(
     CreateMassAttendanceEvent event,
@@ -102,20 +101,4 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
       emit(AttendanceError('Ошибка сохранения посещаемости: $e'));
     }
   }
-
-  // Future<void> _onUpdateSchedule(
-  //   UpdateScheduleEvent event,
-  //   Emitter<ScheduleState> emit,
-  // ) async {
-  //   emit(ScheduleLoading());
-  //   try {
-  //     await _repository.updateSchedule(
-  //       scheduleId: event.scheduleId,
-  //       updateData: event.updateData,
-  //     );
-  //     emit(ScheduleOperationSuccess('Занятие успешно обновлено'));
-  //   } catch (e) {
-  //     emit(ScheduleError('Ошибка обновления занятия: $e'));
-  //   }
-  // }
 }

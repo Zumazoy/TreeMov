@@ -50,7 +50,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
   DateTime _startDateTime = DateTime.now();
   DateTime _endDateTime = DateTime.now().add(const Duration(hours: 1));
 
-  // final List<String> _repeatOptions = ['Повтор', 'Ежедневно', 'Еженедельно'];
+  final List<String> _repeatOptions = ['Повтор', 'Ежедневно', 'Еженедельно'];
 
   final List<String> _reminderOptions = [
     'Не напоминать',
@@ -302,19 +302,19 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
     }
   }
 
-  // Widget _buildRepeatDropdown() {
-  //   return _buildStringDropdownCard(
-  //     title: 'Повтор',
-  //     value: _selectedRepeatOption ?? 'Повтор',
-  //     options: _repeatOptions,
-  //     onSelected: (value) {
-  //       setState(() {
-  //         _selectedRepeatOption = value;
-  //       });
-  //     },
-  //     iconPath: 'assets/images/repeat_icon.png',
-  //   );
-  // }
+  Widget _buildRepeatDropdown() {
+    return _buildStringDropdownCard(
+      title: 'Повтор',
+      value: _selectedRepeatOption ?? 'Повтор',
+      options: _repeatOptions,
+      onSelected: (value) {
+        setState(() {
+          _selectedRepeatOption = value;
+        });
+      },
+      iconPath: 'assets/images/repeat_icon.png',
+    );
+  }
 
   Widget _buildModelDropdownCard<T>({
     required String title,
@@ -718,8 +718,8 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                         const SizedBox(height: 8),
 
                         // Период расписания (повтор)
-                        // _buildRepeatDropdown(),
-                        // const SizedBox(height: 8),
+                        _buildRepeatDropdown(),
+                        const SizedBox(height: 8),
                         _buildDateTimeSection(),
                         const SizedBox(height: 8),
 

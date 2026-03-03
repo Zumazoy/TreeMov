@@ -12,9 +12,9 @@ class PeriodLessonResponseModel extends BaseResponseModel {
   final String? repeatLessonsUntilDate;
   final String? startDate;
   final TeacherResponseModel? teacher;
-  final SubjectResponseModel? subject;
-  final GroupStudentsResponseModel? group;
   final ClassroomResponseModel? classroom;
+  final GroupStudentsResponseModel? group;
+  final SubjectResponseModel? subject;
 
   PeriodLessonResponseModel({
     required super.baseData,
@@ -25,17 +25,12 @@ class PeriodLessonResponseModel extends BaseResponseModel {
     required this.repeatLessonsUntilDate,
     required this.startDate,
     required this.teacher,
-    required this.subject,
-    required this.group,
     required this.classroom,
+    required this.group,
+    required this.subject,
   });
 
   factory PeriodLessonResponseModel.fromJson(Map<String, dynamic> json) {
-    final teacherJson = json['teacher'];
-    final subjectJson = json['subject'];
-    final groupJson = json['group'];
-    final classroomJson = json['classroom'];
-
     return PeriodLessonResponseModel(
       baseData: json.baseData,
       title: json['title'],
@@ -44,17 +39,17 @@ class PeriodLessonResponseModel extends BaseResponseModel {
       period: json['period'],
       repeatLessonsUntilDate: json['repeat_lessons_until_date'],
       startDate: json['start_date'],
-      teacher: teacherJson != null && teacherJson is Map<String, dynamic>
-          ? TeacherResponseModel.fromJson(teacherJson)
+      teacher: json['teacher'] != null
+          ? TeacherResponseModel.fromJson(json['teacher'])
           : null,
-      subject: subjectJson != null && subjectJson is Map<String, dynamic>
-          ? SubjectResponseModel.fromJson(subjectJson)
+      classroom: json['classroom'] != null
+          ? ClassroomResponseModel.fromJson(json['classroom'])
           : null,
-      group: groupJson != null && groupJson is Map<String, dynamic>
-          ? GroupStudentsResponseModel.fromJson(groupJson)
+      group: json['student_group'] != null
+          ? GroupStudentsResponseModel.fromJson(json['student_group'])
           : null,
-      classroom: classroomJson != null && classroomJson is Map<String, dynamic>
-          ? ClassroomResponseModel.fromJson(classroomJson)
+      subject: json['subject'] != null
+          ? SubjectResponseModel.fromJson(json['subject'])
           : null,
     );
   }

@@ -25,6 +25,7 @@ class ApiConstants {
   static const String classrooms = 'classrooms';
   static const String subjects = 'subjects';
   static const String lessons = 'lessons';
+  static const String periodLessons = 'lessons/period';
   static const String studentGroups = 'student-groups';
   static const String studentGroupMembers = 'student-group-members';
   static const String attendances = 'attendances';
@@ -65,6 +66,4 @@ class ApiConstants {
     sendEmail,
     verifyEmail,
   ];
-
-  // static const String periodLessons = 'period_lessons/'; Отсутcвует соответствующий роут в документации
 }
