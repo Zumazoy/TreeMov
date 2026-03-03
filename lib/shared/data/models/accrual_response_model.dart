@@ -5,8 +5,8 @@ class AccrualResponseModel {
   final int id;
   final int amount;
   final String comment;
-  final TeacherResponseModel teacher;
-  final StudentResponseModel student;
+  final TeacherResponseModel? teacher;
+  final StudentResponseModel? student;
   final String category;
   final DateTime createdAt;
 
@@ -14,8 +14,8 @@ class AccrualResponseModel {
     required this.id,
     required this.amount,
     required this.comment,
-    required this.teacher,
-    required this.student,
+    this.teacher,
+    this.student,
     required this.category,
     required this.createdAt,
   });
@@ -25,15 +25,15 @@ class AccrualResponseModel {
       id: json['id'] ?? 0,
       amount: json['amount'] ?? 0,
       comment: json['comment'] ?? '',
-      teacher: json['teacher'] != null
+      teacher: json['teacher'] != null && json['teacher'] is Map
           ? TeacherResponseModel.fromJson(json['teacher'])
-          : TeacherResponseModel.fromJson({}),
-      student: json['student'] != null
+          : null,
+      student: json['student'] != null && json['student'] is Map
           ? StudentResponseModel.fromJson(json['student'])
-          : StudentResponseModel.fromJson({}),
+          : null,
       category: json['category'] ?? '',
       createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
+          ? DateTime.tryParse(json['created_at']) ?? DateTime.now()
           : DateTime.now(),
     );
   }
