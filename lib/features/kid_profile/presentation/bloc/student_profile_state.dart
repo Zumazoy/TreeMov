@@ -57,8 +57,8 @@ class StudentProfileState extends Equatable {
   // Вычисляемые данные для UI
   int get totalEarnings {
     return activities
-        .where((a) => a.amount > 0)
-        .fold(0, (sum, a) => sum + a.amount);
+        .where((a) => a.amount! > 0)
+        .fold(0, (sum, a) => sum + a.amount!);
   }
 
   int get attendance {
@@ -74,7 +74,7 @@ class StudentProfileState extends Equatable {
 
   int get currentPoints {
     return studentProfile?.score ??
-        activities.fold(0, (sum, a) => sum + a.amount);
+        activities.fold(0, (sum, a) => sum + a.amount!);
   }
 
   @override

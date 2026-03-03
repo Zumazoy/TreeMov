@@ -6,8 +6,9 @@ class ActivityConverter {
     // Определяем иконку и цвета на основе категории
     String iconPath;
     String title;
+    String category = accrual.category ?? 'Активность';
 
-    switch (accrual.category.toLowerCase()) {
+    switch (category.toLowerCase()) {
       case 'attendance':
       case 'presence':
         iconPath = 'assets/images/calendar_icon.png';
@@ -28,23 +29,21 @@ class ActivityConverter {
       case 'behavior_negative':
       case 'passive':
         iconPath = 'assets/images/alarm.png';
-        title = accrual.comment.isNotEmpty ? accrual.comment : 'Пассивность';
+        title = accrual.comment ?? 'Пассивность';
         break;
       default:
         iconPath = 'assets/images/energy_icon.png';
-        title = accrual.comment.isNotEmpty ? accrual.comment : 'Активность';
+        title = accrual.comment ?? 'Активность';
     }
 
     // Форматируем дату
-    final date = _formatDate(
-      accrual.createdAt,
-    ); // Предполагаем, что есть поле createdAt
+    final date = _formatDate(DateTime.now());
 
     return ActivityItemData(
       title: title,
       date: date,
-      time: _formatTime(accrual.createdAt),
-      points: accrual.amount,
+      time: _formatTime(DateTime.now()),
+      points: accrual.amount ?? 0,
       iconPath: iconPath,
     );
   }

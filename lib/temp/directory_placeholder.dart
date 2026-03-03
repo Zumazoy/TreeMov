@@ -11,7 +11,7 @@ class DirectoryPlaceholder extends StatelessWidget {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text(
-          'Ученики',
+          'Магазин',
           style: TextStyle(
             fontFamily: 'Arial',
             fontWeight: FontWeight.w900,
