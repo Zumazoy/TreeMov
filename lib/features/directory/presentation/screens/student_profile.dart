@@ -27,7 +27,7 @@ class StudentProfileScreen extends StatelessWidget {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => MainScreen(initialIndex: index),
+          builder: (context) => TeacherScreen(initialIndex: index),
         ),
         (route) => false,
       );

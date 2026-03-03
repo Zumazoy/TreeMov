@@ -132,11 +132,10 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
     }
     await _secureStorage.saveRole('student');
 
-    // TODO: заменить на нужный экран для ученика
     if (mounted) {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        AppRoutes.mainApp,
+        AppRoutes.studentApp,
         (route) => false,
       );
     }

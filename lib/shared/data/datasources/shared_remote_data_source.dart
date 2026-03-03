@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/core/storage/secure_storage_repository.dart';
+import 'package:treemov/shared/data/models/accrual_response_model.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
+import 'package:treemov/shared/data/models/student_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/data/models/teacher_response_model.dart';
 
@@ -37,9 +38,7 @@ class SharedRemoteDataSource {
             throw Exception('Организация с id $orgMemberId не найдена');
           }
         } else {
-          throw Exception(
-            'Некорректный формат ответа от сервера:\n$responseData',
-          );
+          throw Exception('Некорректный формат ответа от сервера');
         }
       } else {
         throw Exception('Ошибка сервера: ${response.statusCode}');
@@ -57,14 +56,12 @@ class SharedRemoteDataSource {
         final responseData = response.data;
 
         if (responseData is List) {
-          // Если ответ - массив
           return responseData
               .map<LessonResponseModel>(
                 (json) => LessonResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
-          // Если ответ - не массив (оборачиваем в список)
           return [LessonResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
@@ -79,10 +76,7 @@ class SharedRemoteDataSource {
 
   Future<int?> getTeacherId() async {
     try {
-      String? orgMemberID = await _secureStorageRepository.getOrgMemberId();
-      if (orgMemberID == null) {
-        debugPrint('orgMemberID равно null');
-      }
+      final orgMemberID = await _secureStorageRepository.getOrgMemberId();
 
       final Response response = await _dioClient.get(
         ApiConstants.teachers,
@@ -92,7 +86,7 @@ class SharedRemoteDataSource {
       if (response.statusCode == 200) {
         final responseData = response.data;
 
-        if (responseData is List) {
+        if (responseData is List && responseData.isNotEmpty) {
           return TeacherResponseModel.fromJson(responseData.first).id;
         } else if (responseData is Map<String, dynamic>) {
           return TeacherResponseModel.fromJson(responseData).id;
@@ -115,14 +109,12 @@ class SharedRemoteDataSource {
         final responseData = response.data;
 
         if (responseData is List) {
-          // Если ответ - массив
           return responseData
               .map<SubjectResponseModel>(
                 (json) => SubjectResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
-          // Если ответ - не массив (оборачиваем в список)
           return [SubjectResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
@@ -145,14 +137,12 @@ class SharedRemoteDataSource {
         final responseData = response.data;
 
         if (responseData is List) {
-          // Если ответ - массив
           return responseData
               .map<GroupStudentsResponseModel>(
                 (json) => GroupStudentsResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
-          // Если ответ - не массив (оборачиваем в список)
           return [GroupStudentsResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
@@ -178,14 +168,12 @@ class SharedRemoteDataSource {
         final responseData = response.data;
 
         if (responseData is List) {
-          // Если ответ - массив
           return responseData
               .map<StudentInGroupResponseModel>(
                 (json) => StudentInGroupResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
-          // Если ответ - не массив (оборачиваем в список)
           return [StudentInGroupResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
@@ -206,14 +194,12 @@ class SharedRemoteDataSource {
         final responseData = response.data;
 
         if (responseData is List) {
-          // Если ответ - массив
           return responseData
               .map<ClassroomResponseModel>(
                 (json) => ClassroomResponseModel.fromJson(json),
               )
               .toList();
         } else if (responseData is Map<String, dynamic>) {
-          // Если ответ - не массив (оборачиваем в список)
           return [ClassroomResponseModel.fromJson(responseData)];
         } else {
           throw Exception('Некорректный формат ответа от сервера');
@@ -223,6 +209,90 @@ class SharedRemoteDataSource {
       }
     } catch (e) {
       throw Exception('Ошибка загрузки аудиторий: $e');
+    }
+  }
+
+  Future<StudentResponseModel> getStudentProfile() async {
+    try {
+      final orgMemberId = await _secureStorageRepository.getOrgMemberId();
+
+      final queryParams = <String, dynamic>{};
+
+      if (orgMemberId != null) {
+        queryParams['org_member'] = orgMemberId;
+      }
+
+      final Response response = await _dioClient.get(
+        ApiConstants.students,
+        queryParameters: queryParams,
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+
+        if (responseData is List && responseData.isNotEmpty) {
+          if (orgMemberId != null) {
+            final student = responseData.firstWhere(
+              (s) =>
+                  s['org_member']?['id'].toString() == orgMemberId.toString(),
+              orElse: () => null,
+            );
+            if (student != null) {
+              return StudentResponseModel.fromJson(student);
+            }
+          }
+          return StudentResponseModel.fromJson(responseData.first);
+        } else if (responseData is Map<String, dynamic>) {
+          return StudentResponseModel.fromJson(responseData);
+        } else {
+          throw Exception('Ученик не найден');
+        }
+      } else {
+        throw Exception('Ошибка сервера: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Ошибка загрузки профиля ученика: $e');
+    }
+  }
+
+  Future<List<AccrualResponseModel>> getStudentAccruals({
+    required int? studentId,
+    required int page,
+  }) async {
+    try {
+      if (studentId == null) {
+        throw Exception('ID ученика не указан');
+      }
+
+      final Response response = await _dioClient.get(
+        ApiConstants.accruals,
+        queryParameters: {'student': studentId, 'page': page, 'page_size': 20},
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+
+        if (responseData is Map<String, dynamic> &&
+            responseData['results'] != null) {
+          return (responseData['results'] as List)
+              .map<AccrualResponseModel>(
+                (json) => AccrualResponseModel.fromJson(json),
+              )
+              .toList();
+        } else if (responseData is List) {
+          return responseData
+              .map<AccrualResponseModel>(
+                (json) => AccrualResponseModel.fromJson(json),
+              )
+              .toList();
+        } else {
+          return [];
+        }
+      } else {
+        throw Exception('Ошибка сервера: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Ошибка загрузки начислений ученика: $e');
     }
   }
 }

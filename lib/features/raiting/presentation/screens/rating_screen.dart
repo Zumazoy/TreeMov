@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treemov/core/network/dio_client.dart';
-import 'package:treemov/core/widgets/layout/child_nav_bar.dart';
 import 'package:treemov/features/raiting/data/repositories/rating_repository_impl.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_bloc.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_event.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_state.dart';
 import 'package:treemov/features/raiting/presentation/widgets/student_card.dart';
 import 'package:treemov/features/raiting/presentation/widgets/top_students_chart.dart';
-import 'package:treemov/features/teacher_calendar/presentation/screens/calendar_screen.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class RatingScreen extends StatefulWidget {
@@ -22,112 +20,81 @@ class RatingScreen extends StatefulWidget {
 }
 
 class _RatingScreenState extends State<RatingScreen> {
-  late final Future<RatingBloc> _ratingBlocFuture;
+  late RatingBloc _ratingBloc;
   bool _showPinnedCard = true;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _ratingBlocFuture = _initializeBloc();
+    debugPrint('RatingScreen: initState');
+    _initializeBloc();
   }
 
-  Future<RatingBloc> _initializeBloc() async {
-    final prefs = await SharedPreferences.getInstance();
-    final repository = RatingRepositoryImpl(widget.dioClient, prefs);
-    final bloc = RatingBloc(repository);
-    bloc.add(const LoadStudentsEvent());
-    bloc.add(const LoadCurrentStudentEvent());
-    return bloc;
+  void _initializeBloc() {
+    SharedPreferences.getInstance().then((prefs) {
+      final repository = RatingRepositoryImpl(widget.dioClient, prefs);
+      _ratingBloc = RatingBloc(repository);
+      _isInitialized = true;
+      _loadData();
+      if (mounted) setState(() {});
+    });
   }
 
-  void _onNavBarTap(int index) {
-    switch (index) {
-      case 0:
-        // Переход на календарь
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                const CalendarScreen(), // Экран календаря ученика
-          ),
-        );
-        break;
-      case 1:
-        // Уже на рейтинге, ничего не делаем или можно обновить
-        break;
-      case 2:
-        // Переход в магазин
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const ShopScreen(),
-        //   ),
-        // );
-        break;
-      case 3:
-        // Переход в профиль дерева
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const TreeProfileScreen(),
-        //   ),
-        // );
-        break;
+  void refreshData() {
+    debugPrint('RatingScreen: refreshData вызван');
+    if (_isInitialized) {
+      _loadData();
+    } else {
+      debugPrint(
+        'RatingScreen: еще не инициализирован, данные загрузятся при инициализации',
+      );
     }
+  }
+
+  void _loadData() {
+    debugPrint('RatingScreen: загружаем данные');
+    _ratingBloc.add(const LoadStudentsEvent());
+    _ratingBloc.add(const LoadCurrentStudentEvent());
+  }
+
+  @override
+  void dispose() {
+    debugPrint('RatingScreen: dispose');
+    _ratingBloc.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF87CEEB),
-      body: FutureBuilder<RatingBloc>(
-        future: _ratingBlocFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+    if (!_isInitialized) {
+      return _buildLoading();
+    }
+
+    return BlocProvider<RatingBloc>.value(
+      value: _ratingBloc,
+      child: BlocBuilder<RatingBloc, RatingState>(
+        builder: (context, state) {
+          if (state is RatingLoading) {
             return _buildLoading();
+          } else if (state is StudentsLoaded || state is CurrentStudentLoaded) {
+            final studentsState = context.read<RatingBloc>().state;
+            List<StudentEntity> students = [];
+            StudentEntity? currentStudent;
+
+            if (studentsState is StudentsLoaded) {
+              students = studentsState.students;
+            }
+            if (studentsState is CurrentStudentLoaded) {
+              currentStudent = studentsState.currentStudent;
+            }
+
+            return _buildContent(students, currentStudent);
+          } else if (state is RatingError) {
+            return _buildError(state.message);
           }
-
-          if (snapshot.hasError) {
-            return _buildError('Ошибка инициализации: ${snapshot.error}');
-          }
-
-          if (!snapshot.hasData) {
-            return _buildLoading();
-          }
-
-          return BlocProvider<RatingBloc>(
-            create: (context) => snapshot.data!,
-            child: BlocBuilder<RatingBloc, RatingState>(
-              builder: (context, state) {
-                if (state is RatingLoading) {
-                  return _buildLoading();
-                } else if (state is StudentsLoaded ||
-                    state is CurrentStudentLoaded) {
-                  final studentsState = context.read<RatingBloc>().state;
-                  List<StudentEntity> students = [];
-                  StudentEntity? currentStudent;
-
-                  if (studentsState is StudentsLoaded) {
-                    students = studentsState.students;
-                  }
-                  if (studentsState is CurrentStudentLoaded) {
-                    currentStudent = studentsState.currentStudent;
-                  }
-
-                  return _buildContent(students, currentStudent);
-                } else if (state is RatingError) {
-                  return _buildError(state.message);
-                }
-                return _buildLoading();
-              },
-            ),
-          );
+          return _buildLoading();
         },
-      ),
-      // Используем готовый компонент BottomNavigationBar
-      bottomNavigationBar: ChildBottomNavigationBar(
-        currentIndex: 1,
-        onTap: _onNavBarTap,
       ),
     );
   }
@@ -144,118 +111,141 @@ class _RatingScreenState extends State<RatingScreen> {
       currentStudent,
     );
 
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: ShaderMask(
-            shaderCallback: (Rect bounds) {
-              return LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.white.withOpacity(1.0),
-                  Colors.white.withOpacity(0.0),
-                ],
-                stops: const [0.0, 0.3],
-              ).createShader(bounds);
-            },
-            blendMode: BlendMode.dstIn,
-            child: Image.asset(
-              'assets/images/background_raiting.png',
-              fit: BoxFit.fitWidth,
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.4,
-              alignment: Alignment.topCenter,
+    return Scaffold(
+      backgroundColor: const Color(0xFF87CEEB),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withOpacity(1.0),
+                    Colors.white.withOpacity(0.0),
+                  ],
+                  stops: const [0.0, 0.3],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.dstIn,
+              child: Image.asset(
+                'assets/images/background_raiting.png',
+                fit: BoxFit.fitWidth,
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.4,
+                alignment: Alignment.topCenter,
+              ),
             ),
           ),
-        ),
-        Column(
-          children: [
-            AppBar(
-              backgroundColor: Colors.transparent,
-              title: const Text(
-                'Рейтинг',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
-              ),
-              elevation: 0,
-            ),
-            const SizedBox(height: 0),
-            if (sortedStudents.isNotEmpty)
-              TopStudentsChart(students: topThree)
-            else
-              const Expanded(
-                child: Center(
-                  child: Text(
-                    'Нет данных о студентах',
-                    style: TextStyle(color: Color(0xFF1A237E), fontSize: 16),
-                  ),
-                ),
-              ),
-          ],
-        ),
-        if (sortedStudents.isNotEmpty)
-          DraggableScrollableSheet(
-            initialChildSize: 0.45,
-            minChildSize: 0.45,
-            maxChildSize: 0.87,
-            snap: true,
-            snapSizes: const [0.45, 0.85],
-            builder: (BuildContext context, ScrollController scrollController) {
-              return Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 16,
-                      offset: Offset(0, -2),
+          RefreshIndicator(
+            onRefresh: () async {
+              debugPrint('RatingScreen: ручное обновление');
+              _loadData();
+              await Future.delayed(const Duration(milliseconds: 500));
+            },
+            color: const Color(0xFF1A237E),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  AppBar(
+                    backgroundColor: Colors.transparent,
+                    title: const Text(
+                      'Рейтинг',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.only(top: 14, bottom: 4),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 40,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1A237E),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                          ],
+                    automaticallyImplyLeading: false,
+                    elevation: 0,
+                  ),
+                  const SizedBox(height: 25),
+                  if (sortedStudents.isNotEmpty)
+                    TopStudentsChart(students: topThree)
+                  else
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text(
+                          'Нет данных о студентах',
+                          style: TextStyle(
+                            color: Color(0xFF1A237E),
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: _buildStudentsList(
-                        scrollController,
-                        sortedStudents,
-                        currentStudent,
-                        currentUserPosition,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  const SizedBox(height: 400),
+                ],
+              ),
+            ),
           ),
-      ],
+          if (sortedStudents.isNotEmpty)
+            DraggableScrollableSheet(
+              initialChildSize: 0.45,
+              minChildSize: 0.45,
+              maxChildSize: 0.87,
+              snap: true,
+              snapSizes: const [0.45, 0.85],
+              builder:
+                  (BuildContext context, ScrollController scrollController) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 16,
+                            offset: Offset(0, -2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {},
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.only(
+                                top: 14,
+                                bottom: 4,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 40,
+                                    height: 4,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF1A237E),
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: _buildStudentsList(
+                              scrollController,
+                              sortedStudents,
+                              currentStudent,
+                              currentUserPosition,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+            ),
+        ],
+      ),
     );
   }
 

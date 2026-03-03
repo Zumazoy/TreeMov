@@ -95,7 +95,9 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
   void _onTabTapped(int index) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => MainScreen(initialIndex: index)),
+      MaterialPageRoute(
+        builder: (context) => TeacherScreen(initialIndex: index),
+      ),
       (route) => false,
     );
   }

@@ -11,6 +11,7 @@ import 'package:treemov/features/registration/presentation/screens/registration_
 import 'package:treemov/features/registration/presentation/screens/verification_code_screen.dart';
 // import 'package:treemov/features/test_home/home_screen.dart';
 import 'package:treemov/temp/main_screen.dart';
+import 'package:treemov/temp/student_screen.dart';
 
 class AppRoutes {
   static const String home = '/home';
@@ -30,6 +31,7 @@ class AppRoutes {
   static const String testSchedule = '/test_schedule';
   static const String rating = '/rating';
   static const String myOrgs = '/my_orgs';
+  static const String studentApp = '/student';
 
   static const String registration = '/registration';
   static const String verificationCode = '/verification_code';
@@ -47,7 +49,8 @@ class AppRoutes {
     // teacherVerificationScreen: (context) => const TeacherVerificationScreen(),
     // teacherInfoScreen: (context) => const TeacherInfoScreen(teacherCode: '1'),
     kidCalendar: (context) => const CalendarKidScreen(),
-    mainApp: (context) => const MainScreen(),
+    mainApp: (context) => const TeacherScreen(),
+    studentApp: (context) => const StudentScreen(),
     // testHome: (context) => HomeScreen(),
     rating: (context) {
       final secureStorageRepository = SecureStorageRepositoryImpl();

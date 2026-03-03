@@ -12,6 +12,7 @@ import 'package:treemov/features/authorization/data/repositories/auth_repository
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/presentation/bloc/login_bloc.dart';
 import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
+import 'package:treemov/features/kid_profile/presentation/bloc/student_profile_bloc.dart';
 import 'package:treemov/features/notes/data/datasources/local_notes_datasource.dart';
 // import 'package:treemov/features/notes/data/datasources/teacher_notes_remote_data_source.dart';
 import 'package:treemov/features/notes/domain/repositories/local_notes_repository.dart';
@@ -127,6 +128,10 @@ void setupDependencies() {
 
   getIt.registerFactory<TeacherProfileBloc>(
     () => TeacherProfileBloc(getIt<SharedRepository>()),
+  );
+
+  getIt.registerFactory<StudentProfileBloc>(
+    () => StudentProfileBloc(getIt<SharedRepository>()),
   );
 
   getIt.registerFactory<RegisterBloc>(

@@ -406,7 +406,9 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
   void _onTabTapped(int index) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => MainScreen(initialIndex: index)),
+      MaterialPageRoute(
+        builder: (context) => TeacherScreen(initialIndex: index),
+      ),
       (route) => false,
     );
   }

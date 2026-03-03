@@ -1,9 +1,11 @@
 import 'package:treemov/shared/data/datasources/shared_remote_data_source.dart';
+import 'package:treemov/shared/data/models/accrual_response_model.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
+import 'package:treemov/shared/data/models/student_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
@@ -47,5 +49,21 @@ class SharedRepositoryImpl implements SharedRepository {
   @override
   Future<List<ClassroomResponseModel>> getClassrooms() async {
     return await _remoteDataSource.getClassrooms();
+  }
+
+  @override
+  Future<StudentResponseModel> getStudentProfile() async {
+    return await _remoteDataSource.getStudentProfile();
+  }
+
+  @override
+  Future<List<AccrualResponseModel>> getStudentAccruals({
+    required int? studentId,
+    required int page,
+  }) async {
+    return await _remoteDataSource.getStudentAccruals(
+      studentId: studentId,
+      page: page,
+    );
   }
 }

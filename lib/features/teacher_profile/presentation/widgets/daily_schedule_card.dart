@@ -150,7 +150,7 @@ class DailyScheduleCard extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => const MainScreen(initialIndex: 0),
+                  builder: (context) => const TeacherScreen(initialIndex: 0),
                 ),
               );
             },

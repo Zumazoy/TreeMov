@@ -58,6 +58,23 @@ class AppColors {
   static const Color statsTodayBorder = Color(0xFFE9D5FF);
   static const Color statsTodayText = Color(0xFF6D28D9);
 
+  static const Color achievementGold = Color(0xFFE99F00);
+  static const Color achievementDeepBlue = Color(0xFF1321B9);
+  static const Color achievementGreen = Color(0xFF22C55E);
+  static const Color achievementOrange = Color(0xFFE3713C);
+  static const Color achievementDarkBlue = Color(0xFF14278E);
+  static const Color achievementYellow = Color(0xFFEAC328);
+  static const Color achievementForestGreen = Color(0xFF439221);
+
+  static const Color activityRed = Color(0xFFDC2626);
+  static const Color activityBlue = Color(0xFF297FFF);
+  static const Color activityCream = Color(0xFFFAE9E0);
+  static const Color activityPurple = Color(0xFF7E22CE);
+
+  static Color get activityRedWithOpacity => activityRed.withAlpha(0x26);
+  static Color get activityBlueWithOpacity => activityBlue.withAlpha(0x26);
+  static Color get activityPurpleWithOpacity => activityPurple.withAlpha(0x26);
+
   // Dark Theme Colors
   static const Color darkBackground = Color(0xFF121212);
   static const Color darkSurface = Color(0xFF1E1E1E);

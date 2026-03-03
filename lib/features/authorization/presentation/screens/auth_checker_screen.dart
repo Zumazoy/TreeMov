@@ -36,7 +36,7 @@ class _AuthCheckerScreenState extends State<AuthCheckerScreen> {
           // Навбар студента
           Navigator.pushNamedAndRemoveUntil(
             context,
-            AppRoutes.mainApp, //TODO: заменить на нужный экран для ученика
+            AppRoutes.studentApp,
             (route) => false,
           );
         } else {
