@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
@@ -58,9 +59,7 @@ class ProfileHeaderCard extends StatelessWidget {
             children: [
               Text(
                 _getFullName(),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                style: AppTextStyles.ttNorms16W700.copyWith(
                   color: AppColors.notesDarkText,
                 ),
               ),
@@ -71,10 +70,7 @@ class ProfileHeaderCard extends StatelessWidget {
                 //     ? teacherProfile!.teacher?.employee.email ??
                 //           'Заглушка должности'
                 //     : 'Профиль null',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.directoryTextSecondary,
-                ),
+                style: AppTextStyles.ttNorms12W400.grey,
               ),
             ],
           ),

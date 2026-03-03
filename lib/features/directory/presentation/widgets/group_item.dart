@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/themes/app_colors.dart';
+import '../../../../../core/themes/app_text_styles.dart';
 
 class GroupItem extends StatefulWidget {
   final String groupName;
@@ -42,24 +43,14 @@ class _GroupItemState extends State<GroupItem> {
           children: [
             Text(
               widget.groupName,
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-                height: 1.0,
+              style: AppTextStyles.arial14W700.copyWith(
                 color: AppColors.grayFieldText,
               ),
             ),
             const SizedBox(width: 8),
             Text(
               '${widget.studentCount} учеников',
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
-                height: 1.0,
-                color: AppColors.directoryTextSecondary,
-              ),
+              style: AppTextStyles.arial12W400.grey,
             ),
             const Spacer(),
             Image.asset(
@@ -67,7 +58,7 @@ class _GroupItemState extends State<GroupItem> {
               width: 24,
               height: 24,
               errorBuilder: (context, error, stackTrace) {
-                return const Icon(
+                return Icon(
                   Icons.arrow_forward_ios,
                   color: AppColors.grayFieldText,
                   size: 20,

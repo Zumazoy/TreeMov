@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/themes/app_colors.dart';
+import '../../../../../core/themes/app_text_styles.dart';
 
 class SearchField extends StatelessWidget {
   final TextEditingController controller;
@@ -23,12 +24,7 @@ class SearchField extends StatelessWidget {
         onChanged: onChanged,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: const TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
-            color: AppColors.directoryTextSecondary,
-          ),
+          hintStyle: AppTextStyles.arial14W400.grey,
           filled: true,
           fillColor: AppColors.white,
           border: OutlineInputBorder(
@@ -52,10 +48,7 @@ class SearchField extends StatelessWidget {
             vertical: 12,
           ),
         ),
-        style: const TextStyle(
-          fontFamily: 'Arial',
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
+        style: AppTextStyles.arial14W400.copyWith(
           color: AppColors.grayFieldText,
         ),
       ),

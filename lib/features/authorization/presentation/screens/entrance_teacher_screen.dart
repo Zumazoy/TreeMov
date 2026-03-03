@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/storage/secure_storage_repository.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/auth/auth_header.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/presentation/bloc/login_bloc.dart';
-
-import '../../../../../core/themes/app_colors.dart';
 
 class EntranceTeacherScreen extends StatelessWidget {
   const EntranceTeacherScreen({super.key});
@@ -42,34 +42,21 @@ class EntranceTeacherScreen extends StatelessWidget {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: const Text(
+        title: Text(
           'Ошибка входа',
-          style: TextStyle(
-            fontSize: 20,
+          style: AppTextStyles.ttNorms20W500.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.teacherPrimary,
-            fontFamily: 'TT Norms',
           ),
         ),
         content: Text(
           _parseError(error),
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.grey,
-            fontFamily: 'TT Norms',
-          ),
+          style: AppTextStyles.ttNorms16W400.copyWith(color: AppColors.grey),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'OK',
-              style: TextStyle(
-                color: AppColors.teacherPrimary,
-                fontSize: 16,
-                fontFamily: 'TT Norms',
-              ),
-            ),
+            child: Text('OK', style: AppTextStyles.ttNorms16W400.primary),
           ),
         ],
       ),
@@ -126,9 +113,9 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: AppColors.teacherPrimary,
-        content: const Text(
+        content: Text(
           'Заполните все поля',
-          style: TextStyle(fontFamily: 'TT Norms'),
+          style: AppTextStyles.ttNorms14W400.white,
         ),
         duration: const Duration(seconds: 2),
       ),
@@ -161,15 +148,7 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
                     children: [
                       const SizedBox(height: 60),
 
-                      const Text(
-                        'Вход',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.white,
-                          fontFamily: 'TT Norms',
-                        ),
-                      ),
+                      Text('Вход', style: AppTextStyles.ttNorms24W900.white),
                       const SizedBox(height: 40),
 
                       _buildTextField(_emailController, 'email'),
@@ -203,13 +182,9 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
                                     ),
                                   ),
                                 )
-                              : const Text(
+                              : Text(
                                   'Войти',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: 'TT Norms',
-                                  ),
+                                  style: AppTextStyles.ttNorms18W700.white,
                                 ),
                         ),
                       ),
@@ -242,13 +217,11 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
             vertical: 12,
           ),
           hintText: hintText,
-          hintStyle: const TextStyle(
+          hintStyle: AppTextStyles.ttNorms16W400.copyWith(
             color: AppColors.grey,
-            fontSize: 16,
-            fontFamily: 'TT Norms',
           ),
         ),
-        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
+        style: AppTextStyles.ttNorms16W400,
       ),
     );
   }
@@ -274,10 +247,8 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
             vertical: 12,
           ),
           hintText: hintText,
-          hintStyle: const TextStyle(
+          hintStyle: AppTextStyles.ttNorms16W400.copyWith(
             color: AppColors.grey,
-            fontSize: 16,
-            fontFamily: 'TT Norms',
           ),
           suffixIcon: IconButton(
             icon: Icon(
@@ -291,7 +262,7 @@ class _EntranceTeacherContentState extends State<_EntranceTeacherContent> {
             },
           ),
         ),
-        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
+        style: AppTextStyles.ttNorms16W400,
       ),
     );
   }

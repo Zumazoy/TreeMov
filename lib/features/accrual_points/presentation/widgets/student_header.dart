@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import 'student_avatar.dart';
 
 class StudentHeader extends StatelessWidget {
@@ -32,13 +33,7 @@ class StudentHeader extends StatelessWidget {
               children: [
                 Text(
                   '${student.name} ${student.surname}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.notesDarkText,
-                    height: 1.0,
-                  ),
+                  style: AppTextStyles.arial14W700.dark,
                 ),
                 const SizedBox(height: 2),
                 Row(
@@ -52,13 +47,7 @@ class StudentHeader extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       '${student.score} баллов',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.directoryTextSecondary,
-                        height: 1.0,
-                      ),
+                      style: AppTextStyles.arial12W400.grey, // 👈
                     ),
                   ],
                 ),

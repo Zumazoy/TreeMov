@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class InviteItem extends StatelessWidget {
   final String organizationName;
@@ -64,20 +65,12 @@ class InviteItem extends StatelessWidget {
               children: [
                 Text(
                   organizationName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  style: AppTextStyles.ttNorms16W600.copyWith(
                     color: AppColors.grayFieldText,
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  email,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.directoryTextSecondary,
-                  ),
-                ),
+                Text(email, style: AppTextStyles.ttNorms12W400.grey),
                 const SizedBox(height: 3),
                 Row(
                   children: [
@@ -92,9 +85,7 @@ class InviteItem extends StatelessWidget {
                       ),
                       child: Text(
                         role,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
+                        style: AppTextStyles.ttNorms11W600.copyWith(
                           color: AppColors.plusButton,
                         ),
                       ),
@@ -108,10 +99,7 @@ class InviteItem extends StatelessWidget {
                     const SizedBox(width: 2),
                     Text(
                       _formatDate(createdAt),
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: AppColors.directoryTextSecondary,
-                      ),
+                      style: AppTextStyles.ttNorms11W400.grey,
                     ),
                   ],
                 ),

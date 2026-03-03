@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/themes/app_colors.dart';
+import '../../../../../core/themes/app_text_styles.dart';
 
 class GroupChips extends StatelessWidget {
   final List<String> groupIds;
@@ -22,10 +23,7 @@ class GroupChips extends StatelessWidget {
           ),
           child: Text(
             "Тест",
-            style: const TextStyle(
-              fontFamily: 'Arial',
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
+            style: AppTextStyles.arial12W400.copyWith(
               color: AppColors.grayFieldText,
             ),
           ),

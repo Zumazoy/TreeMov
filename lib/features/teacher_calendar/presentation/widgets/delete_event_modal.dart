@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class DeleteEventModal extends StatefulWidget {
   final VoidCallback? onDeletePressed;
@@ -48,13 +48,7 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                       Expanded(
                         child: Text(
                           option,
-                          style: const TextStyle(
-                            fontFamily: 'Arial',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            height: 1.2,
-                            color: Colors.black,
-                          ),
+                          style: AppTextStyles.arial14W400.black,
                           overflow: TextOverflow.visible,
                         ),
                       ),
@@ -118,14 +112,9 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
+                    child: Text(
                       'ОТМЕНА',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                      ),
+                      style: AppTextStyles.arial14W400.primary,
                     ),
                   ),
                 ),
@@ -157,13 +146,10 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
+                    child: Text(
                       'УДАЛИТЬ',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: AppColors.deleteRed,
                       ),
                     ),
                   ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
@@ -9,7 +11,6 @@ import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_st
 import 'package:treemov/shared/data/models/student_response_model.dart';
 import 'package:treemov/temp/main_screen.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import '../widgets/attendance_parts/lesson_info_card.dart';
 import '../widgets/attendance_parts/statistics_row.dart';
 import '../widgets/attendance_parts/student_card.dart';
@@ -258,15 +259,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           backgroundColor: AppColors.white,
           elevation: 0,
           titleSpacing: 0,
-          title: Text(
-            'Посещаемость',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-              fontFamily: 'TT Norms',
-              color: Colors.black,
-            ),
-          ),
+          title: Text('Посещаемость', style: AppTextStyles.ttNorms22W900.black),
           actions: [
             if (_students.isNotEmpty)
               Padding(
@@ -285,13 +278,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                       vertical: 0,
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     '+ отметить всех',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'TT Norms',
-                    ),
+                    style: AppTextStyles.ttNorms12W600.white,
                   ),
                 ),
               ),
@@ -322,10 +311,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
                 Text(
                   'Список обучающихся: ${_students.length}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Arial',
+                  style: AppTextStyles.arial16W700.copyWith(
                     color: AppColors.grayFieldText,
                   ),
                 ),
@@ -386,20 +372,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           children: [
             Text(
               'Ошибка загрузки студентов',
-              style: TextStyle(
-                fontSize: 16,
+              style: AppTextStyles.ttNorms16W400.copyWith(
                 color: AppColors.grayFieldText,
-                fontFamily: 'TT Norms',
               ),
             ),
             const SizedBox(height: 8),
             Text(
               message,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.red,
-                fontFamily: 'TT Norms',
-              ),
+              style: AppTextStyles.ttNorms12W400.copyWith(color: Colors.red),
               textAlign: TextAlign.center,
             ),
           ],
@@ -414,10 +394,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       child: Center(
         child: Text(
           'В группе нет студентов',
-          style: TextStyle(
-            fontSize: 16,
+          style: AppTextStyles.ttNorms16W400.copyWith(
             color: AppColors.grayFieldText,
-            fontFamily: 'TT Norms',
           ),
         ),
       ),
@@ -465,10 +443,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 canSaveAttendance
                     ? 'Сохранить посещаемость'
                     : 'Сохранить ($notMarkedCount не отмечено)',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'TT Norms',
+                style: AppTextStyles.ttNorms16W600.copyWith(
                   color: canSaveAttendance
                       ? AppColors.white
                       : AppColors.calendarButton,
@@ -485,12 +460,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       child: Center(
         child: Text(
           'Отметьте всех, чтобы сохранить',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            fontFamily: 'TT Norms',
-            color: Colors.black,
-          ),
+          style: AppTextStyles.ttNorms14W400.black,
         ),
       ),
     );

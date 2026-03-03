@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class AchievementChipWidget extends StatelessWidget {
   final String label;
@@ -25,15 +26,7 @@ class AchievementChipWidget extends StatelessWidget {
         children: [
           Image.asset(iconPath, width: 18, height: 18, color: Colors.white),
           const SizedBox(width: 6),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              fontFamily: 'TT Norms',
-              color: Colors.white,
-            ),
-          ),
+          Text(label, style: AppTextStyles.ttNorms12W400.white),
         ],
       ),
     );

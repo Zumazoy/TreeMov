@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 import '../../../../app/routes/app_routes.dart';
-import '../../../../core/themes/app_colors.dart';
 import '../../../../shared/presentation/widgets/app_primary_button.dart';
 import '../../../../shared/presentation/widgets/app_text_field.dart';
 import '../bloc/register_bloc.dart';
@@ -28,11 +29,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
-        titleTextStyle: const TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        titleTextStyle: AppTextStyles.ttNorms18W700.black,
       ),
       body: BlocConsumer<RegisterBloc, RegisterState>(
         listener: (context, state) {
@@ -61,10 +58,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   "Мы отправили код на вашу почту.\nВведите его ниже.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: AppTextStyles.ttNorms16W400.grey,
                 ),
                 const SizedBox(height: 24),
                 AppTextField(
@@ -93,7 +90,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                         onPressed: () {
                           context.read<RegisterBloc>().add(ResendCodeEvent());
                         },
-                        child: const Text("Отправить код повторно"),
+                        child: Text(
+                          "Отправить код повторно",
+                          style: AppTextStyles.ttNorms16W400.primary,
+                        ),
                       ),
                     ],
                   ),

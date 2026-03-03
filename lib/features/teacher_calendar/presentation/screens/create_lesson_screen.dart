@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
@@ -9,8 +11,6 @@ import 'package:treemov/shared/data/models/lesson_request_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
-
-import '../../../../core/themes/app_colors.dart';
 
 class CreateLessonScreen extends StatefulWidget {
   final SharedRepository sharedRepository;
@@ -352,11 +352,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
         ),
-        textStyle: const TextStyle(
-          fontFamily: 'Arial',
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          height: 1.0,
+        textStyle: AppTextStyles.arial14W400.copyWith(
           color: AppColors.grayFieldText,
         ),
         menuStyle: MenuStyle(
@@ -422,11 +418,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
         ),
-        textStyle: const TextStyle(
-          fontFamily: 'Arial',
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          height: 1.0,
+        textStyle: AppTextStyles.arial14W400.copyWith(
           color: AppColors.grayFieldText,
         ),
         menuStyle: MenuStyle(
@@ -581,7 +573,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                   ),
                   border: InputBorder.none,
                 ),
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Arial',
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -756,16 +748,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.teacherPrimary,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Новое событие',
-          style: TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.w900,
-            fontSize: 20,
-            height: 1.0,
-            color: AppColors.white,
-          ),
-        ),
+        title: Text('Новое событие', style: AppTextStyles.arial20W900.white),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),

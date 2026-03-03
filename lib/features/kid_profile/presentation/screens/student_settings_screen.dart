@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// Импорт для переключения организаций
 import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/themes/theme_cubit.dart';
 import 'package:treemov/core/widgets/auth/logout_dialog.dart';
 import 'package:treemov/features/kid_profile/presentation/widgets/student_profile_header_card.dart';
@@ -46,14 +46,7 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
     return Scaffold(
       backgroundColor: AppColors.kidPrimary,
       appBar: AppBar(
-        title: const Text(
-          'Настройки',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-          ),
-        ),
+        title: Text('Настройки', style: AppTextStyles.ttNorms20W900.white),
         backgroundColor: AppColors.kidPrimary,
         elevation: 0,
         leading: IconButton(
@@ -64,11 +57,9 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 24),
         children: [
-          // 1. Профиль (Header)
           StudentProfileHeaderCard(student: widget.studentProfile),
           const SizedBox(height: 16),
 
-          // 2. Секция профиля
           StudentSettingsProfileSection(
             onEditProfileTap: () => _navigate('Edit Profile'),
             onChangePhotoTap: () => _navigate('Change Photo'),
@@ -77,7 +68,6 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
             },
           ),
 
-          // 3. Секция уведомлений
           StudentSettingsNotificationsSection(
             notificationsEnabled: _notificationsEnabled,
             emailNotificationsEnabled: _emailNotificationsEnabled,
@@ -92,7 +82,6 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
                 setState(() => _parentNotifications = v),
           ),
 
-          // 4. Секция внешнего вида
           BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
               final themeCubit = context.read<ThemeCubit>();
@@ -108,7 +97,6 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
             },
           ),
 
-          // 5. Секция системы (расширенная)
           StudentSettingsSystemSection(
             soundEnabled: _soundEnabled,
             autoSaveEnabled: _autoSaveEnabled,
@@ -119,7 +107,6 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
                 setState(() => _offlineModeEnabled = v),
           ),
 
-          // 6. Секция безопасности (расширенная)
           StudentSettingsSecuritySection(
             onChangePasswordTap: () => _navigate('Change Password'),
             onTwoFactorTap: () => _navigate('Two Factor Auth'),
@@ -127,7 +114,6 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
             onPrivacyPolicyTap: () => _navigate('Privacy Policy'),
           ),
 
-          // 7. Секция поддержки
           StudentSettingsSupportSection(
             onHelpTap: () => _navigate('Help'),
             onFeedbackTap: () => _navigate('Feedback'),
@@ -136,7 +122,6 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
 
           const SizedBox(height: 24),
 
-          // 8. Кнопка выхода
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: OutlinedButton(
@@ -150,9 +135,9 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
                 foregroundColor: Colors.red,
                 backgroundColor: Colors.white,
               ),
-              child: const Text(
+              child: Text(
                 'Выйти из аккаунта',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: AppTextStyles.ttNorms16W600.dark,
               ),
             ),
           ),

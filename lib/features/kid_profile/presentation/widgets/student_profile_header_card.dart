@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/data/models/student_response_model.dart';
 
 class StudentProfileHeaderCard extends StatelessWidget {
@@ -42,9 +43,7 @@ class StudentProfileHeaderCard extends StatelessWidget {
               backgroundColor: AppColors.kidButton.withAlpha(51),
               child: Text(
                 _getInitials(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
+                style: AppTextStyles.ttNorms20W900.copyWith(
                   color: AppColors.kidButton,
                 ),
               ),
@@ -57,19 +56,14 @@ class StudentProfileHeaderCard extends StatelessWidget {
               children: [
                 Text(
                   _getFullName(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                  style: AppTextStyles.ttNorms16W700.copyWith(
                     color: AppColors.notesDarkText,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   student?.progress ?? 'Ученик',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.directoryTextSecondary,
-                  ),
+                  style: AppTextStyles.ttNorms12W400.grey,
                 ),
               ],
             ),
@@ -82,7 +76,7 @@ class StudentProfileHeaderCard extends StatelessWidget {
             ),
             child: Text(
               'Уровень ${_calculateLevel(student?.score ?? 0)}',
-              style: const TextStyle(fontSize: 11, color: Colors.white),
+              style: AppTextStyles.ttNorms11W400.white,
             ),
           ),
         ],

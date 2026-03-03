@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/temp/main_screen.dart';
-
-import '../../../../core/themes/app_colors.dart';
 
 class DailyScheduleCard extends StatelessWidget {
   final List<LessonResponseModel> todayLessons;
@@ -85,12 +85,8 @@ class DailyScheduleCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       'Мой день',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Arial',
+                      style: AppTextStyles.arial20W700.copyWith(
                         color: AppColors.notesDarkText,
-                        height: 1.0,
                       ),
                     ),
                   ],
@@ -162,12 +158,8 @@ class DailyScheduleCard extends StatelessWidget {
                 children: [
                   Text(
                     'Нажмите для просмотра расписания',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.bold,
+                    style: AppTextStyles.arial12W700.copyWith(
                       color: const Color(0xFF5853FF),
-                      height: 1.0,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -246,9 +238,7 @@ class DailyScheduleCard extends StatelessWidget {
 
         return RichText(
           text: TextSpan(
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'Arial',
+            style: AppTextStyles.arial14W400.copyWith(
               color: AppColors.notesDarkText,
             ),
             children: [
@@ -271,9 +261,7 @@ class DailyScheduleCard extends StatelessWidget {
 
         return RichText(
           text: TextSpan(
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'Arial',
+            style: AppTextStyles.arial14W400.copyWith(
               color: AppColors.notesDarkText,
             ),
             children: [
@@ -294,9 +282,7 @@ class DailyScheduleCard extends StatelessWidget {
 
         return RichText(
           text: TextSpan(
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'Arial',
+            style: AppTextStyles.arial14W400.copyWith(
               color: AppColors.notesDarkText,
             ),
             children: [
@@ -313,11 +299,7 @@ class DailyScheduleCard extends StatelessWidget {
 
     return Text(
       text,
-      style: TextStyle(
-        fontSize: 14,
-        fontFamily: 'Arial',
-        color: AppColors.notesDarkText,
-      ),
+      style: AppTextStyles.arial14W400.copyWith(color: AppColors.notesDarkText),
     );
   }
 }

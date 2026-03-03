@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/features/teacher_calendar/presentation/utils/calendar_utils.dart';
-
-import '../../../../../core/themes/app_colors.dart';
 
 class CalendarKidScreen extends StatelessWidget {
   const CalendarKidScreen({super.key});
@@ -116,13 +116,11 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                 Padding(
                   padding: const EdgeInsets.only(left: 36, right: 28),
                   child: lessons.isEmpty
-                      ? const Center(
+                      ? Center(
                           child: Text(
                             'На этот день нет занятий',
-                            style: TextStyle(
-                              fontSize: 16,
+                            style: AppTextStyles.ttNorms16W400.copyWith(
                               color: AppColors.kidButton,
-                              fontFamily: 'TT Norms',
                             ),
                           ),
                         )
@@ -185,20 +183,14 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
           children: [
             Text(
               startTime,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w900,
+              style: AppTextStyles.ttNorms14W900.copyWith(
                 color: AppColors.kidButton,
-                fontFamily: 'TT Norms',
               ),
             ),
             Text(
               endTime,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w900,
+              style: AppTextStyles.ttNorms14W900.copyWith(
                 color: AppColors.kidButton,
-                fontFamily: 'TT Norms',
               ),
             ),
           ],
@@ -219,20 +211,14 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                 '${lesson.subject?.title ?? 'Занятие'} ($teacherName)',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w900,
+                style: AppTextStyles.ttNorms14W900.copyWith(
                   color: AppColors.kidButton,
-                  fontFamily: 'TT Norms',
                 ),
               ),
               Text(
                 lesson.classroom?.title ?? 'Аудитория',
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                style: AppTextStyles.ttNorms14W500.copyWith(
                   color: AppColors.kidButton,
-                  fontFamily: 'TT Norms',
                 ),
               ),
             ],
@@ -242,7 +228,6 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
     );
   }
 
-  // Виджет для заголовка месяца (аналог CalendarHeader)
   Widget _buildMonthHeader() {
     return Container(
       width: 327,
@@ -267,12 +252,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
           ),
           Text(
             _getMonthYearText(_currentDate),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'TT Norms',
-            ),
+            style: AppTextStyles.ttNorms20W500.white,
           ),
           IconButton(
             onPressed: () => _changeMonth(1),
@@ -328,12 +308,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
               children: [
                 Text(
                   date.day.toString(),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    fontFamily: 'TT Norms',
-                    color: Colors.white,
-                  ),
+                  style: AppTextStyles.ttNorms20W500.white,
                 ),
                 if (hasEvent)
                   Positioned(
@@ -388,15 +363,7 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
         key: _scaffoldKey,
         backgroundColor: AppColors.kidPrimary,
         appBar: AppBar(
-          title: const Text(
-            'Календарь',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'TT Norms',
-            ),
-          ),
+          title: Text('Календарь', style: AppTextStyles.ttNorms24W700.white),
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
@@ -433,7 +400,6 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
               children: [
                 _buildMonthHeader(),
                 const SizedBox(height: 10),
-                // Дни недели
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -450,7 +416,6 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // Календарь
                 Expanded(
                   child: SingleChildScrollView(
                     child: SizedBox(
@@ -483,14 +448,6 @@ class _WeekDayText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        fontFamily: 'TT Norms',
-      ),
-    );
+    return Text(text, style: AppTextStyles.ttNorms16W700.white);
   }
 }

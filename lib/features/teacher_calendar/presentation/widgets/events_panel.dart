@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import 'event_details_modal.dart';
 import 'lesson_event_card.dart';
 
@@ -70,24 +71,16 @@ class EventsPanel extends StatelessWidget {
             child: Center(
               child: Text(
                 _formatDate(selectedDate),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'TT Norms',
-                ),
+                style: AppTextStyles.ttNorms16W600.black,
               ),
             ),
           ),
           Expanded(
             child: events.isEmpty
-                ? const Center(
+                ? Center(
                     child: Text(
                       'На эту дату событий нет',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.grey,
-                        fontFamily: 'TT Norms',
-                      ),
+                      style: AppTextStyles.ttNorms14W400.grey,
                     ),
                   )
                 : ListView.builder(

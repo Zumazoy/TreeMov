@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class ActivityItemWidget extends StatelessWidget {
   final String title;
@@ -54,30 +55,18 @@ class ActivityItemWidget extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                  style: AppTextStyles.ttNorms14W600.copyWith(
                     color: AppColors.notesDarkText,
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  '$date в $time',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.directoryTextSecondary,
-                  ),
-                ),
+                Text('$date в $time', style: AppTextStyles.ttNorms12W400.grey),
               ],
             ),
           ),
           Text(
             pointsText,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: pointsColor,
-            ),
+            style: AppTextStyles.ttNorms18W700.copyWith(color: pointsColor),
           ),
         ],
       ),

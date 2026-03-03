@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_card.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_nav_row.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_section_title.dart';
@@ -65,19 +66,15 @@ class SettingsProfileSection extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              title: const Text(
+              title: Text(
                 'Мои организации',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
+                style: AppTextStyles.ttNorms16W500.copyWith(
                   color: AppColors.notesDarkText,
                 ),
               ),
-              subtitle: const Text(
+              subtitle: Text(
                 'Управление организациями и приглашениями',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.directoryTextSecondary,
-                ),
+                style: AppTextStyles.ttNorms12W400.grey,
               ),
               trailing: const Icon(
                 Icons.arrow_forward_ios,

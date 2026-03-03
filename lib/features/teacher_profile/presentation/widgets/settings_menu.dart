@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class SettingsMenu extends StatelessWidget {
   final VoidCallback onEditData;
@@ -106,11 +106,8 @@ class SettingsMenu extends StatelessWidget {
                     if (icon != null) ...[icon, const SizedBox(width: 8)],
                     Text(
                       text,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Arial',
+                      style: AppTextStyles.arial14W400.copyWith(
                         color: isLogout ? Colors.red : AppColors.notesDarkText,
-                        fontWeight: FontWeight.normal,
                       ),
                     ),
                   ],
@@ -121,13 +118,10 @@ class SettingsMenu extends StatelessWidget {
                     Expanded(
                       child: Text(
                         text,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Arial',
+                        style: AppTextStyles.arial14W400.copyWith(
                           color: isLogout
                               ? Colors.red
                               : AppColors.notesDarkText,
-                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     ),

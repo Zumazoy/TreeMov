@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/storage/secure_storage_repository.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/auth/auth_header.dart';
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/presentation/bloc/login_bloc.dart';
-
-import '../../../../../core/themes/app_colors.dart';
 
 class EntranceKidScreen extends StatefulWidget {
   const EntranceKidScreen({super.key});
@@ -49,15 +49,7 @@ class _EntranceKidScreenState extends State<EntranceKidScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 60),
-                    const Text(
-                      'Вход',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.white,
-                        fontFamily: 'TT Norms',
-                      ),
-                    ),
+                    Text('Вход', style: AppTextStyles.ttNorms24W900.white),
                     const SizedBox(height: 40),
                     _buildTextField('Email', _emailController),
                     const SizedBox(height: 20),
@@ -78,14 +70,9 @@ class _EntranceKidScreenState extends State<EntranceKidScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, AppRoutes.registration);
                       },
-                      child: const Text(
+                      child: Text(
                         'Регистрация',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'TT Norms',
-                        ),
+                        style: AppTextStyles.ttNorms16W700.white,
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -116,13 +103,11 @@ class _EntranceKidScreenState extends State<EntranceKidScreen> {
             vertical: 12,
           ),
           hintText: hintText,
-          hintStyle: const TextStyle(
+          hintStyle: AppTextStyles.ttNorms16W400.copyWith(
             color: AppColors.grey,
-            fontSize: 16,
-            fontFamily: 'TT Norms',
-          ),
+          ), // 👈
         ),
-        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
+        style: AppTextStyles.ttNorms16W400,
       ),
     );
   }
@@ -148,10 +133,8 @@ class _EntranceKidScreenState extends State<EntranceKidScreen> {
             vertical: 12,
           ),
           hintText: hintText,
-          hintStyle: const TextStyle(
+          hintStyle: AppTextStyles.ttNorms16W400.copyWith(
             color: AppColors.grey,
-            fontSize: 16,
-            fontFamily: 'TT Norms',
           ),
           suffixIcon: IconButton(
             icon: Icon(
@@ -165,7 +148,7 @@ class _EntranceKidScreenState extends State<EntranceKidScreen> {
             },
           ),
         ),
-        style: const TextStyle(fontSize: 16, fontFamily: 'TT Norms'),
+        style: AppTextStyles.ttNorms16W400,
       ),
     );
   }
@@ -242,14 +225,7 @@ class _LoginButton extends StatelessWidget {
                         color: AppColors.white,
                       ),
                     )
-                  : const Text(
-                      'Войти',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'TT Norms',
-                      ),
-                    ),
+                  : Text('Войти', style: AppTextStyles.ttNorms18W700.white),
             ),
           );
         },

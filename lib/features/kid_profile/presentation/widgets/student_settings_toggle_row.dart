@@ -35,7 +35,7 @@ class StudentSettingsToggleRow extends StatelessWidget {
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeColor: AppColors.kidButton,
+        activeThumbColor: AppColors.kidButton,
         activeTrackColor: AppColors.kidButton.withAlpha(128),
         inactiveThumbColor: AppColors.grey,
         inactiveTrackColor: AppColors.lightGrey,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/accrual_points/presentation/bloc/accrual_bloc.dart';
 import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
@@ -7,7 +9,6 @@ import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 import 'package:treemov/temp/main_screen.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import '../../../directory/presentation/widgets/search_field.dart';
 import '../../domain/entities/point_category_entity.dart';
 import '../widgets/action_selection_dialog.dart';
@@ -142,12 +143,7 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
         appBar: AppBar(
           title: Text(
             widget.group.title ?? 'Группа',
-            style: const TextStyle(
-              fontFamily: 'Arial',
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: AppColors.notesDarkText,
-            ),
+            style: AppTextStyles.arial18W700.dark,
           ),
           backgroundColor: AppColors.white,
           elevation: 0,
@@ -182,21 +178,11 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
               color: AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
-            Text(
-              'Ученики не найдены',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.grayFieldText,
-              ),
-            ),
+            Text('Ученики не найдены', style: AppTextStyles.arial16W700.dark),
             const SizedBox(height: 8),
             Text(
               'Попробуйте изменить поисковый запрос',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.directoryTextSecondary,
-              ),
+              style: AppTextStyles.arial14W400.grey,
             ),
           ],
         ),
@@ -216,19 +202,12 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
             const SizedBox(height: 16),
             Text(
               'В группе нет учеников',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.grayFieldText,
-              ),
+              style: AppTextStyles.arial16W700.dark,
             ),
             const SizedBox(height: 8),
             Text(
               'Добавьте учеников в группу',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.directoryTextSecondary,
-              ),
+              style: AppTextStyles.arial14W400.grey,
             ),
           ],
         ),
@@ -265,12 +244,7 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
               children: [
                 Text(
                   '${student.name ?? ''} ${student.surname ?? ''}',
-                  style: const TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: AppColors.notesDarkText,
-                  ),
+                  style: AppTextStyles.arial16W700.dark,
                 ),
                 const SizedBox(height: 4),
                 Row(
@@ -284,13 +258,7 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
                     const SizedBox(width: 4),
                     Text(
                       '${student.score} баллов',
-                      style: const TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12,
-                        height: 1.0,
-                        color: AppColors.directoryTextSecondary,
-                      ),
+                      style: AppTextStyles.arial12W400.grey,
                     ),
                   ],
                 ),
@@ -308,13 +276,9 @@ class _StudentsPointsListScreenState extends State<StudentsPointsListScreen> {
             child: TextButton.icon(
               onPressed: () => _showActionSelectionDialog(student),
               icon: const Icon(Icons.add, color: AppColors.white, size: 16),
-              label: const Text(
+              label: Text(
                 'Начислить',
-                style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontSize: 12,
-                  color: AppColors.white,
-                ),
+                style: AppTextStyles.arial12W400.white, // 👈
               ),
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,

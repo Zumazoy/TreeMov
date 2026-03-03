@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
+import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/directory/presentation/screens/student_profile.dart';
 import 'package:treemov/features/directory/presentation/widgets/app_bar_title.dart';
 import 'package:treemov/features/directory/presentation/widgets/search_field.dart';
@@ -7,9 +10,6 @@ import 'package:treemov/shared/data/models/student_group_member_response_model.d
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 import 'package:treemov/temp/main_screen.dart';
-
-import '../../../../../core/themes/app_colors.dart';
-import '../../../../../core/widgets/layout/nav_bar.dart';
 
 class StudentDirectoryScreen extends StatefulWidget {
   final GroupStudentsResponseModel group;
@@ -135,21 +135,16 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
                           color: AppColors.directoryTextSecondary,
                         ),
                         const SizedBox(height: 16),
-                        const Text(
+                        Text(
                           'Студенты не найдены',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                          style: AppTextStyles.ttNorms16W700.copyWith(
                             color: AppColors.grayFieldText,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
+                        Text(
                           'Попробуйте изменить поисковый запрос',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.directoryTextSecondary,
-                          ),
+                          style: AppTextStyles.ttNorms14W400.grey,
                         ),
                       ],
                     ),

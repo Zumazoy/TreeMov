@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class LevelProgressWidget extends StatelessWidget {
   final int currentExp;
@@ -29,22 +30,14 @@ class LevelProgressWidget extends StatelessWidget {
             children: [
               Text(
                 'Прогресс до следующего уровня',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'TT Norms',
+                style: AppTextStyles.ttNorms10W400.copyWith(
                   color: AppColors.kidButton,
-                  height: 1.0,
                 ),
               ),
               Text(
                 '$currentExp/$nextLevelExp',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'TT Norms',
+                style: AppTextStyles.ttNorms14W900.copyWith(
                   color: AppColors.statsPinnedText,
-                  height: 1.0,
                 ),
               ),
             ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
 import 'package:treemov/features/directory/presentation/screens/student_directory.dart';
 import 'package:treemov/features/directory/presentation/widgets/app_bar_title.dart';
@@ -8,8 +10,6 @@ import 'package:treemov/features/directory/presentation/widgets/group_item.dart'
 import 'package:treemov/features/directory/presentation/widgets/search_field.dart';
 import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
-
-import '../../../../../core/themes/app_colors.dart';
 
 class DirectoryScreen extends StatelessWidget {
   const DirectoryScreen({super.key});
@@ -121,11 +121,9 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
               color: AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Ошибка загрузки',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              style: AppTextStyles.ttNorms16W700.copyWith(
                 color: AppColors.grayFieldText,
               ),
             ),
@@ -133,10 +131,7 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
             Text(
               state.message,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.directoryTextSecondary,
-              ),
+              style: AppTextStyles.ttNorms14W400.grey,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -160,21 +155,16 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
               color: AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Группы не найдены',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              style: AppTextStyles.ttNorms16W700.copyWith(
                 color: AppColors.grayFieldText,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Попробуйте изменить поисковый запрос',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.directoryTextSecondary,
-              ),
+              style: AppTextStyles.ttNorms14W400.grey,
             ),
           ],
         ),
@@ -193,21 +183,16 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
                 color: AppColors.directoryTextSecondary,
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Нет доступных групп',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                style: AppTextStyles.ttNorms16W700.copyWith(
                   color: AppColors.grayFieldText,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Группы появятся после их создания',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.directoryTextSecondary,
-                ),
+                style: AppTextStyles.ttNorms14W400.grey,
               ),
             ],
           ),

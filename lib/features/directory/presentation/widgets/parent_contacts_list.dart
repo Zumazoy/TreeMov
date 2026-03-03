@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/themes/app_colors.dart';
+import '../../../../../core/themes/app_text_styles.dart';
 
 class ParentContactsList extends StatelessWidget {
   static const List parentContacts = [''];
@@ -23,21 +24,11 @@ class ParentContactsList extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '${contact.relationship}: ',
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.2,
-                          color: AppColors.directoryTextSecondary,
-                        ),
+                        style: AppTextStyles.arial12W400.grey,
                       ),
                       TextSpan(
                         text: contact.fullName,
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.2,
+                        style: AppTextStyles.arial12W400.copyWith(
                           color: AppColors.grayFieldText,
                         ),
                       ),
@@ -49,21 +40,11 @@ class ParentContactsList extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: 'Номер: ',
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.2,
-                          color: AppColors.directoryTextSecondary,
-                        ),
+                        style: AppTextStyles.arial12W400.grey,
                       ),
                       TextSpan(
                         text: contact.phone,
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.2,
+                        style: AppTextStyles.arial12W400.copyWith(
                           color: AppColors.grayFieldText,
                         ),
                       ),

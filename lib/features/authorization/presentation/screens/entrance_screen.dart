@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/app/routes/app_routes.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/auth/auth_header.dart';
-
-import '../../../../../core/themes/app_colors.dart';
 
 class EntranceScreen extends StatelessWidget {
   const EntranceScreen({super.key});
@@ -25,15 +25,9 @@ class EntranceScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 60),
 
-                    const Text(
+                    Text(
                       'Вход',
-                      style: TextStyle(
-                        fontFamily: 'TT Norms',
-                        fontWeight: FontWeight.w900,
-                        fontSize: 24,
-                        height: 1.0,
-                        color: AppColors.white,
-                      ),
+                      style: AppTextStyles.ttNorms24W900.white,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
@@ -63,12 +57,9 @@ class EntranceScreen extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: const Text(
+                      child: Text(
                         'Зарегистрироваться',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 16,
-                          fontFamily: 'TT Norms',
+                        style: AppTextStyles.ttNorms16W700.white.copyWith(
                           decoration: TextDecoration.underline,
                           decorationColor: AppColors.white,
                           decorationThickness: 1.5,
@@ -108,14 +99,7 @@ class EntranceScreen extends StatelessWidget {
           elevation: 0,
           shadowColor: Colors.transparent,
         ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'TT Norms',
-          ),
-        ),
+        child: Text(text, style: AppTextStyles.ttNorms16W700.white),
       ),
     );
   }

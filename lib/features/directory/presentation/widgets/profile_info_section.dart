@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/directory/presentation/screens/student_directory.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
-
-import '../../../../../core/themes/app_colors.dart';
 
 class ProfileInfoSection extends StatelessWidget {
   final StudentEntity student;
@@ -79,23 +79,13 @@ class ProfileInfoSection extends StatelessWidget {
                 child: RichText(
                   text: TextSpan(
                     children: [
-                      const TextSpan(
+                      TextSpan(
                         text: 'День рождения: ',
-                        style: TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.0,
-                          color: AppColors.directoryTextSecondary,
-                        ),
+                        style: AppTextStyles.arial12W400.grey,
                       ),
                       TextSpan(
                         text: _formatDate(student.birthday),
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.0,
+                        style: AppTextStyles.arial12W400.copyWith(
                           color: AppColors.grayFieldText,
                         ),
                       ),
@@ -104,16 +94,7 @@ class ProfileInfoSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              Text(
-                '$age лет',
-                style: const TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12,
-                  height: 1.0,
-                  color: AppColors.directoryTextSecondary,
-                ),
-              ),
+              Text('$age лет', style: AppTextStyles.arial12W400.grey),
             ],
           ),
           const SizedBox(height: 12),
@@ -121,23 +102,13 @@ class ProfileInfoSection extends StatelessWidget {
           RichText(
             text: TextSpan(
               children: [
-                const TextSpan(
+                TextSpan(
                   text: 'Прогресс: ',
-                  style: TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                    height: 1.0,
-                    color: AppColors.directoryTextSecondary,
-                  ),
+                  style: AppTextStyles.arial12W400.grey,
                 ),
                 TextSpan(
                   text: student.progress ?? 'Не указан',
-                  style: const TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                    height: 1.0,
+                  style: AppTextStyles.arial12W400.copyWith(
                     color: AppColors.grayFieldText,
                   ),
                 ),
@@ -146,25 +117,12 @@ class ProfileInfoSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          const Text(
-            'Другие группы:',
-            style: TextStyle(
-              fontFamily: 'Arial',
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              height: 1.0,
-              color: AppColors.directoryTextSecondary,
-            ),
-          ),
+          Text('Другие группы:', style: AppTextStyles.arial12W400.grey),
           const SizedBox(height: 8),
           if (otherGroups.isEmpty)
-            const Text(
+            Text(
               'Нет других групп',
-              style: TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
-                height: 1.0,
+              style: AppTextStyles.arial12W400.copyWith(
                 color: AppColors.grayFieldText,
               ),
             )
@@ -187,10 +145,7 @@ class ProfileInfoSection extends StatelessWidget {
                     ),
                     child: Text(
                       group.title ?? 'Без названия',
-                      style: const TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
+                      style: AppTextStyles.arial12W400.copyWith(
                         color: AppColors.grayFieldText,
                       ),
                     ),
@@ -203,23 +158,13 @@ class ProfileInfoSection extends StatelessWidget {
           RichText(
             text: TextSpan(
               children: [
-                const TextSpan(
+                TextSpan(
                   text: 'Email: ',
-                  style: TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                    height: 1.0,
-                    color: AppColors.directoryTextSecondary,
-                  ),
+                  style: AppTextStyles.arial12W400.grey,
                 ),
                 TextSpan(
                   text: student.orgMember?.profile?.email ?? 'Не указан',
-                  style: const TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                    height: 1.0,
+                  style: AppTextStyles.arial12W400.copyWith(
                     color: AppColors.grayFieldText,
                   ),
                 ),
@@ -228,24 +173,11 @@ class ProfileInfoSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          const Text(
-            'Контакты родителей:',
-            style: TextStyle(
-              fontFamily: 'Arial',
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              height: 1.0,
-              color: AppColors.directoryTextSecondary,
-            ),
-          ),
+          Text('Контакты родителей:', style: AppTextStyles.arial12W400.grey),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Не указаны',
-            style: TextStyle(
-              fontFamily: 'Arial',
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              height: 1.0,
+            style: AppTextStyles.arial12W400.copyWith(
               color: AppColors.grayFieldText,
             ),
           ),

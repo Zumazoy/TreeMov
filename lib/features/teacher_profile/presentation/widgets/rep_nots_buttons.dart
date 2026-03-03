@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/reports/presentation/screens/reports_screen.dart';
-
-import '../../../../core/themes/app_colors.dart';
 
 class RepNotsButtons extends StatelessWidget {
   const RepNotsButtons({super.key});
@@ -36,16 +36,7 @@ class RepNotsButtons extends StatelessWidget {
                     height: 24,
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    'Отчеты',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.normal,
-                      color: AppColors.teacherPrimary,
-                      height: 1.0,
-                    ),
-                  ),
+                  Text('Отчеты', style: AppTextStyles.arial14W400.primary),
                 ],
               ),
             ),
@@ -77,16 +68,7 @@ class RepNotsButtons extends StatelessWidget {
                     height: 24,
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    'Заметки',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.normal,
-                      color: AppColors.teacherPrimary,
-                      height: 1.0,
-                    ),
-                  ),
+                  Text('Заметки', style: AppTextStyles.arial14W400.primary),
                 ],
               ),
             ),
