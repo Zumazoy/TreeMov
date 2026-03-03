@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/core/storage/secure_storage_repository_impl.dart';
 import 'package:treemov/core/widgets/layout/child_nav_bar.dart';
-import 'package:treemov/features/directory/presentation/screens/directory_screen.dart';
 import 'package:treemov/features/kid_calendar/presentation/screens/calendar_kid.dart';
 import 'package:treemov/features/kid_profile/presentation/screens/student_profile_screen.dart';
 import 'package:treemov/features/raiting/presentation/screens/rating_screen.dart';
+import 'package:treemov/temp/directory_placeholder.dart';
 
 class StudentScreen extends StatefulWidget {
   final int initialIndex;
@@ -35,7 +35,7 @@ class _StudentScreenState extends State<StudentScreen> {
         children: [
           const CalendarKidScreen(),
           RatingScreen(dioClient: _dioClient),
-          const DirectoryScreen(),
+          const DirectoryPlaceholder(),
           const StudentProfileScreen(),
         ],
       ),
