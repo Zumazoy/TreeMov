@@ -52,7 +52,7 @@ class ReportFilterQuickSection extends StatelessWidget {
                 const SizedBox(height: 8),
             ],
           );
-        }).toList(),
+        }),
       ],
     );
   }

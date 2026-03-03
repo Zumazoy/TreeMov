@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:treemov/app/di/di.config.dart';
+import 'package:treemov/app/routes/app_routes.dart';
 import 'package:treemov/core/constants/api_constants.dart';
+import 'package:treemov/core/navigation/navigation_service.dart';
 import 'package:treemov/core/storage/secure_storage_repository.dart';
 import 'package:treemov/shared/domain/services/token_refresh_service.dart';
 
@@ -66,13 +69,9 @@ class AuthInterceptor extends Interceptor {
       debugPrint('❌ Refresh failed, redirecting to login');
       await secureStorage.deleteAllTokens();
 
-      // Редирект на экран авторизации
-      // WidgetsBinding.instance.addPostFrameCallback((_) {
-      //   navigatorKey.currentState?.pushNamedAndRemoveUntil(
-      //     '/entrance',
-      //     (route) => false,
-      //   );
-      // });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        getIt<NavigationService>().navigateToReplacement(AppRoutes.entrance);
+      });
 
       handler.next(err);
     } catch (e) {

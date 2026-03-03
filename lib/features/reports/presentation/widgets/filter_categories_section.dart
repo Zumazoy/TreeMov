@@ -54,7 +54,7 @@ class ReportFilterCategoriesSection extends StatelessWidget {
                 const SizedBox(height: 8),
             ],
           );
-        }).toList(),
+        }),
       ],
     );
   }

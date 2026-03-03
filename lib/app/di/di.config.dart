@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:treemov/core/navigation/navigation_service.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/core/storage/secure_storage_factory.dart';
 import 'package:treemov/core/storage/secure_storage_repository.dart';
@@ -50,6 +51,10 @@ void setupDependencies() {
   );
 
   // Сервисы
+  getIt.registerLazySingleton<NavigationService>(() => NavigationService());
+  getIt.registerSingleton<SettingsService>(SettingsService());
+
+  // Источники данных
   getIt.registerSingleton<AuthRemoteDataSource>(
     AuthRemoteDataSource(getIt<DioClient>()),
   );
@@ -74,7 +79,6 @@ void setupDependencies() {
   getIt.registerSingleton<OrgsRemoteDataSource>(
     OrgsRemoteDataSource(getIt<DioClient>()),
   );
-  getIt.registerSingleton<SettingsService>(SettingsService());
 
   // Репозитории
   getIt.registerSingleton<AuthRepository>(

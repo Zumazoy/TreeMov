@@ -248,7 +248,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         ? () => _onDownloadReport(report)
                         : null,
                   );
-                }).toList(),
+                }),
 
                 _buildCreateReportSection(),
               ],
