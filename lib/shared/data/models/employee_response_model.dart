@@ -24,7 +24,9 @@ class EmployeeResponseModel extends BaseResponseModel {
       surname: json['surname'],
       patronymic: json['patronymic'],
       email: json['email'],
-      orgMember: OrgMemberResponseModel.fromJson(json['org_member']),
+      orgMember: json['org_member'] != null
+          ? OrgMemberResponseModel.fromJson(json['org_member'])
+          : null,
     );
   }
 }

@@ -8,23 +8,23 @@ class LessonItem extends StatelessWidget {
   const LessonItem({super.key, required this.lesson});
 
   String _formatTeacherName() {
-    if (lesson.teacher?.employee.name == null &&
-        lesson.teacher?.employee.surname == null) {
+    if (lesson.teacher?.employee?.name == null &&
+        lesson.teacher?.employee?.surname == null) {
       return 'Преподаватель';
     }
 
     final parts = [
-      lesson.teacher?.employee.surname,
-      lesson.teacher?.employee.name,
+      lesson.teacher?.employee!.surname,
+      lesson.teacher?.employee!.name,
     ].where((part) => part != null && part.isNotEmpty).toList();
 
     if (parts.isEmpty) return 'Преподаватель';
 
     String teacherName = parts.join(' ');
 
-    if (lesson.teacher?.employee.patronymic != null &&
-        lesson.teacher!.employee.patronymic!.isNotEmpty) {
-      teacherName += ' ${lesson.teacher!.employee.patronymic![0]}.';
+    if (lesson.teacher?.employee!.patronymic != null &&
+        lesson.teacher!.employee!.patronymic!.isNotEmpty) {
+      teacherName += ' ${lesson.teacher!.employee!.patronymic![0]}.';
     }
 
     return teacherName;
