@@ -6,6 +6,7 @@ class AccrualResponseModel extends BaseResponseModel {
   final int? amount;
   final String? comment;
   final String? category;
+  final String? createdAt;
   final TeacherResponseModel? teacher;
   final StudentResponseModel? student;
 
@@ -14,6 +15,7 @@ class AccrualResponseModel extends BaseResponseModel {
     required this.amount,
     required this.comment,
     required this.category,
+    required this.createdAt,
     required this.teacher,
     required this.student,
   });
@@ -24,6 +26,7 @@ class AccrualResponseModel extends BaseResponseModel {
       amount: json['amount'],
       comment: json['comment'],
       category: json['category'],
+      createdAt: json['created_at'],
       teacher: json['teacher'] != null
           ? TeacherResponseModel.fromJson(json['teacher'])
           : null,
