@@ -8,11 +8,11 @@ class KidCalendarRepositoryImpl implements KidCalendarRepository {
   KidCalendarRepositoryImpl(this._sharedRepository);
 
   @override
-  Future<List<LessonEntity>> getLessons(dateMin, String dateMax) async {
-    final lessons = await _sharedRepository.getLessons(
-      dateMin as DateTime,
-      dateMax as DateTime,
-    );
+  Future<List<LessonEntity>> getLessons(String dateMin, String dateMax) async {
+    final DateTime minDate = DateTime.parse(dateMin);
+    final DateTime maxDate = DateTime.parse(dateMax);
+
+    final lessons = await _sharedRepository.getLessons(minDate, maxDate);
 
     return lessons.map((model) {
       return LessonEntity(
