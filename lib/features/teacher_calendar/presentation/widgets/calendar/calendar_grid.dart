@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/themes/app_colors.dart';
 import '../../utils/calendar_utils.dart';
 
 class CalendarGrid extends StatelessWidget {
@@ -19,6 +18,7 @@ class CalendarGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
     final List<DateTime?> calendarDays = CalendarUtils.generateMonthDays(
       currentDate,
     );
@@ -52,11 +52,16 @@ class CalendarGrid extends StatelessWidget {
               margin: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 border: isToday
-                    ? Border.all(color: AppColors.teacherPrimary, width: 1)
+                    ? Border.all(
+                        color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                        width: 1,
+                      )
                     : null,
                 borderRadius: BorderRadius.circular(8),
                 color: isSelected
-                    ? AppColors.selectedDateBackground
+                    ? theme.colorScheme.primary.withAlpha(
+                        51,
+                      ) // 👈 ИСПРАВЛЕНО (было AppColors.selectedDateBackground)
                     : Colors.transparent,
               ),
               child: Stack(
@@ -69,7 +74,10 @@ class CalendarGrid extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Arial',
                         height: 1.0,
-                        color: AppColors.notesDarkText,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, // 👈 ИСПРАВЛЕНО (было AppColors.notesDarkText)
                       ),
                     ),
                   ),
@@ -83,7 +91,9 @@ class CalendarGrid extends StatelessWidget {
                           width: 6,
                           height: 6,
                           decoration: BoxDecoration(
-                            color: AppColors.calendarButton,
+                            color: theme
+                                .colorScheme
+                                .primary, // 👈 ИСПРАВЛЕНО (было AppColors.calendarButton)
                             shape: BoxShape.circle,
                           ),
                         ),

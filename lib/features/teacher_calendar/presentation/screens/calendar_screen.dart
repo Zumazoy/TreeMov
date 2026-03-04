@@ -7,7 +7,6 @@ import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_ev
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import '../utils/calendar_utils.dart';
 import '../widgets/calendar/add_event_button.dart';
 import '../widgets/calendar/calendar_app_bar.dart';
@@ -73,6 +72,8 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return BlocListener<SchedulesBloc, ScheduleState>(
       listener: (context, state) {
         if (state is LessonsLoaded) {
@@ -82,18 +83,17 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: theme
+            .scaffoldBackgroundColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
         appBar: const CalendarAppBar(),
         body: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
                 child: SizedBox(
-                  // 1. Растягиваем на всю ширину
                   width: double.infinity,
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center, // 2. Центрируем элементы
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CalendarHeader(
                         currentDate: _currentDate,

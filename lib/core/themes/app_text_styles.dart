@@ -30,7 +30,6 @@ class AppTextStyles {
   static TextStyle arial(double size, FontWeight weight) =>
       _base(size, weight, _arial);
 
-  // ========== МЕТОД ДЛЯ ДОБАВЛЕНИЯ ЦВЕТА ==========
   static TextStyle withColor(TextStyle style, Color color) =>
       style.copyWith(color: color);
 
@@ -89,12 +88,9 @@ class AppTextStyles {
 }
 
 // ========== EXTENSIONS ==========
-/// Удобные методы для работы со стилями текста
 extension TextStyleExtensions on TextStyle {
-  /// Применить любой цвет из палитры
   TextStyle withColor(Color color) => copyWith(color: color);
 
-  /// Предустановленные цвета для частого использования
   TextStyle get dark => copyWith(color: AppColors.notesDarkText);
   TextStyle get white => copyWith(color: AppColors.white);
   TextStyle get black => copyWith(color: AppColors.black);
@@ -104,7 +100,6 @@ extension TextStyleExtensions on TextStyle {
   TextStyle get error => copyWith(color: AppColors.activityRed);
   TextStyle get success => copyWith(color: AppColors.statsTotalText);
 
-  /// Для будущей темной темы (адаптируется под контекст)
   TextStyle themed(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return copyWith(
@@ -112,15 +107,20 @@ extension TextStyleExtensions on TextStyle {
     );
   }
 
-  /// Сделать текст жирным
   TextStyle get bold => copyWith(fontWeight: FontWeight.w700);
 
-  /// Сделать текст полужирным
   TextStyle get semiBold => copyWith(fontWeight: FontWeight.w600);
 
-  /// Сделать текст обычным
   TextStyle get regular => copyWith(fontWeight: FontWeight.w400);
 
-  /// Сделать текст светлым
   TextStyle get light => copyWith(fontWeight: FontWeight.w300);
 }
+
+// ========== ШПАРГАЛКА ПО FONTWEIGHT ==========
+// w900 (Black)   - Главные заголовки экранов
+// w700 (Bold)    - Подзаголовки, имена, важные числа
+// w600 (SemiBold)- Кнопки, пункты меню
+// w500 (Medium)  - Обычный текст, описания
+// w400 (Regular) - Второстепенный текст, поля ввода
+// w300 (Light)   - Даты, мелкие подписи
+// =============================================

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/themes/app_colors.dart';
-
 class CalendarWeekDays extends StatelessWidget {
   const CalendarWeekDays({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
     const List<String> weekDays = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
 
     return SizedBox(
@@ -24,7 +23,9 @@ class CalendarWeekDays extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Arial',
-                  color: AppColors.violet800WithOpacity,
+                  color: theme.textTheme.bodyMedium?.color?.withAlpha(
+                    128,
+                  ), // 👈 ИСПРАВЛЕНО
                   height: 1.0,
                 ),
               ),

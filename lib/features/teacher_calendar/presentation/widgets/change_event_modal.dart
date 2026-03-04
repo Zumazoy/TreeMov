@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 
 class ChangeEventModal extends StatefulWidget {
@@ -20,13 +19,15 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       width: 367,
       constraints: const BoxConstraints(minHeight: 120),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Column(
@@ -49,7 +50,9 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         option,
-                        style: AppTextStyles.arial14W400.black,
+                        style: AppTextStyles.arial14W400.themed(
+                          context,
+                        ), // 👈 ИСПРАВЛЕНО
                       ),
                     ),
                   ),
@@ -61,7 +64,8 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: AppColors.grayFieldText,
+                        color: theme
+                            .dividerColor, // 👈 ИСПРАВЛЕНО (было AppColors.grayFieldText)
                         width: 1,
                       ),
                     ),

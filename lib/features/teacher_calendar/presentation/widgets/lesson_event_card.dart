@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 
 import '../../domain/entities/lesson_entity.dart';
@@ -12,6 +11,8 @@ class LessonEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     final timeParts = event
         .formatTime(event.startTime, event.endTime)
         .split('\n');
@@ -23,7 +24,9 @@ class LessonEventCard extends StatelessWidget {
       height: 70,
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: AppColors.eventTap,
+        color: theme.cardColor.withAlpha(
+          26,
+        ), // 👈 ИСПРАВЛЕНО (было AppColors.eventTap)
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -33,9 +36,19 @@ class LessonEventCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(startTime, style: AppTextStyles.ttNorms14W600.black),
+                Text(
+                  startTime,
+                  style: AppTextStyles.ttNorms14W600.themed(
+                    context,
+                  ), // 👈 ИСПРАВЛЕНО
+                ),
                 const SizedBox(height: 4),
-                Text(endTime, style: AppTextStyles.ttNorms12W400.black),
+                Text(
+                  endTime,
+                  style: AppTextStyles.ttNorms12W400.themed(
+                    context,
+                  ), // 👈 ИСПРАВЛЕНО
+                ),
               ],
             ),
           ),
@@ -44,7 +57,8 @@ class LessonEventCard extends StatelessWidget {
             height: 40,
             margin: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF2F213E),
+              color:
+                  theme.dividerColor, // 👈 ИСПРАВЛЕНО (было Color(0xFF2F213E))
               borderRadius: BorderRadius.circular(4.5),
             ),
           ),
@@ -61,7 +75,9 @@ class LessonEventCard extends StatelessWidget {
                       event.subject?.title,
                       event.group?.title,
                     ),
-                    style: AppTextStyles.ttNorms14W500.black,
+                    style: AppTextStyles.ttNorms14W500.themed(
+                      context,
+                    ), // 👈 ИСПРАВЛЕНО
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -70,7 +86,9 @@ class LessonEventCard extends StatelessWidget {
                     event.classroom != null
                         ? event.formatTitle(event.classroom?.title)
                         : '(Не указана)',
-                    style: AppTextStyles.ttNorms12W400.grey,
+                    style: AppTextStyles.ttNorms12W400.copyWith(
+                      color: theme.textTheme.bodySmall?.color, // 👈 ИСПРАВЛЕНО
+                    ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -88,6 +106,8 @@ class LessonEventCard extends StatelessWidget {
                 'assets/images/purple_arrow.png',
                 width: 24,
                 height: 24,
+                color:
+                    theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО (цвет стрелки)
                 fit: BoxFit.contain,
               ),
               onPressed: onTap,

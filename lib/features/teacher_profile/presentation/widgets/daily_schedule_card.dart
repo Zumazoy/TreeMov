@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 import 'package:treemov/temp/main_screen.dart';
@@ -13,8 +12,6 @@ class DailyScheduleCard extends StatelessWidget {
 
   LessonResponseModel? get nextLesson {
     final now = DateTime.now();
-
-    // Фильтруем уроки, которые еще не начались или идут сейчас
     final upcomingLessons = todayLessons.where((lesson) {
       if (lesson.startTime == null) return false;
 
@@ -47,7 +44,6 @@ class DailyScheduleCard extends StatelessWidget {
 
     if (upcomingLessons.isEmpty) return null;
 
-    // Находим ближайший урок
     upcomingLessons.sort((a, b) {
       if (a.startTime == null || b.startTime == null) return 0;
       return a.startTime!.compareTo(b.startTime!);
@@ -58,6 +54,7 @@ class DailyScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final hasLessonsToday = todayLessons.isNotEmpty;
     final nextLesson = this.nextLesson;
 
@@ -65,7 +62,7 @@ class DailyScheduleCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: AppColors.eventTap,
+        color: theme.cardColor,
       ),
       child: Column(
         children: [
@@ -81,13 +78,12 @@ class DailyScheduleCard extends StatelessWidget {
                       'assets/images/grad_calendar.png',
                       width: 20,
                       height: 20,
+                      color: theme.iconTheme.color,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       'Мой день',
-                      style: AppTextStyles.arial20W700.copyWith(
-                        color: AppColors.notesDarkText,
-                      ),
+                      style: AppTextStyles.arial20W700.themed(context),
                     ),
                   ],
                 ),
@@ -95,52 +91,46 @@ class DailyScheduleCard extends StatelessWidget {
 
                 if (hasLessonsToday)
                   _buildScheduleItem(
+                    context,
                     'assets/images/book_icon.png',
                     '$totalLessons ${_getLessonWord(totalLessons)} сегодня',
-                    AppColors.statsTotalText,
+                    theme.colorScheme.primary,
                     isNumberColored: true,
                   ),
 
                 if (!hasLessonsToday)
                   _buildScheduleItem(
+                    context,
                     'assets/images/book_icon.png',
                     'Сегодня нет занятий',
-                    AppColors.statsTotalText,
+                    theme.colorScheme.primary,
                   ),
 
                 if (hasLessonsToday) const SizedBox(height: 12),
 
                 if (nextLesson != null && hasLessonsToday)
                   _buildScheduleItem(
+                    context,
                     'assets/images/clock_icon.png',
                     'Следующий: ${nextLesson.group?.title ?? "Группа не указана"} ${_formatTimeRange(nextLesson)}',
-                    AppColors.statsPinnedText,
+                    theme.colorScheme.secondary,
                     isTimeColored: true,
                   ),
 
                 if (nextLesson == null && hasLessonsToday)
                   _buildScheduleItem(
+                    context,
                     'assets/images/clock_icon.png',
                     'Занятия на сегодня закончились',
-                    AppColors.statsPinnedText,
+                    theme.colorScheme.secondary,
                   ),
-
-                // const SizedBox(height: 12),
-
-                // Заглушка для напоминания
-                // _buildScheduleItem(
-                //   'assets/images/bell_icon.png',
-                //   'Напоминание: Родительское собрание 17:00',
-                //   AppColors.categoryGeneralText,
-                //   isReminderColored: true,
-                // ),
               ],
             ),
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             height: 1,
-            color: AppColors.teacherPrimary,
+            color: theme.dividerColor,
           ),
           InkWell(
             onTap: () {
@@ -159,7 +149,7 @@ class DailyScheduleCard extends StatelessWidget {
                   Text(
                     'Нажмите для просмотра расписания',
                     style: AppTextStyles.arial12W700.copyWith(
-                      color: const Color(0xFF5853FF),
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -167,6 +157,7 @@ class DailyScheduleCard extends StatelessWidget {
                     'assets/images/purple_arrow.png',
                     width: 16,
                     height: 16,
+                    color: theme.colorScheme.primary,
                   ),
                 ],
               ),
@@ -198,6 +189,7 @@ class DailyScheduleCard extends StatelessWidget {
   }
 
   Widget _buildScheduleItem(
+    BuildContext context,
     String iconPath,
     String text,
     Color color, {
@@ -205,12 +197,20 @@ class DailyScheduleCard extends StatelessWidget {
     bool isTimeColored = false,
     bool isReminderColored = false,
   }) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
-        Image.asset(iconPath, width: 16, height: 16, color: color),
+        Image.asset(
+          iconPath,
+          width: 16,
+          height: 16,
+          color: theme.iconTheme.color,
+        ),
         const SizedBox(width: 8),
         Expanded(
           child: _buildColoredText(
+            context,
             text,
             color,
             isNumberColored: isNumberColored,
@@ -223,12 +223,16 @@ class DailyScheduleCard extends StatelessWidget {
   }
 
   Widget _buildColoredText(
+    BuildContext context,
     String text,
     Color color, {
     bool isNumberColored = false,
     bool isTimeColored = false,
     bool isReminderColored = false,
   }) {
+    final theme = Theme.of(context);
+    final baseStyle = AppTextStyles.arial14W400.themed(context);
+
     if (isNumberColored) {
       final numberMatch = RegExp(r'\d+').firstMatch(text);
       if (numberMatch != null) {
@@ -238,14 +242,12 @@ class DailyScheduleCard extends StatelessWidget {
 
         return RichText(
           text: TextSpan(
-            style: AppTextStyles.arial14W400.copyWith(
-              color: AppColors.notesDarkText,
-            ),
+            style: baseStyle,
             children: [
               TextSpan(text: before),
               TextSpan(
                 text: number,
-                style: TextStyle(color: color),
+                style: TextStyle(color: color, fontWeight: FontWeight.bold),
               ),
               TextSpan(text: after),
             ],
@@ -261,14 +263,12 @@ class DailyScheduleCard extends StatelessWidget {
 
         return RichText(
           text: TextSpan(
-            style: AppTextStyles.arial14W400.copyWith(
-              color: AppColors.notesDarkText,
-            ),
+            style: baseStyle,
             children: [
               TextSpan(text: before),
               TextSpan(
                 text: time,
-                style: TextStyle(color: color),
+                style: TextStyle(color: color, fontWeight: FontWeight.w600),
               ),
               TextSpan(text: after),
             ],
@@ -282,14 +282,12 @@ class DailyScheduleCard extends StatelessWidget {
 
         return RichText(
           text: TextSpan(
-            style: AppTextStyles.arial14W400.copyWith(
-              color: AppColors.notesDarkText,
-            ),
+            style: baseStyle,
             children: [
               const TextSpan(text: 'Напоминание: '),
               TextSpan(
                 text: reminderText,
-                style: TextStyle(color: color),
+                style: TextStyle(color: color, fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -297,9 +295,6 @@ class DailyScheduleCard extends StatelessWidget {
       }
     }
 
-    return Text(
-      text,
-      style: AppTextStyles.arial14W400.copyWith(color: AppColors.notesDarkText),
-    );
+    return Text(text, style: baseStyle);
   }
 }

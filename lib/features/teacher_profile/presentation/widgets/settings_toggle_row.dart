@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 
 class SettingsToggleRow extends StatelessWidget {
@@ -18,21 +17,28 @@ class SettingsToggleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return ListTile(
       title: Text(
         title,
-        style: AppTextStyles.ttNorms16W500.copyWith(
-          color: AppColors.notesDarkText,
+        style: AppTextStyles.ttNorms16W500.themed(context), // 👈 ИСПРАВЛЕНО
+      ),
+      subtitle: Text(
+        subtitle,
+        style: AppTextStyles.ttNorms12W400.copyWith(
+          color: theme.textTheme.bodySmall?.color, // 👈 ИСПРАВЛЕНО
         ),
       ),
-      subtitle: Text(subtitle, style: AppTextStyles.ttNorms12W400.grey),
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeThumbColor: AppColors.teacherPrimary,
-        activeTrackColor: AppColors.teacherPrimary.withAlpha(128),
-        inactiveThumbColor: AppColors.grey,
-        inactiveTrackColor: AppColors.lightGrey,
+        activeColor: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+        activeTrackColor: theme.colorScheme.primary.withAlpha(
+          128,
+        ), // 👈 ИСПРАВЛЕНО
+        inactiveThumbColor: theme.unselectedWidgetColor, // 👈 ИСПРАВЛЕНО
+        inactiveTrackColor: theme.disabledColor, // 👈 ИСПРАВЛЕНО
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       onTap: () => onChanged(!value),
