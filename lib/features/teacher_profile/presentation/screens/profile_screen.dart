@@ -16,9 +16,14 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<TeacherProfileBloc>()
-        ..add(LoadTeacherProfile())
-        ..add(LoadLessons()),
+      create: (context) {
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+
+        return getIt<TeacherProfileBloc>()
+          ..add(LoadTeacherProfile())
+          ..add(LoadLessons(today, today));
+      },
       child: const _ProfileScreenContent(),
     );
   }
@@ -172,14 +177,18 @@ class _ProfileScreenContent extends StatelessWidget {
 
     // Ошибка загрузки уроков
     if (state.lessonsError != null) {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Ошибка загрузки расписания: ${state.lessonsError}'),
             ElevatedButton(
-              onPressed: () =>
-                  context.read<TeacherProfileBloc>().add(LoadLessons()),
+              onPressed: () => context.read<TeacherProfileBloc>().add(
+                LoadLessons(today, today),
+              ),
               child: const Text('Попробовать снова'),
             ),
           ],

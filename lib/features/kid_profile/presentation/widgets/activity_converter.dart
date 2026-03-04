@@ -1,15 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:treemov/features/kid_profile/domain/student_profile_models.dart';
 import 'package:treemov/shared/data/models/accrual_response_model.dart';
 
 class ActivityConverter {
   static ActivityItemData fromAccrual(AccrualResponseModel accrual) {
-    print('🔄 Конвертация начисления ID: ${accrual.id}');
+    debugPrint('🔄 Конвертация начисления ID: ${accrual.id}');
 
     String iconPath;
     String title;
 
     String category = accrual.category ?? 'Активность';
-    print('   Категория: $category, комментарий: ${accrual.comment}');
+    debugPrint('   Категория: $category, комментарий: ${accrual.comment}');
     switch (category.toLowerCase()) {
       case 'attendance':
       case 'presence':
@@ -42,7 +43,7 @@ class ActivityConverter {
         title = accrual.comment ?? 'Активность';
     }
 
-    print('   → Результат: $title, ${accrual.amount} баллов');
+    debugPrint('   → Результат: $title, ${accrual.amount} баллов');
 
     return ActivityItemData(
       title: title,

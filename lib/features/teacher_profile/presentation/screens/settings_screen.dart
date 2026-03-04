@@ -32,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _autoSaveEnabled = true;
 
   void _navigate(String destination) {
-    print('Navigate to: $destination');
+    debugPrint('Navigate to: $destination');
   }
 
   @override

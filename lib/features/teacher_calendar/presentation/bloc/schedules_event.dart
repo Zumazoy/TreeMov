@@ -11,19 +11,13 @@ abstract class ScheduleEvent extends Equatable {
 }
 
 class LoadLessonsEvent extends ScheduleEvent {
-  const LoadLessonsEvent();
+  final DateTime dateMin;
+  final DateTime dateMax;
+
+  const LoadLessonsEvent(this.dateMin, this.dateMax);
 
   @override
   List<Object?> get props => [];
-}
-
-class LoadLessonByIdEvent extends ScheduleEvent {
-  final int lessonId;
-
-  const LoadLessonByIdEvent(this.lessonId);
-
-  @override
-  List<Object?> get props => [lessonId];
 }
 
 class LoadStudentsInGroupByIdEvent extends ScheduleEvent {
@@ -54,10 +48,10 @@ class CreatePeriodLessonEvent extends ScheduleEvent {
 }
 
 class CreateMassAttendanceEvent extends ScheduleEvent {
-  final List<AttendanceRequestModel> requests;
+  final List<AttendanceRequestModel> request;
 
-  const CreateMassAttendanceEvent(this.requests);
+  const CreateMassAttendanceEvent(this.request);
 
   @override
-  List<Object?> get props => [requests];
+  List<Object?> get props => [request];
 }

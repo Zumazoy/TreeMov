@@ -38,7 +38,10 @@ class TeacherProfileBloc
   ) async {
     emit(state.copyWith(isLoadingLessons: true, lessonsError: null));
     try {
-      final lessons = await _sharedRepository.getLessons();
+      final lessons = await _sharedRepository.getLessons(
+        event.dateMin,
+        event.dateMax,
+      );
       final todayLessons = _filterTodayLessons(lessons);
       emit(state.copyWith(lessons: todayLessons, isLoadingLessons: false));
     } catch (e) {

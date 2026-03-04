@@ -48,9 +48,15 @@ class SharedRemoteDataSource {
     }
   }
 
-  Future<List<LessonResponseModel>> getLessons() async {
+  Future<List<LessonResponseModel>> getLessons(
+    DateTime dateMin,
+    DateTime dateMax,
+  ) async {
     try {
-      final Response response = await _dioClient.get(ApiConstants.lessons);
+      final Response response = await _dioClient.get(
+        ApiConstants.lessons,
+        queryParameters: {'date_min': dateMin, 'date_max': dateMax},
+      );
 
       if (response.statusCode == 200) {
         final responseData = response.data;

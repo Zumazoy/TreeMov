@@ -35,7 +35,7 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
   bool _offlineModeEnabled = false;
 
   void _navigate(String destination) {
-    print('Navigate to: $destination');
+    debugPrint('Navigate to: $destination');
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text('Переход к: $destination')));

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/features/accrual_points/data/models/accrual_request_model.dart';
@@ -81,13 +82,14 @@ class AccrualRemoteDataSource {
           dataList = response.data;
         } else if (response.data is Map) {
           final map = response.data as Map;
-          if (map['results'] != null)
+          if (map['results'] != null) {
             dataList = map['results'];
-          else if (map['data'] != null)
+          } else if (map['data'] != null) {
             dataList = map['data'];
+          }
         }
 
-        print(
+        debugPrint(
           '📦 Получено начислений для ученика $studentId: ${dataList.length}',
         );
 
@@ -98,7 +100,7 @@ class AccrualRemoteDataSource {
         throw Exception('Ошибка загрузки начислений: ${response.statusCode}');
       }
     } catch (e) {
-      print('❌ Ошибка: $e');
+      debugPrint('❌ Ошибка: $e');
       throw Exception('Ошибка загрузки начислений: $e');
     }
   }

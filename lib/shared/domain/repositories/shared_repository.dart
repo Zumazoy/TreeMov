@@ -9,7 +9,10 @@ import 'package:treemov/shared/data/models/subject_response_model.dart';
 
 abstract class SharedRepository {
   Future<OrgMemberResponseModel> getMyOrgMember();
-  Future<List<LessonResponseModel>> getLessons();
+  Future<List<LessonResponseModel>> getLessons(
+    DateTime dateMin,
+    DateTime dateMax,
+  );
   Future<int?> getTeacherId();
   Future<List<SubjectResponseModel>> getSubjects();
   Future<List<GroupStudentsResponseModel>> getGroupStudents();

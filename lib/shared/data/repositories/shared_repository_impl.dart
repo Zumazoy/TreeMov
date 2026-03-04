@@ -20,8 +20,11 @@ class SharedRepositoryImpl implements SharedRepository {
   }
 
   @override
-  Future<List<LessonResponseModel>> getLessons() async {
-    return await _remoteDataSource.getLessons();
+  Future<List<LessonResponseModel>> getLessons(
+    DateTime dateMin,
+    DateTime dateMax,
+  ) async {
+    return await _remoteDataSource.getLessons(dateMin, dateMax);
   }
 
   @override

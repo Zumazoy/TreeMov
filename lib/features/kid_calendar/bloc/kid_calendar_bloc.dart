@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
-import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 
 part 'kid_calendar_event.dart';
@@ -15,7 +14,7 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
   late final StreamSubscription _schedulesSubscription;
 
   KidCalendarBloc({required this.schedulesBloc}) : super(KidCalendarInitial()) {
-    on<LoadKidLessonsEvent>(_onLoadLessons);
+    // on<LoadKidLessonsEvent>(_onLoadLessons);
     on<LessonsLoadedEvent>(_onLessonsLoaded);
     on<ChangeMonthEvent>(_onChangeMonth);
     on<SelectDayEvent>(_onSelectDay);
@@ -30,13 +29,13 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
     add(const LoadKidLessonsEvent());
   }
 
-  void _onLoadLessons(
-    LoadKidLessonsEvent event,
-    Emitter<KidCalendarState> emit,
-  ) {
-    emit(KidCalendarLoading());
-    schedulesBloc.add(const LoadLessonsEvent());
-  }
+  // void _onLoadLessons(
+  //   LoadKidLessonsEvent event,
+  //   Emitter<KidCalendarState> emit,
+  // ) {
+  //   emit(KidCalendarLoading());
+  //   schedulesBloc.add(const LoadLessonsEvent());
+  // }
 
   void _onLessonsLoaded(
     LessonsLoadedEvent event,

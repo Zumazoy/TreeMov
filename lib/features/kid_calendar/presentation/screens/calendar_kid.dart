@@ -15,8 +15,13 @@ class CalendarKidScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          getIt<SchedulesBloc>()..add(const LoadLessonsEvent()),
+      create: (context) {
+        final now = DateTime.now();
+        final dateMin = DateTime(now.year, now.month - 1, 1);
+        final dateMax = DateTime(now.year, now.month + 2, 0);
+
+        return getIt<SchedulesBloc>()..add(LoadLessonsEvent(dateMin, dateMax));
+      },
       child: const _CalendarKidScreenContent(),
     );
   }
