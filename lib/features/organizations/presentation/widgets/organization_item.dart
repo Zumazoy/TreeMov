@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class OrganizationItem extends StatelessWidget {
   final String organizationName;
@@ -62,9 +63,7 @@ class OrganizationItem extends StatelessWidget {
                       organizationName.isNotEmpty
                           ? organizationName[0].toUpperCase()
                           : '?',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
+                      style: AppTextStyles.ttNorms20W700.copyWith(
                         color: avatarColor,
                       ),
                     ),
@@ -80,9 +79,7 @@ class OrganizationItem extends StatelessWidget {
                     children: [
                       Text(
                         organizationName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                        style: AppTextStyles.ttNorms16W600.copyWith(
                           color: AppColors.grayFieldText,
                         ),
                         maxLines: 1,
@@ -100,9 +97,7 @@ class OrganizationItem extends StatelessWidget {
                         ),
                         child: Text(
                           userRole,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
+                          style: AppTextStyles.ttNorms11W600.copyWith(
                             color: roleColor,
                           ),
                         ),

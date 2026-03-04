@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/themes/app_colors.dart';
+import '../../../../../core/themes/app_text_styles.dart';
 
 class AppBarTitle extends StatelessWidget {
   final String text;
@@ -11,11 +12,8 @@ class AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-        fontFamily: 'Arial',
+      style: AppTextStyles.arial20W700.copyWith(
         fontWeight: FontWeight.w900,
-        fontSize: 20,
-        height: 1.0,
         color: AppColors.grayFieldText,
       ),
     );

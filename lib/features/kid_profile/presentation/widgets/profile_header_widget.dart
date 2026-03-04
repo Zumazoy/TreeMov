@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class ProfileHeaderWidget extends StatelessWidget {
   final String name;
@@ -33,9 +34,7 @@ class ProfileHeaderWidget extends StatelessWidget {
             child: avatarUrl == null
                 ? Text(
                     _getInitials(name),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
+                    style: AppTextStyles.ttNorms20W900.copyWith(
                       color: AppColors.teacherPrimary,
                     ),
                   )
@@ -49,12 +48,8 @@ class ProfileHeaderWidget extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w900,
-                    fontFamily: 'TT Norms',
+                  style: AppTextStyles.ttNorms14W900.copyWith(
                     color: AppColors.kidButton,
-                    height: 1.0,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -69,12 +64,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                   ),
                   child: Text(
                     'Уровень $level · $levelTitle',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.white,
-                      height: 1.0,
-                    ),
+                    style: AppTextStyles.ttNorms11W400.white,
                   ),
                 ),
               ],
@@ -94,22 +84,16 @@ class ProfileHeaderWidget extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     currentPoints.toString(),
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
+                    style: AppTextStyles.ttNorms24W900.copyWith(
                       color: AppColors.statsPinnedText,
-                      height: 1.0,
                     ),
                   ),
                 ],
               ),
               Text(
                 'текущий балл',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w400,
+                style: AppTextStyles.ttNorms11W400.copyWith(
                   color: AppColors.kidButton,
-                  height: 1.0,
                 ),
               ),
             ],

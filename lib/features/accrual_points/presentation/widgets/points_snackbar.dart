@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import '../../domain/entities/point_category_entity.dart';
 
 class PointsSnackBar {
@@ -16,11 +17,7 @@ class PointsSnackBar {
       SnackBar(
         content: Text(
           '${isPositive ? 'Начислено' : 'Списано'} ${action.points.abs()} баллов',
-          style: const TextStyle(
-            fontFamily: 'Arial',
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          style: AppTextStyles.arial14W500.white,
         ),
         backgroundColor: isPositive
             ? AppColors.teacherPrimary

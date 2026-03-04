@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class AcceptInviteDialog extends StatelessWidget {
   final String organizationName;
@@ -23,7 +24,9 @@ class AcceptInviteDialog extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             organizationName,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            style: AppTextStyles.ttNorms16W600.copyWith(
+              color: AppColors.notesDarkText,
+            ),
           ),
         ],
       ),

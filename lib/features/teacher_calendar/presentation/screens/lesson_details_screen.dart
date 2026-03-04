@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/update_lesson_screen.dart';
 import 'package:treemov/temp/main_screen.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import '../widgets/change_event_modal.dart';
 import '../widgets/delete_event_modal.dart';
 
@@ -84,16 +85,7 @@ class LessonDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.teacherPrimary,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Событие',
-          style: TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.w900,
-            fontSize: 20,
-            height: 1.0,
-            color: AppColors.white,
-          ),
-        ),
+        title: Text('Событие', style: AppTextStyles.arial20W900.white),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -128,13 +120,7 @@ class LessonDetailsScreen extends StatelessWidget {
                               event.group != null
                                   ? 'Группа "${event.formatTitle(event.group?.title)}"'
                                   : '(Не указан)',
-                              style: const TextStyle(
-                                fontFamily: 'Arial',
-                                fontWeight: FontWeight.w900,
-                                fontSize: 16,
-                                height: 1.2,
-                                color: Colors.black,
-                              ),
+                              style: AppTextStyles.arial16W900.black,
                             ),
                           ),
 
@@ -189,12 +175,9 @@ class LessonDetailsScreen extends StatelessWidget {
                               event.comment,
                               message: 'Описание занятия отсутствует',
                             ),
-                            style: const TextStyle(
-                              fontFamily: 'Arial',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              height: 1.4,
+                            style: AppTextStyles.arial14W400.copyWith(
                               color: AppColors.grayFieldText,
+                              height: 1.4,
                             ),
                           ),
                         ],
@@ -252,11 +235,7 @@ class LessonDetailsScreen extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                height: 1.2,
+              style: AppTextStyles.arial14W400.copyWith(
                 color: AppColors.grayFieldText,
               ),
             ),
@@ -387,13 +366,7 @@ class LessonDetailsScreen extends StatelessWidget {
             const SizedBox(height: 5),
             Text(
               text,
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
-                height: 1.0,
-                color: Colors.black,
-              ),
+              style: AppTextStyles.arial12W400.black,
               textAlign: TextAlign.center,
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/themes/app_colors.dart';
+import '../../../../core/themes/app_text_styles.dart';
 import '../../domain/entities/point_category_entity.dart';
 
 class CategoryButtons extends StatelessWidget {
@@ -91,13 +92,7 @@ class CategoryButtons extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Arial',
-                color: textColor,
-                height: 1.0,
-              ),
+              style: AppTextStyles.arial12W700.copyWith(color: textColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

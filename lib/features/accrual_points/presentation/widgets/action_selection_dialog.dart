@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/accrual_points/data/models/accrual_request_model.dart';
 import 'package:treemov/features/accrual_points/presentation/bloc/accrual_bloc.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import '../../data/mocks/mock_points_data.dart';
 import '../../domain/entities/point_category_entity.dart';
 import 'category_buttons.dart';
@@ -189,16 +190,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
                 const SizedBox(height: 16),
               ],
 
-              const Text(
-                'Категория:',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.directoryTextSecondary,
-                  height: 1.0,
-                ),
-              ),
+              Text('Категория:', style: AppTextStyles.arial16W400.grey),
               const SizedBox(height: 8),
 
               CategoryButtons(
@@ -209,16 +201,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
               const SizedBox(height: 16),
 
               if (_selectedCategory != null && !_showCustomAction) ...[
-                const Text(
-                  'Действие:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.directoryTextSecondary,
-                    height: 1.0,
-                  ),
-                ),
+                Text('Действие:', style: AppTextStyles.arial16W400.grey),
                 const SizedBox(height: 8),
 
                 _buildActionsList(),
@@ -291,21 +274,10 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        title: Text(
-          action.title,
-          style: const TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.w700,
-            fontSize: 14,
-            color: AppColors.notesDarkText,
-          ),
-        ),
+        title: Text(action.title, style: AppTextStyles.arial14W700.dark),
         subtitle: Text(
           action.description,
-          style: const TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
+          style: AppTextStyles.arial12W400.copyWith(
             color: AppColors.grayFieldText,
           ),
         ),
@@ -317,13 +289,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
           ),
           child: Text(
             '${isPositive ? '+' : ''}${action.points}',
-            style: TextStyle(
-              fontFamily: 'Arial',
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
-              color: chipTextColor,
-              height: 1.0,
-            ),
+            style: AppTextStyles.arial14W700.copyWith(color: chipTextColor),
           ),
         ),
         onTap: () => _onActionSelected(action),
@@ -351,21 +317,10 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
           ),
           child: const Icon(Icons.add, color: AppColors.teacherPrimary),
         ),
-        title: const Text(
-          'Создать действие',
-          style: TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.w700,
-            fontSize: 14,
-            color: AppColors.notesDarkText,
-          ),
-        ),
-        subtitle: const Text(
+        title: Text('Создать действие', style: AppTextStyles.arial14W700.dark),
+        subtitle: Text(
           'Настроить свое действие',
-          style: TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
+          style: AppTextStyles.arial12W400.copyWith(
             color: AppColors.grayFieldText,
           ),
         ),
@@ -408,13 +363,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: const Text(
-              'Отмена',
-              style: TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+            child: Text('Отмена', style: AppTextStyles.arial14W400.dark),
           ),
         ),
         const SizedBox(width: 8),
@@ -429,13 +378,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: Text(
-              buttonText,
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            child: Text(buttonText, style: AppTextStyles.arial14W700.white),
           ),
         ),
       ],

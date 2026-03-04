@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 import '../../domain/student_profile_models.dart';
 
@@ -71,13 +72,7 @@ class AllAchievementsScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     'Мои достижения',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'TT Norms',
-                      color: AppColors.white,
-                      height: 1.0,
-                    ),
+                    style: AppTextStyles.ttNorms24W900.white,
                   ),
                 ],
               ),
@@ -147,26 +142,14 @@ class AllAchievementsScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                       achievement.label,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w900,
-                                        fontFamily: 'TT Norms',
-                                        color: AppColors.white,
-                                        height: 1.0,
-                                      ),
+                                      style: AppTextStyles.ttNorms12W900.white,
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       achievementDescriptions[achievement
                                               .label] ??
                                           '',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'TT Norms',
-                                        color: AppColors.white,
-                                        height: 1.0,
-                                      ),
+                                      style: AppTextStyles.ttNorms10W500.white,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -190,24 +173,14 @@ class AllAchievementsScreen extends StatelessWidget {
                                       children: [
                                         Text(
                                           'Прогресс',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'TT Norms',
-                                            color: AppColors.white,
-                                            height: 1.0,
-                                          ),
+                                          style:
+                                              AppTextStyles.ttNorms10W400.white,
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
                                           '$current/$total',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w700,
-                                            fontFamily: 'TT Norms',
-                                            color: AppColors.white,
-                                            height: 1.0,
-                                          ),
+                                          style:
+                                              AppTextStyles.ttNorms10W700.white,
                                         ),
                                       ],
                                     ),
@@ -252,13 +225,7 @@ class AllAchievementsScreen extends StatelessWidget {
                                 const SizedBox(),
                                 Text(
                                   achievementDates[achievement.label] ?? '—',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w300,
-                                    fontFamily: 'TT Norms',
-                                    color: AppColors.white,
-                                    height: 1.0,
-                                  ),
+                                  style: AppTextStyles.ttNorms10W300.white,
                                 ),
                               ],
                             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import '../../domain/entities/lesson_entity.dart';
 
 class LessonEventCard extends StatelessWidget {
@@ -32,25 +33,9 @@ class LessonEventCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  startTime,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'TT Norms',
-                    color: Colors.black,
-                  ),
-                ),
+                Text(startTime, style: AppTextStyles.ttNorms14W600.black),
                 const SizedBox(height: 4),
-                Text(
-                  endTime,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'TT Norms',
-                    color: Colors.black,
-                  ),
-                ),
+                Text(endTime, style: AppTextStyles.ttNorms12W400.black),
               ],
             ),
           ),
@@ -76,12 +61,7 @@ class LessonEventCard extends StatelessWidget {
                       event.subject?.title,
                       event.group?.title,
                     ),
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'TT Norms',
-                      color: Colors.black,
-                    ),
+                    style: AppTextStyles.ttNorms14W500.black,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -90,11 +70,7 @@ class LessonEventCard extends StatelessWidget {
                     event.classroom != null
                         ? event.formatTitle(event.classroom?.title)
                         : '(Не указана)',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.grey,
-                      fontFamily: 'TT Norms',
-                    ),
+                    style: AppTextStyles.ttNorms12W400.grey,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),

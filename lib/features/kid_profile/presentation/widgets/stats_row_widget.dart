@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class StatsRowWidget extends StatelessWidget {
   final int totalEarnings;
@@ -77,23 +78,13 @@ class StatsRowWidget extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'TT Norms',
-              color: valueColor,
-              height: 1.0,
-            ),
+            style: AppTextStyles.ttNorms16W700.copyWith(color: valueColor),
           ),
           const SizedBox(height: 2),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w300,
-              fontFamily: 'TT Norms',
+            style: AppTextStyles.ttNorms11W300.copyWith(
               color: AppColors.kidButton,
-              height: 1.0,
             ),
             textAlign: TextAlign.center,
             maxLines: 1,

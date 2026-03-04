@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/kid_profile/presentation/bloc/student_profile_bloc.dart';
 import 'package:treemov/features/kid_profile/presentation/screens/student_settings_screen.dart';
 import 'package:treemov/features/kid_profile/presentation/widgets/activity_converter.dart';
@@ -142,14 +143,7 @@ class _StudentProfileContent extends StatelessWidget {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ).createShader(bounds),
-        child: const Text(
-          'TreeMov',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
+        child: Text('TreeMov', style: AppTextStyles.ttNorms20W700.white),
       ),
       actions: [
         IconButton(

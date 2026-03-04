@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class SettingsSectionTitle extends StatelessWidget {
   final String title;
@@ -21,9 +22,7 @@ class SettingsSectionTitle extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+            style: AppTextStyles.ttNorms18W700.copyWith(
               color: AppColors.notesDarkText,
             ),
           ),

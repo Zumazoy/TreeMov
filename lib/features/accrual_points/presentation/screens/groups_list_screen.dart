@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/accrual_points/presentation/bloc/accrual_bloc.dart';
 import 'package:treemov/shared/data/models/student_group_member_response_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 
-import '../../../../core/themes/app_colors.dart';
 import 'students_points_list_screen.dart';
 
 class GroupsListScreen extends StatelessWidget {
@@ -85,16 +86,7 @@ class _GroupsListScreenState extends State<_GroupsListScreenContent> {
                   },
                 ),
                 const SizedBox(width: 8),
-                const Text(
-                  'Журнал',
-                  style: TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: AppColors.notesDarkText,
-                    height: 1.0,
-                  ),
-                ),
+                Text('Журнал', style: AppTextStyles.arial20W700.dark),
               ],
             ),
             backgroundColor: AppColors.white,
@@ -106,13 +98,9 @@ class _GroupsListScreenState extends State<_GroupsListScreenContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Выберите группу для начисления баллов:',
-                  style: TextStyle(
-                    fontFamily: 'Arial',
-                    fontSize: 16,
-                    color: AppColors.notesDarkText,
-                  ),
+                  style: AppTextStyles.arial16W400.dark,
                 ),
                 const SizedBox(height: 16),
                 Expanded(child: _buildContent(state)),
@@ -140,22 +128,12 @@ class _GroupsListScreenState extends State<_GroupsListScreenContent> {
               color: AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
-            Text(
-              'Ошибка загрузки',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.grayFieldText,
-              ),
-            ),
+            Text('Ошибка загрузки', style: AppTextStyles.arial16W700.dark),
             const SizedBox(height: 8),
             Text(
               state.message,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.directoryTextSecondary,
-              ),
+              style: AppTextStyles.arial14W400.grey,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -183,21 +161,11 @@ class _GroupsListScreenState extends State<_GroupsListScreenContent> {
               color: AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
-            Text(
-              'Нет доступных групп',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.grayFieldText,
-              ),
-            ),
+            Text('Нет доступных групп', style: AppTextStyles.arial16W700.dark),
             const SizedBox(height: 8),
             Text(
               'Группы появятся после их создания',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.directoryTextSecondary,
-              ),
+              style: AppTextStyles.arial14W400.grey,
             ),
           ],
         ),
@@ -239,12 +207,7 @@ class _GroupsListScreenState extends State<_GroupsListScreenContent> {
                 children: [
                   Text(
                     group.title ?? 'Без названия',
-                    style: const TextStyle(
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: AppColors.notesDarkText,
-                    ),
+                    style: AppTextStyles.arial16W700.dark,
                   ),
                   const SizedBox(height: 4),
                   Row(
@@ -265,11 +228,7 @@ class _GroupsListScreenState extends State<_GroupsListScreenContent> {
                       const SizedBox(width: 4),
                       Text(
                         '$studentCount учеников',
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontSize: 14,
-                          color: AppColors.directoryTextSecondary,
-                        ),
+                        style: AppTextStyles.arial14W400.grey,
                       ),
                     ],
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 import '../../domain/student_profile_models.dart';
 import 'activity_item_widget.dart';
@@ -116,12 +117,8 @@ class ActivitySectionWidget extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'Последняя активность',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'TT Norms',
+                style: AppTextStyles.ttNorms18W700.copyWith(
                   color: AppColors.notesDarkText,
-                  height: 1.0,
                 ),
               ),
             ],

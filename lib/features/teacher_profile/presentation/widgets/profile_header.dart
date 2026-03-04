@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
-
-import '../../../../core/themes/app_colors.dart';
 
 class ProfileHeader extends StatelessWidget {
   final OrgMemberResponseModel orgMember;
@@ -56,10 +56,7 @@ class ProfileHeader extends StatelessWidget {
               children: [
                 Text(
                   _getFullName(),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Arial',
+                  style: AppTextStyles.arial18W700.copyWith(
                     color: AppColors.notesDarkText,
                   ),
                 ),
@@ -68,11 +65,7 @@ class ProfileHeader extends StatelessWidget {
                   ' ',
                   // teacherProfile.teacher?.employee.email ??
                   //     'Заглушка должности',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.directoryTextSecondary,
-                    fontFamily: 'Arial',
-                  ),
+                  style: AppTextStyles.arial14W400.grey,
                 ),
               ],
             ),

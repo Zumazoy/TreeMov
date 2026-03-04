@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class LessonInfoCard extends StatelessWidget {
   final Map<String, dynamic> lesson;
@@ -26,15 +26,7 @@ class LessonInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Группа
-          Text(
-            lesson['group'],
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'TT Norms',
-              color: Colors.black,
-            ),
-          ),
+          Text(lesson['group'], style: AppTextStyles.ttNorms18W700.black),
           const SizedBox(height: 16),
 
           // Данные о занятии
@@ -92,10 +84,7 @@ class LessonInfoCard extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           text,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'TT Norms',
+          style: AppTextStyles.ttNorms14W500.copyWith(
             color: AppColors.grayFieldText,
           ),
         ),

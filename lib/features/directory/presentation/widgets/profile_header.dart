@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
-
-import '../../../../../core/themes/app_colors.dart';
 
 class ProfileHeader extends StatelessWidget {
   final StudentEntity student;
@@ -30,11 +30,7 @@ class ProfileHeader extends StatelessWidget {
               children: [
                 Text(
                   '${student.name} ${student.surname}',
-                  style: const TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w900,
-                    fontSize: 18,
-                    height: 1.0,
+                  style: AppTextStyles.arial18W900.copyWith(
                     color: AppColors.grayFieldText,
                   ),
                 ),
@@ -44,21 +40,11 @@ class ProfileHeader extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: 'Группа: ',
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.0,
-                          color: AppColors.directoryTextSecondary,
-                        ),
+                        style: AppTextStyles.arial12W400.grey,
                       ),
                       TextSpan(
                         text: groupName,
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.0,
+                        style: AppTextStyles.arial12W400.copyWith(
                           color: AppColors.grayFieldText,
                         ),
                       ),
@@ -71,21 +57,11 @@ class ProfileHeader extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: 'Почта: ',
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.0,
-                          color: AppColors.directoryTextSecondary,
-                        ),
+                        style: AppTextStyles.arial12W400.grey,
                       ),
                       TextSpan(
                         //text: student.email ?? 'Не указана',
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.0,
+                        style: AppTextStyles.arial12W400.copyWith(
                           color: AppColors.grayFieldText,
                         ),
                       ),
@@ -98,21 +74,11 @@ class ProfileHeader extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: 'Дата присоединения к группе: ',
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.0,
-                          color: AppColors.directoryTextSecondary,
-                        ),
+                        style: AppTextStyles.arial12W400.grey,
                       ),
                       TextSpan(
                         text: 'Не указана', // Заглушка
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          height: 1.0,
+                        style: AppTextStyles.arial12W400.copyWith(
                           color: AppColors.grayFieldText,
                         ),
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/themes/theme_cubit.dart';
 import 'package:treemov/core/widgets/auth/logout_dialog.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/profile_header_card.dart';
@@ -39,11 +40,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: AppColors.notesBackground,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Настройки',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w900,
+          style: AppTextStyles.ttNorms20W900.copyWith(
             color: AppColors.notesDarkText,
           ),
         ),
@@ -118,9 +117,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 foregroundColor: Colors.red,
               ),
-              child: const Text(
+              child: Text(
                 'Выйти из аккаунта',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: AppTextStyles.ttNorms16W600.copyWith(color: Colors.red),
               ),
             ),
           ),

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/kid_profile/presentation/widgets/student_settings_card.dart';
 import 'package:treemov/features/kid_profile/presentation/widgets/student_settings_toggle_row.dart';
 
 class StudentSettingsAppearanceSection extends StatelessWidget {
   final bool darkModeEnabled;
   final bool showProgress;
-  final bool showPhotosInLists; // Новый параметр
+  final bool showPhotosInLists;
   final ValueChanged<bool> onDarkModeChanged;
   final ValueChanged<bool> onShowProgressChanged;
-  final ValueChanged<bool> onShowPhotosChanged; // Новый параметр
+  final ValueChanged<bool> onShowPhotosChanged;
 
   const StudentSettingsAppearanceSection({
     super.key,
@@ -26,20 +27,17 @@ class StudentSettingsAppearanceSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 16, top: 12, bottom: 4),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, top: 12, bottom: 4),
           child: Row(
             children: [
-              Icon(Icons.brightness_6_outlined, size: 24, color: Colors.white),
-              SizedBox(width: 8),
-              Text(
-                'Внешний вид',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              const Icon(
+                Icons.brightness_6_outlined,
+                size: 24,
+                color: Colors.white,
               ),
+              const SizedBox(width: 8),
+              Text('Внешний вид', style: AppTextStyles.ttNorms18W700.white),
             ],
           ),
         ),

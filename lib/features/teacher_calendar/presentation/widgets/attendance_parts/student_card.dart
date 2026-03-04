@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class StudentCard extends StatelessWidget {
   final Map<String, dynamic> student;
@@ -110,12 +110,7 @@ class StudentCard extends StatelessWidget {
                 children: [
                   Text(
                     student['name'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'TT Norms',
-                      color: AppColors.black,
-                    ),
+                    style: AppTextStyles.ttNorms14W600.black,
                   ),
                   const SizedBox(height: 2),
 
@@ -138,10 +133,7 @@ class StudentCard extends StatelessWidget {
                     ),
                     child: Text(
                       _getAttendanceText(attendanceStatus),
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'TT Norms',
+                      style: AppTextStyles.ttNorms10W500.copyWith(
                         color: _getAttendanceColor(attendanceStatus),
                       ),
                     ),

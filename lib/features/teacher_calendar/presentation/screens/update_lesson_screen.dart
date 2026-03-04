@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/temp/main_screen.dart';
-
-import '../../../../core/themes/app_colors.dart';
 
 class UpdateLessonScreen extends StatefulWidget {
   final LessonEntity event;
@@ -229,11 +229,7 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
         ),
-        textStyle: const TextStyle(
-          fontFamily: 'Arial',
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          height: 1.0,
+        textStyle: AppTextStyles.arial14W400.copyWith(
           color: AppColors.grayFieldText,
         ),
         menuStyle: MenuStyle(
@@ -388,7 +384,7 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
                   ),
                   border: InputBorder.none,
                 ),
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Arial',
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -420,16 +416,7 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.teacherPrimary,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Изменить событие',
-          style: TextStyle(
-            fontFamily: 'Arial',
-            fontWeight: FontWeight.w900,
-            fontSize: 20,
-            height: 1.0,
-            color: AppColors.white,
-          ),
-        ),
+        title: Text('Изменить событие', style: AppTextStyles.arial20W900.white),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),

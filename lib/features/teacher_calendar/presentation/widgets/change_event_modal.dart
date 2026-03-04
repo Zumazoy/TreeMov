@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class ChangeEventModal extends StatefulWidget {
   final Function(String)? onOptionSelected;
@@ -49,13 +49,7 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         option,
-                        style: const TextStyle(
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          height: 1.2,
-                          color: Colors.black,
-                        ),
+                        style: AppTextStyles.arial14W400.black,
                       ),
                     ),
                   ),

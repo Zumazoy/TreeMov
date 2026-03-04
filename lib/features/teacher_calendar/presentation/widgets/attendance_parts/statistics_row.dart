@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class StatisticsRow extends StatelessWidget {
   final double availableWidth;
@@ -89,12 +89,7 @@ class StatisticsRow extends StatelessWidget {
         children: [
           Text(
             count.toString(),
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'TT Norms',
-              color: countColor,
-            ),
+            style: AppTextStyles.ttNorms20W700.copyWith(color: countColor),
           ),
           const SizedBox(height: 2),
           Padding(
@@ -102,12 +97,7 @@ class StatisticsRow extends StatelessWidget {
             child: Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Arial',
-                color: countColor,
-              ),
+              style: AppTextStyles.arial11W400.copyWith(color: countColor),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

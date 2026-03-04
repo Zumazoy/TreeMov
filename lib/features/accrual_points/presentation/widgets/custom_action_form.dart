@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/themes/app_colors.dart';
+import '../../../../core/themes/app_text_styles.dart';
 
 class CustomActionForm extends StatefulWidget {
   final Function(String, String, int) onSave;
@@ -50,14 +52,9 @@ class _CustomActionFormState extends State<CustomActionForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Создать свое действие',
-              style: TextStyle(
-                fontFamily: 'Arial',
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-                color: AppColors.notesDarkText,
-              ),
+              style: AppTextStyles.arial14W700.dark,
             ),
             const SizedBox(height: 16),
 
@@ -81,16 +78,11 @@ class _CustomActionFormState extends State<CustomActionForm> {
                   horizontal: 12,
                   vertical: 12,
                 ),
-                labelStyle: const TextStyle(
-                  fontFamily: 'Arial',
+                labelStyle: AppTextStyles.arial14W400.copyWith(
                   color: AppColors.grayFieldText,
                 ),
               ),
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontSize: 14,
-                color: AppColors.notesDarkText,
-              ),
+              style: AppTextStyles.arial14W400.dark,
             ),
             const SizedBox(height: 12),
 
@@ -114,16 +106,11 @@ class _CustomActionFormState extends State<CustomActionForm> {
                   horizontal: 12,
                   vertical: 12,
                 ),
-                labelStyle: const TextStyle(
-                  fontFamily: 'Arial',
+                labelStyle: AppTextStyles.arial14W400.copyWith(
                   color: AppColors.grayFieldText,
                 ),
               ),
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontSize: 14,
-                color: AppColors.notesDarkText,
-              ),
+              style: AppTextStyles.arial14W400.dark,
               maxLines: 2,
             ),
             const SizedBox(height: 12),
@@ -150,26 +137,19 @@ class _CustomActionFormState extends State<CustomActionForm> {
                   horizontal: 12,
                   vertical: 12,
                 ),
-                labelStyle: const TextStyle(
-                  fontFamily: 'Arial',
+                labelStyle: AppTextStyles.arial14W400.copyWith(
                   color: AppColors.grayFieldText,
                 ),
               ),
-              style: const TextStyle(
-                fontFamily: 'Arial',
-                fontSize: 14,
-                color: AppColors.notesDarkText,
-              ),
+              style: AppTextStyles.arial14W400.dark,
             ),
             const SizedBox(height: 8),
 
-            const Padding(
-              padding: EdgeInsets.only(left: 4),
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
               child: Text(
                 'Введите число баллов',
-                style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontSize: 11,
+                style: AppTextStyles.arial11W400.copyWith(
                   color: AppColors.grayFieldText,
                 ),
               ),
@@ -190,13 +170,9 @@ class _CustomActionFormState extends State<CustomActionForm> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Отмена',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                      ),
+                      style: AppTextStyles.arial14W400.dark,
                     ),
                   ),
                 ),
@@ -212,13 +188,9 @@ class _CustomActionFormState extends State<CustomActionForm> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Сохранить',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                      ),
+                      style: AppTextStyles.arial14W400.white,
                     ),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class StudentSettingsNavRow extends StatelessWidget {
   final String title;
@@ -18,18 +19,11 @@ class StudentSettingsNavRow extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
+        style: AppTextStyles.ttNorms16W500.copyWith(
           color: AppColors.notesDarkText,
         ),
       ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(
-          fontSize: 12,
-          color: AppColors.directoryTextSecondary,
-        ),
-      ),
+      subtitle: Text(subtitle, style: AppTextStyles.ttNorms12W400.grey),
       trailing: const Icon(
         Icons.arrow_forward_ios,
         size: 16,

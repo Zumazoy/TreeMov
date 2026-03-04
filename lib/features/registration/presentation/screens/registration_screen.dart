@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 import '../../../../app/routes/app_routes.dart';
-import '../../../../core/themes/app_colors.dart';
 import '../../../../core/widgets/auth/auth_header.dart';
 import '../../../../shared/presentation/widgets/app_primary_button.dart';
 import '../../../../shared/presentation/widgets/app_text_field.dart';
@@ -83,14 +84,9 @@ class _RegistrationScreenContentState
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 80),
-                      const Text(
+                      Text(
                         'Регистрация',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.white,
-                          fontFamily: 'TT Norms',
-                        ),
+                        style: AppTextStyles.ttNorms24W900.white,
                       ),
                       const SizedBox(height: 30),
 
@@ -143,16 +139,11 @@ class _RegistrationScreenContentState
 
                       const SizedBox(height: 20),
 
-                      // Кнопка "Войти"
                       Column(
                         children: [
-                          const Text(
+                          Text(
                             'Есть аккаунт?',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 16,
-                              fontFamily: 'TT Norms',
-                            ),
+                            style: AppTextStyles.ttNorms16W400.white,
                           ),
                           TextButton(
                             onPressed: () {
@@ -161,12 +152,9 @@ class _RegistrationScreenContentState
                                 AppRoutes.entranceKid,
                               );
                             },
-                            child: const Text(
+                            child: Text(
                               'Войти',
-                              style: TextStyle(
-                                color: AppColors.white,
-                                fontSize: 16,
-                                fontFamily: 'TT Norms',
+                              style: AppTextStyles.ttNorms16W400.white.copyWith(
                                 decoration: TextDecoration.underline,
                                 decorationColor: AppColors.white,
                               ),

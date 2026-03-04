@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/attendance_screen.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/lesson_details_screen.dart';
-
-import '../../../../core/themes/app_colors.dart';
 
 class EventDetailsModal extends StatelessWidget {
   final LessonEntity event;
@@ -65,12 +65,7 @@ class EventDetailsModal extends StatelessWidget {
                 event.group != null
                     ? 'Группа "${event.formatTitle(event.group?.title)}"'
                     : '(Не указан)',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'TT Norms',
-                  color: Colors.black,
-                ),
+                style: AppTextStyles.ttNorms16W600.black,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -143,14 +138,9 @@ class EventDetailsModal extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.5),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'К событию',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'TT Norms',
-                        color: Colors.black,
-                      ),
+                      style: AppTextStyles.ttNorms14W500.black,
                     ),
                   ),
                 ),
@@ -177,14 +167,9 @@ class EventDetailsModal extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.5),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Посещаемость',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'TT Norms',
-                        color: AppColors.white,
-                      ),
+                      style: AppTextStyles.ttNorms14W500.white,
                     ),
                   ),
                 ),
@@ -215,12 +200,7 @@ class EventDetailsModal extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'TT Norms',
-                color: Colors.black,
-              ),
+              style: AppTextStyles.ttNorms13W400.black,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

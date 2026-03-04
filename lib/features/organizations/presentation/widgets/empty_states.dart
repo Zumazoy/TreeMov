@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
+import 'package:treemov/core/themes/app_text_styles.dart';
 
 class EmptySearchView extends StatelessWidget {
   const EmptySearchView({super.key});
@@ -16,21 +17,16 @@ class EmptySearchView extends StatelessWidget {
             color: AppColors.directoryTextSecondary,
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'Ничего не найдено',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+            style: AppTextStyles.ttNorms16W700.copyWith(
               color: AppColors.grayFieldText,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Попробуйте изменить поисковый запрос',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.directoryTextSecondary,
-            ),
+            style: AppTextStyles.ttNorms14W400.grey,
           ),
         ],
       ),
@@ -53,21 +49,16 @@ class EmptyOrganizationsView extends StatelessWidget {
             color: AppColors.directoryTextSecondary,
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'Нет организаций',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+            style: AppTextStyles.ttNorms16W700.copyWith(
               color: AppColors.grayFieldText,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Создайте первую организацию и примите приглашение',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.directoryTextSecondary,
-            ),
+            style: AppTextStyles.ttNorms14W400.grey,
             textAlign: TextAlign.center,
           ),
         ],
