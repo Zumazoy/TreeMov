@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
+import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/student_response_model.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
@@ -41,6 +42,39 @@ class RatingRepositoryImpl implements RatingRepository {
   }
 
   @override
+  Future<List<StudentEntity>> getStudentsByGroup(int groupId) async {
+    try {
+      final response = await _dioClient.get(
+        ApiConstants.studentGroupMembers,
+        queryParameters: {'student_group__id': groupId},
+      );
+
+      if (response.statusCode != 200 || response.data is! List) {
+        return [];
+      }
+
+      final students = <StudentEntity>[];
+
+      for (var json in response.data as List) {
+        try {
+          if (json['student'] != null) {
+            final student = StudentResponseModel.fromJson(json['student']);
+            final entity = student.toEntity();
+            students.add(entity);
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+
+      students.sort((a, b) => b.score.compareTo(a.score));
+      return students;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  @override
   Future<StudentEntity?> getCurrentStudent() async {
     final currentStudentId = _prefs.getInt('current_student_id');
 
@@ -51,6 +85,22 @@ class RatingRepositoryImpl implements RatingRepository {
       return students.firstWhere((student) => student.id == currentStudentId);
     } catch (e) {
       return null;
+    }
+  }
+
+  @override
+  Future<List<GroupStudentsResponseModel>> getStudentGroups() async {
+    try {
+      final response = await _dioClient.get(ApiConstants.studentGroups);
+
+      if (response.statusCode == 200 && response.data is List) {
+        return (response.data as List)
+            .map((json) => GroupStudentsResponseModel.fromJson(json))
+            .toList();
+      }
+      return [];
+    } catch (e) {
+      return [];
     }
   }
 

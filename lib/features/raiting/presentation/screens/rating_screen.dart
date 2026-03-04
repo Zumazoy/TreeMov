@@ -7,8 +7,12 @@ import 'package:treemov/features/raiting/data/repositories/rating_repository_imp
 import 'package:treemov/features/raiting/presentation/blocs/rating_bloc.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_event.dart';
 import 'package:treemov/features/raiting/presentation/blocs/rating_state.dart';
-import 'package:treemov/features/raiting/presentation/widgets/student_card.dart';
-import 'package:treemov/features/raiting/presentation/widgets/top_students_chart.dart';
+import 'package:treemov/features/raiting/presentation/widgets/group_selector.dart';
+import 'package:treemov/features/raiting/presentation/widgets/loading_error_widgets.dart';
+import 'package:treemov/features/raiting/presentation/widgets/rating_app_bar.dart';
+import 'package:treemov/features/raiting/presentation/widgets/rating_background.dart';
+import 'package:treemov/features/raiting/presentation/widgets/students_draggable_sheet.dart';
+import 'package:treemov/features/raiting/presentation/widgets/top_students_section.dart';
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class RatingScreen extends StatefulWidget {
@@ -46,16 +50,12 @@ class _RatingScreenState extends State<RatingScreen> {
     debugPrint('RatingScreen: refreshData вызван');
     if (_isInitialized) {
       _loadData();
-    } else {
-      debugPrint(
-        'RatingScreen: еще не инициализирован, данные загрузятся при инициализации',
-      );
     }
   }
 
   void _loadData() {
     debugPrint('RatingScreen: загружаем данные');
-    _ratingBloc.add(const LoadStudentsEvent());
+    _ratingBloc.add(const LoadStudentGroupsEvent());
     _ratingBloc.add(const LoadCurrentStudentEvent());
   }
 
@@ -69,7 +69,7 @@ class _RatingScreenState extends State<RatingScreen> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      return _buildLoading();
+      return const RatingLoadingWidget();
     }
 
     return BlocProvider<RatingBloc>.value(
@@ -77,288 +77,85 @@ class _RatingScreenState extends State<RatingScreen> {
       child: BlocBuilder<RatingBloc, RatingState>(
         builder: (context, state) {
           if (state is RatingLoading) {
-            return _buildLoading();
-          } else if (state is StudentsLoaded || state is CurrentStudentLoaded) {
-            final studentsState = context.read<RatingBloc>().state;
-            List<StudentEntity> students = [];
-            StudentEntity? currentStudent;
-
-            if (studentsState is StudentsLoaded) {
-              students = studentsState.students;
-            }
-            if (studentsState is CurrentStudentLoaded) {
-              currentStudent = studentsState.currentStudent;
-            }
-
-            return _buildContent(students, currentStudent);
+            return const RatingLoadingWidget();
+          } else if (state is StudentsLoaded) {
+            return _buildContent(state);
           } else if (state is RatingError) {
-            return _buildError(state.message);
+            return RatingErrorWidget(message: state.message);
           }
-          return _buildLoading();
+          return const RatingLoadingWidget();
         },
       ),
     );
   }
 
-  Widget _buildContent(
-    List<StudentEntity> students,
-    StudentEntity? currentStudent,
-  ) {
-    final sortedStudents = [...students]
+  Widget _buildContent(StudentsLoaded state) {
+    final sortedStudents = [...state.students]
       ..sort((a, b) => b.score.compareTo(a.score));
-    final topThree = _getTopThree(sortedStudents);
     final currentUserPosition = _getCurrentUserPosition(
       sortedStudents,
-      currentStudent,
+      state.currentStudent,
     );
 
     return Scaffold(
       backgroundColor: AppColors.skyBlue,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.white, Colors.white.withAlpha(0)],
-                  stops: const [0.0, 0.3],
-                ).createShader(bounds);
+      body: RatingBackground(
+        child: Stack(
+          children: [
+            RefreshIndicator(
+              onRefresh: () async {
+                debugPrint('RatingScreen: ручное обновление');
+                if (state.selectedGroup != null) {
+                  _ratingBloc.add(
+                    LoadStudentsForGroupEvent(state.selectedGroup!),
+                  );
+                } else {
+                  _loadData();
+                }
+                await Future.delayed(const Duration(milliseconds: 500));
               },
-              blendMode: BlendMode.dstIn,
-              child: Image.asset(
-                'assets/images/background_raiting.png',
-                fit: BoxFit.fitWidth,
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.4,
-                alignment: Alignment.topCenter,
-              ),
-            ),
-          ),
-
-          RefreshIndicator(
-            onRefresh: () async {
-              debugPrint('RatingScreen: ручное обновление');
-              _loadData();
-              await Future.delayed(const Duration(milliseconds: 500));
-            },
-            color: const Color(0xFF1A237E),
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      AppBar(
-                        backgroundColor: Colors.transparent,
-                        title: const Text(
-                          'Рейтинг',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+              color: const Color(0xFF1A237E),
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        const RatingAppBar(),
+                        if (state.groups.isNotEmpty)
+                          GroupSelector(
+                            groups: state.groups,
+                            selectedGroup: state.selectedGroup,
+                            onGroupSelected: (group) {
+                              _ratingBloc.add(ChangeGroupEvent(group));
+                            },
                           ),
-                        ),
-                        automaticallyImplyLeading: false,
-                        elevation: 0,
-                      ),
-                      const SizedBox(height: 25),
-                      if (sortedStudents.isNotEmpty)
-                        TopStudentsChart(students: topThree)
-                      else
-                        const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Text(
-                              'Нет данных о студентах',
-                              style: TextStyle(
-                                color: AppColors.achievementDeepBlue,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      const SizedBox(height: 300),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          if (sortedStudents.isNotEmpty)
-            DraggableScrollableSheet(
-              initialChildSize: 0.45,
-              minChildSize: 0.45,
-              maxChildSize: 0.87,
-              snap: true,
-              snapSizes: const [0.45, 0.85],
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                    return Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 16,
-                            offset: Offset(0, -2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {},
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.only(
-                                top: 14,
-                                bottom: 4,
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 40,
-                                    height: 4,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.achievementDeepBlue,
-                                      borderRadius: BorderRadius.circular(2),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: _buildStudentsList(
-                              scrollController,
-                              sortedStudents,
-                              currentStudent,
-                              currentUserPosition,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStudentsList(
-    ScrollController scrollController,
-    List<StudentEntity> sortedStudents,
-    StudentEntity? currentStudent,
-    int currentUserPosition,
-  ) {
-    if (currentStudent == null ||
-        !sortedStudents.any((s) => s.id == currentStudent.id)) {
-      return _buildAllStudentsList(
-        scrollController,
-        sortedStudents,
-        currentStudent,
-      );
-    }
-
-    const itemHeight = 72.0;
-
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification notification) {
-        if (notification is ScrollUpdateNotification ||
-            notification is ScrollEndNotification) {
-          final scrollOffset = notification.metrics.pixels;
-          final viewportHeight = notification.metrics.viewportDimension;
-
-          final userPosition = (currentUserPosition - 1) * itemHeight;
-
-          final userIsAboveViewport = userPosition + itemHeight <= scrollOffset;
-          final userIsBelowViewport =
-              userPosition >= scrollOffset + viewportHeight;
-
-          final shouldShowPinned = userIsAboveViewport || userIsBelowViewport;
-
-          if (_showPinnedCard != shouldShowPinned) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                setState(() {
-                  _showPinnedCard = shouldShowPinned;
-                });
-              }
-            });
-          }
-        }
-        return false;
-      },
-      child: Stack(
-        children: [
-          _buildAllStudentsList(
-            scrollController,
-            sortedStudents,
-            currentStudent,
-          ),
-          if (_showPinnedCard)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: const Offset(0, -2),
+                        const SizedBox(height: 16), // Уменьшаем отступ
+                        TopStudentsSection(students: sortedStudents),
+                      ],
                     ),
-                  ],
-                ),
-                child: StudentCard(
-                  student: currentStudent,
-                  position: currentUserPosition,
-                  isCurrentUser: true,
-                ),
+                  ),
+                ],
               ),
             ),
-        ],
+            if (sortedStudents.isNotEmpty)
+              StudentsDraggableSheet(
+                students: sortedStudents,
+                currentStudent: state.currentStudent,
+                currentUserPosition: currentUserPosition,
+                showPinnedCard: _showPinnedCard,
+                onPinnedCardVisibilityChanged: (visible) {
+                  if (mounted) {
+                    setState(() {
+                      _showPinnedCard = visible;
+                    });
+                  }
+                },
+              ),
+          ],
+        ),
       ),
     );
-  }
-
-  Widget _buildAllStudentsList(
-    ScrollController scrollController,
-    List<StudentEntity> sortedStudents,
-    StudentEntity? currentStudent,
-  ) {
-    return ListView.builder(
-      controller: scrollController,
-      itemCount: sortedStudents.length,
-      itemBuilder: (context, index) {
-        final student = sortedStudents[index];
-        final position = index + 1;
-        final isCurrentUser =
-            currentStudent != null && student.id == currentStudent.id;
-
-        return StudentCard(
-          student: student,
-          position: position,
-          isCurrentUser: isCurrentUser,
-        );
-      },
-    );
-  }
-
-  List<StudentEntity> _getTopThree(List<StudentEntity> sortedStudents) {
-    final studentsWithScore = sortedStudents.where((s) => s.score > 0).toList();
-    if (studentsWithScore.length < 3) return studentsWithScore;
-    return studentsWithScore.take(3).toList();
   }
 
   int _getCurrentUserPosition(
@@ -370,23 +167,5 @@ class _RatingScreenState extends State<RatingScreen> {
       (student) => student.id == currentStudent.id,
     );
     return index != -1 ? index + 1 : 0;
-  }
-
-  Widget _buildLoading() {
-    return const Center(
-      child: CircularProgressIndicator(color: AppColors.achievementDeepBlue),
-    );
-  }
-
-  Widget _buildError(String message) {
-    return Center(
-      child: Text(
-        'Ошибка: $message',
-        style: const TextStyle(
-          color: AppColors.achievementDeepBlue,
-          fontSize: 16,
-        ),
-      ),
-    );
   }
 }
