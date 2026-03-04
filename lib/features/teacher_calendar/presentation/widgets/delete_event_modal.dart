@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 
 class DeleteEventModal extends StatefulWidget {
@@ -22,13 +21,15 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       width: 367,
       constraints: const BoxConstraints(minHeight: 180),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Column(
@@ -48,7 +49,9 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                       Expanded(
                         child: Text(
                           option,
-                          style: AppTextStyles.arial14W400.black,
+                          style: AppTextStyles.arial14W400.themed(
+                            context,
+                          ), // 👈 ИСПРАВЛЕНО
                           overflow: TextOverflow.visible,
                         ),
                       ),
@@ -66,11 +69,13 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: _selectedOption == option
-                                  ? Colors.black
-                                  : AppColors.grayFieldText,
+                                  ? theme
+                                        .colorScheme
+                                        .primary // 👈 ИСПРАВЛЕНО
+                                  : theme.dividerColor, // 👈 ИСПРАВЛЕНО
                               width: _selectedOption == option ? 3 : 2,
                             ),
-                            color: Colors.white,
+                            color: theme.cardColor, // 👈 ИСПРАВЛЕНО
                           ),
                         ),
                       ),
@@ -84,7 +89,7 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: AppColors.grayFieldText,
+                        color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
                         width: 1,
                       ),
                     ),
@@ -104,8 +109,9 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.white,
-                      foregroundColor: AppColors.categoryBehaviorText,
+                      backgroundColor: theme.cardColor, // 👈 ИСПРАВЛЕНО
+                      foregroundColor:
+                          theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -114,7 +120,9 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                     ),
                     child: Text(
                       'ОТМЕНА',
-                      style: AppTextStyles.arial14W400.primary,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                      ),
                     ),
                   ),
                 ),
@@ -125,7 +133,10 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                 height: 20,
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.grayFieldText, width: 1),
+                  border: Border.all(
+                    color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
+                    width: 1,
+                  ),
                 ),
               ),
 
@@ -138,8 +149,8 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                       widget.onDeletePressed?.call();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.white,
-                      foregroundColor: AppColors.deleteRed,
+                      backgroundColor: theme.cardColor, // 👈 ИСПРАВЛЕНО
+                      foregroundColor: theme.colorScheme.error, // 👈 ИСПРАВЛЕНО
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -149,7 +160,7 @@ class _DeleteEventModalState extends State<DeleteEventModal> {
                     child: Text(
                       'УДАЛИТЬ',
                       style: AppTextStyles.arial14W400.copyWith(
-                        color: AppColors.deleteRed,
+                        color: theme.colorScheme.error, // 👈 ИСПРАВЛЕНО
                       ),
                     ),
                   ),

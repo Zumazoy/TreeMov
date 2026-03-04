@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_card.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_nav_row.dart';
 import 'package:treemov/features/teacher_profile/presentation/widgets/settings_section_title.dart';
@@ -16,6 +15,8 @@ class SettingsSecuritySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Column(
       children: [
         const SettingsSectionTitle(
@@ -29,11 +30,12 @@ class SettingsSecuritySection extends StatelessWidget {
               subtitle: 'Изменить пароль для входа',
               onTap: onChangePasswordTap,
             ),
-            const Divider(
+            Divider(
+              // 👈 УБРАЛ const
               height: 1,
               indent: 16,
               endIndent: 16,
-              color: AppColors.eventTap,
+              color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
             ),
             SettingsNavRow(
               title: 'Двухфакторная аутентификация',

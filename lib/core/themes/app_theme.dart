@@ -31,7 +31,6 @@ class AppTheme {
   );
 
   // --- Theme Helpers ---
-
   static final CardThemeData _darkCardTheme = CardThemeData(
     color: AppColors.darkCard,
     elevation: 0,
@@ -56,7 +55,7 @@ class AppTheme {
     }),
   );
 
-  // --- Dark Theme Definition (New) ---
+  // --- Dark Theme Definition ---
   static final ThemeData darkTheme = ThemeData(
     primarySwatch: Colors.blue,
     useMaterial3: true,
@@ -66,10 +65,10 @@ class AppTheme {
     canvasColor: AppColors.darkSurface,
     cardColor: AppColors.darkCard,
     dividerColor: AppColors.darkSurface,
-    // Text
+    // Text (darkTextSecondary для bodyMedium)
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.darkText),
-      bodyMedium: TextStyle(color: AppColors.darkText),
+      bodyMedium: TextStyle(color: AppColors.darkTextSecondary),
       titleLarge: TextStyle(color: AppColors.darkText),
     ),
     // App Bar
@@ -95,5 +94,12 @@ class AppTheme {
     cardTheme: _darkCardTheme,
     // Switch
     switchTheme: _darkSwitchTheme,
+    // кнопки в темной теме
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.teacherPrimary,
+        foregroundColor: Colors.white, // Текст белый на основных кнопках
+      ),
+    ),
   );
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 
@@ -23,8 +22,10 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Container(
-      color: AppColors.white,
+      color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
       child: Row(
         children: [
@@ -33,18 +34,24 @@ class ProfileHeader extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               border: Border.all(
-                color: AppColors.directoryAvatarBorder,
+                color: theme.colorScheme.primary.withAlpha(
+                  128,
+                ), // 👈 ИСПРАВЛЕНО (было directoryAvatarBorder)
                 width: 4,
               ),
               borderRadius: BorderRadius.circular(40),
             ),
             child: CircleAvatar(
               radius: 36,
-              backgroundColor: AppColors.directoryAvatarBackground,
+              backgroundColor: theme.colorScheme.primary.withAlpha(
+                26,
+              ), // 👈 ИСПРАВЛЕНО (было directoryAvatarBackground)
               child: Icon(
                 Icons.person,
                 size: 32,
-                color: AppColors.teacherPrimary,
+                color: theme
+                    .colorScheme
+                    .primary, // 👈 ИСПРАВЛЕНО (было teacherPrimary)
               ),
             ),
           ),
@@ -56,14 +63,13 @@ class ProfileHeader extends StatelessWidget {
               children: [
                 Text(
                   _getFullName(),
-                  style: AppTextStyles.arial18W700.copyWith(
-                    color: AppColors.notesDarkText,
-                  ),
+                  style: AppTextStyles.arial18W700.themed(
+                    context,
+                  ), // 👈 ИСПРАВЛЕНО
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  ' ',
-                  // teacherProfile.teacher?.employee.email ??
+                  ' ', // teacherProfile.teacher?.employee.email ??
                   //     'Заглушка должности',
                   style: AppTextStyles.arial14W400.grey,
                 ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/themes/app_colors.dart';
-
 class AddEventButton extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -9,6 +7,8 @@ class AddEventButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return SafeArea(
       child: Container(
         width: double.infinity,
@@ -16,19 +16,24 @@ class AddEventButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.plusButton,
-            foregroundColor: Colors.white,
+            backgroundColor: theme
+                .colorScheme
+                .primary, // 👈 ИСПРАВЛЕНО (было AppColors.plusButton)
+            foregroundColor: theme
+                .colorScheme
+                .onPrimary, // 👈 ИСПРАВЛЕНО (было Colors.white)
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.5),
             ),
             padding: const EdgeInsets.symmetric(vertical: 12),
           ),
-          child: const Text(
+          child: Text(
             'Добавить событие',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               fontFamily: 'TT Norms',
+              color: theme.colorScheme.onPrimary, // 👈 ИСПРАВЛЕНО
             ),
           ),
         ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/themes/theme_cubit.dart';
 import 'package:treemov/core/widgets/auth/logout_dialog.dart';
@@ -37,16 +36,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Scaffold(
-      backgroundColor: AppColors.notesBackground,
+      backgroundColor: theme.scaffoldBackgroundColor, // 👈 ИСПРАВЛЕНО
       appBar: AppBar(
         title: Text(
           'Настройки',
-          style: AppTextStyles.ttNorms20W900.copyWith(
-            color: AppColors.notesDarkText,
-          ),
+          style: AppTextStyles.ttNorms20W900.themed(context), // 👈 ИСПРАВЛЕНО
         ),
-        backgroundColor: AppColors.notesBackground,
+        backgroundColor: theme.appBarTheme.backgroundColor, // 👈 ИСПРАВЛЕНО
         elevation: 0,
       ),
       body: ListView(
@@ -75,15 +74,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
               final themeCubit = context.read<ThemeCubit>();
+              print('🎨 Текущая тема в билдере: $themeMode');
+
               return SettingsAppearanceSection(
                 darkModeEnabled: themeMode == ThemeMode.dark,
                 showPhotosInLists: _showPhotosInLists,
-                onDarkModeChanged: (v) => themeCubit.setTheme(v),
+                onDarkModeChanged: (v) {
+                  print('🔄 Переключение темы на: $v');
+                  themeCubit.setTheme(v);
+                },
                 onShowPhotosChanged: (v) =>
                     setState(() => _showPhotosInLists = v),
               );
             },
-          ), //
+          ),
 
           SettingsSystemSection(
             soundEnabled: _soundEnabled,
@@ -111,15 +115,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () => LogoutDialog.show(context: context),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 48),
-                side: const BorderSide(color: Colors.red, width: 1),
+                side: BorderSide(
+                  color: theme
+                      .colorScheme
+                      .error, // 👈 ИСПРАВЛЕНО (красный из темы)
+                  width: 1,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                foregroundColor: Colors.red,
+                foregroundColor: theme.colorScheme.error, // 👈 ИСПРАВЛЕНО
               ),
               child: Text(
                 'Выйти из аккаунта',
-                style: AppTextStyles.ttNorms16W600.copyWith(color: Colors.red),
+                style: AppTextStyles.ttNorms16W600.withColor(
+                  theme.colorScheme.error, // 👈 ИСПРАВЛЕНО
+                ),
               ),
             ),
           ),

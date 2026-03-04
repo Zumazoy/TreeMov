@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/reports/presentation/screens/reports_screen.dart';
 
@@ -8,15 +7,21 @@ class RepNotsButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Row(
       children: [
         Expanded(
           child: Container(
             height: 80,
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.teacherPrimary),
+              border: Border.all(
+                color: theme
+                    .colorScheme
+                    .primary, // 👈 ИСПРАВЛЕНО (было teacherPrimary)
+              ),
               borderRadius: BorderRadius.circular(8),
-              color: AppColors.eventTap,
+              color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было eventTap)
             ),
             child: TextButton(
               onPressed: () {
@@ -34,9 +39,15 @@ class RepNotsButtons extends StatelessWidget {
                     'assets/images/paper_icon.png',
                     width: 24,
                     height: 24,
+                    color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО (иконка)
                   ),
                   const SizedBox(height: 4),
-                  Text('Отчеты', style: AppTextStyles.arial14W400.primary),
+                  Text(
+                    'Отчеты',
+                    style: AppTextStyles.arial14W400.copyWith(
+                      color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -48,9 +59,11 @@ class RepNotsButtons extends StatelessWidget {
           child: Container(
             height: 80,
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.teacherPrimary),
+              border: Border.all(
+                color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+              ),
               borderRadius: BorderRadius.circular(8),
-              color: AppColors.eventTap,
+              color: theme.cardColor, // 👈 ИСПРАВЛЕНО
             ),
             child: TextButton(
               onPressed: () {
@@ -66,9 +79,15 @@ class RepNotsButtons extends StatelessWidget {
                     'assets/images/text_icon.png',
                     width: 24,
                     height: 24,
+                    color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
                   ),
                   const SizedBox(height: 4),
-                  Text('Заметки', style: AppTextStyles.arial14W400.primary),
+                  Text(
+                    'Заметки',
+                    style: AppTextStyles.arial14W400.copyWith(
+                      color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                    ),
+                  ),
                 ],
               ),
             ),

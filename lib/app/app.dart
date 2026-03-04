@@ -17,10 +17,11 @@ class App extends StatelessWidget {
         builder: (context, themeMode) {
           return MaterialApp(
             navigatorKey: getIt<NavigationService>().navigatorKey,
+            key: ValueKey(themeMode),
             debugShowCheckedModeBanner: false,
             title: 'TreeMov App',
             theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
             themeMode: themeMode,
             initialRoute: AppRoutes.home,
             routes: AppRoutes.routes,

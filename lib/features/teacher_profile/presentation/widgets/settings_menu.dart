@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 
 class SettingsMenu extends StatelessWidget {
@@ -18,15 +17,17 @@ class SettingsMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Container(
       width: 200,
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black,
+            color: theme.shadowColor, // 👈 ИСПРАВЛЕНО (было Colors.black)
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -36,39 +37,43 @@ class SettingsMenu extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildMenuItem(
+            context,
             'Редактировать данные',
             onEditData,
             icon: Image.asset(
               'assets/images/note_change_icon.png',
               width: 16,
               height: 16,
-              color: AppColors.notesDarkText,
+              color: theme.iconTheme.color, // 👈 ИСПРАВЛЕНО
             ),
           ),
-          _buildDivider(),
+          _buildDivider(context), // 👈 ИСПРАВЛЕНО
           _buildMenuItem(
+            context,
             'Сменить пароль',
             onChangePassword,
             icon: Image.asset(
               'assets/images/lock_icon.png',
               width: 16,
               height: 16,
-              color: AppColors.notesDarkText,
+              color: theme.iconTheme.color, // 👈 ИСПРАВЛЕНО
             ),
           ),
-          _buildDivider(),
+          _buildDivider(context), // 👈 ИСПРАВЛЕНО
           _buildMenuItem(
+            context,
             'Настройки',
             onSettings,
             icon: Image.asset(
               'assets/images/gear_icon.png',
               width: 16,
               height: 16,
-              color: AppColors.notesDarkText,
+              color: theme.iconTheme.color, // 👈 ИСПРАВЛЕНО
             ),
           ),
-          _buildDivider(),
+          _buildDivider(context), // 👈 ИСПРАВЛЕНО
           _buildMenuItem(
+            context,
             'Выйти',
             onLogout,
             isLogout: true,
@@ -76,7 +81,7 @@ class SettingsMenu extends StatelessWidget {
               'assets/images/exit_icon.png',
               width: 16,
               height: 16,
-              color: Colors.red,
+              color: theme.colorScheme.error, // 👈 ИСПРАВЛЕНО (красный из темы)
             ),
             centered: true,
           ),
@@ -86,12 +91,15 @@ class SettingsMenu extends StatelessWidget {
   }
 
   Widget _buildMenuItem(
+    BuildContext context,
     String text,
     VoidCallback onTap, {
     Widget? icon,
     bool isLogout = false,
     bool centered = false,
   }) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -107,7 +115,14 @@ class SettingsMenu extends StatelessWidget {
                     Text(
                       text,
                       style: AppTextStyles.arial14W400.copyWith(
-                        color: isLogout ? Colors.red : AppColors.notesDarkText,
+                        color: isLogout
+                            ? theme
+                                  .colorScheme
+                                  .error // 👈 ИСПРАВЛЕНО
+                            : theme
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.color, // 👈 ИСПРАВЛЕНО
                       ),
                     ),
                   ],
@@ -120,8 +135,13 @@ class SettingsMenu extends StatelessWidget {
                         text,
                         style: AppTextStyles.arial14W400.copyWith(
                           color: isLogout
-                              ? Colors.red
-                              : AppColors.notesDarkText,
+                              ? theme
+                                    .colorScheme
+                                    .error // 👈 ИСПРАВЛЕНО
+                              : theme
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color, // 👈 ИСПРАВЛЕНО
                         ),
                       ),
                     ),
@@ -132,11 +152,13 @@ class SettingsMenu extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider() {
+  Widget _buildDivider(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       height: 1,
-      color: AppColors.notesDarkText,
+      color: theme.dividerColor, // 👈 ИСПРАВЛЕНО (было AppColors.notesDarkText)
     );
   }
 }

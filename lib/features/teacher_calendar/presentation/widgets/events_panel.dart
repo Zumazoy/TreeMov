@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
@@ -39,11 +38,13 @@ class EventsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Container(
       height: 450,
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12.5),
           topRight: Radius.circular(12.5),
         ),
@@ -55,7 +56,7 @@ class EventsPanel extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: AppColors.teacherPrimary,
+              color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -65,13 +66,19 @@ class EventsPanel extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Colors.grey.shade300, width: 1),
+                bottom: BorderSide(
+                  color: theme
+                      .dividerColor, // 👈 ИСПРАВЛЕНО (было Colors.grey.shade300)
+                  width: 1,
+                ),
               ),
             ),
             child: Center(
               child: Text(
                 _formatDate(selectedDate),
-                style: AppTextStyles.ttNorms16W600.black,
+                style: AppTextStyles.ttNorms16W600.themed(
+                  context,
+                ), // 👈 ИСПРАВЛЕНО
               ),
             ),
           ),
@@ -80,7 +87,10 @@ class EventsPanel extends StatelessWidget {
                 ? Center(
                     child: Text(
                       'На эту дату событий нет',
-                      style: AppTextStyles.ttNorms14W400.grey,
+                      style: AppTextStyles.ttNorms14W400.copyWith(
+                        color:
+                            theme.textTheme.bodySmall?.color, // 👈 ИСПРАВЛЕНО
+                      ),
                     ),
                   )
                 : ListView.builder(

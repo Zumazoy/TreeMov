@@ -34,6 +34,8 @@ class EventDetailsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     final timeParts = event
         .formatTime(event.startTime, event.endTime)
         .split('\n');
@@ -44,7 +46,7 @@ class EventDetailsModal extends StatelessWidget {
       width: 355,
       height: 320,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Column(
@@ -54,7 +56,9 @@ class EventDetailsModal extends StatelessWidget {
             height: 70,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.eventTap,
+              color: theme.colorScheme.primary.withAlpha(
+                26,
+              ), // 👈 ИСПРАВЛЕНО (было AppColors.eventTap)
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12.5),
                 topRight: Radius.circular(12.5),
@@ -65,7 +69,9 @@ class EventDetailsModal extends StatelessWidget {
                 event.group != null
                     ? 'Группа "${event.formatTitle(event.group?.title)}"'
                     : '(Не указан)',
-                style: AppTextStyles.ttNorms16W600.black,
+                style: AppTextStyles.ttNorms16W600.themed(
+                  context,
+                ), // 👈 ИСПРАВЛЕНО
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -79,8 +85,12 @@ class EventDetailsModal extends StatelessWidget {
             height: 140,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.white,
-              border: Border.all(color: Colors.grey.shade300, width: 1),
+              color: theme.cardColor, // 👈 ИСПРАВЛЕНО
+              border: Border.all(
+                color: theme
+                    .dividerColor, // 👈 ИСПРАВЛЕНО (было Colors.grey.shade300)
+                width: 1,
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -88,18 +98,21 @@ class EventDetailsModal extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildInfoRowWithIcon(
+                  context,
                   'assets/images/activity_icon.png',
                   event.subject != null
                       ? event.formatTitle(event.subject?.title)
                       : '(Не указан)',
                 ),
                 _buildInfoRowWithIcon(
+                  context,
                   'assets/images/place_icon.png',
                   event.classroom != null
                       ? event.formatTitle(event.classroom?.title)
                       : '(Не указана)',
                 ),
                 _buildInfoRowWithIcon(
+                  context,
                   'assets/images/clock_icon.png',
                   '$startTime-$endTime',
                 ),
@@ -129,9 +142,9 @@ class EventDetailsModal extends StatelessWidget {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: AppColors.white,
-                      side: const BorderSide(
-                        color: AppColors.directoryTextSecondary,
+                      backgroundColor: theme.cardColor, // 👈 ИСПРАВЛЕНО
+                      side: BorderSide(
+                        color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
                         width: 1,
                       ),
                       shape: RoundedRectangleBorder(
@@ -140,7 +153,9 @@ class EventDetailsModal extends StatelessWidget {
                     ),
                     child: Text(
                       'К событию',
-                      style: AppTextStyles.ttNorms14W500.black,
+                      style: AppTextStyles.ttNorms14W500.themed(
+                        context,
+                      ), // 👈 ИСПРАВЛЕНО
                     ),
                   ),
                 ),
@@ -162,14 +177,16 @@ class EventDetailsModal extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.teacherPrimary,
+                      backgroundColor:
+                          theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.5),
                       ),
                     ),
                     child: Text(
                       'Посещаемость',
-                      style: AppTextStyles.ttNorms14W500.white,
+                      style:
+                          AppTextStyles.ttNorms14W500.white, // .white оставляем
                     ),
                   ),
                 ),
@@ -181,7 +198,13 @@ class EventDetailsModal extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRowWithIcon(String iconPath, String value) {
+  Widget _buildInfoRowWithIcon(
+    BuildContext context,
+    String iconPath,
+    String value,
+  ) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return SizedBox(
       height: 32,
       child: Row(
@@ -193,6 +216,7 @@ class EventDetailsModal extends StatelessWidget {
               iconPath,
               width: 20,
               height: 20,
+              color: theme.iconTheme.color, // 👈 ИСПРАВЛЕНО (цвет иконки)
               fit: BoxFit.contain,
             ),
           ),
@@ -200,7 +224,9 @@ class EventDetailsModal extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: AppTextStyles.ttNorms13W400.black,
+              style: AppTextStyles.ttNorms13W400.themed(
+                context,
+              ), // 👈 ИСПРАВЛЕНО
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

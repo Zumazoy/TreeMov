@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/shared/data/models/org_member_response_model.dart';
 
@@ -26,11 +25,13 @@ class ProfileHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -40,39 +41,48 @@ class ProfileHeaderCard extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.teacherPrimary.withAlpha(51),
-              border: Border.all(color: AppColors.teacherPrimary, width: 1.5),
+              color: theme.colorScheme.primary.withAlpha(
+                51,
+              ), // 👈 ИСПРАВЛЕНО (было teacherPrimary)
+              border: Border.all(
+                color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                width: 1.5,
+              ),
             ),
             child: CircleAvatar(
               radius: 36,
-              backgroundColor: AppColors.directoryAvatarBackground,
+              backgroundColor: theme.colorScheme.primary.withAlpha(
+                26,
+              ), // 👈 ИСПРАВЛЕНО (было directoryAvatarBackground)
               child: Icon(
                 Icons.person,
                 size: 32,
-                color: AppColors.teacherPrimary,
+                color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
               ),
             ),
           ),
           const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _getFullName(),
-                style: AppTextStyles.ttNorms16W700.copyWith(
-                  color: AppColors.notesDarkText,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _getFullName(),
+                  style: AppTextStyles.ttNorms16W700.themed(
+                    context,
+                  ), // 👈 ИСПРАВЛЕНО
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                ' ',
-                // teacherProfile != null
-                //     ? teacherProfile!.teacher?.employee.email ??
-                //           'Заглушка должности'
-                //     : 'Профиль null',
-                style: AppTextStyles.ttNorms12W400.grey,
-              ),
-            ],
+                const SizedBox(height: 4),
+                Text(
+                  ' ', // teacherProfile != null
+                  //     ? teacherProfile!.teacher?.employee.email ??
+                  //           'Заглушка должности'
+                  //     : 'Профиль null',
+                  style: AppTextStyles.ttNorms12W400.grey,
+                ),
+              ],
+            ),
           ),
         ],
       ),
