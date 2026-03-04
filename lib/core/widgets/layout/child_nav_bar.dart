@@ -21,69 +21,84 @@ class ChildBottomNavigationBar extends StatelessWidget {
       end: Alignment.centerRight,
     );
 
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      onTap: onTap,
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.white,
-      selectedItemColor: Colors.transparent,
-      unselectedItemColor: unselectedColor,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-      elevation: 8,
-      items: [
-        _buildNavItem(
-          iconPath: 'assets/images/calendar_icon.png',
-          isSelected: currentIndex == 0,
-          unselectedColor: unselectedColor,
-          gradient: selectedGradient,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Container(
+          height: 60,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 65,
+          ), // Отступы по бокам
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildNavItem(
+                iconPath: 'assets/images/calendar_icon.png',
+                isSelected: currentIndex == 0,
+                unselectedColor: unselectedColor,
+                gradient: selectedGradient,
+                onTap: () => onTap(0),
+              ),
+              const SizedBox(width: 20),
+              _buildNavItem(
+                iconPath: 'assets/images/leaderboard_icon.png',
+                isSelected: currentIndex == 1,
+                unselectedColor: unselectedColor,
+                gradient: selectedGradient,
+                onTap: () => onTap(1),
+              ),
+              const SizedBox(width: 20),
+              _buildNavItem(
+                iconPath: 'assets/images/tree_profile.png',
+                isSelected: currentIndex == 2,
+                unselectedColor: unselectedColor,
+                gradient: selectedGradient,
+                onTap: () => onTap(2),
+              ),
+            ],
+          ),
         ),
-        _buildNavItem(
-          iconPath: 'assets/images/leaderboard_icon.png',
-          isSelected: currentIndex == 1,
-          unselectedColor: unselectedColor,
-          gradient: selectedGradient,
-        ),
-        _buildNavItem(
-          iconPath: 'assets/images/shop_icon.png',
-          isSelected: currentIndex == 2,
-          unselectedColor: unselectedColor,
-          gradient: selectedGradient,
-        ),
-        _buildNavItem(
-          iconPath: 'assets/images/tree_profile.png',
-          isSelected: currentIndex == 3,
-          unselectedColor: unselectedColor,
-          gradient: selectedGradient,
-        ),
-      ],
+      ),
     );
   }
 
-  BottomNavigationBarItem _buildNavItem({
+  Widget _buildNavItem({
     required String iconPath,
     required bool isSelected,
     required Color unselectedColor,
     required Gradient gradient,
+    required VoidCallback onTap,
   }) {
-    return BottomNavigationBarItem(
-      icon: Image.asset(
-        iconPath,
-        width: 24,
-        height: 24,
-        color: isSelected ? null : unselectedColor,
-      ),
-      activeIcon: ShaderMask(
-        shaderCallback: (bounds) => gradient.createShader(bounds),
-        blendMode: BlendMode.srcIn,
-        child: Image.asset(
-          iconPath,
-          width: 24,
-          height: 24,
-          color: Colors.white,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(shape: BoxShape.circle),
+        child: Center(
+          child: isSelected
+              ? ShaderMask(
+                  shaderCallback: (bounds) => gradient.createShader(bounds),
+                  blendMode: BlendMode.srcIn,
+                  child: Image.asset(iconPath, width: 24, height: 24),
+                )
+              : Image.asset(
+                  iconPath,
+                  width: 24,
+                  height: 24,
+                  color: unselectedColor,
+                ),
         ),
       ),
-      label: '',
     );
   }
 }

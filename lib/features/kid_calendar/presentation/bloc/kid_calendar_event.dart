@@ -8,7 +8,12 @@ abstract class KidCalendarEvent extends Equatable {
 }
 
 class LoadKidLessonsEvent extends KidCalendarEvent {
-  const LoadKidLessonsEvent();
+  final String dateMin;
+  final String dateMax;
+  const LoadKidLessonsEvent(this.dateMin, this.dateMax);
+
+  @override
+  List<Object?> get props => [dateMin, dateMax];
 }
 
 class LessonsLoadedEvent extends KidCalendarEvent {

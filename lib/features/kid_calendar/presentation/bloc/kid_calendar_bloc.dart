@@ -2,58 +2,51 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:treemov/features/kid_calendar/domain/repositories/kid_calendar_repository.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
-import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
-import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 
 part 'kid_calendar_event.dart';
 part 'kid_calendar_state.dart';
 
 class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
-  final SchedulesBloc schedulesBloc;
-  late final StreamSubscription _schedulesSubscription;
+  final KidCalendarRepository _repository;
 
-  KidCalendarBloc({required this.schedulesBloc}) : super(KidCalendarInitial()) {
-    // on<LoadKidLessonsEvent>(_onLoadLessons);
-    on<LessonsLoadedEvent>(_onLessonsLoaded);
+  KidCalendarBloc({required KidCalendarRepository repository})
+    : _repository = repository,
+      super(KidCalendarInitial()) {
+    on<LoadKidLessonsEvent>(_onLoadLessons);
     on<ChangeMonthEvent>(_onChangeMonth);
     on<SelectDayEvent>(_onSelectDay);
     on<ClosePanelEvent>(_onClosePanel);
-
-    _schedulesSubscription = schedulesBloc.stream.listen((state) {
-      if (state is LessonsLoaded) {
-        add(LessonsLoadedEvent(state.lessons as List<LessonEntity>));
-      }
-    });
-
-    add(const LoadKidLessonsEvent());
   }
 
-  // void _onLoadLessons(
-  //   LoadKidLessonsEvent event,
-  //   Emitter<KidCalendarState> emit,
-  // ) {
-  //   emit(KidCalendarLoading());
-  //   schedulesBloc.add(const LoadLessonsEvent());
-  // }
-
-  void _onLessonsLoaded(
-    LessonsLoadedEvent event,
+  Future<void> _onLoadLessons(
+    LoadKidLessonsEvent event,
     Emitter<KidCalendarState> emit,
-  ) {
-    final currentDate = _getCurrentDateFromState();
-    final processed = _processLessons(event.lessons, currentDate);
+  ) async {
+    emit(KidCalendarLoading());
+    try {
+      final lessons = await _repository.getLessons(
+        event.dateMin,
+        event.dateMax,
+      );
 
-    emit(
-      KidCalendarLoaded(
-        currentDate: currentDate,
-        selectedDate: null,
-        selectedDay: -1,
-        daysWithLessons: processed.days,
-        lessonsByDay: processed.lessonsByDay,
-        allLessons: event.lessons,
-      ),
-    );
+      final currentDate = _getCurrentDate(event.dateMin);
+      final processed = _processLessons(lessons, currentDate);
+
+      emit(
+        KidCalendarLoaded(
+          currentDate: currentDate,
+          selectedDate: null,
+          selectedDay: -1,
+          daysWithLessons: processed.days,
+          lessonsByDay: processed.lessonsByDay,
+          allLessons: lessons,
+        ),
+      );
+    } catch (e) {
+      emit(KidCalendarError('Ошибка загрузки расписания: $e'));
+    }
   }
 
   void _onChangeMonth(ChangeMonthEvent event, Emitter<KidCalendarState> emit) {
@@ -65,17 +58,10 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
         1,
       );
 
-      final processed = _processLessons(current.allLessons, newDate);
+      final dateMin = _getFirstDayOfMonth(newDate);
+      final dateMax = _getLastDayOfMonth(newDate);
 
-      emit(
-        current.copyWith(
-          currentDate: newDate,
-          selectedDate: null,
-          selectedDay: -1,
-          daysWithLessons: processed.days,
-          lessonsByDay: processed.lessonsByDay,
-        ),
-      );
+      add(LoadKidLessonsEvent(dateMin, dateMax));
     }
   }
 
@@ -98,11 +84,29 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
     }
   }
 
-  DateTime _getCurrentDateFromState() {
-    if (state is KidCalendarLoaded) {
-      return (state as KidCalendarLoaded).currentDate;
+  DateTime _getCurrentDate(String? dateMin) {
+    if (dateMin != null) {
+      try {
+        return DateTime.parse(dateMin);
+      } catch (_) {}
     }
     return DateTime.now();
+  }
+
+  String _getFirstDayOfMonth(DateTime date) {
+    return DateTime(
+      date.year,
+      date.month,
+      1,
+    ).toIso8601String().split('T').first;
+  }
+
+  String _getLastDayOfMonth(DateTime date) {
+    return DateTime(
+      date.year,
+      date.month + 1,
+      0,
+    ).toIso8601String().split('T').first;
   }
 
   _ProcessedLessons _processLessons(
@@ -131,12 +135,6 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
     }
 
     return _ProcessedLessons(days: days, lessonsByDay: lessonsByDay);
-  }
-
-  @override
-  Future<void> close() {
-    _schedulesSubscription.cancel();
-    return super.close();
   }
 }
 
