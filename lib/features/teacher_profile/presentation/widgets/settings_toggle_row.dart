@@ -33,7 +33,7 @@ class SettingsToggleRow extends StatelessWidget {
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeColor: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+        activeThumbColor: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
         activeTrackColor: theme.colorScheme.primary.withAlpha(
           128,
         ), // 👈 ИСПРАВЛЕНО

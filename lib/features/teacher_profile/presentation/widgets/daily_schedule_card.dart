@@ -230,7 +230,7 @@ class DailyScheduleCard extends StatelessWidget {
     bool isTimeColored = false,
     bool isReminderColored = false,
   }) {
-    final theme = Theme.of(context);
+    Theme.of(context);
     final baseStyle = AppTextStyles.arial14W400.themed(context);
 
     if (isNumberColored) {
