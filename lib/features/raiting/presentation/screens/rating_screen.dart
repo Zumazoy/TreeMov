@@ -82,7 +82,6 @@ class _RatingScreenState extends State<RatingScreen> {
       value: _ratingBloc,
       child: BlocBuilder<RatingBloc, RatingState>(
         buildWhen: (previous, current) {
-          // Не перестраиваем при загрузке, если есть кешированное состояние
           if (current is RatingLoading && _cachedState != null) {
             return false;
           }
@@ -90,13 +89,11 @@ class _RatingScreenState extends State<RatingScreen> {
         },
         builder: (context, state) {
           if (state is StudentsLoaded) {
-            // Сохраняем успешное состояние в кеш
             _cachedState = state;
             return _buildContent(state);
           } else if (state is RatingError) {
             return _buildErrorContent();
           } else if (state is RatingLoading && _cachedState != null) {
-            // Показываем кешированное состояние во время загрузки
             return _buildContent(_cachedState!);
           } else if (state is RatingLoading) {
             return const RatingLoadingWidget();
