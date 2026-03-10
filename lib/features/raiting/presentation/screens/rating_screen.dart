@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:treemov/app/di/di.config.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/features/raiting/data/repositories/rating_repository_impl.dart';
@@ -16,9 +17,7 @@ import 'package:treemov/features/raiting/presentation/widgets/top_students_secti
 import 'package:treemov/shared/domain/entities/student_entity.dart';
 
 class RatingScreen extends StatefulWidget {
-  final DioClient dioClient;
-
-  const RatingScreen({super.key, required this.dioClient});
+  const RatingScreen({super.key});
 
   @override
   State<RatingScreen> createState() => _RatingScreenState();
@@ -29,6 +28,8 @@ class _RatingScreenState extends State<RatingScreen> {
   bool _showPinnedCard = true;
   bool _isInitialized = false;
 
+  StudentsLoaded? _cachedState;
+
   @override
   void initState() {
     super.initState();
@@ -36,20 +37,25 @@ class _RatingScreenState extends State<RatingScreen> {
     _initializeBloc();
   }
 
-  void _initializeBloc() {
-    SharedPreferences.getInstance().then((prefs) {
-      final repository = RatingRepositoryImpl(widget.dioClient, prefs);
+  Future<void> _initializeBloc() async {
+    try {
+      final dioClient = getIt<DioClient>();
+      final prefs = await SharedPreferences.getInstance();
+      final repository = RatingRepositoryImpl(dioClient, prefs);
       _ratingBloc = RatingBloc(repository);
-      _isInitialized = true;
-      _loadData();
-      if (mounted) setState(() {});
-    });
-  }
 
-  void refreshData() {
-    debugPrint('RatingScreen: refreshData вызван');
-    if (_isInitialized) {
-      _loadData();
+      if (mounted) {
+        _isInitialized = true;
+        _loadData();
+        setState(() {});
+      }
+    } catch (e) {
+      debugPrint('RatingScreen: ошибка инициализации - $e');
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+      }
     }
   }
 
@@ -75,16 +81,80 @@ class _RatingScreenState extends State<RatingScreen> {
     return BlocProvider<RatingBloc>.value(
       value: _ratingBloc,
       child: BlocBuilder<RatingBloc, RatingState>(
+        buildWhen: (previous, current) {
+          if (current is RatingLoading && _cachedState != null) {
+            return false;
+          }
+          return true;
+        },
         builder: (context, state) {
-          if (state is RatingLoading) {
-            return const RatingLoadingWidget();
-          } else if (state is StudentsLoaded) {
+          if (state is StudentsLoaded) {
+            _cachedState = state;
             return _buildContent(state);
           } else if (state is RatingError) {
-            return RatingErrorWidget(message: state.message);
+            return _buildErrorContent();
+          } else if (state is RatingLoading && _cachedState != null) {
+            return _buildContent(_cachedState!);
+          } else if (state is RatingLoading) {
+            return const RatingLoadingWidget();
           }
           return const RatingLoadingWidget();
         },
+      ),
+    );
+  }
+
+  Widget _buildErrorContent() {
+    return Scaffold(
+      backgroundColor: AppColors.skyBlue,
+      body: RatingBackground(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.sentiment_dissatisfied_outlined,
+                size: 64,
+                color: Colors.white70,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Ой, кажется что-то пошло не так',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Попробуйте обновить экран',
+                style: TextStyle(
+                  color: Colors.white.withAlpha(179),
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  _ratingBloc.add(const LoadStudentGroupsEvent());
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: AppColors.achievementDeepBlue,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: const Text('Обновить'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -114,7 +184,7 @@ class _RatingScreenState extends State<RatingScreen> {
                 }
                 await Future.delayed(const Duration(milliseconds: 500));
               },
-              color: const Color(0xFF1A237E),
+              color: AppColors.achievementDeepBlue,
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
@@ -130,7 +200,7 @@ class _RatingScreenState extends State<RatingScreen> {
                               _ratingBloc.add(ChangeGroupEvent(group));
                             },
                           ),
-                        const SizedBox(height: 16), // Уменьшаем отступ
+                        const SizedBox(height: 16),
                         TopStudentsSection(students: sortedStudents),
                       ],
                     ),
