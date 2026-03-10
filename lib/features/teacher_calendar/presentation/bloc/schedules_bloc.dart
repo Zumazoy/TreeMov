@@ -13,10 +13,11 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
   SchedulesBloc(this._scheduleRepository, this._sharedRepository)
     : super(ScheduleInitial()) {
     on<LoadLessonsEvent>(_onLoadLessons);
-    on<LoadStudentsInGroupByIdEvent>(_onLoadStudentsInGroupById);
+    on<LoadAttendanceEvent>(_onLoadAttendance);
     on<CreateLessonEvent>(_onCreateLesson);
     on<CreatePeriodLessonEvent>(_onCreatePeriodLesson);
     on<CreateMassAttendanceEvent>(_onCreateMassAttendance);
+    on<PatchMassAttendanceEvent>(_onPatchMassAttendance);
   }
 
   Future<void> _onLoadLessons(
@@ -35,18 +36,29 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
     }
   }
 
-  Future<void> _onLoadStudentsInGroupById(
-    LoadStudentsInGroupByIdEvent event,
+  Future<void> _onLoadAttendance(
+    LoadAttendanceEvent event,
     Emitter<ScheduleState> emit,
   ) async {
-    emit(StudentsLoading());
+    emit(AttendanceLoading());
     try {
-      final students = await _sharedRepository.getStudentsInGroup(
-        event.groupId,
+      final attendance = await _scheduleRepository.getAttendance(
+        event.lessonId,
       );
-      emit(StudentGroupLoaded(students));
+      if (attendance.isNotEmpty) {
+        emit(AttendanceLoaded(attendance));
+      } else {
+        try {
+          final students = await _sharedRepository.getStudentsInGroup(
+            event.groupId,
+          );
+          emit(StudentGroupLoaded(students));
+        } catch (e) {
+          emit(StudentGroupError('Ошибка загрузки группы: $e'));
+        }
+      }
     } catch (e) {
-      emit(StudentGroupError('Ошибка загрузки группы: $e'));
+      emit(StudentGroupError('Ошибка загрузки посещаемости: $e'));
     }
   }
 
@@ -86,6 +98,23 @@ class SchedulesBloc extends Bloc<ScheduleEvent, ScheduleState> {
       emit(AttendanceOperationSuccess('Посещаемость успешно сохранена'));
     } catch (e) {
       emit(AttendanceError('Ошибка сохранения посещаемости: $e'));
+    }
+  }
+
+  Future<void> _onPatchMassAttendance(
+    PatchMassAttendanceEvent event,
+    Emitter<ScheduleState> emit,
+  ) async {
+    emit(ScheduleLoading());
+    try {
+      for (final entry in event.requests.entries) {
+        final id = entry.key;
+        final request = entry.value;
+        await _scheduleRepository.patchMassAttendance(id, request);
+      }
+      emit(AttendanceOperationSuccess('Посещаемость успешно обновлена'));
+    } catch (e) {
+      emit(AttendanceError('Ошибка обновления посещаемости: $e'));
     }
   }
 }

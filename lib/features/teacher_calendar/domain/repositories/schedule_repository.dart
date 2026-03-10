@@ -6,12 +6,16 @@ import 'package:treemov/shared/data/models/lesson_request_model.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
 abstract class ScheduleRepository {
-  Future<LessonResponseModel> getLessonById(int lessonId);
+  Future<List<AttendanceResponseModel>> getAttendance(int lessonId);
   Future<LessonResponseModel> createLesson(LessonRequestModel request);
   Future<PeriodLessonResponseModel> createPeriodLesson(
     PeriodLessonRequestModel request,
   );
   Future<AttendanceResponseModel> createMassAttendance(
     List<AttendanceRequestModel> request,
+  );
+  Future<AttendanceResponseModel> patchMassAttendance(
+    int id,
+    AttendanceRequestModel request,
   );
 }

@@ -4,6 +4,7 @@ import 'package:treemov/shared/domain/models/base_response_model.dart';
 
 class AccrualResponseModel extends BaseResponseModel {
   final int? amount;
+  final int? orgMemberId;
   final String? comment;
   final String? category;
   final String? createdAt;
@@ -13,6 +14,7 @@ class AccrualResponseModel extends BaseResponseModel {
   AccrualResponseModel({
     required super.baseData,
     required this.amount,
+    required this.orgMemberId,
     required this.comment,
     required this.category,
     required this.createdAt,
@@ -24,6 +26,7 @@ class AccrualResponseModel extends BaseResponseModel {
     return AccrualResponseModel(
       baseData: json.baseData,
       amount: json['amount'],
+      orgMemberId: json['org_member_id'],
       comment: json['comment'],
       category: json['category'],
       createdAt: json['created_at'],

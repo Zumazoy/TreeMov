@@ -4,11 +4,11 @@ import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/attendance_entity.dart';
 import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
-import 'package:treemov/shared/data/models/student_response_model.dart';
 import 'package:treemov/temp/main_screen.dart';
 
 import '../widgets/attendance_parts/lesson_info_card.dart';
@@ -30,7 +30,7 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  List<Map<String, dynamic>> _students = [];
+  List<AttendanceEntity> _attendances = [];
   bool _isLoading = false;
   String? _errorMessage;
   bool _isSaving = false;
@@ -42,26 +42,26 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   void _loadStudents() {
-    if (widget.lesson.group?.id != null) {
+    if (widget.lesson.group?.id != null && widget.lesson.id != null) {
       setState(() {
         _isLoading = true;
         _errorMessage = null;
       });
 
       widget.schedulesBloc.add(
-        LoadStudentsInGroupByIdEvent(widget.lesson.group!.id!),
+        LoadAttendanceEvent(widget.lesson.group!.id!, widget.lesson.id!),
       );
     }
   }
 
   // Статистика
-  int get totalStudents => _students.length;
+  int get totalStudents => _attendances.length;
   int get presentCount =>
-      _students.where((s) => s['attendance'] == 'present').length;
+      _attendances.where((s) => s.wasPresent == true).length;
   int get absentCount =>
-      _students.where((s) => s['attendance'] == 'absent').length;
+      _attendances.where((s) => s.wasPresent == false).length;
   int get notMarkedCount =>
-      _students.where((s) => s['attendance'] == 'not_marked').length;
+      _attendances.where((s) => s.wasPresent == null).length;
 
   // Проверка, можно ли сохранять
   bool get canSaveAttendance => notMarkedCount == 0;
@@ -103,23 +103,27 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   void _markAllPresent() {
     setState(() {
-      for (var student in _students) {
-        student['attendance'] = 'present';
+      for (var attendance in _attendances) {
+        if (attendance.wasPresent != true) attendance.wasPresent = true;
       }
     });
   }
 
-  void _markPresent(int studentId) {
+  void _markPresent(int studentIndex) {
     setState(() {
-      final student = _students.firstWhere((s) => s['id'] == studentId);
-      student['attendance'] = 'present';
+      final attendance = _attendances.firstWhere(
+        (s) => s.index == studentIndex,
+      );
+      attendance.wasPresent = true;
     });
   }
 
-  void _markAbsent(int studentId) {
+  void _markAbsent(int studentIndex) {
     setState(() {
-      final student = _students.firstWhere((s) => s['id'] == studentId);
-      student['attendance'] = 'absent';
+      final attendance = _attendances.firstWhere(
+        (s) => s.index == studentIndex,
+      );
+      attendance.wasPresent = false;
     });
   }
 
@@ -147,21 +151,46 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       return;
     }
 
+    final changedAttendances = _attendances
+        .where((a) => a.isChanged())
+        .toList();
+
+    if (changedAttendances.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Вы ничего не поменяли'),
+          backgroundColor: Colors.orange,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     setState(() {
       _isSaving = true;
     });
 
-    // Создаем список запросов для всех студентов
-    final attendanceRequests = _students.map((student) {
-      return AttendanceRequestModel(
-        studentId: student['student']?.id ?? student['id'],
-        lessonId: widget.lesson.id!,
-        wasPresent: student['attendance'] == 'present',
-      );
-    }).toList();
+    if (_attendances.any((a) => a.shouldCreate())) {
+      final attendanceRequests = _attendances.map((attendance) {
+        return AttendanceRequestModel(
+          studentId: attendance.student!.id!,
+          lessonId: widget.lesson.id!,
+          wasPresent: attendance.wasPresent!,
+        );
+      }).toList();
 
-    // Отправляем все запросы одним событием
-    widget.schedulesBloc.add(CreateMassAttendanceEvent(attendanceRequests));
+      widget.schedulesBloc.add(CreateMassAttendanceEvent(attendanceRequests));
+    } else {
+      final attendanceRequests = {
+        for (var attendance in changedAttendances)
+          attendance.id!: AttendanceRequestModel(
+            wasPresent: attendance.wasPresent!,
+          ),
+      };
+
+      widget.schedulesBloc.add(PatchMassAttendanceEvent(attendanceRequests));
+    }
+    Navigator.of(context).pop();
   }
 
   void _onTabTapped(int index) {
@@ -174,20 +203,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  String _formatStudentName(StudentResponseModel student) {
-    final parts = [
-      student.surname,
-      student.name,
-    ].where((part) => part != null && part.isNotEmpty).toList();
-
-    return parts.isNotEmpty ? parts.join(' ') : 'Неизвестный студент';
-  }
-
   // Сортируем студентов по фамилии и имени
-  List<Map<String, dynamic>> _getSortedStudents() {
-    return List.from(_students)..sort((a, b) {
-      final studentA = a['student'] as StudentResponseModel?;
-      final studentB = b['student'] as StudentResponseModel?;
+  List<AttendanceEntity> _getSortedStudents() {
+    return List.from(_attendances)..sort((a, b) {
+      final studentA = a.student;
+      final studentB = b.student;
 
       if (studentA == null || studentB == null) return 0;
 
@@ -208,23 +228,37 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return BlocListener<SchedulesBloc, ScheduleState>(
       bloc: widget.schedulesBloc,
       listener: (context, state) {
-        if (state is StudentsLoading) {
+        if (state is AttendanceLoading) {
           setState(() {
             _isLoading = true;
             _errorMessage = null;
           });
+        } else if (state is AttendanceLoaded) {
+          setState(() {
+            _isLoading = false;
+            _attendances = state.attendance.asMap().entries.map((entry) {
+              final attendance = entry.value;
+              final index = entry.key;
+              return AttendanceEntity(
+                index: index,
+                id: attendance.id,
+                wasPresent: attendance.wasPresent,
+                student: attendance.student,
+              );
+            }).toList();
+          });
         } else if (state is StudentGroupLoaded) {
           setState(() {
             _isLoading = false;
-            _students = state.studentsInGroup.asMap().entries.map((entry) {
-              final student = entry.value.student;
+            _attendances = state.studentsInGroup.asMap().entries.map((entry) {
+              final studentInGroup = entry.value;
               final index = entry.key;
-              return {
-                'id': index + 1,
-                'name': _formatStudentName(student),
-                'attendance': 'not_marked',
-                'student': student,
-              };
+              return AttendanceEntity(
+                index: index,
+                id: studentInGroup.id,
+                wasPresent: null,
+                student: studentInGroup.student,
+              );
             }).toList();
           });
         } else if (state is StudentGroupError) {
@@ -261,7 +295,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           titleSpacing: 0,
           title: Text('Посещаемость', style: AppTextStyles.ttNorms22W900.black),
           actions: [
-            if (_students.isNotEmpty)
+            if (_attendances.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(right: 16),
                 child: ElevatedButton(
@@ -310,7 +344,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 const SizedBox(height: 30),
 
                 Text(
-                  'Список обучающихся: ${_students.length}',
+                  'Список обучающихся: ${_attendances.length}',
                   style: AppTextStyles.arial16W700.copyWith(
                     color: AppColors.grayFieldText,
                   ),
@@ -322,7 +356,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   _buildLoadingIndicator()
                 else if (_errorMessage != null)
                   _buildErrorState(_errorMessage!)
-                else if (_students.isEmpty)
+                else if (_attendances.isEmpty)
                   _buildEmptyState()
                 else
                   Column(
@@ -330,17 +364,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                       return StudentCard(
                         student: student,
                         availableWidth: availableWidth,
-                        onMarkPresent: () => _markPresent(student['id']),
-                        onMarkAbsent: () => _markAbsent(student['id']),
+                        onMarkPresent: () => _markPresent(student.index),
+                        onMarkAbsent: () => _markAbsent(student.index),
                       );
                     }).toList(),
                   ),
                 const SizedBox(height: 20),
 
                 // Кнопка сохранения
-                if (_students.isNotEmpty) _buildSaveButton(availableWidth),
+                if (_attendances.isNotEmpty) _buildSaveButton(availableWidth),
 
-                if (_students.isNotEmpty && !canSaveAttendance)
+                if (_attendances.isNotEmpty && !canSaveAttendance)
                   _buildSaveHintText(),
               ],
             ),

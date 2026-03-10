@@ -17,16 +17,17 @@ class LoadLessonsEvent extends ScheduleEvent {
   const LoadLessonsEvent(this.dateMin, this.dateMax);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [dateMin, dateMax];
 }
 
-class LoadStudentsInGroupByIdEvent extends ScheduleEvent {
+class LoadAttendanceEvent extends ScheduleEvent {
   final int groupId;
+  final int lessonId;
 
-  const LoadStudentsInGroupByIdEvent(this.groupId);
+  const LoadAttendanceEvent(this.groupId, this.lessonId);
 
   @override
-  List<Object?> get props => [groupId];
+  List<Object?> get props => [groupId, lessonId];
 }
 
 class CreateLessonEvent extends ScheduleEvent {
@@ -54,4 +55,13 @@ class CreateMassAttendanceEvent extends ScheduleEvent {
 
   @override
   List<Object?> get props => [request];
+}
+
+class PatchMassAttendanceEvent extends ScheduleEvent {
+  final Map<int, AttendanceRequestModel> requests;
+
+  const PatchMassAttendanceEvent(this.requests);
+
+  @override
+  List<Object?> get props => [requests];
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
+import 'package:treemov/features/teacher_calendar/domain/entities/attendance_entity.dart';
 
 class StudentCard extends StatelessWidget {
-  final Map<String, dynamic> student;
+  final AttendanceEntity student;
   final double availableWidth;
   final VoidCallback onMarkPresent;
   final VoidCallback onMarkAbsent;
@@ -16,44 +17,44 @@ class StudentCard extends StatelessWidget {
     required this.onMarkAbsent,
   });
 
-  String _getAttendanceText(String status) {
+  String _getAttendanceText(bool? status) {
     switch (status) {
-      case 'present':
+      case true:
         return 'Присутствует';
-      case 'absent':
+      case false:
         return 'Отсутствует';
       default:
         return 'Не отмечено';
     }
   }
 
-  Color _getAttendanceColor(String status) {
+  Color _getAttendanceColor(bool? status) {
     switch (status) {
-      case 'present':
+      case true:
         return AppColors.statsTotalText;
-      case 'absent':
+      case false:
         return AppColors.statsAbsentText;
       default:
         return AppColors.grayFieldText;
     }
   }
 
-  Color _getAttendanceBackgroundColor(String status) {
+  Color _getAttendanceBackgroundColor(bool? status) {
     switch (status) {
-      case 'present':
+      case true:
         return AppColors.statsTotalBg;
-      case 'absent':
+      case false:
         return AppColors.statsAbsentBg;
       default:
         return AppColors.white;
     }
   }
 
-  Color _getAttendanceBorderColor(String status) {
+  Color _getAttendanceBorderColor(bool? status) {
     switch (status) {
-      case 'present':
+      case true:
         return AppColors.statsTotalBorder;
-      case 'absent':
+      case false:
         return AppColors.statsAbsentBorder;
       default:
         return AppColors.lightGrey;
@@ -62,7 +63,7 @@ class StudentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final attendanceStatus = student['attendance'];
+    final attendanceStatus = student.wasPresent;
 
     return Container(
       width: availableWidth,
@@ -108,10 +109,7 @@ class StudentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    student['name'],
-                    style: AppTextStyles.ttNorms14W600.black,
-                  ),
+                  Text(student.name, style: AppTextStyles.ttNorms14W600.black),
                   const SizedBox(height: 2),
 
                   // Плашка статуса
@@ -122,7 +120,7 @@ class StudentCard extends StatelessWidget {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: attendanceStatus == 'not_marked'
+                      color: attendanceStatus == null
                           ? AppColors.white
                           : _getAttendanceBackgroundColor(attendanceStatus),
                       borderRadius: BorderRadius.circular(36),
@@ -160,12 +158,12 @@ class StudentCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.5),
                       border: Border.all(
-                        color: attendanceStatus == 'present'
+                        color: attendanceStatus == true
                             ? AppColors.statsTotalText
                             : AppColors.lightGrey,
                         width: 1,
                       ),
-                      color: attendanceStatus == 'present'
+                      color: attendanceStatus == true
                           ? AppColors.statsTotalBg
                           : AppColors.white,
                     ),
@@ -174,7 +172,7 @@ class StudentCard extends StatelessWidget {
                         'assets/images/student_present.png',
                         width: 16,
                         height: 16,
-                        color: attendanceStatus == 'present'
+                        color: attendanceStatus == true
                             ? AppColors.statsTotalText
                             : AppColors.grayFieldText,
                       ),
@@ -193,12 +191,12 @@ class StudentCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.5),
                       border: Border.all(
-                        color: attendanceStatus == 'absent'
+                        color: attendanceStatus == false
                             ? AppColors.statsAbsentText
                             : AppColors.lightGrey,
                         width: 1,
                       ),
-                      color: attendanceStatus == 'absent'
+                      color: attendanceStatus == false
                           ? AppColors.statsAbsentBg
                           : AppColors.white,
                     ),
@@ -207,7 +205,7 @@ class StudentCard extends StatelessWidget {
                         'assets/images/student_absent.png',
                         width: 16,
                         height: 16,
-                        color: attendanceStatus == 'absent'
+                        color: attendanceStatus == false
                             ? AppColors.statsAbsentText
                             : AppColors.grayFieldText,
                       ),

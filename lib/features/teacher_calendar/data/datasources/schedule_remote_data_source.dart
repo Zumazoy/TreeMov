@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:treemov/core/constants/api_constants.dart';
 import 'package:treemov/core/network/dio_client.dart';
 import 'package:treemov/features/teacher_calendar/data/models/attendance_request_model.dart';
@@ -12,19 +13,32 @@ class ScheduleRemoteDataSource {
 
   ScheduleRemoteDataSource(this._dioClient);
 
-  Future<LessonResponseModel> getLessonById(int scheduleId) async {
+  Future<List<AttendanceResponseModel>> getAttendance(int lessonId) async {
     try {
-      final response = await _dioClient.get(
-        '${ApiConstants.lessons}$scheduleId/',
+      final Response response = await _dioClient.get(
+        ApiConstants.attendances,
+        queryParameters: {'lesson_id': lessonId},
       );
 
       if (response.statusCode == 200) {
-        return LessonResponseModel.fromJson(response.data);
+        final responseData = response.data;
+
+        if (responseData is List) {
+          return responseData
+              .map<AttendanceResponseModel>(
+                (json) => AttendanceResponseModel.fromJson(json),
+              )
+              .toList();
+        } else if (responseData is Map<String, dynamic>) {
+          return [AttendanceResponseModel.fromJson(responseData)];
+        } else {
+          throw Exception('Некорректный формат ответа от сервера');
+        }
       } else {
-        throw Exception('Failed to fetch schedule: ${response.statusCode}');
+        throw Exception('Ошибка сервера: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Ошибка получения занятия: $e');
+      throw Exception('Ошибка загрузки посещаемости: $e');
     }
   }
 
@@ -82,6 +96,28 @@ class ScheduleRemoteDataSource {
       }
     } catch (e) {
       throw Exception('Ошибка создания посещаемости: $e');
+    }
+  }
+
+  Future<AttendanceResponseModel> patchMassAttendance(
+    int id,
+    AttendanceRequestModel request,
+  ) async {
+    try {
+      final response = await _dioClient.patch(
+        '${ApiConstants.attendances}/$id',
+        data: request,
+      );
+
+      if (response.statusCode == 200) {
+        return AttendanceResponseModel.fromJson(response.data);
+      } else {
+        throw Exception(
+          'Ошибка обновления посещаемости: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      throw Exception('Ошибка обновления посещаемости: $e');
     }
   }
 }

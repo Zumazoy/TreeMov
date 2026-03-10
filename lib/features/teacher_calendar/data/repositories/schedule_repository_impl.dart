@@ -13,8 +13,8 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   ScheduleRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<LessonResponseModel> getLessonById(int scheduleId) async {
-    return await _remoteDataSource.getLessonById(scheduleId);
+  Future<List<AttendanceResponseModel>> getAttendance(int lessonId) async {
+    return await _remoteDataSource.getAttendance(lessonId);
   }
 
   @override
@@ -34,5 +34,13 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     List<AttendanceRequestModel> request,
   ) async {
     return await _remoteDataSource.createMassAttendance(request);
+  }
+
+  @override
+  Future<AttendanceResponseModel> patchMassAttendance(
+    int id,
+    AttendanceRequestModel request,
+  ) async {
+    return await _remoteDataSource.patchMassAttendance(id, request);
   }
 }
