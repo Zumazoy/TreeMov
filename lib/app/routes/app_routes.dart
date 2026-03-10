@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:treemov/core/network/dio_client.dart';
-import 'package:treemov/core/storage/secure_storage_repository_impl.dart';
 import 'package:treemov/features/authorization/auth_checker_feature.dart';
 import 'package:treemov/features/authorization/presentation/screens/entrance_kid_screen.dart';
 import 'package:treemov/features/authorization/presentation/screens/entrance_teacher_screen.dart';
 import 'package:treemov/features/kid_calendar/presentation/screens/calendar_kid.dart';
 import 'package:treemov/features/organizations/presentation/screens/organizations_screen.dart';
-import 'package:treemov/features/raiting/presentation/screens/rating_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/registration_screen.dart';
 import 'package:treemov/features/registration/presentation/screens/verification_code_screen.dart';
 // import 'package:treemov/features/test_home/home_screen.dart';
@@ -52,11 +49,6 @@ class AppRoutes {
     mainApp: (context) => const TeacherScreen(),
     studentApp: (context) => const StudentScreen(),
     // testHome: (context) => HomeScreen(),
-    rating: (context) {
-      final secureStorageRepository = SecureStorageRepositoryImpl();
-      final dioClient = DioClient(secureStorage: secureStorageRepository);
-      return RatingScreen(dioClient: dioClient);
-    },
     myOrgs: (context) => const OrganizationsScreen(),
   };
 }

@@ -6,27 +6,9 @@ class RatingLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(color: AppColors.achievementDeepBlue),
-    );
-  }
-}
-
-class RatingErrorWidget extends StatelessWidget {
-  final String message;
-
-  const RatingErrorWidget({super.key, required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Ошибка: $message',
-        style: const TextStyle(
-          color: AppColors.achievementDeepBlue,
-          fontSize: 16,
-        ),
-      ),
+    return Scaffold(
+      backgroundColor: AppColors.skyBlue,
+      body: const Center(child: CircularProgressIndicator(color: Colors.white)),
     );
   }
 }
