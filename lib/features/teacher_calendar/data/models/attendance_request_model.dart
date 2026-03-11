@@ -12,9 +12,9 @@ class AttendanceRequestModel {
   });
 
   Map<String, dynamic> toJson() => {
-    'student_id': studentId,
-    'lesson_id': lessonId,
+    if (studentId != null) 'student_id': studentId,
+    if (lessonId != null) 'lesson_id': lessonId,
     'was_present': wasPresent,
-    'comment': comment,
+    if (comment != null) 'comment': comment,
   };
 }

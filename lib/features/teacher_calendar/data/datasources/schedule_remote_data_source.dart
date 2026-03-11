@@ -86,7 +86,7 @@ class ScheduleRemoteDataSource {
     try {
       final response = await _dioClient.post(
         '${ApiConstants.attendances}/batch',
-        data: request,
+        data: request.map((r) => r.toJson()).toList(),
       );
 
       if (response.statusCode == 201) {
@@ -106,7 +106,7 @@ class ScheduleRemoteDataSource {
     try {
       final response = await _dioClient.patch(
         '${ApiConstants.attendances}/$id',
-        data: request,
+        data: request.toJson(),
       );
 
       if (response.statusCode == 200) {
