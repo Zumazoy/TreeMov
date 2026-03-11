@@ -118,9 +118,11 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
 
     if (_groupId == null || _subjectId == null || _classroomId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Пожалуйста, выберите группу, предмет и аудиторию'),
-          backgroundColor: Colors.orange,
+        SnackBar(
+          content: const Text(
+            'Пожалуйста, выберите группу, предмет и аудиторию',
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -128,9 +130,9 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
 
     if (_teacherId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Не удалось определить преподавателя'),
-          backgroundColor: Colors.orange,
+        SnackBar(
+          content: const Text('Не удалось определить преподавателя'),
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -214,9 +216,9 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.teacherPrimary,
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Theme.of(context).colorScheme.primary,
             ),
           ),
           child: child!,
@@ -230,9 +232,9 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
         initialTime: TimeOfDay.fromDateTime(_startDateTime),
         builder: (BuildContext context, Widget? child) {
           return Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: AppColors.teacherPrimary,
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Theme.of(context).colorScheme.primary,
               ),
             ),
             child: child!,
@@ -265,9 +267,9 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.teacherPrimary,
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Theme.of(context).colorScheme.primary,
             ),
           ),
           child: child!,
@@ -281,9 +283,9 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
         initialTime: TimeOfDay.fromDateTime(_endDateTime),
         builder: (BuildContext context, Widget? child) {
           return Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: AppColors.teacherPrimary,
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Theme.of(context).colorScheme.primary,
               ),
             ),
             child: child!,
@@ -328,11 +330,17 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
     required Function(T?) onSelected,
     required String iconPath,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.grayFieldText;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+    final backgroundColor = isDark ? AppColors.darkCard : Colors.white;
+
     return Container(
       width: 352,
       height: 52,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.eventTap, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: DropdownMenu<T>(
@@ -355,11 +363,9 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
         ),
-        textStyle: AppTextStyles.arial14W400.copyWith(
-          color: AppColors.grayFieldText,
-        ),
+        textStyle: AppTextStyles.arial14W400.copyWith(color: textColor),
         menuStyle: MenuStyle(
-          backgroundColor: WidgetStateProperty.all(Colors.white),
+          backgroundColor: WidgetStateProperty.all(backgroundColor),
           elevation: WidgetStateProperty.all(2),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5)),
@@ -369,20 +375,11 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
         hintText: displayValue ?? title,
         leadingIcon: Padding(
           padding: const EdgeInsets.only(right: 12),
-          child: Image.asset(
-            iconPath,
-            width: 20,
-            height: 20,
-            color: AppColors.grayFieldText,
-          ),
+          child: Image.asset(iconPath, width: 20, height: 20, color: textColor),
         ),
-        trailingIcon: const Padding(
-          padding: EdgeInsets.only(left: 8),
-          child: Icon(
-            Icons.expand_more,
-            size: 20,
-            color: AppColors.grayFieldText,
-          ),
+        trailingIcon: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Icon(Icons.expand_more, size: 20, color: textColor),
         ),
       ),
     );
@@ -396,11 +393,17 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
     required Function(String?) onSelected,
     required String iconPath,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.grayFieldText;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+    final backgroundColor = isDark ? AppColors.darkCard : Colors.white;
+
     return Container(
       width: 352,
       height: 52,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.eventTap, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: DropdownMenu<String>(
@@ -421,11 +424,9 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
         ),
-        textStyle: AppTextStyles.arial14W400.copyWith(
-          color: AppColors.grayFieldText,
-        ),
+        textStyle: AppTextStyles.arial14W400.copyWith(color: textColor),
         menuStyle: MenuStyle(
-          backgroundColor: WidgetStateProperty.all(Colors.white),
+          backgroundColor: WidgetStateProperty.all(backgroundColor),
           elevation: WidgetStateProperty.all(2),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5)),
@@ -435,31 +436,28 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
         hintText: value ?? title,
         leadingIcon: Padding(
           padding: const EdgeInsets.only(right: 12),
-          child: Image.asset(
-            iconPath,
-            width: 20,
-            height: 20,
-            color: AppColors.grayFieldText,
-          ),
+          child: Image.asset(iconPath, width: 20, height: 20, color: textColor),
         ),
-        trailingIcon: const Padding(
-          padding: EdgeInsets.only(left: 8),
-          child: Icon(
-            Icons.expand_more,
-            size: 20,
-            color: AppColors.grayFieldText,
-          ),
+        trailingIcon: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Icon(Icons.expand_more, size: 20, color: textColor),
         ),
       ),
     );
   }
 
   Widget _buildDateTimeSection() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.grayFieldText;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+    final dividerColor = theme.dividerColor;
+
     return Container(
       width: 352,
       height: 90,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.eventTap, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Padding(
@@ -475,62 +473,44 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
                       'assets/images/clock_icon.png',
                       width: 20,
                       height: 20,
-                      color: AppColors.grayFieldText,
+                      color: textColor,
                     ),
                     const SizedBox(width: 12),
-                    const Text(
+                    Text(
                       'Начало:',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                        color: AppColors.grayFieldText,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: textColor,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       _formatDateTime(_startDateTime),
-                      style: const TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                        color: AppColors.grayFieldText,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: textColor,
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            Container(height: 1, color: AppColors.eventTap),
-
+            Container(height: 1, color: dividerColor),
             Expanded(
               child: GestureDetector(
                 onTap: _selectEndDateTime,
                 child: Row(
                   children: [
-                    const SizedBox(width: 20),
-                    const SizedBox(width: 12),
-                    const Text(
+                    const SizedBox(width: 32), // Для выравнивания с иконкой
+                    Text(
                       'Конец:',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                        color: AppColors.grayFieldText,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: textColor,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       _formatDateTime(_endDateTime),
-                      style: const TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                        color: AppColors.grayFieldText,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: textColor,
                       ),
                     ),
                   ],
@@ -544,11 +524,16 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
   }
 
   Widget _buildDescriptionField() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.grayFieldText;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+
     return Container(
       width: 352,
       height: 52,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.eventTap, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Padding(
@@ -559,30 +544,20 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
               'assets/images/desc_icon.png',
               width: 20,
               height: 20,
-              color: AppColors.grayFieldText,
+              color: textColor,
             ),
             const SizedBox(width: 12),
             Expanded(
               child: TextField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Описание',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    height: 1.0,
-                    color: AppColors.grayFieldText,
+                  hintStyle: AppTextStyles.arial14W400.copyWith(
+                    color: textColor.withAlpha(128),
                   ),
                   border: InputBorder.none,
                 ),
-                style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  height: 1.0,
-                  color: AppColors.grayFieldText,
-                ),
+                style: AppTextStyles.arial14W400.copyWith(color: textColor),
               ),
             ),
           ],
@@ -593,9 +568,13 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     if (_isLoading) {
       return _buildScaffold(
-        body: const Center(child: CircularProgressIndicator()),
+        body: Center(
+          child: CircularProgressIndicator(color: theme.colorScheme.primary),
+        ),
       );
     }
 
@@ -605,7 +584,7 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(_error!),
+              Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _loadInitialData,
@@ -632,7 +611,10 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
 
         if (state is LessonError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: theme.colorScheme.error,
+            ),
           );
         }
       },
@@ -746,12 +728,17 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
   }
 
   Widget _buildScaffold({required Widget body}) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.teacherPrimary,
+        backgroundColor: theme.colorScheme.primary,
         automaticallyImplyLeading: false,
-        title: Text('Новое событие', style: AppTextStyles.arial20W900.white),
+        title: Text(
+          'Новое событие',
+          style: AppTextStyles.arial20W900.copyWith(color: Colors.white),
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),

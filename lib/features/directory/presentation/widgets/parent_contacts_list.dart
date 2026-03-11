@@ -4,16 +4,23 @@ import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/themes/app_text_styles.dart';
 
 class ParentContactsList extends StatelessWidget {
-  static const List parentContacts = [''];
+  final List<Map<String, String>> contacts;
 
-  const ParentContactsList({super.key});
+  const ParentContactsList({super.key, this.contacts = const []});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    if (contacts.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...parentContacts.map((contact) {
+        ...contacts.map((contact) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Column(
@@ -23,13 +30,19 @@ class ParentContactsList extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: '${contact.relationship}: ',
-                        style: AppTextStyles.arial12W400.grey,
+                        text: '${contact['relationship'] ?? 'Родитель'}: ',
+                        style: AppTextStyles.arial12W400.copyWith(
+                          color: isDark
+                              ? AppColors.darkTextSecondary
+                              : AppColors.directoryTextSecondary,
+                        ),
                       ),
                       TextSpan(
-                        text: contact.fullName,
+                        text: contact['fullName'] ?? '',
                         style: AppTextStyles.arial12W400.copyWith(
-                          color: AppColors.grayFieldText,
+                          color: isDark
+                              ? AppColors.darkText
+                              : AppColors.grayFieldText,
                         ),
                       ),
                     ],
@@ -40,12 +53,18 @@ class ParentContactsList extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: 'Номер: ',
-                        style: AppTextStyles.arial12W400.grey,
+                        style: AppTextStyles.arial12W400.copyWith(
+                          color: isDark
+                              ? AppColors.darkTextSecondary
+                              : AppColors.directoryTextSecondary,
+                        ),
                       ),
                       TextSpan(
-                        text: contact.phone,
+                        text: contact['phone'] ?? '',
                         style: AppTextStyles.arial12W400.copyWith(
-                          color: AppColors.grayFieldText,
+                          color: isDark
+                              ? AppColors.darkText
+                              : AppColors.grayFieldText,
                         ),
                       ),
                     ],

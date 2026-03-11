@@ -28,42 +28,96 @@ class StudentCard extends StatelessWidget {
     }
   }
 
-  Color _getAttendanceColor(bool? status) {
+  Color _getAttendanceColor(bool? status, BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     switch (status) {
       case true:
-        return AppColors.statsTotalText;
+        return isDark
+            ? AppColors.darkCategoryStudyText
+            : AppColors.statsTotalText;
       case false:
-        return AppColors.statsAbsentText;
+        return isDark
+            ? AppColors.darkCategoryGeneralText
+            : AppColors.statsAbsentText;
       default:
-        return AppColors.grayFieldText;
+        return isDark ? AppColors.darkTextSecondary : AppColors.grayFieldText;
     }
   }
 
-  Color _getAttendanceBackgroundColor(bool? status) {
+  Color _getAttendanceBackgroundColor(bool? status, BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     switch (status) {
       case true:
-        return AppColors.statsTotalBg;
+        return isDark ? AppColors.darkCategoryStudyBg : AppColors.statsTotalBg;
       case false:
-        return AppColors.statsAbsentBg;
+        return isDark
+            ? AppColors.darkCategoryGeneralBg
+            : AppColors.statsAbsentBg;
       default:
-        return AppColors.white;
+        return isDark ? AppColors.darkCard : AppColors.white;
     }
   }
 
-  Color _getAttendanceBorderColor(bool? status) {
+  Color _getAttendanceBorderColor(bool? status, BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     switch (status) {
       case true:
-        return AppColors.statsTotalBorder;
+        return isDark ? AppColors.darkSurface : AppColors.statsTotalBorder;
       case false:
-        return AppColors.statsAbsentBorder;
+        return isDark ? AppColors.darkSurface : AppColors.statsAbsentBorder;
       default:
-        return AppColors.lightGrey;
+        return isDark ? AppColors.darkSurface : AppColors.lightGrey;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final attendanceStatus = student.wasPresent;
+
+    final avatarBgColor = isDark
+        ? AppColors.darkCard
+        : AppColors.directoryAvatarBackground;
+    final avatarBorderColor = isDark
+        ? AppColors.darkSurface
+        : AppColors.directoryAvatarBorder;
+    final avatarIconColor = isDark
+        ? AppColors.darkTextSecondary
+        : AppColors.directoryTextSecondary;
+
+    final nameColor = isDark ? AppColors.darkText : Colors.black;
+
+    final presentButtonBgColor = attendanceStatus == true
+        ? (isDark ? AppColors.darkCategoryStudyBg : AppColors.statsTotalBg)
+        : (isDark ? AppColors.darkCard : AppColors.white);
+
+    final presentButtonBorderColor = attendanceStatus == true
+        ? (isDark ? AppColors.darkCategoryStudyText : AppColors.statsTotalText)
+        : (isDark ? AppColors.darkSurface : AppColors.lightGrey);
+
+    final presentIconColor = attendanceStatus == true
+        ? (isDark ? AppColors.darkCategoryStudyText : AppColors.statsTotalText)
+        : (isDark ? AppColors.darkTextSecondary : AppColors.grayFieldText);
+
+    final absentButtonBgColor = attendanceStatus == false
+        ? (isDark ? AppColors.darkCategoryGeneralBg : AppColors.statsAbsentBg)
+        : (isDark ? AppColors.darkCard : AppColors.white);
+
+    final absentButtonBorderColor = attendanceStatus == false
+        ? (isDark
+              ? AppColors.darkCategoryGeneralText
+              : AppColors.statsAbsentText)
+        : (isDark ? AppColors.darkSurface : AppColors.lightGrey);
+
+    final absentIconColor = attendanceStatus == false
+        ? (isDark
+              ? AppColors.darkCategoryGeneralText
+              : AppColors.statsAbsentText)
+        : (isDark ? AppColors.darkTextSecondary : AppColors.grayFieldText);
 
     return Container(
       width: availableWidth,
@@ -71,10 +125,10 @@ class StudentCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: _getAttendanceBackgroundColor(attendanceStatus),
+        color: _getAttendanceBackgroundColor(attendanceStatus, context),
         borderRadius: BorderRadius.circular(12.5),
         border: Border.all(
-          color: _getAttendanceBorderColor(attendanceStatus),
+          color: _getAttendanceBorderColor(attendanceStatus, context),
           width: 1,
         ),
       ),
@@ -85,18 +139,11 @@ class StudentCard extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color: AppColors.directoryAvatarBackground,
+              color: avatarBgColor,
               borderRadius: BorderRadius.circular(26),
-              border: Border.all(
-                color: AppColors.directoryAvatarBorder,
-                width: 2,
-              ),
+              border: Border.all(color: avatarBorderColor, width: 2),
             ),
-            child: const Icon(
-              Icons.person,
-              color: AppColors.directoryTextSecondary,
-              size: 28,
-            ),
+            child: Icon(Icons.person, color: avatarIconColor, size: 28),
           ),
 
           const SizedBox(width: 12),
@@ -109,7 +156,12 @@ class StudentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(student.name, style: AppTextStyles.ttNorms14W600.black),
+                  Text(
+                    student.name,
+                    style: AppTextStyles.ttNorms14W600.copyWith(
+                      color: nameColor,
+                    ),
+                  ),
                   const SizedBox(height: 2),
 
                   // Плашка статуса
@@ -121,18 +173,21 @@ class StudentCard extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: attendanceStatus == null
-                          ? AppColors.white
-                          : _getAttendanceBackgroundColor(attendanceStatus),
+                          ? (isDark ? AppColors.darkCard : AppColors.white)
+                          : _getAttendanceBackgroundColor(
+                              attendanceStatus,
+                              context,
+                            ),
                       borderRadius: BorderRadius.circular(36),
                       border: Border.all(
-                        color: _getAttendanceColor(attendanceStatus),
+                        color: _getAttendanceColor(attendanceStatus, context),
                         width: 1,
                       ),
                     ),
                     child: Text(
                       _getAttendanceText(attendanceStatus),
                       style: AppTextStyles.ttNorms10W500.copyWith(
-                        color: _getAttendanceColor(attendanceStatus),
+                        color: _getAttendanceColor(attendanceStatus, context),
                       ),
                     ),
                   ),
@@ -158,23 +213,17 @@ class StudentCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.5),
                       border: Border.all(
-                        color: attendanceStatus == true
-                            ? AppColors.statsTotalText
-                            : AppColors.lightGrey,
+                        color: presentButtonBorderColor,
                         width: 1,
                       ),
-                      color: attendanceStatus == true
-                          ? AppColors.statsTotalBg
-                          : AppColors.white,
+                      color: presentButtonBgColor,
                     ),
                     child: Center(
                       child: Image.asset(
                         'assets/images/student_present.png',
                         width: 16,
                         height: 16,
-                        color: attendanceStatus == true
-                            ? AppColors.statsTotalText
-                            : AppColors.grayFieldText,
+                        color: presentIconColor,
                       ),
                     ),
                   ),
@@ -191,23 +240,17 @@ class StudentCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.5),
                       border: Border.all(
-                        color: attendanceStatus == false
-                            ? AppColors.statsAbsentText
-                            : AppColors.lightGrey,
+                        color: absentButtonBorderColor,
                         width: 1,
                       ),
-                      color: attendanceStatus == false
-                          ? AppColors.statsAbsentBg
-                          : AppColors.white,
+                      color: absentButtonBgColor,
                     ),
                     child: Center(
                       child: Image.asset(
                         'assets/images/student_absent.png',
                         width: 16,
                         height: 16,
-                        color: attendanceStatus == false
-                            ? AppColors.statsAbsentText
-                            : AppColors.grayFieldText,
+                        color: absentIconColor,
                       ),
                     ),
                   ),

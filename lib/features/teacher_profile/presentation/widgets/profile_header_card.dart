@@ -25,13 +25,13 @@ class ProfileHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -41,23 +41,16 @@ class ProfileHeaderCard extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: theme.colorScheme.primary.withAlpha(
-                51,
-              ), // 👈 ИСПРАВЛЕНО (было teacherPrimary)
-              border: Border.all(
-                color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
-                width: 1.5,
-              ),
+              color: theme.colorScheme.primary.withAlpha(51),
+              border: Border.all(color: theme.colorScheme.primary, width: 1.5),
             ),
             child: CircleAvatar(
               radius: 36,
-              backgroundColor: theme.colorScheme.primary.withAlpha(
-                26,
-              ), // 👈 ИСПРАВЛЕНО (было directoryAvatarBackground)
+              backgroundColor: theme.colorScheme.primary.withAlpha(26),
               child: Icon(
                 Icons.person,
                 size: 32,
-                color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                color: theme.colorScheme.primary,
               ),
             ),
           ),
@@ -68,9 +61,7 @@ class ProfileHeaderCard extends StatelessWidget {
               children: [
                 Text(
                   _getFullName(),
-                  style: AppTextStyles.ttNorms16W700.themed(
-                    context,
-                  ), // 👈 ИСПРАВЛЕНО
+                  style: AppTextStyles.ttNorms16W700.themed(context),
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),

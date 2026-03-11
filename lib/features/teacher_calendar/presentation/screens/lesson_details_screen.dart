@@ -80,10 +80,17 @@ class LessonDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.grayFieldText;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+    final cardColor = isDark ? AppColors.darkCard : AppColors.white;
+    final primaryColor = theme.colorScheme.primary;
+
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.teacherPrimary,
+        backgroundColor: primaryColor,
         automaticallyImplyLeading: false,
         title: Text('Событие', style: AppTextStyles.arial20W900.white),
         centerTitle: true,
@@ -101,12 +108,13 @@ class LessonDetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // Основная карточка с информацией
                     Container(
                       width: 367,
                       constraints: const BoxConstraints(minHeight: 320),
                       decoration: BoxDecoration(
-                        color: AppColors.white,
-                        border: Border.all(color: AppColors.eventTap, width: 1),
+                        color: cardColor,
+                        border: Border.all(color: borderColor, width: 1),
                         borderRadius: BorderRadius.circular(12.5),
                       ),
                       padding: const EdgeInsets.all(20),
@@ -120,7 +128,11 @@ class LessonDetailsScreen extends StatelessWidget {
                               event.group != null
                                   ? 'Группа "${event.formatTitle(event.group?.title)}"'
                                   : '(Не указан)',
-                              style: AppTextStyles.arial16W900.black,
+                              style: AppTextStyles.arial16W900.copyWith(
+                                color: isDark
+                                    ? AppColors.darkText
+                                    : Colors.black,
+                              ),
                             ),
                           ),
 
@@ -129,6 +141,7 @@ class LessonDetailsScreen extends StatelessWidget {
                             text: event.subject != null
                                 ? event.formatTitle(event.subject?.title)
                                 : '(Не указан)',
+                            textColor: textColor,
                           ),
                           const SizedBox(height: 12),
 
@@ -137,15 +150,21 @@ class LessonDetailsScreen extends StatelessWidget {
                             text: event.classroom != null
                                 ? event.formatTitle(event.classroom?.title)
                                 : '(Не указана)',
+                            textColor: textColor,
                           ),
                           const SizedBox(height: 16),
 
-                          _buildTimeSection(),
+                          _buildTimeSection(
+                            textColor: textColor,
+                            borderColor: borderColor,
+                            dividerColor: theme.dividerColor,
+                          ),
                           const SizedBox(height: 12),
 
                           _buildInfoRow(
                             iconPath: 'assets/images/bell_icon.png',
                             text: 'Добавить напоминание',
+                            textColor: textColor,
                           ),
                         ],
                       ),
@@ -153,12 +172,13 @@ class LessonDetailsScreen extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
+                    // Карточка с описанием
                     Container(
                       width: 367,
                       constraints: const BoxConstraints(minHeight: 120),
                       decoration: BoxDecoration(
-                        color: AppColors.white,
-                        border: Border.all(color: AppColors.eventTap, width: 1),
+                        color: cardColor,
+                        border: Border.all(color: borderColor, width: 1),
                         borderRadius: BorderRadius.circular(12.5),
                       ),
                       padding: const EdgeInsets.all(20),
@@ -168,6 +188,7 @@ class LessonDetailsScreen extends StatelessWidget {
                           _buildInfoRow(
                             iconPath: 'assets/images/desc_icon.png',
                             text: 'Описание',
+                            textColor: textColor,
                           ),
                           const SizedBox(height: 12),
                           Text(
@@ -176,7 +197,7 @@ class LessonDetailsScreen extends StatelessWidget {
                               message: 'Описание занятия отсутствует',
                             ),
                             style: AppTextStyles.arial14W400.copyWith(
-                              color: AppColors.grayFieldText,
+                              color: textColor,
                               height: 1.4,
                             ),
                           ),
@@ -188,6 +209,7 @@ class LessonDetailsScreen extends StatelessWidget {
               ),
             ),
 
+            // Нижняя панель с кнопками действий
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -198,6 +220,7 @@ class LessonDetailsScreen extends StatelessWidget {
                     text: 'Изменить',
                     icon: Icons.edit,
                     onPressed: () => _showChangeModal(context),
+                    theme: theme,
                   ),
 
                   const SizedBox(width: 16),
@@ -206,6 +229,7 @@ class LessonDetailsScreen extends StatelessWidget {
                     text: 'Удалить',
                     icon: Icons.delete,
                     onPressed: () => _showDeleteModal(context),
+                    theme: theme,
                   ),
                 ],
               ),
@@ -220,24 +244,21 @@ class LessonDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow({required String iconPath, required String text}) {
+  Widget _buildInfoRow({
+    required String iconPath,
+    required String text,
+    required Color textColor,
+  }) {
     return SizedBox(
       height: 32,
       child: Row(
         children: [
-          Image.asset(
-            iconPath,
-            width: 20,
-            height: 20,
-            color: AppColors.grayFieldText,
-          ),
+          Image.asset(iconPath, width: 20, height: 20, color: textColor),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
-              style: AppTextStyles.arial14W400.copyWith(
-                color: AppColors.grayFieldText,
-              ),
+              style: AppTextStyles.arial14W400.copyWith(color: textColor),
             ),
           ),
         ],
@@ -245,12 +266,16 @@ class LessonDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeSection() {
+  Widget _buildTimeSection({
+    required Color textColor,
+    required Color borderColor,
+    required Color dividerColor,
+  }) {
     return Container(
       width: double.infinity,
       height: 64,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.eventTap, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Column(
@@ -264,18 +289,12 @@ class LessonDetailsScreen extends StatelessWidget {
                     'assets/images/clock_icon.png',
                     width: 20,
                     height: 20,
-                    color: AppColors.grayFieldText,
+                    color: textColor,
                   ),
                   const SizedBox(width: 12),
-                  const Text(
+                  Text(
                     'Начало:',
-                    style: TextStyle(
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      height: 1.0,
-                      color: AppColors.grayFieldText,
-                    ),
+                    style: AppTextStyles.arial14W400.copyWith(color: textColor),
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -285,34 +304,22 @@ class LessonDetailsScreen extends StatelessWidget {
                           : event.startTime,
                       message: 'Время начала не задано',
                     ),
-                    style: const TextStyle(
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      height: 1.0,
-                      color: AppColors.grayFieldText,
-                    ),
+                    style: AppTextStyles.arial14W400.copyWith(color: textColor),
                   ),
                 ],
               ),
             ),
           ),
-          Container(height: 1, color: AppColors.eventTap),
+          Container(height: 1, color: dividerColor),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   const SizedBox(width: 32),
-                  const Text(
+                  Text(
                     'Конец:',
-                    style: TextStyle(
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      height: 1.0,
-                      color: AppColors.grayFieldText,
-                    ),
+                    style: AppTextStyles.arial14W400.copyWith(color: textColor),
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -322,13 +329,7 @@ class LessonDetailsScreen extends StatelessWidget {
                           : event.endTime,
                       message: 'Время конца не задано',
                     ),
-                    style: const TextStyle(
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      height: 1.0,
-                      color: AppColors.grayFieldText,
-                    ),
+                    style: AppTextStyles.arial14W400.copyWith(color: textColor),
                   ),
                 ],
               ),
@@ -343,30 +344,36 @@ class LessonDetailsScreen extends StatelessWidget {
     required String text,
     required IconData icon,
     required VoidCallback onPressed,
+    required ThemeData theme,
   }) {
+    final isDark = theme.brightness == Brightness.dark;
+    final backgroundColor = isDark ? AppColors.darkCard : AppColors.white;
+    final foregroundColor = isDark ? AppColors.darkText : Colors.black;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+
     return SizedBox(
       width: 90,
       height: 61,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.white,
-          foregroundColor: Colors.black,
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
           padding: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.5),
-            side: BorderSide(color: AppColors.eventTap, width: 1),
+            side: BorderSide(color: borderColor, width: 1),
           ),
           elevation: 0,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 20, color: Colors.black),
+            Icon(icon, size: 20, color: foregroundColor),
             const SizedBox(height: 5),
             Text(
               text,
-              style: AppTextStyles.arial12W400.black,
+              style: AppTextStyles.arial12W400.copyWith(color: foregroundColor),
               textAlign: TextAlign.center,
             ),
           ],

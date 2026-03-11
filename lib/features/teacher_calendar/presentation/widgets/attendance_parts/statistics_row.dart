@@ -20,6 +20,9 @@ class StatisticsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return SizedBox(
       width: availableWidth,
       height: 80,
@@ -29,9 +32,15 @@ class StatisticsRow extends StatelessWidget {
             child: _buildStatContainer(
               count: totalStudents,
               title: 'Всего',
-              bgColor: AppColors.statsTodayBg,
-              borderColor: AppColors.statsTodayBorder,
-              countColor: AppColors.statsTodayText,
+              bgColor: isDark
+                  ? AppColors.darkCategoryParentsBg
+                  : AppColors.statsTodayBg,
+              borderColor: isDark
+                  ? AppColors.darkSurface
+                  : AppColors.statsTodayBorder,
+              countColor: isDark
+                  ? AppColors.darkCategoryParentsText
+                  : AppColors.statsTodayText,
             ),
           ),
           const SizedBox(width: 5),
@@ -39,9 +48,15 @@ class StatisticsRow extends StatelessWidget {
             child: _buildStatContainer(
               count: presentCount,
               title: 'Присутствует',
-              bgColor: AppColors.statsTotalBg,
-              borderColor: AppColors.statsTotalBorder,
-              countColor: AppColors.statsTotalText,
+              bgColor: isDark
+                  ? AppColors.darkCategoryStudyBg
+                  : AppColors.statsTotalBg,
+              borderColor: isDark
+                  ? AppColors.darkSurface
+                  : AppColors.statsTotalBorder,
+              countColor: isDark
+                  ? AppColors.darkCategoryStudyText
+                  : AppColors.statsTotalText,
             ),
           ),
           const SizedBox(width: 5),
@@ -49,9 +64,15 @@ class StatisticsRow extends StatelessWidget {
             child: _buildStatContainer(
               count: absentCount,
               title: 'Отсутствует',
-              bgColor: AppColors.statsAbsentBg,
-              borderColor: AppColors.statsAbsentBorder,
-              countColor: AppColors.statsAbsentText,
+              bgColor: isDark
+                  ? AppColors.darkCategoryGeneralBg
+                  : AppColors.statsAbsentBg,
+              borderColor: isDark
+                  ? AppColors.darkSurface
+                  : AppColors.statsAbsentBorder,
+              countColor: isDark
+                  ? AppColors.darkCategoryGeneralText
+                  : AppColors.statsAbsentText,
             ),
           ),
           const SizedBox(width: 5),
@@ -59,9 +80,13 @@ class StatisticsRow extends StatelessWidget {
             child: _buildStatContainer(
               count: notMarkedCount,
               title: 'Не отмечено',
-              bgColor: AppColors.notesBackground,
-              borderColor: AppColors.statsNotMarkedBorder,
-              countColor: AppColors.black,
+              bgColor: isDark ? AppColors.darkCard : AppColors.notesBackground,
+              borderColor: isDark
+                  ? AppColors.darkSurface
+                  : AppColors.statsNotMarkedBorder,
+              countColor: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.black,
             ),
           ),
         ],

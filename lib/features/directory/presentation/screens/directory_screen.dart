@@ -71,6 +71,9 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return BlocConsumer<DirectoryBloc, DirectoryState>(
       listener: (context, state) {
         if (state is GroupsWithCountsLoaded) {
@@ -84,11 +87,13 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: AppColors.white,
+          backgroundColor: theme.scaffoldBackgroundColor,
           appBar: AppBar(
             title: const AppBarTitle(text: 'Ученики'),
-            backgroundColor: AppColors.white,
-            foregroundColor: AppColors.grayFieldText,
+            backgroundColor: theme.scaffoldBackgroundColor,
+            foregroundColor: isDark
+                ? AppColors.darkText
+                : AppColors.grayFieldText,
             elevation: 0,
           ),
           body: Column(
@@ -97,7 +102,7 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
                 controller: _searchController,
                 onChanged: _onSearchChanged,
               ),
-              Expanded(child: _buildContent(state)),
+              Expanded(child: _buildContent(state, isDark)),
             ],
           ),
         );
@@ -105,9 +110,13 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
     );
   }
 
-  Widget _buildContent(DirectoryState state) {
+  Widget _buildContent(DirectoryState state, bool isDark) {
     if (state is DirectoryLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      );
     }
 
     if (state is DirectoryError) {
@@ -115,28 +124,38 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
               size: 64,
-              color: AppColors.directoryTextSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
             Text(
               'Ошибка загрузки',
               style: AppTextStyles.ttNorms16W700.copyWith(
-                color: AppColors.grayFieldText,
+                color: isDark ? AppColors.darkText : AppColors.grayFieldText,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               state.message,
               textAlign: TextAlign.center,
-              style: AppTextStyles.ttNorms14W400.grey,
+              style: AppTextStyles.ttNorms14W400.copyWith(
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.directoryTextSecondary,
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () =>
                   context.read<DirectoryBloc>().add(LoadAllGroupsWithCounts()),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Colors.white,
+              ),
               child: const Text('Попробовать снова'),
             ),
           ],
@@ -149,22 +168,28 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.search_off,
               size: 64,
-              color: AppColors.directoryTextSecondary,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.directoryTextSecondary,
             ),
             const SizedBox(height: 16),
             Text(
               'Группы не найдены',
               style: AppTextStyles.ttNorms16W700.copyWith(
-                color: AppColors.grayFieldText,
+                color: isDark ? AppColors.darkText : AppColors.grayFieldText,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'Попробуйте изменить поисковый запрос',
-              style: AppTextStyles.ttNorms14W400.grey,
+              style: AppTextStyles.ttNorms14W400.copyWith(
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.directoryTextSecondary,
+              ),
             ),
           ],
         ),
@@ -177,22 +202,28 @@ class _DirectoryScreenState extends State<_DirectoryScreenContent> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.group_outlined,
                 size: 64,
-                color: AppColors.directoryTextSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.directoryTextSecondary,
               ),
               const SizedBox(height: 16),
               Text(
                 'Нет доступных групп',
                 style: AppTextStyles.ttNorms16W700.copyWith(
-                  color: AppColors.grayFieldText,
+                  color: isDark ? AppColors.darkText : AppColors.grayFieldText,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Группы появятся после их создания',
-                style: AppTextStyles.ttNorms14W400.grey,
+                style: AppTextStyles.ttNorms14W400.copyWith(
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.directoryTextSecondary,
+                ),
               ),
             ],
           ),

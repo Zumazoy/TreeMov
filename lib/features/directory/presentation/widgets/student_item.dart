@@ -24,6 +24,23 @@ class _StudentItemState extends State<StudentItem> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    Color getBackgroundColor() {
+      if (_isPressed) {
+        return isDark ? AppColors.darkEventTap : AppColors.eventTap;
+      }
+      return isDark ? AppColors.darkCard : AppColors.white;
+    }
+
+    Color getBorderColor() {
+      if (_isPressed) {
+        return isDark ? AppColors.darkEventTap : AppColors.eventTap;
+      }
+      return isDark ? AppColors.darkSurface : AppColors.directoryBorder;
+    }
+
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) => setState(() => _isPressed = false),
@@ -33,10 +50,8 @@ class _StudentItemState extends State<StudentItem> {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: _isPressed ? AppColors.eventTap : AppColors.white,
-          border: Border.all(
-            color: _isPressed ? AppColors.eventTap : AppColors.directoryBorder,
-          ),
+          color: getBackgroundColor(),
+          border: Border.all(color: getBorderColor()),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -46,16 +61,22 @@ class _StudentItemState extends State<StudentItem> {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: AppColors.directoryAvatarBackground,
+                color: isDark
+                    ? AppColors.darkCard
+                    : AppColors.directoryAvatarBackground,
                 borderRadius: BorderRadius.circular(26),
                 border: Border.all(
-                  color: AppColors.directoryAvatarBorder,
+                  color: isDark
+                      ? AppColors.darkSurface
+                      : AppColors.directoryAvatarBorder,
                   width: 2,
                 ),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person,
-                color: AppColors.directoryTextSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.directoryTextSecondary,
                 size: 28,
               ),
             ),
@@ -68,13 +89,19 @@ class _StudentItemState extends State<StudentItem> {
                   Text(
                     '${widget.student.name ?? ''} ${widget.student.surname ?? ''}',
                     style: AppTextStyles.arial14W700.copyWith(
-                      color: AppColors.grayFieldText,
+                      color: isDark
+                          ? AppColors.darkText
+                          : AppColors.grayFieldText,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Группа: ${widget.groupName}',
-                    style: AppTextStyles.arial12W400.grey,
+                    style: AppTextStyles.arial12W400.copyWith(
+                      color: isDark
+                          ? AppColors.darkTextSecondary
+                          : AppColors.directoryTextSecondary,
+                    ),
                   ),
                 ],
               ),
@@ -84,10 +111,15 @@ class _StudentItemState extends State<StudentItem> {
               'assets/images/purple_arrow.png',
               width: 24,
               height: 24,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.grayFieldText,
               errorBuilder: (context, error, stackTrace) {
                 return Icon(
                   Icons.arrow_forward_ios,
-                  color: AppColors.grayFieldText,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.grayFieldText,
                   size: 20,
                 );
               },

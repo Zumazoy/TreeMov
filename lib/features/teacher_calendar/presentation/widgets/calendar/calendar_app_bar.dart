@@ -5,12 +5,10 @@ class CalendarAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return AppBar(
-      backgroundColor: theme
-          .appBarTheme
-          .backgroundColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+      backgroundColor: theme.appBarTheme.backgroundColor,
       elevation: 0,
       title: Row(
         mainAxisSize: MainAxisSize.min,
@@ -19,7 +17,7 @@ class CalendarAppBar extends StatelessWidget implements PreferredSizeWidget {
             'assets/images/calendar_simple_icon.png',
             width: 24,
             height: 24,
-            color: theme.iconTheme.color, // 👈 ИСПРАВЛЕНО (было Colors.black)
+            color: theme.iconTheme.color,
           ),
           const SizedBox(width: 8),
           Text(
@@ -28,10 +26,7 @@ class CalendarAppBar extends StatelessWidget implements PreferredSizeWidget {
               fontSize: 20,
               fontWeight: FontWeight.w700,
               fontFamily: 'Arial',
-              color: theme
-                  .textTheme
-                  .titleLarge
-                  ?.color, // 👈 ИСПРАВЛЕНО (было Colors.black)
+              color: theme.textTheme.titleLarge?.color,
             ),
           ),
         ],

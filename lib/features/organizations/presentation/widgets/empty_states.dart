@@ -7,26 +7,35 @@ class EmptySearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.search_off,
             size: 64,
-            color: AppColors.directoryTextSecondary,
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.directoryTextSecondary,
           ),
           const SizedBox(height: 16),
           Text(
             'Ничего не найдено',
             style: AppTextStyles.ttNorms16W700.copyWith(
-              color: AppColors.grayFieldText,
+              color: isDark ? AppColors.darkText : AppColors.grayFieldText,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Попробуйте изменить поисковый запрос',
-            style: AppTextStyles.ttNorms14W400.grey,
+            style: AppTextStyles.ttNorms14W400.copyWith(
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.directoryTextSecondary,
+            ),
           ),
         ],
       ),
@@ -39,26 +48,35 @@ class EmptyOrganizationsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.business_outlined,
             size: 64,
-            color: AppColors.directoryTextSecondary,
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.directoryTextSecondary,
           ),
           const SizedBox(height: 16),
           Text(
             'Нет организаций',
             style: AppTextStyles.ttNorms16W700.copyWith(
-              color: AppColors.grayFieldText,
+              color: isDark ? AppColors.darkText : AppColors.grayFieldText,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Создайте первую организацию и примите приглашение',
-            style: AppTextStyles.ttNorms14W400.grey,
+            style: AppTextStyles.ttNorms14W400.copyWith(
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.directoryTextSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
         ],

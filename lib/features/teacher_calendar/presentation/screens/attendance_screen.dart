@@ -222,6 +222,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final double availableWidth = MediaQuery.of(context).size.width - 40;
     final sortedStudents = _getSortedStudents();
 
@@ -288,12 +290,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: AppColors.white,
+          backgroundColor: theme.scaffoldBackgroundColor,
           elevation: 0,
           titleSpacing: 0,
-          title: Text('Посещаемость', style: AppTextStyles.ttNorms22W900.black),
+          title: Text(
+            'Посещаемость',
+            style: AppTextStyles.ttNorms22W900.copyWith(
+              color: isDark ? AppColors.darkText : Colors.black,
+            ),
+          ),
           actions: [
             if (_attendances.isNotEmpty)
               Padding(
@@ -301,8 +308,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 child: ElevatedButton(
                   onPressed: _markAllPresent,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.calendarButton,
-                    foregroundColor: AppColors.white,
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.5),
                     ),
@@ -346,18 +353,20 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 Text(
                   'Список обучающихся: ${_attendances.length}',
                   style: AppTextStyles.arial16W700.copyWith(
-                    color: AppColors.grayFieldText,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.grayFieldText,
                   ),
                 ),
                 const SizedBox(height: 16),
 
                 // Список студентов
                 if (_isLoading)
-                  _buildLoadingIndicator()
+                  _buildLoadingIndicator(theme)
                 else if (_errorMessage != null)
-                  _buildErrorState(_errorMessage!)
+                  _buildErrorState(_errorMessage!, isDark)
                 else if (_attendances.isEmpty)
-                  _buildEmptyState()
+                  _buildEmptyState(isDark)
                 else
                   Column(
                     children: sortedStudents.map((student) {
@@ -372,10 +381,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 const SizedBox(height: 20),
 
                 // Кнопка сохранения
-                if (_attendances.isNotEmpty) _buildSaveButton(availableWidth),
-
+                if (_attendances.isNotEmpty)
+                  _buildSaveButton(availableWidth, theme, isDark),
                 if (_attendances.isNotEmpty && !canSaveAttendance)
-                  _buildSaveHintText(),
+                  _buildSaveHintText(isDark),
               ],
             ),
           ),
@@ -388,16 +397,16 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  Widget _buildLoadingIndicator() {
+  Widget _buildLoadingIndicator(ThemeData theme) {
     return SizedBox(
       height: 100,
       child: Center(
-        child: CircularProgressIndicator(color: AppColors.calendarButton),
+        child: CircularProgressIndicator(color: theme.colorScheme.primary),
       ),
     );
   }
 
-  Widget _buildErrorState(String message) {
+  Widget _buildErrorState(String message, bool isDark) {
     return SizedBox(
       height: 100,
       child: Center(
@@ -407,13 +416,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             Text(
               'Ошибка загрузки студентов',
               style: AppTextStyles.ttNorms16W400.copyWith(
-                color: AppColors.grayFieldText,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.grayFieldText,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               message,
-              style: AppTextStyles.ttNorms12W400.copyWith(color: Colors.red),
+              style: AppTextStyles.ttNorms12W400.copyWith(
+                color: isDark ? AppColors.darkCategoryGeneralText : Colors.red,
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -422,21 +435,24 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(bool isDark) {
     return SizedBox(
       height: 100,
       child: Center(
         child: Text(
           'В группе нет студентов',
           style: AppTextStyles.ttNorms16W400.copyWith(
-            color: AppColors.grayFieldText,
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.grayFieldText,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildSaveButton(double availableWidth) {
+  Widget _buildSaveButton(double availableWidth, ThemeData theme, bool isDark) {
+    // изменено
     return SizedBox(
       width: availableWidth,
       height: 56,
@@ -446,20 +462,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             : (canSaveAttendance ? _saveAttendance : null),
         style: ElevatedButton.styleFrom(
           backgroundColor: canSaveAttendance && !_isSaving
-              ? AppColors.calendarButton
-              : AppColors.eventTap,
+              ? theme.colorScheme.primary
+              : (isDark ? AppColors.darkCard : AppColors.eventTap),
           foregroundColor: canSaveAttendance && !_isSaving
-              ? AppColors.white
-              : AppColors.calendarButton,
+              ? Colors.white
+              : theme.colorScheme.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.5),
           ),
-          side: BorderSide(
-            color: canSaveAttendance && !_isSaving
-                ? AppColors.calendarButton
-                : AppColors.calendarButton,
-            width: 1,
-          ),
+          side: BorderSide(color: theme.colorScheme.primary, width: 1),
           elevation: 0,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -470,7 +481,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.calendarButton,
+                  color: theme.colorScheme.primary,
                 ),
               )
             : Text(
@@ -479,8 +490,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     : 'Сохранить ($notMarkedCount не отмечено)',
                 style: AppTextStyles.ttNorms16W600.copyWith(
                   color: canSaveAttendance
-                      ? AppColors.white
-                      : AppColors.calendarButton,
+                      ? Colors.white
+                      : theme.colorScheme.primary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -488,13 +499,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  Widget _buildSaveHintText() {
+  Widget _buildSaveHintText(bool isDark) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Center(
         child: Text(
           'Отметьте всех, чтобы сохранить',
-          style: AppTextStyles.ttNorms14W400.black,
+          style: AppTextStyles.ttNorms14W400.copyWith(
+            color: isDark ? AppColors.darkTextSecondary : Colors.black,
+          ),
         ),
       ),
     );

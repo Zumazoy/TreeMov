@@ -16,15 +16,13 @@ class CalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Container(
       width: 327,
       height: 48,
       decoration: BoxDecoration(
-        color: theme
-            .colorScheme
-            .primary, // 👈 ИСПРАВЛЕНО (было AppColors.calendarButton)
+        color: theme.colorScheme.primary,
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Row(
@@ -33,9 +31,7 @@ class CalendarHeader extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.chevron_left,
-              color: theme
-                  .colorScheme
-                  .onPrimary, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+              color: theme.colorScheme.onPrimary,
               size: 24,
             ),
             onPressed: onPrevMonth,
@@ -46,9 +42,7 @@ class CalendarHeader extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
-                color: theme
-                    .colorScheme
-                    .onPrimary, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+                color: theme.colorScheme.onPrimary,
                 fontFamily: 'Arial',
                 height: 1.0,
               ),
@@ -57,7 +51,7 @@ class CalendarHeader extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.chevron_right,
-              color: theme.colorScheme.onPrimary, // 👈 ИСПРАВЛЕНО
+              color: theme.colorScheme.onPrimary,
               size: 24,
             ),
             onPressed: onNextMonth,

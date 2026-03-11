@@ -38,12 +38,12 @@ class EventsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Container(
       height: 450,
       decoration: BoxDecoration(
-        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+        color: theme.cardColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12.5),
           topRight: Radius.circular(12.5),
@@ -56,7 +56,7 @@ class EventsPanel extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+              color: theme.colorScheme.primary,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -66,19 +66,13 @@ class EventsPanel extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(
-                  color: theme
-                      .dividerColor, // 👈 ИСПРАВЛЕНО (было Colors.grey.shade300)
-                  width: 1,
-                ),
+                bottom: BorderSide(color: theme.dividerColor, width: 1),
               ),
             ),
             child: Center(
               child: Text(
                 _formatDate(selectedDate),
-                style: AppTextStyles.ttNorms16W600.themed(
-                  context,
-                ), // 👈 ИСПРАВЛЕНО
+                style: AppTextStyles.ttNorms16W600.themed(context),
               ),
             ),
           ),
@@ -88,8 +82,7 @@ class EventsPanel extends StatelessWidget {
                     child: Text(
                       'На эту дату событий нет',
                       style: AppTextStyles.ttNorms14W400.copyWith(
-                        color:
-                            theme.textTheme.bodySmall?.color, // 👈 ИСПРАВЛЕНО
+                        color: theme.textTheme.bodySmall?.color,
                       ),
                     ),
                   )

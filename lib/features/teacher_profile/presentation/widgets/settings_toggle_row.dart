@@ -17,28 +17,23 @@ class SettingsToggleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return ListTile(
-      title: Text(
-        title,
-        style: AppTextStyles.ttNorms16W500.themed(context), // 👈 ИСПРАВЛЕНО
-      ),
+      title: Text(title, style: AppTextStyles.ttNorms16W500.themed(context)),
       subtitle: Text(
         subtitle,
         style: AppTextStyles.ttNorms12W400.copyWith(
-          color: theme.textTheme.bodySmall?.color, // 👈 ИСПРАВЛЕНО
+          color: theme.textTheme.bodySmall?.color,
         ),
       ),
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeThumbColor: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
-        activeTrackColor: theme.colorScheme.primary.withAlpha(
-          128,
-        ), // 👈 ИСПРАВЛЕНО
-        inactiveThumbColor: theme.unselectedWidgetColor, // 👈 ИСПРАВЛЕНО
-        inactiveTrackColor: theme.disabledColor, // 👈 ИСПРАВЛЕНО
+        activeThumbColor: theme.colorScheme.primary,
+        activeTrackColor: theme.colorScheme.primary.withAlpha(128),
+        inactiveThumbColor: theme.unselectedWidgetColor,
+        inactiveTrackColor: theme.disabledColor,
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       onTap: () => onChanged(!value),

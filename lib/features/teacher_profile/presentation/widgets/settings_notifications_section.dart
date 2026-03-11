@@ -23,7 +23,7 @@ class SettingsNotificationsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Column(
       children: [
@@ -40,11 +40,10 @@ class SettingsNotificationsSection extends StatelessWidget {
               onChanged: onNotificationsChanged,
             ),
             Divider(
-              // 👈 УБРАЛ const
               height: 1,
               indent: 16,
               endIndent: 16,
-              color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
+              color: theme.dividerColor,
             ),
             SettingsToggleRow(
               title: 'Email уведомления',
@@ -53,11 +52,10 @@ class SettingsNotificationsSection extends StatelessWidget {
               onChanged: onEmailChanged,
             ),
             Divider(
-              // 👈 УБРАЛ const
               height: 1,
               indent: 16,
               endIndent: 16,
-              color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
+              color: theme.dividerColor,
             ),
             SettingsToggleRow(
               title: 'Push уведомления',

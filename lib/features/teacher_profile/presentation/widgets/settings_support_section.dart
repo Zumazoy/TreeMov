@@ -17,7 +17,7 @@ class SettingsSupportSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Column(
       children: [
@@ -33,11 +33,10 @@ class SettingsSupportSection extends StatelessWidget {
               onTap: onHelpTap,
             ),
             Divider(
-              // 👈 УБРАЛ const
               height: 1,
               indent: 16,
               endIndent: 16,
-              color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
+              color: theme.dividerColor,
             ),
             SettingsNavRow(
               title: 'Обратная связь',
@@ -45,11 +44,10 @@ class SettingsSupportSection extends StatelessWidget {
               onTap: onFeedbackTap,
             ),
             Divider(
-              // 👈 УБРАЛ const
               height: 1,
               indent: 16,
               endIndent: 16,
-              color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
+              color: theme.dividerColor,
             ),
             SettingsNavRow(
               title: 'О системе',

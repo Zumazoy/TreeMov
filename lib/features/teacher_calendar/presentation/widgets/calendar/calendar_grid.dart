@@ -18,7 +18,7 @@ class CalendarGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
     final List<DateTime?> calendarDays = CalendarUtils.generateMonthDays(
       currentDate,
     );
@@ -52,16 +52,11 @@ class CalendarGrid extends StatelessWidget {
               margin: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 border: isToday
-                    ? Border.all(
-                        color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
-                        width: 1,
-                      )
+                    ? Border.all(color: theme.colorScheme.primary, width: 1)
                     : null,
                 borderRadius: BorderRadius.circular(8),
                 color: isSelected
-                    ? theme.colorScheme.primary.withAlpha(
-                        51,
-                      ) // 👈 ИСПРАВЛЕНО (было AppColors.selectedDateBackground)
+                    ? theme.colorScheme.primary.withAlpha(51)
                     : Colors.transparent,
               ),
               child: Stack(
@@ -74,10 +69,7 @@ class CalendarGrid extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Arial',
                         height: 1.0,
-                        color: theme
-                            .textTheme
-                            .bodyLarge
-                            ?.color, // 👈 ИСПРАВЛЕНО (было AppColors.notesDarkText)
+                        color: theme.textTheme.bodyLarge?.color,
                       ),
                     ),
                   ),
@@ -91,9 +83,7 @@ class CalendarGrid extends StatelessWidget {
                           width: 6,
                           height: 6,
                           decoration: BoxDecoration(
-                            color: theme
-                                .colorScheme
-                                .primary, // 👈 ИСПРАВЛЕНО (было AppColors.calendarButton)
+                            color: theme.colorScheme.primary,
                             shape: BoxShape.circle,
                           ),
                         ),

@@ -16,23 +16,29 @@ class OrganizationItem extends StatelessWidget {
     required this.onTap,
   });
 
-  Color _getRoleColor(String role) {
+  Color _getRoleColor(String role, bool isDark) {
     if (role.toLowerCase().contains('администратор') ||
         role.toLowerCase().contains('crm_admin') ||
         role.toLowerCase().contains('teacher') ||
         role.toLowerCase().contains('учитель')) {
-      return AppColors.plusButton;
+      return isDark ? AppColors.darkCategoryParentsText : AppColors.plusButton;
     } else if (role.toLowerCase().contains('студент') ||
         role.toLowerCase().contains('student') ||
         role.toLowerCase().contains('ученик')) {
-      return AppColors.calendarButton;
+      return isDark
+          ? AppColors.darkCategoryStudyText
+          : AppColors.calendarButton;
     }
-    return AppColors.directoryTextSecondary;
+    return isDark
+        ? AppColors.darkTextSecondary
+        : AppColors.directoryTextSecondary;
   }
 
   @override
   Widget build(BuildContext context) {
-    final roleColor = _getRoleColor(userRole);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final roleColor = _getRoleColor(userRole, isDark);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -44,9 +50,13 @@ class OrganizationItem extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: isDark ? AppColors.darkCard : AppColors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.directoryBorder),
+              border: Border.all(
+                color: isDark
+                    ? AppColors.darkSurface
+                    : AppColors.directoryBorder,
+              ),
             ),
             child: Row(
               children: [
@@ -55,7 +65,9 @@ class OrganizationItem extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: avatarColor.withAlpha(25),
+                    color: isDark
+                        ? avatarColor.withAlpha(40)
+                        : avatarColor.withAlpha(25),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
@@ -64,7 +76,7 @@ class OrganizationItem extends StatelessWidget {
                           ? organizationName[0].toUpperCase()
                           : '?',
                       style: AppTextStyles.ttNorms20W700.copyWith(
-                        color: avatarColor,
+                        color: isDark ? AppColors.darkText : avatarColor,
                       ),
                     ),
                   ),
@@ -80,7 +92,9 @@ class OrganizationItem extends StatelessWidget {
                       Text(
                         organizationName,
                         style: AppTextStyles.ttNorms16W600.copyWith(
-                          color: AppColors.grayFieldText,
+                          color: isDark
+                              ? AppColors.darkText
+                              : AppColors.grayFieldText,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -92,7 +106,9 @@ class OrganizationItem extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: roleColor.withAlpha(25),
+                          color: isDark
+                              ? roleColor.withAlpha(40)
+                              : roleColor.withAlpha(25),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
@@ -107,10 +123,12 @@ class OrganizationItem extends StatelessWidget {
                 ),
 
                 // Стрелка
-                const Icon(
+                Icon(
                   Icons.chevron_right,
                   size: 18,
-                  color: AppColors.directoryTextSecondary,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.directoryTextSecondary,
                 ),
               ],
             ),

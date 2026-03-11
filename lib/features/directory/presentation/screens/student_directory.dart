@@ -104,14 +104,16 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final students = _convertToEntities(widget.initialStudents);
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: AppBarTitle(text: 'Ученики ${widget.group.title ?? ''}'),
-        backgroundColor: AppColors.white,
-        foregroundColor: AppColors.grayFieldText,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        foregroundColor: isDark ? AppColors.darkText : AppColors.grayFieldText,
         elevation: 0,
       ),
       body: Column(
@@ -123,28 +125,45 @@ class _StudentDirectoryScreenState extends State<StudentDirectoryScreen> {
           ),
           Expanded(
             child: students.isEmpty
-                ? const Center(child: Text('В этой группе нет учеников'))
+                ? Center(
+                    child: Text(
+                      'В этой группе нет учеников',
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.directoryTextSecondary,
+                      ),
+                    ),
+                  )
                 : _filteredStudents.isEmpty && _searchController.text.isNotEmpty
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.person_search,
                           size: 64,
-                          color: AppColors.directoryTextSecondary,
+                          color: isDark
+                              ? AppColors.darkTextSecondary
+                              : AppColors.directoryTextSecondary,
                         ),
                         const SizedBox(height: 16),
                         Text(
                           'Студенты не найдены',
                           style: AppTextStyles.ttNorms16W700.copyWith(
-                            color: AppColors.grayFieldText,
+                            color: isDark
+                                ? AppColors.darkText
+                                : AppColors.grayFieldText,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Попробуйте изменить поисковый запрос',
-                          style: AppTextStyles.ttNorms14W400.grey,
+                          style: AppTextStyles.ttNorms14W400.copyWith(
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.directoryTextSecondary,
+                          ),
                         ),
                       ],
                     ),

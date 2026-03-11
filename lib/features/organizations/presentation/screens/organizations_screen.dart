@@ -156,15 +156,30 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
   }
 
   void _declineInvite(InviteResponseModel invite) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Отклонить приглашение'),
-        content: const Text('Вы уверены, что хотите отклонить приглашение?'),
+        title: Text(
+          'Отклонить приглашение',
+          style: TextStyle(color: isDark ? AppColors.darkText : Colors.black),
+        ),
+        content: Text(
+          'Вы уверены, что хотите отклонить приглашение?',
+          style: TextStyle(color: isDark ? AppColors.darkTextSecondary : null),
+        ),
+        backgroundColor: isDark ? AppColors.darkCard : null,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Отмена'),
+            child: Text(
+              'Отмена',
+              style: TextStyle(
+                color: isDark ? AppColors.darkTextSecondary : null,
+              ),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -177,15 +192,21 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
               });
 
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Приглашение отклонено'),
-                  backgroundColor: Colors.orange,
+                SnackBar(
+                  content: const Text('Приглашение отклонено'),
+                  backgroundColor: isDark
+                      ? AppColors.darkCategoryGeneralBg
+                      : Colors.orange,
                 ),
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: AppColors.white,
+              backgroundColor: isDark
+                  ? AppColors.darkCategoryGeneralBg
+                  : Colors.red,
+              foregroundColor: isDark
+                  ? AppColors.darkCategoryGeneralText
+                  : AppColors.white,
             ),
             child: const Text('Отклонить'),
           ),
@@ -196,16 +217,22 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const AppBarTitle(text: 'Мои организации'),
-        backgroundColor: AppColors.white,
-        foregroundColor: AppColors.grayFieldText,
+        title: AppBarTitle(text: 'Мои организации'),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        foregroundColor: isDark ? AppColors.darkText : AppColors.grayFieldText,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: Icon(
+              Icons.refresh,
+              color: isDark ? AppColors.darkText : null,
+            ),
             onPressed: () => context.read<OrgsBloc>().add(LoadOrgsEvent()),
           ),
         ],
@@ -228,24 +255,33 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
                   });
                 } else if (state is InviteAccepted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Вы успешно присоединились к организации'),
-                      backgroundColor: Colors.green,
+                    SnackBar(
+                      content: const Text(
+                        'Вы успешно присоединились к организации',
+                      ),
+                      backgroundColor: isDark
+                          ? AppColors.darkCategoryStudyBg
+                          : Colors.green,
                     ),
                   );
                 }
               },
               builder: (context, state) {
                 if (state is OrgsLoading || state is AcceptInviteLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: theme.colorScheme.primary,
+                    ),
+                  );
                 } else if (state is OrgsError || state is AcceptInviteError) {
-                  return _buildErrorWidget();
+                  return _buildErrorWidget(isDark);
                 } else {
                   return RefreshIndicator(
                     onRefresh: () async {
                       context.read<OrgsBloc>().add(LoadOrgsEvent());
                     },
-                    child: _buildContent(),
+                    color: theme.colorScheme.primary,
+                    child: _buildContent(isDark),
                   );
                 }
               },
@@ -256,15 +292,24 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
     );
   }
 
-  Widget _buildErrorWidget() {
+  Widget _buildErrorWidget(bool isDark) {
+    final theme = Theme.of(context);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Ошибка загрузки данных'),
+          Text(
+            'Ошибка загрузки данных',
+            style: TextStyle(color: isDark ? AppColors.darkText : null),
+          ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.read<OrgsBloc>().add(LoadOrgsEvent()),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: Colors.white,
+            ),
             child: const Text('Повторить'),
           ),
         ],
@@ -272,7 +317,7 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(bool isDark) {
     bool hasAnyContent =
         _filteredTeacher.isNotEmpty ||
         _filteredStudent.isNotEmpty ||
@@ -288,7 +333,7 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         if (_filteredInvites.isNotEmpty) ...[
-          const SectionHeader(title: 'Приглашения', icon: Icons.mail_outline),
+          SectionHeader(title: 'Приглашения', icon: Icons.mail_outline),
           ..._filteredInvites.map(
             (invite) => InviteItem(
               organizationName: invite.org?.title ?? 'Организация',
@@ -303,7 +348,7 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
         ],
 
         if (_filteredTeacher.isNotEmpty) ...[
-          const SectionHeader(title: 'Преподавание', icon: Icons.school),
+          SectionHeader(title: 'Преподавание', icon: Icons.school),
           ..._filteredTeacher.map(
             (org) => OrganizationItem(
               organizationName: org.org?.title ?? 'Без названия',
@@ -316,7 +361,7 @@ class _OrganizationsScreenState extends State<_OrganizationsScreenContent> {
         ],
 
         if (_filteredStudent.isNotEmpty) ...[
-          const SectionHeader(title: 'Обучение', icon: Icons.people_outline),
+          SectionHeader(title: 'Обучение', icon: Icons.people_outline),
           ..._filteredStudent.map(
             (org) => OrganizationItem(
               organizationName: org.org?.title ?? 'Без названия',

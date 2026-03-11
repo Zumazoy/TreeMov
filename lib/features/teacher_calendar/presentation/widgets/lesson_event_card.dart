@@ -10,7 +10,7 @@ class LessonEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     final timeParts = event
         .formatTime(event.startTime, event.endTime)
@@ -23,9 +23,7 @@ class LessonEventCard extends StatelessWidget {
       height: 70,
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: theme.cardColor.withAlpha(
-          26,
-        ), // 👈 ИСПРАВЛЕНО (было AppColors.eventTap)
+        color: theme.cardColor.withAlpha(26),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -37,16 +35,12 @@ class LessonEventCard extends StatelessWidget {
               children: [
                 Text(
                   startTime,
-                  style: AppTextStyles.ttNorms14W600.themed(
-                    context,
-                  ), // 👈 ИСПРАВЛЕНО
+                  style: AppTextStyles.ttNorms14W600.themed(context),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   endTime,
-                  style: AppTextStyles.ttNorms12W400.themed(
-                    context,
-                  ), // 👈 ИСПРАВЛЕНО
+                  style: AppTextStyles.ttNorms12W400.themed(context),
                 ),
               ],
             ),
@@ -56,8 +50,7 @@ class LessonEventCard extends StatelessWidget {
             height: 40,
             margin: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
-              color:
-                  theme.dividerColor, // 👈 ИСПРАВЛЕНО (было Color(0xFF2F213E))
+              color: theme.dividerColor,
               borderRadius: BorderRadius.circular(4.5),
             ),
           ),
@@ -74,9 +67,7 @@ class LessonEventCard extends StatelessWidget {
                       event.subject?.title,
                       event.group?.title,
                     ),
-                    style: AppTextStyles.ttNorms14W500.themed(
-                      context,
-                    ), // 👈 ИСПРАВЛЕНО
+                    style: AppTextStyles.ttNorms14W500.themed(context),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -86,7 +77,7 @@ class LessonEventCard extends StatelessWidget {
                         ? event.formatTitle(event.classroom?.title)
                         : '(Не указана)',
                     style: AppTextStyles.ttNorms12W400.copyWith(
-                      color: theme.textTheme.bodySmall?.color, // 👈 ИСПРАВЛЕНО
+                      color: theme.textTheme.bodySmall?.color,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -105,8 +96,7 @@ class LessonEventCard extends StatelessWidget {
                 'assets/images/purple_arrow.png',
                 width: 24,
                 height: 24,
-                color:
-                    theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО (цвет стрелки)
+                color: theme.colorScheme.primary,
                 fit: BoxFit.contain,
               ),
               onPressed: onTap,

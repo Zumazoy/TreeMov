@@ -17,7 +17,7 @@ class SettingsProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Column(
       children: [
@@ -33,11 +33,10 @@ class SettingsProfileSection extends StatelessWidget {
               onTap: onEditProfileTap,
             ),
             Divider(
-              // 👈 УБРАЛ const
               height: 1,
               indent: 16,
               endIndent: 16,
-              color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
+              color: theme.dividerColor,
             ),
             SettingsNavRow(
               title: 'Изменить фото',
@@ -46,11 +45,10 @@ class SettingsProfileSection extends StatelessWidget {
             ),
 
             Divider(
-              // 👈 УБРАЛ const
               height: 1,
               indent: 16,
               endIndent: 16,
-              color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
+              color: theme.dividerColor,
             ),
 
             // Специальный ListTile для организаций
@@ -59,33 +57,29 @@ class SettingsProfileSection extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withAlpha(
-                    25,
-                  ), // 👈 ИСПРАВЛЕНО
+                  color: theme.colorScheme.primary.withAlpha(25),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.business,
-                  color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                  color: theme.colorScheme.primary,
                   size: 20,
                 ),
               ),
               title: Text(
                 'Мои организации',
-                style: AppTextStyles.ttNorms16W500.themed(
-                  context,
-                ), // 👈 ИСПРАВЛЕНО
+                style: AppTextStyles.ttNorms16W500.themed(context),
               ),
               subtitle: Text(
                 'Управление организациями и приглашениями',
                 style: AppTextStyles.ttNorms12W400.copyWith(
-                  color: theme.textTheme.bodySmall?.color, // 👈 ИСПРАВЛЕНО
+                  color: theme.textTheme.bodySmall?.color,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios,
                 size: 16,
-                color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                color: theme.colorScheme.primary,
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               onTap: () {

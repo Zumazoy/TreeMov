@@ -7,7 +7,7 @@ class AddEventButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return SafeArea(
       child: Container(
@@ -16,12 +16,8 @@ class AddEventButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: theme
-                .colorScheme
-                .primary, // 👈 ИСПРАВЛЕНО (было AppColors.plusButton)
-            foregroundColor: theme
-                .colorScheme
-                .onPrimary, // 👈 ИСПРАВЛЕНО (было Colors.white)
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: theme.colorScheme.onPrimary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.5),
             ),
@@ -33,7 +29,7 @@ class AddEventButton extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.w600,
               fontFamily: 'TT Norms',
-              color: theme.colorScheme.onPrimary, // 👈 ИСПРАВЛЕНО
+              color: theme.colorScheme.onPrimary,
             ),
           ),
         ),
