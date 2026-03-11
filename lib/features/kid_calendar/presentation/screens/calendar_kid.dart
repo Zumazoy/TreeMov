@@ -14,24 +14,27 @@ import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 class CalendarKidScreen extends StatelessWidget {
   const CalendarKidScreen({super.key});
 
-  String _getFirstDayOfMonth() {
-    final now = DateTime.now();
-    return DateTime(now.year, now.month, 1).toIso8601String().split('T').first;
+  String _getFirstDayOfMonth(DateTime date) {
+    return DateTime(
+      date.year,
+      date.month,
+      1,
+    ).toIso8601String().split('T').first;
   }
 
-  String _getLastDayOfMonth() {
-    final now = DateTime.now();
+  String _getLastDayOfMonth(DateTime date) {
     return DateTime(
-      now.year,
-      now.month + 1,
+      date.year,
+      date.month + 1,
       0,
     ).toIso8601String().split('T').first;
   }
 
   @override
   Widget build(BuildContext context) {
-    final dateMin = _getFirstDayOfMonth();
-    final dateMax = _getLastDayOfMonth();
+    final now = DateTime.now();
+    final dateMin = _getFirstDayOfMonth(DateTime(now.year, now.month - 2));
+    final dateMax = _getLastDayOfMonth(DateTime(now.year, now.month + 3));
 
     return BlocProvider(
       create: (context) {
@@ -80,6 +83,22 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent>
   void dispose() {
     _slideController.dispose();
     super.dispose();
+  }
+
+  String _getFirstDayOfMonth(DateTime date) {
+    return DateTime(
+      date.year,
+      date.month,
+      1,
+    ).toIso8601String().split('T').first;
+  }
+
+  String _getLastDayOfMonth(DateTime date) {
+    return DateTime(
+      date.year,
+      date.month + 1,
+      0,
+    ).toIso8601String().split('T').first;
   }
 
   Future<void> _closeLessonsPanel() async {
@@ -191,6 +210,44 @@ class _CalendarKidScreenContentState extends State<_CalendarKidScreenContent>
                         SelectDayEvent(day: day, selectedDate: selectedDate),
                       );
                     },
+                  );
+                } else if (state is KidCalendarError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Ошибка загрузки',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          state.message,
+                          style: TextStyle(color: Colors.white70),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            final now = DateTime.now();
+                            final dateMin = _getFirstDayOfMonth(
+                              DateTime(now.year, now.month - 2),
+                            );
+                            final dateMax = _getLastDayOfMonth(
+                              DateTime(now.year, now.month + 3),
+                            );
+
+                            context.read<KidCalendarBloc>().add(
+                              LoadKidLessonsEvent(dateMin, dateMax),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.kidButton,
+                          ),
+                          child: const Text('Повторить'),
+                        ),
+                      ],
+                    ),
                   );
                 }
                 return const SizedBox.shrink();

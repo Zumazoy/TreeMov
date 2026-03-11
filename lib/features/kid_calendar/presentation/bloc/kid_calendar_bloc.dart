@@ -11,6 +11,14 @@ part 'kid_calendar_state.dart';
 class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
   final KidCalendarRepository _repository;
 
+  List<LessonEntity> _cachedLessons = [];
+  DateTime? _cachedDateMin;
+  DateTime? _cachedDateMax;
+
+  bool _isLoading = false;
+
+  DateTime _currentDisplayDate = DateTime.now();
+
   KidCalendarBloc({required KidCalendarRepository repository})
     : _repository = repository,
       super(KidCalendarInitial()) {
@@ -24,28 +32,46 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
     LoadKidLessonsEvent event,
     Emitter<KidCalendarState> emit,
   ) async {
-    emit(KidCalendarLoading());
+    final requestedMin = DateTime.parse(event.dateMin);
+    final requestedMax = DateTime.parse(event.dateMax);
+
+    if (_isLoading || _isRangeCached(requestedMin, requestedMax)) {
+      if (_isRangeCached(requestedMin, requestedMax)) {
+        _emitLoadedState(emit, _currentDisplayDate);
+      }
+      return;
+    }
+
+    _isLoading = true;
+
     try {
+      final expandedMin = DateTime(
+        requestedMin.year,
+        requestedMin.month - 2,
+        1,
+      );
+      final expandedMax = DateTime(
+        requestedMax.year,
+        requestedMax.month + 3,
+        0,
+      );
+
       final lessons = await _repository.getLessons(
-        event.dateMin,
-        event.dateMax,
+        _formatDate(expandedMin),
+        _formatDate(expandedMax),
       );
 
-      final currentDate = _getCurrentDate(event.dateMin);
-      final processed = _processLessons(lessons, currentDate);
+      _cachedLessons = lessons;
+      _cachedDateMin = expandedMin;
+      _cachedDateMax = expandedMax;
 
-      emit(
-        KidCalendarLoaded(
-          currentDate: currentDate,
-          selectedDate: null,
-          selectedDay: -1,
-          daysWithLessons: processed.days,
-          lessonsByDay: processed.lessonsByDay,
-          allLessons: lessons,
-        ),
-      );
+      _emitLoadedState(emit, _currentDisplayDate);
     } catch (e) {
-      emit(KidCalendarError('Ошибка загрузки расписания: $e'));
+      if (state is! KidCalendarLoaded) {
+        emit(KidCalendarError('Ошибка загрузки расписания: $e'));
+      }
+    } finally {
+      _isLoading = false;
     }
   }
 
@@ -58,8 +84,12 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
         1,
       );
 
-      final dateMin = _getFirstDayOfMonth(newDate);
-      final dateMax = _getLastDayOfMonth(newDate);
+      _currentDisplayDate = newDate;
+
+      final dateMin = _formatDate(newDate);
+      final dateMax = _formatDate(DateTime(newDate.year, newDate.month + 1, 0));
+
+      emit(current.copyWith(currentDate: newDate));
 
       add(LoadKidLessonsEvent(dateMin, dateMax));
     }
@@ -84,29 +114,39 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
     }
   }
 
-  DateTime _getCurrentDate(String? dateMin) {
-    if (dateMin != null) {
+  bool _isRangeCached(DateTime min, DateTime max) {
+    if (_cachedDateMin == null || _cachedDateMax == null) return false;
+
+    return min.isAfter(_cachedDateMin!) && max.isBefore(_cachedDateMax!);
+  }
+
+  void _emitLoadedState(Emitter<KidCalendarState> emit, DateTime currentDate) {
+    final monthLessons = _cachedLessons.where((lesson) {
+      if (lesson.date == null) return false;
       try {
-        return DateTime.parse(dateMin);
-      } catch (_) {}
-    }
-    return DateTime.now();
+        final date = DateTime.parse(lesson.date!);
+        return date.year == currentDate.year && date.month == currentDate.month;
+      } catch (e) {
+        return false;
+      }
+    }).toList();
+
+    final processed = _processLessons(monthLessons, currentDate);
+
+    emit(
+      KidCalendarLoaded(
+        currentDate: currentDate,
+        selectedDate: null,
+        selectedDay: -1,
+        daysWithLessons: processed.days,
+        lessonsByDay: processed.lessonsByDay,
+        allLessons: monthLessons,
+      ),
+    );
   }
 
-  String _getFirstDayOfMonth(DateTime date) {
-    return DateTime(
-      date.year,
-      date.month,
-      1,
-    ).toIso8601String().split('T').first;
-  }
-
-  String _getLastDayOfMonth(DateTime date) {
-    return DateTime(
-      date.year,
-      date.month + 1,
-      0,
-    ).toIso8601String().split('T').first;
+  String _formatDate(DateTime date) {
+    return date.toIso8601String().split('T').first;
   }
 
   _ProcessedLessons _processLessons(
@@ -120,14 +160,11 @@ class KidCalendarBloc extends Bloc<KidCalendarEvent, KidCalendarState> {
       if (lesson.date != null) {
         try {
           final date = DateTime.parse(lesson.date!);
-          if (date.year == currentDate.year &&
-              date.month == currentDate.month) {
-            days.add(date.day);
-            if (!lessonsByDay.containsKey(date.day)) {
-              lessonsByDay[date.day] = [];
-            }
-            lessonsByDay[date.day]!.add(lesson);
+          days.add(date.day);
+          if (!lessonsByDay.containsKey(date.day)) {
+            lessonsByDay[date.day] = [];
           }
+          lessonsByDay[date.day]!.add(lesson);
         } catch (e) {
           continue;
         }
