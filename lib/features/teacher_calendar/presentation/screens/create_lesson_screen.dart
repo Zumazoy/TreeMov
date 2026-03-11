@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
+import 'package:treemov/features/teacher_calendar/data/models/lesson_request_model.dart';
 import 'package:treemov/features/teacher_calendar/data/models/period_lesson_request_model.dart';
+import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
 import 'package:treemov/shared/data/models/classroom_response_model.dart';
-import 'package:treemov/shared/data/models/lesson_request_model.dart';
 import 'package:treemov/shared/data/models/student_group_response_model.dart';
 import 'package:treemov/shared/data/models/subject_response_model.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 class CreateLessonScreen extends StatefulWidget {
   final SharedRepository sharedRepository;
+  final ScheduleRepository scheduleRepository;
   final SchedulesBloc schedulesBloc;
 
   const CreateLessonScreen({
     super.key,
     required this.sharedRepository,
+    required this.scheduleRepository,
     required this.schedulesBloc,
   });
 
@@ -41,8 +44,8 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
   final TextEditingController _descriptionController = TextEditingController();
 
   List<GroupStudentsResponseModel> _groups = [];
-  List<SubjectResponseModel> _subjects = [];
   List<ClassroomResponseModel> _classrooms = [];
+  List<SubjectResponseModel> _subjects = [];
 
   bool _isLoading = true;
   String? _error;
@@ -70,15 +73,15 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
     try {
       final results = await Future.wait([
         widget.sharedRepository.getGroupStudents(),
-        widget.sharedRepository.getSubjects(),
-        widget.sharedRepository.getClassrooms(),
-        widget.sharedRepository.getTeacherId(),
+        widget.scheduleRepository.getClassrooms(),
+        widget.scheduleRepository.getSubjects(),
+        widget.scheduleRepository.getTeacherId(),
       ]);
 
       setState(() {
         _groups = results[0] as List<GroupStudentsResponseModel>;
-        _subjects = results[1] as List<SubjectResponseModel>;
-        _classrooms = results[2] as List<ClassroomResponseModel>;
+        _classrooms = results[1] as List<ClassroomResponseModel>;
+        _subjects = results[2] as List<SubjectResponseModel>;
         final teacherId = results[3] as int?;
         if (teacherId != null) {
           _teacherId = teacherId;
@@ -90,14 +93,14 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
           _selectedGroupName = _groups.first.title ?? 'Без названия';
         }
 
-        if (_subjects.isNotEmpty) {
-          _subjectId = _subjects.first.id;
-          _selectedSubjectName = _subjects.first.title ?? 'Без названия';
-        }
-
         if (_classrooms.isNotEmpty) {
           _classroomId = _classrooms.first.id;
           _selectedClassroomName = _classrooms.first.title ?? 'Без названия';
+        }
+
+        if (_subjects.isNotEmpty) {
+          _subjectId = _subjects.first.id;
+          _selectedSubjectName = _subjects.first.title ?? 'Без названия';
         }
 
         _isLoading = false;

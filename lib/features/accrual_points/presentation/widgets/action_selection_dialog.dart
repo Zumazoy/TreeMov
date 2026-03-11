@@ -31,33 +31,11 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
   PointAction? _selectedAction;
   List<PointAction> _currentActions = [];
   bool _showCustomAction = false;
-  int? _teacherProfileId;
-  bool _isLoadingProfile = false;
 
   @override
   void initState() {
     super.initState();
     _updateActions();
-
-    // Загружаем ID профиля учителя при инициализации диалога
-    _loadTeacherProfileId();
-  }
-
-  void _loadTeacherProfileId() {
-    setState(() {
-      _isLoadingProfile = true;
-    });
-
-    // Проверяем, есть ли уже загруженный ID в BLoC
-    if (widget.accrualBloc.teacherProfileId != null) {
-      setState(() {
-        _teacherProfileId = widget.accrualBloc.teacherProfileId;
-        _isLoadingProfile = false;
-      });
-    } else {
-      // Если нет, загружаем
-      widget.accrualBloc.add(LoadTeacherProfileId());
-    }
   }
 
   void _updateActions() {
@@ -118,19 +96,8 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
 
   void _createAccrual() {
     if (_selectedAction != null) {
-      if (_teacherProfileId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Загрузка профиля учителя...'),
-            backgroundColor: Colors.orange,
-          ),
-        );
-        return;
-      }
-
       // Создаем AccrualRequestModel
       final request = AccrualRequestModel(
-        teacherId: _teacherProfileId!,
         studentId: widget.student.id ?? 0,
         amount: _selectedAction!.points,
         category: _selectedAction!.category.name,
@@ -145,25 +112,12 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
     }
   }
 
-  Widget _buildLoadingState() {
-    return const Center(child: CircularProgressIndicator());
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<AccrualBloc, AccrualState>(
       bloc: widget.accrualBloc,
       listener: (context, state) {
-        if (state is TeacherProfileIdLoaded) {
-          setState(() {
-            _teacherProfileId = state.teacherProfileId;
-            _isLoadingProfile = false;
-          });
-        } else if (state is AccrualError) {
-          setState(() {
-            _isLoadingProfile = false;
-          });
-
+        if (state is AccrualError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Ошибка: ${state.message}'),
@@ -184,11 +138,6 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
               StudentHeader(student: widget.student, onClose: _onClose),
 
               const SizedBox(height: 16),
-
-              if (_isLoadingProfile) ...[
-                _buildLoadingState(),
-                const SizedBox(height: 16),
-              ],
 
               Text('Категория:', style: AppTextStyles.arial16W400.grey),
               const SizedBox(height: 8),
@@ -330,21 +279,20 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
   }
 
   Widget _buildConfirmationButtons() {
-    final isButtonDisabled = _selectedAction == null || _isLoadingProfile;
-    final buttonText = _isLoadingProfile
-        ? 'Загрузка...'
-        : _selectedAction == null
+    final buttonText = _selectedAction == null
         ? 'Выберите действие'
         : 'Подтвердить ${_selectedAction!.points > 0 ? '+' : ''}${_selectedAction!.points}';
 
     // Определяем цвет кнопки в зависимости от количества баллов
     Color buttonColor;
-    if (isButtonDisabled) {
-      buttonColor = AppColors.lightGrey;
-    } else if (_selectedAction!.points > 0) {
-      buttonColor = Colors.green;
-    } else if (_selectedAction!.points < 0) {
-      buttonColor = AppColors.activityRed;
+    if (_selectedAction != null) {
+      if (_selectedAction!.points > 0) {
+        buttonColor = Colors.green;
+      } else if (_selectedAction!.points < 0) {
+        buttonColor = AppColors.activityRed;
+      } else {
+        buttonColor = AppColors.teacherPrimary;
+      }
     } else {
       buttonColor = AppColors.teacherPrimary;
     }
@@ -369,7 +317,7 @@ class _ActionSelectionDialogState extends State<ActionSelectionDialog> {
         const SizedBox(width: 8),
         Expanded(
           child: ElevatedButton(
-            onPressed: isButtonDisabled ? null : _createAccrual,
+            onPressed: _createAccrual,
             style: ElevatedButton.styleFrom(
               backgroundColor: buttonColor,
               foregroundColor: AppColors.white,

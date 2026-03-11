@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:treemov/features/kid_calendar/domain/repositories/kid_calendar_repository.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/shared/domain/entities/lesson_entity.dart';
 
 part 'kid_calendar_event.dart';
 part 'kid_calendar_state.dart';

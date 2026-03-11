@@ -13,6 +13,9 @@ import 'package:treemov/features/authorization/data/repositories/auth_repository
 import 'package:treemov/features/authorization/domain/repositories/auth_repository.dart';
 import 'package:treemov/features/authorization/presentation/bloc/login_bloc.dart';
 import 'package:treemov/features/directory/presentation/bloc/directory_bloc.dart';
+import 'package:treemov/features/kid_profile/data/datasources/student_profile_remote_data_source.dart';
+import 'package:treemov/features/kid_profile/data/repositories/student_profile_repository_impl.dart';
+import 'package:treemov/features/kid_profile/domain/repositories/student_profile_repository.dart';
 import 'package:treemov/features/kid_profile/presentation/bloc/student_profile_bloc.dart';
 import 'package:treemov/features/notes/data/datasources/local_notes_datasource.dart';
 // import 'package:treemov/features/notes/data/datasources/teacher_notes_remote_data_source.dart';
@@ -59,7 +62,10 @@ void setupDependencies() {
     AuthRemoteDataSource(getIt<DioClient>()),
   );
   getIt.registerSingleton<ScheduleRemoteDataSource>(
-    ScheduleRemoteDataSource(getIt<DioClient>()),
+    ScheduleRemoteDataSource(
+      getIt<DioClient>(),
+      getIt<SecureStorageRepository>(),
+    ),
   );
   getIt.registerSingleton<SharedRemoteDataSource>(
     SharedRemoteDataSource(
@@ -78,6 +84,12 @@ void setupDependencies() {
   );
   getIt.registerSingleton<OrgsRemoteDataSource>(
     OrgsRemoteDataSource(getIt<DioClient>()),
+  );
+  getIt.registerSingleton<StudentProfileRemoteDataSource>(
+    StudentProfileRemoteDataSource(
+      getIt<DioClient>(),
+      getIt<SecureStorageRepository>(),
+    ),
   );
 
   // Репозитории
@@ -104,6 +116,9 @@ void setupDependencies() {
   );
   getIt.registerSingleton<OrgsRepository>(
     OrgsRepositoryImpl(getIt<OrgsRemoteDataSource>()),
+  );
+  getIt.registerSingleton<StudentProfileRepository>(
+    StudentProfileRepositoryImpl(getIt<StudentProfileRemoteDataSource>()),
   );
 
   // BLoC
@@ -135,7 +150,7 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<StudentProfileBloc>(
-    () => StudentProfileBloc(getIt<SharedRepository>()),
+    () => StudentProfileBloc(getIt<StudentProfileRepository>()),
   );
 
   getIt.registerFactory<RegisterBloc>(

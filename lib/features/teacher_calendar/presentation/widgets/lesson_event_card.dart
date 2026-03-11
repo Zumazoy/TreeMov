@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
-
-import '../../domain/entities/lesson_entity.dart';
+import 'package:treemov/shared/domain/entities/lesson_entity.dart';
 
 class LessonEventCard extends StatelessWidget {
   final LessonEntity event;

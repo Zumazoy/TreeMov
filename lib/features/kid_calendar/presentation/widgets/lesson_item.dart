@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/shared/domain/entities/lesson_entity.dart';
 
 class LessonItem extends StatelessWidget {
   final LessonEntity lesson;

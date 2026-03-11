@@ -1,4 +1,4 @@
-import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/shared/domain/entities/lesson_entity.dart';
 import 'package:treemov/shared/data/models/lesson_response_model.dart';
 
 class CalendarUtils {

@@ -14,9 +14,4 @@ class AccrualRepositoryImpl implements AccrualRepository {
   ) async {
     return await _remoteDataSource.createAccrual(request);
   }
-
-  @override
-  Future<List<AccrualResponseModel>> getAccruals() async {
-    return await _remoteDataSource.getAccruals();
-  }
 }

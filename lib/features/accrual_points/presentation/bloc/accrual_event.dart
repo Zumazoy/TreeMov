@@ -9,8 +9,6 @@ abstract class AccrualEvent extends Equatable {
 
 class LoadStudentGroups extends AccrualEvent {}
 
-class LoadTeacherProfileId extends AccrualEvent {}
-
 class CreateAccrual extends AccrualEvent {
   final AccrualRequestModel request;
 

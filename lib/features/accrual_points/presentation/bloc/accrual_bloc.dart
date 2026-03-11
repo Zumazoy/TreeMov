@@ -17,7 +17,6 @@ class AccrualBloc extends Bloc<AccrualEvent, AccrualState> {
   AccrualBloc(this._sharedRepository, this._accrualRepository)
     : super(AccrualInitial()) {
     on<LoadStudentGroups>(_onLoadStudentGroups);
-    on<LoadTeacherProfileId>(_onLoadTeacherProfileId);
     on<CreateAccrual>(_onCreateAccrual);
   }
 
@@ -58,27 +57,6 @@ class AccrualBloc extends Bloc<AccrualEvent, AccrualState> {
       );
     } catch (e) {
       emit(AccrualError(e.toString()));
-    }
-  }
-
-  Future<void> _onLoadTeacherProfileId(
-    LoadTeacherProfileId event,
-    Emitter<AccrualState> emit,
-  ) async {
-    emit(AccrualLoading());
-    try {
-      final teacherProfile = await _sharedRepository.getMyOrgMember();
-
-      final teacherProfileId = teacherProfile.profile?.baseData.id;
-
-      if (teacherProfileId != null) {
-        _teacherProfileId = teacherProfileId;
-        emit(TeacherProfileIdLoaded(teacherProfileId));
-      } else {
-        emit(AccrualError('Не удалось получить ID профиля учителя'));
-      }
-    } catch (e) {
-      emit(AccrualError('Ошибка загрузки профиля учителя: $e'));
     }
   }
 

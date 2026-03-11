@@ -8,7 +8,7 @@ import 'package:treemov/features/kid_calendar/presentation/widgets/calendar_app_
 import 'package:treemov/features/kid_calendar/presentation/widgets/calendar_background.dart';
 import 'package:treemov/features/kid_calendar/presentation/widgets/calendar_content.dart';
 import 'package:treemov/features/kid_calendar/presentation/widgets/lessons_panel.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/shared/domain/entities/lesson_entity.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 class CalendarKidScreen extends StatelessWidget {

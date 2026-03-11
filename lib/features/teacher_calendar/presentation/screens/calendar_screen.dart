@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:treemov/app/di/di.config.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/shared/domain/entities/lesson_entity.dart';
+import 'package:treemov/features/teacher_calendar/domain/repositories/schedule_repository.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_bloc.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_event.dart';
 import 'package:treemov/features/teacher_calendar/presentation/bloc/schedules_state.dart';
@@ -75,6 +76,7 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
       MaterialPageRoute(
         builder: (_) => CreateLessonScreen(
           sharedRepository: getIt<SharedRepository>(),
+          scheduleRepository: getIt<ScheduleRepository>(),
           schedulesBloc: schedulesBloc,
         ),
       ),

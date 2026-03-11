@@ -1,18 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:treemov/features/kid_profile/domain/repositories/student_profile_repository.dart';
 import 'package:treemov/shared/data/models/accrual_response_model.dart';
 import 'package:treemov/shared/data/models/student_response_model.dart';
-import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 part 'student_profile_event.dart';
 part 'student_profile_state.dart';
 
 class StudentProfileBloc
     extends Bloc<StudentProfileEvent, StudentProfileState> {
-  final SharedRepository _sharedRepository;
+  final StudentProfileRepository _studentProfileRepository;
 
-  StudentProfileBloc(this._sharedRepository)
+  StudentProfileBloc(this._studentProfileRepository)
     : super(StudentProfileState.initial()) {
     on<LoadStudentProfile>(_onLoadStudentProfile);
     on<LoadStudentActivities>(_onLoadStudentActivities);
@@ -24,7 +24,8 @@ class StudentProfileBloc
   ) async {
     emit(state.copyWith(isLoadingProfile: true, profileError: null));
     try {
-      final studentProfile = await _sharedRepository.getStudentProfile();
+      final studentProfile = await _studentProfileRepository
+          .getStudentProfile();
       emit(
         state.copyWith(studentProfile: studentProfile, isLoadingProfile: false),
       );
@@ -62,7 +63,7 @@ class StudentProfileBloc
     emit(state.copyWith(isLoadingActivities: true, activitiesError: null));
 
     try {
-      final allActivities = await _sharedRepository.getStudentAccruals(
+      final allActivities = await _studentProfileRepository.getStudentAccruals(
         studentId: studentId,
         page: 1,
       );

@@ -1,5 +1,5 @@
 import 'package:treemov/features/kid_calendar/domain/repositories/kid_calendar_repository.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/shared/domain/entities/lesson_entity.dart';
 import 'package:treemov/shared/domain/repositories/shared_repository.dart';
 
 class KidCalendarRepositoryImpl implements KidCalendarRepository {

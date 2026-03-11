@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:treemov/core/themes/app_colors.dart';
 import 'package:treemov/core/themes/app_text_styles.dart';
 import 'package:treemov/core/widgets/layout/nav_bar.dart';
-import 'package:treemov/features/teacher_calendar/domain/entities/lesson_entity.dart';
+import 'package:treemov/shared/domain/entities/lesson_entity.dart';
 import 'package:treemov/features/teacher_calendar/presentation/screens/update_lesson_screen.dart';
 import 'package:treemov/temp/main_screen.dart';
 

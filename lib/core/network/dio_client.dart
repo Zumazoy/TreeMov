@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:treemov/core/constants/api_constants.dart';
-import 'package:treemov/core/network/auth_interceptor.dart';
-import 'package:treemov/core/network/logging_interceptor.dart';
-import 'package:treemov/core/network/org_member_id_interceptor.dart';
+import 'package:treemov/core/network/interceptors/auth_interceptor.dart';
+import 'package:treemov/core/network/interceptors/logging_interceptor.dart';
+import 'package:treemov/core/network/interceptors/org_member_id_interceptor.dart';
 import 'package:treemov/core/storage/secure_storage_repository.dart';
 import 'package:treemov/shared/data/services/token_refresh_service_impl.dart';
 import 'package:treemov/shared/domain/services/token_refresh_service.dart';
