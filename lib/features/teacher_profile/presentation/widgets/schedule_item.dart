@@ -13,7 +13,7 @@ class ScheduleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Row(
       children: [
@@ -21,29 +21,17 @@ class ScheduleItem extends StatelessWidget {
           width: 20,
           height: 20,
           decoration: BoxDecoration(
-            color: isCompleted
-                ? theme
-                      .colorScheme
-                      .primary // 👈 ИСПРАВЛЕНО (было teacherPrimary)
-                : Colors.transparent,
+            color: isCompleted ? theme.colorScheme.primary : Colors.transparent,
             border: Border.all(
               color: isCompleted
-                  ? theme
-                        .colorScheme
-                        .primary // 👈 ИСПРАВЛЕНО
-                  : theme.dividerColor, // 👈 ИСПРАВЛЕНО (было AppColors.grey)
+                  ? theme.colorScheme.primary
+                  : theme.dividerColor,
               width: 2,
             ),
             borderRadius: BorderRadius.circular(4),
           ),
           child: isCompleted
-              ? Icon(
-                  Icons.check,
-                  size: 14,
-                  color: theme
-                      .colorScheme
-                      .onPrimary, // 👈 ИСПРАВЛЕНО (белый из темы)
-                )
+              ? Icon(Icons.check, size: 14, color: theme.colorScheme.onPrimary)
               : null,
         ),
         const SizedBox(width: 12),
@@ -53,7 +41,6 @@ class ScheduleItem extends StatelessWidget {
             style: AppTextStyles.arial14W400
                 .themed(context)
                 .copyWith(
-                  // 👈 ИСПРАВЛЕНО
                   decoration: isCompleted ? TextDecoration.lineThrough : null,
                 ),
           ),

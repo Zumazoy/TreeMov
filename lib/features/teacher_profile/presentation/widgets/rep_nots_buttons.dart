@@ -7,7 +7,7 @@ class RepNotsButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Row(
       children: [
@@ -15,13 +15,9 @@ class RepNotsButtons extends StatelessWidget {
           child: Container(
             height: 80,
             decoration: BoxDecoration(
-              border: Border.all(
-                color: theme
-                    .colorScheme
-                    .primary, // 👈 ИСПРАВЛЕНО (было teacherPrimary)
-              ),
+              border: Border.all(color: theme.colorScheme.primary),
               borderRadius: BorderRadius.circular(8),
-              color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было eventTap)
+              color: theme.cardColor,
             ),
             child: TextButton(
               onPressed: () {
@@ -39,13 +35,13 @@ class RepNotsButtons extends StatelessWidget {
                     'assets/images/paper_icon.png',
                     width: 24,
                     height: 24,
-                    color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО (иконка)
+                    color: theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Отчеты',
                     style: AppTextStyles.arial14W400.copyWith(
-                      color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                 ],
@@ -59,9 +55,7 @@ class RepNotsButtons extends StatelessWidget {
           child: Container(
             height: 80,
             decoration: BoxDecoration(
-              border: Border.all(
-                color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
-              ),
+              border: Border.all(color: theme.colorScheme.primary),
               borderRadius: BorderRadius.circular(8),
               color: theme.cardColor, // 👈 ИСПРАВЛЕНО
             ),
@@ -79,13 +73,13 @@ class RepNotsButtons extends StatelessWidget {
                     'assets/images/text_icon.png',
                     width: 24,
                     height: 24,
-                    color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                    color: theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Заметки',
                     style: AppTextStyles.arial14W400.copyWith(
-                      color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                 ],

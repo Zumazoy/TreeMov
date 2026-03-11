@@ -14,7 +14,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unselectedColor = AppColors.grey;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final backgroundColor = isDark ? AppColors.darkBackground : AppColors.white;
+    final unselectedColor = isDark
+        ? AppColors.darkTextSecondary
+        : AppColors.grey;
+
     final selectedGradient = const LinearGradient(
       colors: [Color(0xFF19BCDB), Color(0xFF741CDB)],
       begin: Alignment.centerLeft,
@@ -25,12 +32,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: onTap,
       type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.white,
+      backgroundColor: backgroundColor,
       selectedItemColor: Colors.transparent,
       unselectedItemColor: unselectedColor,
       showSelectedLabels: false,
       showUnselectedLabels: false,
-      elevation: 8,
+      elevation: isDark ? 0 : 8,
       items: [
         _buildNavItem(
           iconPath: 'assets/images/calendar_icon.png',
@@ -74,7 +81,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
         color: isSelected ? null : unselectedColor,
       ),
       activeIcon: ShaderMask(
-        shaderCallback: (bounds) => gradient.createShader(bounds),
+        shaderCallback: (bounds) => gradient.createShader(
+          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+        ),
         blendMode: BlendMode.srcIn,
         child: Image.asset(
           iconPath,

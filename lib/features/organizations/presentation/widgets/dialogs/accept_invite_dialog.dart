@@ -14,18 +14,30 @@ class AcceptInviteDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return AlertDialog(
-      title: const Text('Принять приглашение'),
+      backgroundColor: isDark ? AppColors.darkCard : null,
+      title: Text(
+        'Принять приглашение',
+        style: TextStyle(color: isDark ? AppColors.darkText : null),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Вы хотите присоединиться к организации:'),
+          Text(
+            'Вы хотите присоединиться к организации:',
+            style: TextStyle(
+              color: isDark ? AppColors.darkTextSecondary : null,
+            ),
+          ),
           const SizedBox(height: 8),
           Text(
             organizationName,
             style: AppTextStyles.ttNorms16W600.copyWith(
-              color: AppColors.notesDarkText,
+              color: isDark ? AppColors.darkText : AppColors.notesDarkText,
             ),
           ),
         ],
@@ -33,7 +45,12 @@ class AcceptInviteDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Отмена'),
+          child: Text(
+            'Отмена',
+            style: TextStyle(
+              color: isDark ? AppColors.darkTextSecondary : null,
+            ),
+          ),
         ),
         ElevatedButton(
           onPressed: () {
@@ -41,8 +58,8 @@ class AcceptInviteDialog extends StatelessWidget {
             Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.plusButton,
-            foregroundColor: AppColors.white,
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: Colors.white,
           ),
           child: const Text('Принять'),
         ),

@@ -22,10 +22,10 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Container(
-      color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+      color: theme.cardColor,
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
       child: Row(
         children: [
@@ -34,24 +34,18 @@ class ProfileHeader extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               border: Border.all(
-                color: theme.colorScheme.primary.withAlpha(
-                  128,
-                ), // 👈 ИСПРАВЛЕНО (было directoryAvatarBorder)
+                color: theme.colorScheme.primary.withAlpha(128),
                 width: 4,
               ),
               borderRadius: BorderRadius.circular(40),
             ),
             child: CircleAvatar(
               radius: 36,
-              backgroundColor: theme.colorScheme.primary.withAlpha(
-                26,
-              ), // 👈 ИСПРАВЛЕНО (было directoryAvatarBackground)
+              backgroundColor: theme.colorScheme.primary.withAlpha(26),
               child: Icon(
                 Icons.person,
                 size: 32,
-                color: theme
-                    .colorScheme
-                    .primary, // 👈 ИСПРАВЛЕНО (было teacherPrimary)
+                color: theme.colorScheme.primary,
               ),
             ),
           ),
@@ -63,9 +57,7 @@ class ProfileHeader extends StatelessWidget {
               children: [
                 Text(
                   _getFullName(),
-                  style: AppTextStyles.arial18W700.themed(
-                    context,
-                  ), // 👈 ИСПРАВЛЕНО
+                  style: AppTextStyles.arial18W700.themed(context),
                 ),
                 const SizedBox(height: 4),
                 Text(

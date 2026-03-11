@@ -105,4 +105,5 @@ class AppColors {
   static const Color darkCategoryParentsText = Color(0xFFDDA6FF);
   static const Color darkCategoryGeneralBg = Color(0xFF9A3412);
   static const Color darkCategoryGeneralText = Color(0xFFFFCC80);
+
 }

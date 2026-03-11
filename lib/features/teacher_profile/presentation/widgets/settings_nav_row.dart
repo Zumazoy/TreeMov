@@ -15,23 +15,20 @@ class SettingsNavRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return ListTile(
-      title: Text(
-        title,
-        style: AppTextStyles.ttNorms16W500.themed(context), // 👈 ИСПРАВЛЕНО
-      ),
+      title: Text(title, style: AppTextStyles.ttNorms16W500.themed(context)),
       subtitle: Text(
         subtitle,
         style: AppTextStyles.ttNorms12W400.copyWith(
-          color: theme.textTheme.bodySmall?.color, // 👈 ИСПРАВЛЕНО
+          color: theme.textTheme.bodySmall?.color,
         ),
       ),
       trailing: Icon(
         Icons.arrow_forward_ios,
         size: 16,
-        color: theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+        color: theme.colorScheme.primary,
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       onTap: onTap,

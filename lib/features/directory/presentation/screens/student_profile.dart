@@ -23,6 +23,9 @@ class StudentProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     void onTabTapped(int index) {
       Navigator.pushAndRemoveUntil(
         context,
@@ -34,11 +37,11 @@ class StudentProfileScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const AppBarTitle(text: 'Профиль'),
-        backgroundColor: AppColors.white,
-        foregroundColor: AppColors.grayFieldText,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        foregroundColor: isDark ? AppColors.darkText : AppColors.grayFieldText,
         elevation: 0,
       ),
       body: ListView(

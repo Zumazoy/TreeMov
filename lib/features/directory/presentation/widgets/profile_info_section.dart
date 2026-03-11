@@ -60,14 +60,18 @@ class ProfileInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final age = _calculateAge(student.birthday);
     final otherGroups = _getOtherGroups();
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.eventTap,
-        border: Border.all(color: AppColors.eventTap),
+        color: isDark ? AppColors.darkCard : AppColors.eventTap,
+        border: Border.all(
+          color: isDark ? AppColors.darkSurface : AppColors.eventTap,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -81,12 +85,18 @@ class ProfileInfoSection extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: 'День рождения: ',
-                        style: AppTextStyles.arial12W400.grey,
+                        style: AppTextStyles.arial12W400.copyWith(
+                          color: isDark
+                              ? AppColors.darkTextSecondary
+                              : AppColors.directoryTextSecondary,
+                        ),
                       ),
                       TextSpan(
                         text: _formatDate(student.birthday),
                         style: AppTextStyles.arial12W400.copyWith(
-                          color: AppColors.grayFieldText,
+                          color: isDark
+                              ? AppColors.darkText
+                              : AppColors.grayFieldText,
                         ),
                       ),
                     ],
@@ -94,7 +104,14 @@ class ProfileInfoSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              Text('$age лет', style: AppTextStyles.arial12W400.grey),
+              Text(
+                '$age лет',
+                style: AppTextStyles.arial12W400.copyWith(
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.directoryTextSecondary,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -104,12 +121,18 @@ class ProfileInfoSection extends StatelessWidget {
               children: [
                 TextSpan(
                   text: 'Прогресс: ',
-                  style: AppTextStyles.arial12W400.grey,
+                  style: AppTextStyles.arial12W400.copyWith(
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.directoryTextSecondary,
+                  ),
                 ),
                 TextSpan(
                   text: student.progress ?? 'Не указан',
                   style: AppTextStyles.arial12W400.copyWith(
-                    color: AppColors.grayFieldText,
+                    color: isDark
+                        ? AppColors.darkText
+                        : AppColors.grayFieldText,
                   ),
                 ),
               ],
@@ -117,13 +140,20 @@ class ProfileInfoSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          Text('Другие группы:', style: AppTextStyles.arial12W400.grey),
+          Text(
+            'Другие группы:',
+            style: AppTextStyles.arial12W400.copyWith(
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.directoryTextSecondary,
+            ),
+          ),
           const SizedBox(height: 8),
           if (otherGroups.isEmpty)
             Text(
               'Нет других групп',
               style: AppTextStyles.arial12W400.copyWith(
-                color: AppColors.grayFieldText,
+                color: isDark ? AppColors.darkText : AppColors.grayFieldText,
               ),
             )
           else
@@ -139,14 +169,20 @@ class ProfileInfoSection extends StatelessWidget {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: isDark ? AppColors.darkCard : AppColors.white,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.directoryBorder),
+                      border: Border.all(
+                        color: isDark
+                            ? AppColors.darkSurface
+                            : AppColors.directoryBorder,
+                      ),
                     ),
                     child: Text(
                       group.title ?? 'Без названия',
                       style: AppTextStyles.arial12W400.copyWith(
-                        color: AppColors.grayFieldText,
+                        color: isDark
+                            ? AppColors.darkText
+                            : AppColors.grayFieldText,
                       ),
                     ),
                   ),
@@ -160,12 +196,18 @@ class ProfileInfoSection extends StatelessWidget {
               children: [
                 TextSpan(
                   text: 'Email: ',
-                  style: AppTextStyles.arial12W400.grey,
+                  style: AppTextStyles.arial12W400.copyWith(
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.directoryTextSecondary,
+                  ),
                 ),
                 TextSpan(
                   text: student.orgMember?.profile?.email ?? 'Не указан',
                   style: AppTextStyles.arial12W400.copyWith(
-                    color: AppColors.grayFieldText,
+                    color: isDark
+                        ? AppColors.darkText
+                        : AppColors.grayFieldText,
                   ),
                 ),
               ],
@@ -173,12 +215,19 @@ class ProfileInfoSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          Text('Контакты родителей:', style: AppTextStyles.arial12W400.grey),
+          Text(
+            'Контакты родителей:',
+            style: AppTextStyles.arial12W400.copyWith(
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.directoryTextSecondary,
+            ),
+          ),
           const SizedBox(height: 8),
           Text(
             'Не указаны',
             style: AppTextStyles.arial12W400.copyWith(
-              color: AppColors.grayFieldText,
+              color: isDark ? AppColors.darkText : AppColors.grayFieldText,
             ),
           ),
         ],

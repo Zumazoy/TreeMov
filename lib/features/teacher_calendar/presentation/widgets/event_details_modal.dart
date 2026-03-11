@@ -34,7 +34,7 @@ class EventDetailsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     final timeParts = event
         .formatTime(event.startTime, event.endTime)
@@ -46,7 +46,7 @@ class EventDetailsModal extends StatelessWidget {
       width: 355,
       height: 320,
       decoration: BoxDecoration(
-        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Column(
@@ -56,9 +56,7 @@ class EventDetailsModal extends StatelessWidget {
             height: 70,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withAlpha(
-                26,
-              ), // 👈 ИСПРАВЛЕНО (было AppColors.eventTap)
+              color: theme.colorScheme.primary.withAlpha(26),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12.5),
                 topRight: Radius.circular(12.5),
@@ -69,9 +67,7 @@ class EventDetailsModal extends StatelessWidget {
                 event.group != null
                     ? 'Группа "${event.formatTitle(event.group?.title)}"'
                     : '(Не указан)',
-                style: AppTextStyles.ttNorms16W600.themed(
-                  context,
-                ), // 👈 ИСПРАВЛЕНО
+                style: AppTextStyles.ttNorms16W600.themed(context),
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -85,12 +81,8 @@ class EventDetailsModal extends StatelessWidget {
             height: 140,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: theme.cardColor, // 👈 ИСПРАВЛЕНО
-              border: Border.all(
-                color: theme
-                    .dividerColor, // 👈 ИСПРАВЛЕНО (было Colors.grey.shade300)
-                width: 1,
-              ),
+              color: theme.cardColor,
+              border: Border.all(color: theme.dividerColor, width: 1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -142,20 +134,15 @@ class EventDetailsModal extends StatelessWidget {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: theme.cardColor, // 👈 ИСПРАВЛЕНО
-                      side: BorderSide(
-                        color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
-                        width: 1,
-                      ),
+                      backgroundColor: theme.cardColor,
+                      side: BorderSide(color: theme.dividerColor, width: 1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.5),
                       ),
                     ),
                     child: Text(
                       'К событию',
-                      style: AppTextStyles.ttNorms14W500.themed(
-                        context,
-                      ), // 👈 ИСПРАВЛЕНО
+                      style: AppTextStyles.ttNorms14W500.themed(context),
                     ),
                   ),
                 ),
@@ -177,16 +164,14 @@ class EventDetailsModal extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          theme.colorScheme.primary, // 👈 ИСПРАВЛЕНО
+                      backgroundColor: theme.colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.5),
                       ),
                     ),
                     child: Text(
                       'Посещаемость',
-                      style:
-                          AppTextStyles.ttNorms14W500.white, // .white оставляем
+                      style: AppTextStyles.ttNorms14W500.white,
                     ),
                   ),
                 ),
@@ -203,7 +188,7 @@ class EventDetailsModal extends StatelessWidget {
     String iconPath,
     String value,
   ) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return SizedBox(
       height: 32,
@@ -216,7 +201,7 @@ class EventDetailsModal extends StatelessWidget {
               iconPath,
               width: 20,
               height: 20,
-              color: theme.iconTheme.color, // 👈 ИСПРАВЛЕНО (цвет иконки)
+              color: theme.iconTheme.color,
               fit: BoxFit.contain,
             ),
           ),
@@ -224,9 +209,7 @@ class EventDetailsModal extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: AppTextStyles.ttNorms13W400.themed(
-                context,
-              ), // 👈 ИСПРАВЛЕНО
+              style: AppTextStyles.ttNorms13W400.themed(context),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

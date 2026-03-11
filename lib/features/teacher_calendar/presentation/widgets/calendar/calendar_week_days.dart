@@ -5,7 +5,7 @@ class CalendarWeekDays extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
     const List<String> weekDays = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
 
     return SizedBox(
@@ -23,9 +23,7 @@ class CalendarWeekDays extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Arial',
-                  color: theme.textTheme.bodyMedium?.color?.withAlpha(
-                    128,
-                  ), // 👈 ИСПРАВЛЕНО
+                  color: theme.textTheme.bodyMedium?.color?.withAlpha(128),
                   height: 1.0,
                 ),
               ),

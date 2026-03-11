@@ -17,6 +17,9 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: TextField(
@@ -24,24 +27,36 @@ class SearchField extends StatelessWidget {
         onChanged: onChanged,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: AppTextStyles.arial14W400.grey,
+          hintStyle: AppTextStyles.arial14W400.copyWith(
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.directoryTextSecondary,
+          ),
           filled: true,
-          fillColor: AppColors.white,
+          fillColor: isDark ? AppColors.darkCard : AppColors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.directoryBorder),
+            borderSide: BorderSide(
+              color: isDark ? AppColors.darkSurface : AppColors.directoryBorder,
+            ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.directoryBorder),
+            borderSide: BorderSide(
+              color: isDark ? AppColors.darkSurface : AppColors.directoryBorder,
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.grayFieldText),
+            borderSide: BorderSide(
+              color: isDark ? AppColors.darkText : AppColors.grayFieldText,
+            ),
           ),
-          prefixIcon: const Icon(
+          prefixIcon: Icon(
             Icons.search,
-            color: AppColors.directoryTextSecondary,
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.directoryTextSecondary,
           ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -49,7 +64,7 @@ class SearchField extends StatelessWidget {
           ),
         ),
         style: AppTextStyles.arial14W400.copyWith(
-          color: AppColors.grayFieldText,
+          color: isDark ? AppColors.darkText : AppColors.grayFieldText,
         ),
       ),
     );

@@ -81,6 +81,8 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
   }
 
   Future<void> _selectStartDateTime() async {
+    final theme = Theme.of(context);
+
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _startDateTime,
@@ -88,10 +90,8 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.teacherPrimary,
-            ),
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(primary: theme.colorScheme.primary),
           ),
           child: child!,
         );
@@ -104,9 +104,9 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
         initialTime: TimeOfDay.fromDateTime(_startDateTime),
         builder: (BuildContext context, Widget? child) {
           return Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: AppColors.teacherPrimary,
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: theme.colorScheme.primary,
               ),
             ),
             child: child!,
@@ -132,6 +132,8 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
   }
 
   Future<void> _selectEndDateTime() async {
+    final theme = Theme.of(context);
+
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _endDateTime,
@@ -139,10 +141,8 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.teacherPrimary,
-            ),
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(primary: theme.colorScheme.primary),
           ),
           child: child!,
         );
@@ -155,9 +155,9 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
         initialTime: TimeOfDay.fromDateTime(_endDateTime),
         builder: (BuildContext context, Widget? child) {
           return Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: AppColors.teacherPrimary,
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: theme.colorScheme.primary,
               ),
             ),
             child: child!,
@@ -204,11 +204,17 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
     required Function(String?) onSelected,
     required String iconPath,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.grayFieldText;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+    final backgroundColor = isDark ? AppColors.darkCard : Colors.white;
+
     return Container(
       width: 352,
       height: 52,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.eventTap, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: DropdownMenu<String>(
@@ -229,11 +235,9 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
         ),
-        textStyle: AppTextStyles.arial14W400.copyWith(
-          color: AppColors.grayFieldText,
-        ),
+        textStyle: AppTextStyles.arial14W400.copyWith(color: textColor),
         menuStyle: MenuStyle(
-          backgroundColor: WidgetStateProperty.all(Colors.white),
+          backgroundColor: WidgetStateProperty.all(backgroundColor),
           elevation: WidgetStateProperty.all(2),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.5)),
@@ -243,31 +247,28 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
         hintText: title,
         leadingIcon: Padding(
           padding: const EdgeInsets.only(right: 12),
-          child: Image.asset(
-            iconPath,
-            width: 20,
-            height: 20,
-            color: AppColors.grayFieldText,
-          ),
+          child: Image.asset(iconPath, width: 20, height: 20, color: textColor),
         ),
-        trailingIcon: const Padding(
-          padding: EdgeInsets.only(left: 8),
-          child: Icon(
-            Icons.expand_more,
-            size: 20,
-            color: AppColors.grayFieldText,
-          ),
+        trailingIcon: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Icon(Icons.expand_more, size: 20, color: textColor),
         ),
       ),
     );
   }
 
   Widget _buildDateTimeSection() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.grayFieldText;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+    final dividerColor = theme.dividerColor;
+
     return Container(
       width: 352,
       height: 90,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.eventTap, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Padding(
@@ -283,62 +284,45 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
                       'assets/images/clock_icon.png',
                       width: 20,
                       height: 20,
-                      color: AppColors.grayFieldText,
+                      color: textColor,
                     ),
                     const SizedBox(width: 12),
-                    const Text(
+                    Text(
                       'Начало:',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                        color: AppColors.grayFieldText,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: textColor,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       _formatDateTime(_startDateTime),
-                      style: const TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                        color: AppColors.grayFieldText,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: textColor,
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            Container(height: 1, color: AppColors.eventTap),
+            Container(height: 1, color: dividerColor),
 
             Expanded(
               child: GestureDetector(
                 onTap: _selectEndDateTime,
                 child: Row(
                   children: [
-                    const SizedBox(width: 20),
-                    const SizedBox(width: 12),
-                    const Text(
+                    const SizedBox(width: 32), // Для выравнивания с иконкой
+                    Text(
                       'Конец:',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                        color: AppColors.grayFieldText,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: textColor,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       _formatDateTime(_endDateTime),
-                      style: const TextStyle(
-                        fontFamily: 'Arial',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        height: 1.0,
-                        color: AppColors.grayFieldText,
+                      style: AppTextStyles.arial14W400.copyWith(
+                        color: textColor,
                       ),
                     ),
                   ],
@@ -352,11 +336,16 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
   }
 
   Widget _buildDescriptionField() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.grayFieldText;
+    final borderColor = isDark ? AppColors.darkSurface : AppColors.eventTap;
+
     return Container(
       width: 352,
       height: 52,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.eventTap, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Padding(
@@ -367,30 +356,20 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
               'assets/images/desc_icon.png',
               width: 20,
               height: 20,
-              color: AppColors.grayFieldText,
+              color: textColor,
             ),
             const SizedBox(width: 12),
             Expanded(
               child: TextField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Описание',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Arial',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    height: 1.0,
-                    color: AppColors.grayFieldText,
+                  hintStyle: AppTextStyles.arial14W400.copyWith(
+                    color: textColor.withAlpha(128),
                   ),
                   border: InputBorder.none,
                 ),
-                style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  height: 1.0,
-                  color: AppColors.grayFieldText,
-                ),
+                style: AppTextStyles.arial14W400.copyWith(color: textColor),
               ),
             ),
           ],
@@ -411,10 +390,13 @@ class _UpdateLessonScreenState extends State<UpdateLessonScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.teacherPrimary,
+        backgroundColor: primaryColor,
         automaticallyImplyLeading: false,
         title: Text('Изменить событие', style: AppTextStyles.arial20W900.white),
         centerTitle: true,

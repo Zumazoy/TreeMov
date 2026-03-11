@@ -31,13 +31,18 @@ class InviteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? AppColors.darkCard : AppColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.directoryBorder),
+        border: Border.all(
+          color: isDark ? AppColors.darkSurface : AppColors.directoryBorder,
+        ),
       ),
       child: Row(
         children: [
@@ -46,13 +51,15 @@ class InviteItem extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.plusButton.withAlpha(25),
+              color: isDark
+                  ? AppColors.plusButton.withAlpha(40)
+                  : AppColors.plusButton.withAlpha(25),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.mail_outline,
               size: 20,
-              color: AppColors.plusButton,
+              color: isDark ? AppColors.darkText : AppColors.plusButton,
             ),
           ),
           const SizedBox(width: 12),
@@ -66,11 +73,20 @@ class InviteItem extends StatelessWidget {
                 Text(
                   organizationName,
                   style: AppTextStyles.ttNorms16W600.copyWith(
-                    color: AppColors.grayFieldText,
+                    color: isDark
+                        ? AppColors.darkText
+                        : AppColors.grayFieldText,
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(email, style: AppTextStyles.ttNorms12W400.grey),
+                Text(
+                  email,
+                  style: AppTextStyles.ttNorms12W400.copyWith(
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.directoryTextSecondary,
+                  ),
+                ),
                 const SizedBox(height: 3),
                 Row(
                   children: [
@@ -80,13 +96,17 @@ class InviteItem extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.plusButton.withAlpha(25),
+                        color: isDark
+                            ? AppColors.plusButton.withAlpha(40)
+                            : AppColors.plusButton.withAlpha(25),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         role,
                         style: AppTextStyles.ttNorms11W600.copyWith(
-                          color: AppColors.plusButton,
+                          color: isDark
+                              ? AppColors.darkText
+                              : AppColors.plusButton,
                         ),
                       ),
                     ),
@@ -94,12 +114,18 @@ class InviteItem extends StatelessWidget {
                     Icon(
                       Icons.access_time,
                       size: 11,
-                      color: AppColors.directoryTextSecondary,
+                      color: isDark
+                          ? AppColors.darkTextSecondary
+                          : AppColors.directoryTextSecondary,
                     ),
                     const SizedBox(width: 2),
                     Text(
                       _formatDate(createdAt),
-                      style: AppTextStyles.ttNorms11W400.grey,
+                      style: AppTextStyles.ttNorms11W400.copyWith(
+                        color: isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.directoryTextSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -116,7 +142,13 @@ class InviteItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: Container(
                   padding: const EdgeInsets.all(8),
-                  child: const Icon(Icons.close, size: 18, color: Colors.red),
+                  child: Icon(
+                    Icons.close,
+                    size: 18,
+                    color: isDark
+                        ? AppColors.darkCategoryGeneralText
+                        : Colors.red,
+                  ),
                 ),
               ),
               const SizedBox(width: 4),
@@ -126,7 +158,7 @@ class InviteItem extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.plusButton,
+                    color: theme.colorScheme.primary,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const Icon(

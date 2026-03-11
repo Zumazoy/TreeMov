@@ -19,7 +19,7 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -27,7 +27,7 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
       constraints: const BoxConstraints(minHeight: 120),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: theme.cardColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(12.5),
       ),
       child: Column(
@@ -50,9 +50,7 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         option,
-                        style: AppTextStyles.arial14W400.themed(
-                          context,
-                        ), // 👈 ИСПРАВЛЕНО
+                        style: AppTextStyles.arial14W400.themed(context),
                       ),
                     ),
                   ),
@@ -63,11 +61,7 @@ class _ChangeEventModalState extends State<ChangeEventModal> {
                     height: 1,
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
-                      border: Border.all(
-                        color: theme
-                            .dividerColor, // 👈 ИСПРАВЛЕНО (было AppColors.grayFieldText)
-                        width: 1,
-                      ),
+                      border: Border.all(color: theme.dividerColor, width: 1),
                     ),
                   ),
               ],

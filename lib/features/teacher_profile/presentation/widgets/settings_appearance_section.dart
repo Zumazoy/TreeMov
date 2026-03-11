@@ -19,7 +19,7 @@ class SettingsAppearanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return Column(
       children: [
@@ -36,11 +36,10 @@ class SettingsAppearanceSection extends StatelessWidget {
               onChanged: onDarkModeChanged,
             ),
             Divider(
-              // 👈 УБРАЛ const
               height: 1,
               indent: 16,
               endIndent: 16,
-              color: theme.dividerColor, // 👈 ИСПРАВЛЕНО
+              color: theme.dividerColor,
             ),
             SettingsToggleRow(
               title: 'Фото учеников',

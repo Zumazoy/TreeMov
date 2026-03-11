@@ -83,7 +83,7 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // 👈 ПОЛУЧАЕМ ТЕМУ
+    final theme = Theme.of(context);
 
     return BlocListener<SchedulesBloc, ScheduleState>(
       listener: (context, state) {
@@ -94,8 +94,7 @@ class _CalendarScreenContentState extends State<_CalendarScreenContent> {
         }
       },
       child: Scaffold(
-        backgroundColor: theme
-            .scaffoldBackgroundColor, // 👈 ИСПРАВЛЕНО (было AppColors.white)
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: const CalendarAppBar(),
         body: Column(
           children: [
